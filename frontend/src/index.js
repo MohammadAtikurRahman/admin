@@ -7,7 +7,7 @@ import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
 import Test from './Test';
-
+import Profile from './Profile';
 import Enumerator from './Enumerator';
 import './Login.css';
 
@@ -20,6 +20,7 @@ ReactDOM.render(
             <Route path='/enumerator' component={Enumerator} />
             <Route path='/test' component={Test} />
 
+            <Route path='/profile' component={Profile} />
             {/* <Route component={NotFound}/> */}
         </Switch>
     </BrowserRouter>,

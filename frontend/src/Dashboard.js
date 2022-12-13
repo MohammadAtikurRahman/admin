@@ -559,7 +559,7 @@ export default class Dashboard extends Component {
             size="small"
 
           >
-               <Link style={{ textDecoration: 'none' , color: 'white'}}   href="/enumerator">
+               <Link style={{ textDecoration: 'none' , color: 'white'}}   href="/profile">
             BeneFiciary Details
           </Link>
           </Button>

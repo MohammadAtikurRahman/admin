@@ -395,7 +395,7 @@ export default class Test extends Component {
                                 name="file"
                                 value={this.state.file}
                                 onChange={this.onChange}
-                                id="fileInput"
+                                id_="fileInput"
                                 placeholder="File"
                                 hidden
                             />
@@ -478,7 +478,7 @@ export default class Test extends Component {
                                 name="file"
                                 value={this.state.file}
                                 onChange={this.onChange}
-                                id="fileInput"
+                                id_1="fileInput"
                                 placeholder="File"
                                 hidden
                                 required
