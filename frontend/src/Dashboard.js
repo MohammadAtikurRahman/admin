@@ -6,6 +6,9 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
+
+import {Link } from '@material-ui/core';
+
 const axios = require('axios');
 
 export default class Dashboard extends Component {
@@ -25,6 +28,7 @@ export default class Dashboard extends Component {
       page: 1,
       search: '',
       products: [],
+      persons: [],
       pages: 0,
       loading: false
     };
@@ -39,12 +43,33 @@ export default class Dashboard extends Component {
         this.getProduct();
       });
     }
+
+    axios.get(`http://localhost:2000/user-details`)
+      .then(res => {
+        const persons = res.data;
+        this.setState({ persons });
+        const userDetails = this.state.persons.payload
+
+        var enumerator_name = userDetails.user;
+
+        var enumerator_id = userDetails.id;
+        console.log(enumerator_name);
+        console.log(enumerator_id);
+
+
+
+        // const propertyNames = Object.keys(userDetails);
+
+        // console.log(propertyNames);
+
+
+      })
   }
 
-  
+
 
   getProduct = () => {
-    
+
     this.setState({ loading: true });
 
     let data = '?';
@@ -64,10 +89,10 @@ export default class Dashboard extends Component {
         icon: "error",
         type: "error"
       });
-      this.setState({ loading: false, products: [], pages: 0 },()=>{});
+      this.setState({ loading: false, products: [], pages: 0 }, () => { });
     });
   }
-  
+
 
   deleteProduct = (id) => {
     axios.post('http://localhost:2000/delete-product', {
@@ -232,8 +257,13 @@ export default class Dashboard extends Component {
       <div>
         {this.state.loading && <LinearProgress size={40} />}
         <div>
-          
-          <h2>Enumerator Dashboard</h2>
+     
+     
+          {this.state.persons.payload ? <p>Enumerator Dashboard {this.state.persons.payload.user} </p> : ""}
+           
+           {/* <h3> {this.enumerator_name}</h3> */}
+
+           
           <Button
             className="button_style"
             variant="contained"
@@ -247,11 +277,25 @@ export default class Dashboard extends Component {
           <Button
             className="button_style"
             variant="contained"
-            color="secondary"
+            color="primary"
             size="small"
-          
+
           >
+               <Link style={{ textDecoration: 'none' , color: 'white'}}   href="/enumerator">
             List Of Enumerator
+          </Link>
+          </Button>
+          
+          <Button
+            className="button_style"
+            variant="contained"
+            color=""
+            size="small"
+
+          >
+                  <Link style={{ textDecoration: 'none' , color: 'black'}}   href="/test">
+            List Of Test
+          </Link>
           </Button>
 
           <Button
@@ -259,9 +303,11 @@ export default class Dashboard extends Component {
             variant="contained"
             color=""
             size="small"
-          
+
           >
-            List Of Test
+                  <Link style={{ textDecoration: 'none' , color: 'black'}}   href="/test">
+            Transactions
+          </Link>
           </Button>
 
           <Button
@@ -327,14 +373,14 @@ export default class Dashboard extends Component {
               variant="contained"
               component="label"
             > Upload
-            <input
+              <input
                 id="standard-basic"
                 type="file"
                 accept="image/*"
                 name="file"
                 value={this.state.file}
                 onChange={this.onChange}
-                id_="fileInput"
+                id="fileInput"
                 placeholder="File"
                 hidden
               />
@@ -407,7 +453,7 @@ export default class Dashboard extends Component {
               variant="contained"
               component="label"
             > Upload
-            <input
+              <input
                 id="standard-basic"
                 type="file"
                 accept="image/*"
@@ -417,7 +463,7 @@ export default class Dashboard extends Component {
                 name="file"
                 value={this.state.file}
                 onChange={this.onChange}
-                id_1="fileInput"
+                id="fileInput"
                 placeholder="File"
                 hidden
                 required
@@ -454,7 +500,7 @@ export default class Dashboard extends Component {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                
+
                 <TableCell align="center">Beneficiary Image</TableCell>
                 <TableCell align="center">Beneficiary Id</TableCell>
                 <TableCell align="center">Beneficiary Name</TableCell>
@@ -462,23 +508,24 @@ export default class Dashboard extends Component {
                 <TableCell align="center">Beneficiary NID</TableCell>
                 <TableCell align="center">Test Score</TableCell>
                 <TableCell align="center">Action</TableCell>
+                <TableCell align="center">View BeneFiciary </TableCell>
 
               </TableRow>
             </TableHead>
             <TableBody>
               {this.state.products.map((row) => (
                 <TableRow key={row.name}>
-                   <TableCell align="center"><img src={`http://localhost:2000/${row.image}`} width="70" height="70" /></TableCell>
-                   <TableCell align="center">{row.discount}</TableCell>
-                 
+                  <TableCell align="center"><img src={`http://localhost:2000/${row.image}`} width="70" height="70" /></TableCell>
+                  <TableCell align="center">{row.discount}</TableCell>
+
                   <TableCell align="center" component="th" scope="row">
                     {row.name}
                   </TableCell>
-                 
+
                   <TableCell align="center">{row.desc}</TableCell>
                   <TableCell align="center">{row.price}</TableCell>
-                
-                
+
+
                   <TableCell align="center">{row.price}</TableCell>
 
                   <TableCell align="center">
@@ -490,7 +537,7 @@ export default class Dashboard extends Component {
                       onClick={(e) => this.handleProductEditOpen(row)}
                     >
                       Edit
-                  </Button>
+                    </Button>
                     <Button
                       className="button_style"
                       variant="outlined"
@@ -499,15 +546,44 @@ export default class Dashboard extends Component {
                       onClick={(e) => this.deleteProduct(row._id)}
                     >
                       Delete
-                  </Button>
+                    </Button>
+                  </TableCell>
+
+                  <TableCell> 
+
+
+                  <Button
+            className="button_style"
+            variant="contained"
+            color="primary"
+            size="small"
+
+          >
+               <Link style={{ textDecoration: 'none' , color: 'white'}}   href="/enumerator">
+            BeneFiciary Details
+          </Link>
+          </Button>
+          
                   </TableCell>
 
                 </TableRow>
               ))}
             </TableBody>
+
           </Table>
           <br />
           <Pagination count={this.state.pages} page={this.state.page} onChange={this.pageChange} color="primary" />
+
+
+
+
+
+
+
+
+
+
+
         </TableContainer>
 
       </div>

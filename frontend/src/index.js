@@ -6,6 +6,9 @@ import { BrowserRouter, Link } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
+import Test from './Test';
+
+import Enumerator from './Enumerator';
 import './Login.css';
 
 ReactDOM.render(
@@ -14,6 +17,9 @@ ReactDOM.render(
             <Route exact path='/' component={Login} />
             <Route exact path='/register' component={Register} />
             <Route path='/dashboard' component={Dashboard} />
+            <Route path='/enumerator' component={Enumerator} />
+            <Route path='/test' component={Test} />
+
             {/* <Route component={NotFound}/> */}
         </Switch>
     </BrowserRouter>,

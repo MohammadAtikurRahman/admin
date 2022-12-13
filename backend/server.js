@@ -12,6 +12,10 @@ var fs = require('fs');
 var product = require("./model/product.js");
 var user = require("./model/user.js");
 
+
+
+
+
 var dir = './uploads';
 var upload = multer({
   storage: multer.diskStorage({
@@ -43,7 +47,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use("/", (req, res, next) => {
   try {
-    if (req.path == "/login" || req.path == "/register" || req.path == "/") {
+    if (req.path == "/login" || req.path == "/register" || req.path == "/" || req.path == "/api" || req.path == "/user-details"  ) {
       next();
     } else {
       /* decode jwt token if authorized*/
@@ -68,11 +72,15 @@ app.use("/", (req, res, next) => {
 })
 
 app.get("/", (req, res) => {
-  res.status(200).json({
-    status: true,
-    title: 'Apis'
-  });
+  res.send({ payload });
+
 });
+
+app.get("/user-details", (req, res) => {
+  res.send({ payload });
+
+});
+
 
 /* login api */
 app.post("/login", (req, res) => {
@@ -349,7 +357,7 @@ app.get("/get-product", (req, res) => {
               });
             } else {
               res.status(400).json({
-                errorMessage: 'There is no product!',
+                errorMessage: 'There is no beneficiary!',
                 status: false
               });
             }
@@ -371,6 +379,35 @@ app.get("/get-product", (req, res) => {
 
 });
 
+
+app.get("/api", (req,res) => {
+
+  user.find((err,val)=>{
+        
+    if(err){
+      console.log(err)
+    }
+    else{
+      res.json(val)
+    }
+
+     
+
+  })
+
+
+
+})
+
+
+const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE'
+
+const base64Url = token.split('.')[1];
+const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+const buff = new Buffer(base64, 'base64');
+const payloadinit = buff.toString('ascii');
+const payload = JSON.parse(payloadinit);
+console.log(payload);
 
 
 
