@@ -47,7 +47,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use("/", (req, res, next) => {
   try {
-    if (req.path == "/login" || req.path == "/register" || req.path == "/" || req.path == "/api" || req.path == "/user-details"  ) {
+    if (req.path == "/login" || req.path == "/register" || req.path == "/" || req.path == "/api" || req.path == "/user-details" 
+    
+    
+    || req.path == "/enumerator"   || req.path == "/beneficiary" ) {
       next();
     } else {
       /* decode jwt token if authorized*/
@@ -398,6 +401,48 @@ app.get("/api", (req,res) => {
 
 
 })
+
+app.get("/enumerator", (req,res) => {
+
+  product.find((err,val)=>{
+        
+    if(err){
+      console.log(err)
+    }
+    else{
+      res.json(val)
+    }
+
+     
+
+  })
+
+
+
+})
+
+
+app.get("/beneficiary", (req,res) => {
+
+  user.find((err,val)=>{
+        
+    if(err){
+      console.log(err)
+    }
+    else{
+      res.json(val)
+    }
+
+     
+
+  })
+
+
+
+})
+
+
+
 
 
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE'
