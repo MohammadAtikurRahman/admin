@@ -5,6 +5,7 @@ userSchema = new Schema({
 
 	username: String,
 	password: String,
+	country: String,
 	created_at: { type: Date, required: true, default: Date.now }
 
 

@@ -13,6 +13,9 @@ var product = require("./model/product.js");
 var user = require("./model/user.js");
 
 
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -440,6 +443,55 @@ app.get("/beneficiary", (req,res) => {
 
 
 })
+
+
+
+
+
+app.post("/beneficiary", async (req, res) => {
+
+  try {
+      //get data from request body
+
+      const newUser = new user({
+
+          username: req.body.username,
+
+          password: req.body.password,
+
+          country: req.body.country
+
+
+      });
+      const userData = await newUser.save();
+
+
+
+      res.status(201).send({ userData });
+
+  } catch (error) {
+
+      res.status(500).send({ message: error.message });
+
+
+  }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
