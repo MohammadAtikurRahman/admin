@@ -325,14 +325,14 @@ export default class Test extends Component {
                         </Link>
                     </Button>
 
-                    <Button
+                    {/* <Button
                         className="button_style"
                         variant="contained"
                         size="small"
                         onClick={this.logOut}
                     >
                         Log Out
-                    </Button>
+                    </Button> */}
                 </div>
 
                 {/* Edit Product */}

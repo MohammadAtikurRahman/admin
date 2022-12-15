@@ -102,7 +102,7 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, products: [], pages: 0 },
-                    () => {}
+                    () => { }
                 );
             });
     };
@@ -154,9 +154,9 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
+            this.setState({ fileName: e.target.files[0].name }, () => { });
         }
-        this.setState({ [e.target.name]: e.target.value }, () => {});
+        this.setState({ [e.target.name]: e.target.value }, () => { });
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getProduct();
@@ -352,7 +352,18 @@ export default class Dashboard extends Component {
                         variant="contained"
                         size="small"
                         onClick={this.logOut}>
-                        Log Out
+
+
+                        <MaterialLink
+                            style={{
+                                textDecoration: "none",
+                                color: "black",
+                            }}
+                            href="/">
+                            logout
+                        </MaterialLink>
+
+
                     </Button>
                 </div>
 
@@ -658,7 +669,10 @@ export default class Dashboard extends Component {
                                                 href="/profile">
                                                 BeneFiciary Details
                                             </MaterialLink> */}
-                                            <Link to={"/profile/" + row._id}>
+                                            <Link    style={{
+                                                    textDecoration: "none",
+                                                    color: "white",
+                                                }} to={"/profile/" + row._id}>
                                                 BeneFiciary Details
                                             </Link>
                                         </Button>

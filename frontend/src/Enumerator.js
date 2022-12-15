@@ -8,7 +8,8 @@ import {
 import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
 
-import { Link } from '@material-ui/core';
+import { Link as MaterialLink } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const axios = require('axios');
 
@@ -296,9 +297,9 @@ export default class Dashboard extends Component {
                         size="small"
 
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} href="/dashboard">
+                        <MaterialLink style={{ textDecoration: 'none', color: 'white' }} href="/dashboard">
                             List Of BeneFiciary
-                        </Link>
+                        </MaterialLink>
                     </Button>
 
                     <Button
@@ -308,9 +309,9 @@ export default class Dashboard extends Component {
                         size="small"
 
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} href="/enumerator">
+                        <MaterialLink style={{ textDecoration: 'none', color: 'white' }} href="/enumerator">
                             List Of Enumerator
-                        </Link>
+                        </MaterialLink>
                     </Button>
 
                     <Button
@@ -320,9 +321,9 @@ export default class Dashboard extends Component {
                         size="small"
 
                     >
-                        <Link style={{ textDecoration: 'none', color: 'black' }} href="/test">
+                        <MaterialLink style={{ textDecoration: 'none', color: 'black' }} href="/test">
                             List Of Test
-                        </Link>
+                        </MaterialLink>
                     </Button>
 
                     <Button
@@ -331,7 +332,15 @@ export default class Dashboard extends Component {
                         size="small"
                         onClick={this.logOut}
                     >
-                        Log Out
+
+                        <MaterialLink
+                            style={{
+                                textDecoration: "none",
+                                color: "black",
+                            }}
+                            href="/">
+                            logout
+                        </MaterialLink>
                     </Button>
                 </div>
 
