@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Switch, Redirect, Route } from "react-router";
-import { BrowserRouter, Link } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
@@ -13,15 +11,15 @@ import "./Login.css";
 
 ReactDOM.render(
     <BrowserRouter>
-        <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/enumerator" component={Enumerator} />
-            <Route path="/test" component={Test} />
-            <Route path="/profile/:id" component={Profile} />
-            {/* <Route component={NotFound}/> */}
-        </Switch>
+        <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/enumerator" element={<Enumerator />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            {/* <Route element={NotFound}/> */}
+        </Routes>
     </BrowserRouter>,
     document.getElementById("root")
 );
