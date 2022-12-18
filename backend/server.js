@@ -8,12 +8,14 @@ const multer = require("multer"),
     path = require("path");
 const mongoose = require("mongoose");
 const { router } = require("./routes.js");
-mongoose.connect("mongodb://127.0.0.1:27017/productDB", {
+mongoose.connect("mongodb://localhost/productDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 
     
 });
+
+
 
 
 
@@ -259,30 +261,6 @@ app.post("/add-product", upload.any(), (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Api to update Product */
 app.post("/update-product", upload.any(), (req, res) => {
     try {
@@ -485,24 +463,19 @@ app.get("/beneficiary", (req, res) => {
 app.post("/beneficiary", async (req, res) => {
 
 try {
-      
+        // const anotherData = JSON.parse(req.body)
         const saveData = req.body;
         const newData = new user({
           username: saveData.username,
           password: saveData.password,
 
           beneficiary: {
-             name: saveData.beneficiary.name
-             
+            // name: saveData.name,
+            name: saveData.beneficiary.name
+
                
           },
         });
-      
-
-
-      console.log(saveData.beneficiary.name);
-
-
         await newData.save();
         res.status(201).json({ success: true, data: newData });
       } catch (error) {

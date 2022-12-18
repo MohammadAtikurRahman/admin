@@ -55,7 +55,7 @@ export default class Dashboard extends Component {
             });
         }
 
-        axios.get(`http://127.0.0.1:27017/user-details`).then((res) => {
+        axios.get(`http://localhost:2000/user-details`).then((res) => {
             const persons = res.data;
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
@@ -81,7 +81,7 @@ export default class Dashboard extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(`http://127.0.0.1:27017/get-product${data}`, {
+            .get(`http://localhost:2000/get-product${data}`, {
                 headers: {
                     token: this.state.token,
                 },
@@ -110,7 +110,7 @@ export default class Dashboard extends Component {
     deleteProduct = (id) => {
         axios
             .post(
-                "http://127.0.0.1:27017/delete-product",
+                "http://localhost:2000/delete-product",
                 {
                     id: id,
                 },
@@ -174,7 +174,7 @@ export default class Dashboard extends Component {
         file.append("price", this.state.price);
 
         axios
-            .post("http://127.0.0.1:27017/add-product", file, {
+            .post("http://localhost:2000/add-product", file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,
@@ -223,7 +223,7 @@ export default class Dashboard extends Component {
         file.append("price", this.state.price);
 
         axios
-            .post("http://127.0.0.1:27017/update-product", file, {
+            .post("http://localhost:2000/update-product", file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,
@@ -605,7 +605,7 @@ export default class Dashboard extends Component {
                                 <TableRow key={row.name}>
                                     <TableCell align="center">
                                         <img
-                                            src={`http://127.0.0.1:27017/${row.image}`}
+                                            src={`http://localhost:2000/${row.image}`}
                                             width="70"
                                             height="70"
                                         />

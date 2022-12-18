@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 
 const beneficiarySchema = new Schema({
-	ben_name: String ,
+	name: String ,
 	created_at: { type: Date, required: true, default: Date.now },
 
 })
