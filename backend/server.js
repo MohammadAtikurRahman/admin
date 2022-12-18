@@ -8,7 +8,7 @@ const multer = require("multer"),
     path = require("path");
 const mongoose = require("mongoose");
 const { router } = require("./routes.js");
-mongoose.connect("mongodb://localhost/productDB", {
+mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/thrift", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 
