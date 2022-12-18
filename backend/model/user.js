@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 
 const beneficiarySchema = new Schema({
-	name: String ,
+	ben_name: String ,
 	created_at: { type: Date, required: true, default: Date.now },
 
 })
@@ -13,11 +13,6 @@ const userSchema = new Schema({
 	password: String,
 	country: String,
 	created_at: { type: Date, required: true, default: Date.now },
-	// beneficiary_details: 
-	// 	{
-	// 	    name: String,
-	// 		created_at: { type: Date, required: true, default: Date.now }, 
-	// 	} 
 	beneficiary: [beneficiarySchema]
 }),
 	
