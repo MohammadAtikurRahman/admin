@@ -605,7 +605,7 @@ export default class Dashboard extends Component {
                                 <TableRow key={row.name}>
                                     <TableCell align="center">
                                         <img
-                                            src={`http://127.0.0.1:27017:/${row.image}`}
+                                            src={`http://127.0.0.1:27017/${row.image}`}
                                             width="70"
                                             height="70"
                                         />
