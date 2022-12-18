@@ -14,6 +14,7 @@ export default function Login(props) {
     const navigate = useNavigate();
 
     const onChange = (event) => {
+        event.persist();
         setUser((user) => {
             return {
                 ...user,

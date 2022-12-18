@@ -4,15 +4,18 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const multer = require("multer"),
-    bodyParser = require("body-parser"),
+ bodyParser = require("body-parser"),
     path = require("path");
 const mongoose = require("mongoose");
 const { router } = require("./routes.js");
-
 mongoose.connect("mongodb://localhost/productDB", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+
+    
 });
+
+
 
 const fs = require("fs");
 const product = require("./model/product.js");
@@ -454,24 +457,83 @@ app.get("/beneficiary", (req, res) => {
     });
 });
 
+
 app.post("/beneficiary", async (req, res) => {
-    try {
-        //get data from request body
 
-        const newUser = new user({
-            username: req.body.username,
+try {
+        // const anotherData = JSON.parse(req.body)
+        const saveData = req.body;
+        const newData = new user({
+          username: saveData.username,
+          password: saveData.password,
 
-            password: req.body.password,
-
-            country: req.body.country,
+          beneficiary: {
+            // name: saveData.name,
+             
+               
+          },
         });
-        const userData = await newUser.save();
 
-        res.status(201).send({ userData });
-    } catch (error) {
-        res.status(500).send({ message: error.message });
-    }
+
+      console.log(saveData);
+        await newData.save();
+        res.status(201).json({ success: true, data: newData });
+      } catch (error) {
+        res.status(400).json({ success: false });
+      }
+
+
+
+   
 });
+
+
+// app.post("/beneficiary", async (req, res) => {
+//     try {
+//         const newUser = new user({
+//             username: req.body.username,
+
+//             password: req.body.password,
+             
+     
+//         });
+
+//         console.log(req.body);
+//         const userData = await newUser.save();
+//         res.status(201).send({ userData });
+
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";

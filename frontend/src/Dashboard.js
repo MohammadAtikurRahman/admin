@@ -63,8 +63,8 @@ export default class Dashboard extends Component {
             var enumerator_name = userDetails.user;
 
             var enumerator_id = userDetails.id;
-            console.log(enumerator_name);
-            console.log(enumerator_id);
+            // console.log(enumerator_name); urgent
+            // console.log(enumerator_id);
 
             // const propertyNames = Object.keys(userDetails);
 
@@ -326,7 +326,7 @@ export default class Dashboard extends Component {
                     <Button
                         className="button_style"
                         variant="contained"
-                        color=""
+                        color="inherit"
                         size="small">
                         <MaterialLink
                             style={{ textDecoration: "none", color: "black" }}
@@ -338,7 +338,7 @@ export default class Dashboard extends Component {
                     <Button
                         className="button_style"
                         variant="contained"
-                        color=""
+                        color="inherit"
                         size="small">
                         <MaterialLink
                             style={{ textDecoration: "none", color: "black" }}
