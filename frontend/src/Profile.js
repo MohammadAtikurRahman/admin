@@ -18,30 +18,25 @@ import {
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
-
 import { Link } from "@material-ui/core";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function Profile() {
     const [persons, setPerson] = useState([]);
-    const [userProfile, setUserProfile] = useState([]);
-    const { id } = useParams();
-
-    useEffect(() => {
-        axios
-            .get("/enumerator/" + id)
-            .then((response) => setUserProfile(response.data));
-    }, []);
+    const location = useLocation();
+    const userProfile = location.state;
+    console.log(userProfile);
+    const navigate = useNavigate();
 
     function logOut() {
         localStorage.setItem("token", null);
-        this.props.history.push("/");
+        navigate("/");
     }
 
     return (
         <div className="container text-center p-5 ">
             <div>
-                <h3>Beneficiary Name {userProfile.name}</h3>
+                <h3>Beneficiary Name {userProfile?.name}</h3>
 
                 <Button
                     className="button_style"

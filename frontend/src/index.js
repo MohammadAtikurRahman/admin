@@ -19,10 +19,8 @@ ReactDOM.render(
             <Route path="/enumerator" element={<Enumerator />} />
             <Route path="/test" element={<Test />} />
             <Route path="/profile/:id" element={<Profile />} />
-
             <Route path="/bene" element={<Bene />} />
             <Route path="/bene/add" element={<Bene />} />
-            
             {/* <Route element={NotFound}/> */}
         </Routes>
     </BrowserRouter>,

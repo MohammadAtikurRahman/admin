@@ -30,7 +30,11 @@ export default class Dashboard extends Component {
             openProductModal: false,
             openProductEditModal: false,
             id: "",
+
             name: "",
+            fatherName: "",
+            nid: "",
+
             desc: "",
             price: "",
             discount: "",
@@ -38,7 +42,7 @@ export default class Dashboard extends Component {
             fileName: "",
             page: 1,
             search: "",
-            products: [],
+            beneficiaries: [],
             persons: [],
             pages: 0,
             loading: false,
@@ -51,7 +55,7 @@ export default class Dashboard extends Component {
             this.props.history.push("/login");
         } else {
             this.setState({ token: token }, () => {
-                this.getProduct();
+                this.getBeneficiaries();
             });
         }
 
@@ -72,7 +76,7 @@ export default class Dashboard extends Component {
         });
     };
 
-    getProduct = () => {
+    getBeneficiaries = () => {
         this.setState({ loading: true });
 
         let data = "?";
@@ -81,28 +85,29 @@ export default class Dashboard extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(`http://localhost:2000/get-product${data}`, {
+            .get(`http://localhost:2000/beneficiary`, {
+                message: "hello",
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
-                console.log(res.data.products);
+                console.log("here", res.data.beneficiaries);
                 this.setState({
                     loading: false,
-                    products: res.data.products,
-                    pages: res.data.pages,
+                    beneficiaries: res.data.beneficiaries,
+                    pages: res.data?.pages,
                 });
             })
             .catch((err) => {
                 swal({
-                    text: err.response.data.errorMessage,
+                    text: err,
                     icon: "error",
                     type: "error",
                 });
                 this.setState(
-                    { loading: false, products: [], pages: 0 },
-                    () => { }
+                    { loading: false, beneficiaries: [], pages: 0 },
+                    () => {}
                 );
             });
     };
@@ -143,7 +148,7 @@ export default class Dashboard extends Component {
 
     pageChange = (e, page) => {
         this.setState({ page: page }, () => {
-            this.getProduct();
+            this.getBeneficiaries();
         });
     };
 
@@ -154,31 +159,26 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => { });
+            this.setState({ fileName: e.target.files[0].name }, () => {});
         }
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({ [e.target.name]: e.target.value }, () => {});
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
-                this.getProduct();
+                this.getBeneficiaries();
             });
         }
     };
 
     addProduct = () => {
         const fileInput = document.querySelector("#fileInput");
-        const file = new FormData();
-        file.append("file", fileInput.files[0]);
-        file.append("name", this.state.name);
-        file.append("desc", this.state.desc);
-        file.append("discount", this.state.discount);
-        file.append("price", this.state.price);
-
         axios
-            .post("http://localhost:2000/add-product", file, {
-                headers: {
-                    "content-type": "multipart/form-data",
-                    token: this.state.token,
+            .post("http://localhost:2000/beneficiary/add", {
+                beneficiary: {
+                    name: this.state.name,
+                    fatherName: this.state.fatherName,
+                    nid: this.state.nid,
                 },
+                token: localStorage.getItem("token"),
             })
             .then((res) => {
                 swal({
@@ -198,7 +198,7 @@ export default class Dashboard extends Component {
                         page: 1,
                     },
                     () => {
-                        this.getProduct();
+                        this.getBeneficiaries();
                     }
                 );
             })
@@ -240,7 +240,7 @@ export default class Dashboard extends Component {
                 this.setState(
                     { name: "", desc: "", discount: "", price: "", file: null },
                     () => {
-                        this.getProduct();
+                        this.getBeneficiaries();
                     }
                 );
             })
@@ -266,7 +266,6 @@ export default class Dashboard extends Component {
         });
     };
 
-
     handleCsv = () => {
         this.setState({
             openProductModal: true,
@@ -281,11 +280,6 @@ export default class Dashboard extends Component {
     handleProductClose = () => {
         this.setState({ openProductModal: false });
     };
-
-
-
-
-
 
     handleProductEditOpen = (data) => {
         this.setState({
@@ -306,7 +300,6 @@ export default class Dashboard extends Component {
     render() {
         return (
             <div>
-                {this.state.loading && <LinearProgress size={40} />}
                 <div>
                     {this.state.persons.payload ? (
                         <p>
@@ -378,8 +371,6 @@ export default class Dashboard extends Component {
                         variant="contained"
                         size="small"
                         onClick={this.logOut}>
-
-
                         <MaterialLink
                             style={{
                                 textDecoration: "none",
@@ -388,8 +379,6 @@ export default class Dashboard extends Component {
                             href="/">
                             logout
                         </MaterialLink>
-
-
                     </Button>
                 </div>
 
@@ -452,13 +441,12 @@ export default class Dashboard extends Component {
                             {" "}
                             Upload
                             <input
-                                id="standard-basic"
+                                id="fileInput"
                                 type="file"
                                 accept="image/*"
                                 name="file"
                                 value={this.state.file}
                                 onChange={this.onChange}
-                                id="fileInput"
                                 placeholder="File"
                                 hidden
                             />
@@ -513,8 +501,8 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="desc"
-                            value={this.state.desc}
+                            name="fatherName"
+                            value={this.state.fatherName}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Father"
                             required
@@ -524,46 +512,16 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
-                            name="price"
-                            value={this.state.price}
+                            name="nid"
+                            value={this.state.nid}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Nid"
-                            required
-                        />
-                        <br />
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="discount"
-                            value={this.state.discount}
-                            onChange={this.onChange}
-                            placeholder="Beneficiry Id"
+                            placeholder="Beneficiary NID"
                             required
                         />
                         <br />
                         <br />
-                        <Button variant="contained" component="label">
-                            {" "}
-                            Upload
-                            <input
-                                id="standard-basic"
-                                type="file"
-                                accept="image/*"
-                                // inputProps={{
-                                //   accept: "image/*"
-                                // }}
-                                name="file"
-                                value={this.state.file}
-                                onChange={this.onChange}
-                                id="fileInput"
-                                placeholder="File"
-                                hidden
-                                required
-                            />
-                        </Button>
+                        <br />
                         &nbsp;
-                        {this.state.fileName}
                     </DialogContent>
 
                     <DialogActions>
@@ -575,10 +533,8 @@ export default class Dashboard extends Component {
                         <Button
                             disabled={
                                 this.state.name == "" ||
-                                this.state.desc == "" ||
-                                this.state.discount == "" ||
-                                this.state.price == "" ||
-                                this.state.file == null
+                                this.state.fatherName == "" ||
+                                this.state.nid == ""
                             }
                             onClick={(e) => this.addProduct()}
                             color="primary"
@@ -627,67 +583,60 @@ export default class Dashboard extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.products.map((row) => (
+                            {this.state?.beneficiaries?.map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell align="center">
-                                        <img
-                                            src={`http://localhost:2000/${row.image}`}
-                                            width="70"
-                                            height="70"
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {row.discount}
-                                    </TableCell>
+                                        <TableCell align="center">
+                                            {row.name}
+                                        </TableCell>
 
-                                    <TableCell
-                                        align="center"
-                                        component="th"
-                                        scope="row">
-                                        {row.name}
-                                    </TableCell>
+                                        <TableCell
+                                            align="center"
+                                            component="th"
+                                            scope="row">
+                                            {row.fatherName}
+                                        </TableCell>
 
-                                    <TableCell align="center">
-                                        {row.desc}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {row.price}
-                                    </TableCell>
+                                        <TableCell align="center">
+                                            {row.nid}
+                                        </TableCell>
 
-                                    <TableCell align="center">
-                                        {row.price}
-                                    </TableCell>
+                                        <TableCell align="center">
+                                            {row.created_at}
+                                        </TableCell>
 
-                                    <TableCell align="center">
-                                        <Button
-                                            className="button_style"
-                                            variant="outlined"
-                                            color="primary"
-                                            size="small"
-                                            onClick={(e) =>
-                                                this.handleProductEditOpen(row)
-                                            }>
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            className="button_style"
-                                            variant="outlined"
-                                            color="secondary"
-                                            size="small"
-                                            onClick={(e) =>
-                                                this.deleteProduct(row._id)
-                                            }>
-                                            Delete
-                                        </Button>
-                                    </TableCell>
+                                        <TableCell align="center">
+                                            <Button
+                                                className="button_style"
+                                                variant="outlined"
+                                                color="primary"
+                                                size="small"
+                                                onClick={(e) =>
+                                                    this.handleProductEditOpen(
+                                                        row
+                                                    )
+                                                }>
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                className="button_style"
+                                                variant="outlined"
+                                                color="secondary"
+                                                size="small"
+                                                onClick={(e) =>
+                                                    this.deleteProduct(row._id)
+                                                }>
+                                                Delete
+                                            </Button>
+                                        </TableCell>
 
-                                    <TableCell>
-                                        <Button
-                                            className="button_style"
-                                            variant="contained"
-                                            color="primary"
-                                            size="small">
-                                            {/* <MaterialLink
+                                        <TableCell>
+                                            <Button
+                                                className="button_style"
+                                                variant="contained"
+                                                color="primary"
+                                                size="small">
+                                                {/* <MaterialLink
                                                 style={{
                                                     textDecoration: "none",
                                                     color: "white",
@@ -695,13 +644,17 @@ export default class Dashboard extends Component {
                                                 href="/profile">
                                                 BeneFiciary Details
                                             </MaterialLink> */}
-                                            <Link    style={{
-                                                    textDecoration: "none",
-                                                    color: "white",
-                                                }} to={"/profile/" + row._id}>
-                                                BeneFiciary Details
-                                            </Link>
-                                        </Button>
+                                                <Link
+                                                    style={{
+                                                        textDecoration: "none",
+                                                        color: "white",
+                                                    }}
+                                                    to={`/profile/${row._id}`}
+                                                    state={row}>
+                                                    BeneFiciary Details
+                                                </Link>
+                                            </Button>
+                                        </TableCell>
                                     </TableCell>
                                 </TableRow>
                             ))}
