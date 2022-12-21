@@ -1,9 +1,15 @@
-module.exports = function (webpackEnv) {
-    return {
-        resolve: {
-            fallback: {
-                crypto: require.resolve("crypto-browserify"),
-            },
-        },
-    };
-};
+module.exports = {
+   
+    resolve: {
+         fallback:{
+
+            process: require.resolve('process/browser')
+
+
+         },
+
+    }
+
+
+
+}

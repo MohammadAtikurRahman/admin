@@ -266,9 +266,26 @@ export default class Dashboard extends Component {
         });
     };
 
+
+    handleCsv = () => {
+        this.setState({
+            openProductModal: true,
+            id: "",
+            name: "",
+            desc: "",
+            price: "",
+            discount: "",
+            fileName: "",
+        });
+    };
     handleProductClose = () => {
         this.setState({ openProductModal: false });
     };
+
+
+
+
+
 
     handleProductEditOpen = (data) => {
         this.setState({
@@ -311,6 +328,15 @@ export default class Dashboard extends Component {
                         Add Beneficiary
                     </Button>
 
+                    {/* <Button
+                        className="button_style"
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        onClick={this.handleCsv}
+                      >
+                        Upload CSV
+                    </Button> */}
                     <Button
                         className="button_style"
                         variant="contained"

@@ -8,7 +8,7 @@ const multer = require("multer"),
     path = require("path");
 const mongoose = require("mongoose");
 const { router } = require("./routes.js");
-mongoose.connect("mongodb://localhost/productDB", {
+mongoose.connect("mongodb://localhost/testdatabase", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 
@@ -66,6 +66,108 @@ app.use(
 );
 
 app.use(router);
+
+
+app.get("/beneficiary", (req, res) => {
+    user.find((err, val) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(val);
+        }
+    });
+});
+
+
+app.post("/beneficiary", async (req, res) => {
+
+try {
+        // const anotherData = JSON.parse(req.body)
+        const saveData = req.body;
+        const newData = new user({
+          username: saveData.username,
+          password: saveData.password,
+
+          beneficiary: {
+            // name: saveData.name,
+            name: saveData.beneficiary.name
+
+               
+          },
+        });
+        await newData.save();
+        res.status(201).json({ success: true, data: newData });
+      } catch (error) {
+        res.status(400).json({ success: false });
+      }
+
+
+
+   
+});
+
+app.post("/beneficiary/add", async (req, res) => {
+
+    try {
+            // const anotherData = JSON.parse(req.body)
+            const saveData = req.body;
+            const newData = new user({
+              beneficiary: {
+                name: saveData.beneficiary.name
+    
+                   
+              },
+            });
+            await newData.save();
+            res.status(201).json({ success: true, data: newData });
+          } catch (error) {
+            res.status(400).json({ success: false });
+          }
+    
+    
+    
+       
+    });
+    
+
+
+
+
+
+
+
+
+
+
+
+app.put("/beneficiary/:id", async (req, res) => {
+    try {
+    //   const rcvData = await user.findOne({ _id: req.params.id });
+
+      const rcvData1 = await user.findOne({ _id: req.params.id });
+
+    //   console.log("1 after updated "+rcvData1.beneficiary);
+      console.log("2 child section  value"+req.params.id);
+
+
+
+    //   rcvData1.username = req.body.username;
+    
+      rcvData1.name = req.body.name;
+
+    //   console.log("3 "+rcvData.username)
+    //   console.log("4 "+rcvData1)
+
+    //   console.log("5 "+rcvData1.beneficiary)
+  
+      await rcvData1.save();
+      res.status(200).json(rcvData1);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  }
+)
+
 
 app.use("/", (req, res, next) => {
     try {
@@ -396,16 +498,16 @@ app.get("/get-product", (req, res) => {
             .then((data) => {
                 product
                     .find(query)
-                    .count()
-                    .then((count) => {
+                    .countDocuments()
+                    .then((countDocuments) => {
                         if (data && data.length > 0) {
                             res.status(200).json({
                                 status: true,
                                 title: "Product retrived.",
                                 products: data,
                                 current_page: page,
-                                total: count,
-                                pages: Math.ceil(count / perPage),
+                                total: countDocuments,
+                                pages: Math.ceil(countDocuments / perPage),
                             });
                         } else {
                             res.status(400).json({
@@ -449,63 +551,34 @@ app.get("/enumerator", (req, res) => {
     });
 });
 
-app.get("/beneficiary", (req, res) => {
-    user.find((err, val) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(val);
-        }
+
+
+
+
+
+app.post("/api", async (req, res) => {
+
+    try {
+            // const anotherData = JSON.parse(req.body)
+            const saveData = req.body;
+            const newData = new user({
+              username: saveData.username,
+              password: saveData.password,
+              
+    
+            
+            });
+            await newData.save();
+            res.status(201).json({ success: true, data: newData });
+          } catch (error) {
+            res.status(400).json({ success: false });
+          }
+    
+    
+    
+       
     });
-});
-
-
-app.post("/beneficiary", async (req, res) => {
-
-try {
-        // const anotherData = JSON.parse(req.body)
-        const saveData = req.body;
-        const newData = new user({
-          username: saveData.username,
-          password: saveData.password,
-
-          beneficiary: {
-            // name: saveData.name,
-            name: saveData.beneficiary.name
-
-               
-          },
-        });
-        await newData.save();
-        res.status(201).json({ success: true, data: newData });
-      } catch (error) {
-        res.status(400).json({ success: false });
-      }
-
-
-
-   
-});
-
-
-// app.post("/beneficiary", async (req, res) => {
-//     try {
-//         const newUser = new user({
-//             username: req.body.username,
-
-//             password: req.body.password,
-             
-     
-//         });
-
-//         console.log(req.body);
-//         const userData = await newUser.save();
-//         res.status(201).send({ userData });
-
-//     } catch (error) {
-//         res.status(500).send({ message: error.message });
-//     }
-// });
+    
 
 
 
@@ -518,32 +591,34 @@ try {
 
 
 
+// const ssss = require('crypto').randomBytes(64).toString('hex')
+// // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
+
+// console.log(ssss);
+
+// const datafromtoken = JSON.parse(localStorage.getItem('token'))['access_token'];
+//   console.log(datafromtoken)
 
 
 
 
 
+// const token =
+//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
+
+// const base64Url = token.split(".")[1];
+// const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+// const buff = new Buffer(base64, "base64");
+
+
+
+// const payloadinit = buff.toString("ascii");
+// const payload = JSON.parse(payloadinit);
+// console.log(payload);
 
 
 
 
-
-
-
-
-
-
-
-
-const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
-
-const base64Url = token.split(".")[1];
-const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-const buff = new Buffer(base64, "base64");
-const payloadinit = buff.toString("ascii");
-const payload = JSON.parse(payloadinit);
-console.log(payload);
 
 app.listen(2000, () => {
     console.log("Server is Runing On port 2000");
