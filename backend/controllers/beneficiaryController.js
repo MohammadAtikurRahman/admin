@@ -24,5 +24,10 @@ async function addBeneficiary(req, res) {
 
     return res.status(200).json({ user: user });
 }
+async function getBeneficiaries(req, res) {
+    const user = jwt_decode(req.headers?.token);
+    let beneficiaries = (await User.findById(user.id))?.toJSON()?.beneficiary;
+    return res.status(200).json({ beneficiaries });
+}
 
-module.exports = { addBeneficiary };
+module.exports = { addBeneficiary, getBeneficiaries };

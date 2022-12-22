@@ -21,6 +21,10 @@ const product = require("./model/product.js");
 const user = require("./model/user.js");
 
 app.use(express.json());
+app.use((req, res, next) => {
+    console.log(req.method, req.url);
+    next();
+});
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -63,17 +67,6 @@ app.use(
 );
 
 app.use(router);
-
-app.get("/beneficiary", (req, res) => {
-    user.find((err, val) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(val);
-        }
-    });
-});
-
 app.post("/beneficiary", async (req, res) => {
     try {
         // const anotherData = JSON.parse(req.body)
@@ -524,16 +517,16 @@ app.post("/api", async (req, res) => {
 // const datafromtoken = JSON.parse(localStorage.getItem('token'))['access_token'];
 //   console.log(datafromtoken)
 
-// const token =
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
+const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
 
-// const base64Url = token.split(".")[1];
-// const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-// const buff = new Buffer(base64, "base64");
+const base64Url = token.split(".")[1];
+const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+const buff = new Buffer(base64, "base64");
 
-// const payloadinit = buff.toString("ascii");
-// const payload = JSON.parse(payloadinit);
-// console.log(payload);
+const payloadinit = buff.toString("ascii");
+const payload = JSON.parse(payloadinit);
+console.log(payload);
 
 app.listen(2000, () => {
     console.log("Server is Runing On port 2000");
