@@ -19,6 +19,7 @@ mongoose.connect("mongodb://localhost/testdatabase", {
 const fs = require("fs");
 const product = require("./model/product.js");
 const user = require("./model/user.js");
+const jwt_decode = require("jwt-decode");
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -525,7 +526,7 @@ const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
 const buff = new Buffer(base64, "base64");
 
 const payloadinit = buff.toString("ascii");
-const payload = JSON.parse(payloadinit);
+var payload = JSON.parse(payloadinit);
 console.log(payload);
 
 app.listen(2000, () => {

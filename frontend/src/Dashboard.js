@@ -32,8 +32,40 @@ export default class Dashboard extends Component {
             id: "",
 
             name: "",
-            fatherName: "",
-            nid: "",
+            f_nm: "",
+            ben_nid: "",
+            sl: "",
+            ben_id: "",
+            m_nm: "",
+            age: "",
+            dis: "",
+            sub_dis: "",
+            uni: "",
+            vill: "",
+            relgn: "",
+            job: "",
+            gen: "",
+            mob: "",
+            pgm: "",
+            pass: "",
+            bank: "",
+            branch: "",
+            r_out: "",
+            mob_1: "",
+            mob_own: "",
+            ben_sts: "",
+            nid_sts: "",
+            a_sts: "",
+            u_nm: "",
+            dob: "",
+
+
+            accre: "",
+            f_allow: "",
+
+
+
+
 
             desc: "",
             price: "",
@@ -107,7 +139,7 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], pages: 0 },
-                    () => {}
+                    () => { }
                 );
             });
     };
@@ -159,9 +191,9 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
+            this.setState({ fileName: e.target.files[0].name }, () => { });
         }
-        this.setState({ [e.target.name]: e.target.value }, () => {});
+        this.setState({ [e.target.name]: e.target.value }, () => { });
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
@@ -175,8 +207,34 @@ export default class Dashboard extends Component {
             .post("http://localhost:2000/beneficiary/add", {
                 beneficiary: {
                     name: this.state.name,
-                    fatherName: this.state.fatherName,
-                    nid: this.state.nid,
+                    f_nm: this.state.f_nm,
+                    ben_nid: this.state.ben_nid,
+                    sl: this.state.sl,
+                    ben_id: this.state.ben_id,
+                    m_nm: this.state.m_nm,
+                    age: this.state.age,
+                    dis: this.state.dis,
+                    sub_dis: this.state.sub_dis,
+                    uni: this.state.uni,
+                    vill: this.state.vill,
+                    relgn: this.state.relgn,
+                    job: this.state.job,
+                    gen: this.state.gen,
+                    mob: this.state.mob,
+
+                    pgm: this.state.pgm,
+                    pass: this.state.pass,
+                    bank: this.state.bank,
+
+                    branch: this.state.branch,
+                    r_out: this.state.r_out,
+                    mob_1: this.state.mob_1,
+                    mob_own: this.state.mob_own,
+                    ben_sts: this.state.ben_sts,
+                    nid_sts: this.state.nid_sts,
+                    a_sts: this.state.a_sts,
+                    u_nm: this.state.u_nm,
+                    dob: this.state.dob,
                 },
                 token: localStorage.getItem("token"),
             })
@@ -321,15 +379,6 @@ export default class Dashboard extends Component {
                         Add Beneficiary
                     </Button>
 
-                    {/* <Button
-                        className="button_style"
-                        variant="contained"
-                        color="secondary"
-                        size="small"
-                        onClick={this.handleCsv}
-                      >
-                        Upload CSV
-                    </Button> */}
                     <Button
                         className="button_style"
                         variant="contained"
@@ -421,7 +470,7 @@ export default class Dashboard extends Component {
                             name="price"
                             value={this.state.price}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Nid"
+                            placeholder="Beneficiary ben_nid"
                             required
                         />
                         <br />
@@ -481,7 +530,8 @@ export default class Dashboard extends Component {
                     open={this.state.openProductModal}
                     onClose={this.handleProductClose}
                     aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description">
+                    aria-describedby="alert-dialog-description"
+                    maxWidth="xl">
                     <DialogTitle id="alert-dialog-title">
                         Add Beneficiary
                     </DialogTitle>
@@ -496,30 +546,413 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Name"
                             required
                         />
-                        <br />
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="fatherName"
-                            value={this.state.fatherName}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary Father"
-                            required
-                        />
-                        <br />
+                        &nbsp;
+                        &nbsp;
+
+
+
                         <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
-                            name="nid"
-                            value={this.state.nid}
+                            name="sl"
+                            value={this.state.sl}
                             onChange={this.onChange}
-                            placeholder="Beneficiary NID"
+                            placeholder="Serail"
                             required
                         />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="ben_nid"
+                            value={this.state.ben_nid}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary ben_nid"
+                            required
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="f_nm"
+                            value={this.state.f_nm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary Father"
+
+
+                        />
+
                         <br />
+
+
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="m_nm"
+                            value={this.state.m_nm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary mother"
+
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="ben_id"
+                            value={this.state.ben_id}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary id"
+
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="age"
+                            value={this.state.age}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary age"
+
+
+                        />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="dis"
+                            value={this.state.dis}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary district"
+
+
+                        />
                         <br />
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="sub_dis"
+                            value={this.state.sub_dis}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary thana"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="uni"
+                            value={this.state.uni}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary union"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="vill"
+                            value={this.state.vill}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary village"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="relgn"
+                            value={this.state.relgn}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary relgn"
+
+                        />
+                        <br />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="job"
+                            value={this.state.job}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary job"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="gen"
+                            value={this.state.gen}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary gen"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="mob"
+                            value={this.state.mob}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary mobile"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="pgm"
+                            value={this.state.pgm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary pgm"
+
+                        />
+
+
+
+                        <br />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="pass"
+                            value={this.state.pass}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary passbook"
+
+                        />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="bank"
+                            value={this.state.bank}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary bank"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="branch"
+                            value={this.state.branch}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary branch name"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="r_out"
+                            value={this.state.r_out}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary rout"
+
+                        />
+
+
+
+                        <br />
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_1"
+                            value={this.state.mob_1}
+                            onChange={this.onChange}
+                            placeholder="2nd mobile no"
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_own"
+                            value={this.state.mob_own}
+                            onChange={this.onChange}
+                            placeholder="owner of the mobile"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="ben_sts"
+                            value={this.state.ben_sts}
+                            onChange={this.onChange}
+                            placeholder="beneficiary sts"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="nid_sts"
+                            value={this.state.nid_sts}
+                            onChange={this.onChange}
+                            placeholder="nid sts"
+
+                        />
+                        <br />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="a_sts"
+                            value={this.state.a_sts}
+                            onChange={this.onChange}
+                            placeholder="Approval Status "
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="u_nm"
+                            value={this.state.u_nm}
+                            onChange={this.onChange}
+                            placeholder="username  "
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            autoComplete="off"
+                            name="dob"
+                            value={this.state.dob}
+                            onChange={this.onChange}
+                            placeholder="date of birth  "
+
+                        />
+
+
+&nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            autoComplete="off"
+                            name="accre"
+                            value={this.state.accre}
+                            onChange={this.onChange}
+                            placeholder="account created "
+
+                        />
+
+
+&nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            autoComplete="off"
+                            name="f_allow"
+                            value={this.state.f_allow}
+                            onChange={this.onChange}
+                            placeholder=" f_allow   "
+
+                        />
                         <br />
                         &nbsp;
                     </DialogContent>
@@ -533,8 +966,26 @@ export default class Dashboard extends Component {
                         <Button
                             disabled={
                                 this.state.name == "" ||
-                                this.state.fatherName == "" ||
-                                this.state.nid == ""
+                                this.state.f_nm == "" ||
+                                this.state.ben_nid == "" ||
+                                this.state.sl == "" ||
+                                this.state.ben_id == "" ||
+                                this.state.m_nm == "" ||
+                                this.state.age == "" ||
+                                this.state.dis == "" ||
+                                this.state.sub_dis == "" ||
+                                this.state.uni == "" ||
+                                this.state.vill == "" ||
+                                this.state.relgn == "" ||
+                                this.state.job == "" ||
+                                this.state.gen == "" ||
+                                this.state.mob == ""
+
+
+
+
+
+
                             }
                             onClick={(e) => this.addProduct()}
                             color="primary"
@@ -557,15 +1008,18 @@ export default class Dashboard extends Component {
                         placeholder="Search by Beneficiary"
                         required
                     />
+
+
+
+
+
+
+
+
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">
-                                    Beneficiary Image
-                                </TableCell>
-                                <TableCell align="center">
-                                    Beneficiary Id
-                                </TableCell>
+
                                 <TableCell align="center">
                                     Beneficiary Name
                                 </TableCell>
@@ -573,7 +1027,7 @@ export default class Dashboard extends Component {
                                     Beneficiary Father
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary NID
+                                    Beneficiary ben_nid
                                 </TableCell>
                                 <TableCell align="center">Test Score</TableCell>
                                 <TableCell align="center">Action</TableCell>
@@ -582,61 +1036,63 @@ export default class Dashboard extends Component {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
+
+
                         <TableBody>
                             {this.state?.beneficiaries?.map((row) => (
                                 <TableRow key={row.name}>
+
                                     <TableCell align="center">
-                                        <TableCell align="center">
-                                            {row.name}
-                                        </TableCell>
+                                        {row.name}
+                                    </TableCell>
 
-                                        <TableCell
-                                            align="center"
-                                            component="th"
-                                            scope="row">
-                                            {row.fatherName}
-                                        </TableCell>
+                                    <TableCell
+                                        align="center"
+                                        component="th"
+                                        scope="row">
+                                        {row.f_nm}
+                                    </TableCell>
 
-                                        <TableCell align="center">
-                                            {row.nid}
-                                        </TableCell>
+                                    <TableCell align="center">
+                                        {row.ben_nid}
+                                    </TableCell>
 
-                                        <TableCell align="center">
-                                            {row.created_at}
-                                        </TableCell>
+                                    <TableCell align="center">
+                                        {row.created_at}
+                                    </TableCell>
 
-                                        <TableCell align="center">
-                                            <Button
-                                                className="button_style"
-                                                variant="outlined"
-                                                color="primary"
-                                                size="small"
-                                                onClick={(e) =>
-                                                    this.handleProductEditOpen(
-                                                        row
-                                                    )
-                                                }>
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                className="button_style"
-                                                variant="outlined"
-                                                color="secondary"
-                                                size="small"
-                                                onClick={(e) =>
-                                                    this.deleteProduct(row._id)
-                                                }>
-                                                Delete
-                                            </Button>
-                                        </TableCell>
+                                    <TableCell align="center">
+                                        <Button
+                                            className="button_style"
+                                            variant="outlined"
+                                            color="primary"
+                                            size="small"
+                                            onClick={(e) =>
+                                                this.handleProductEditOpen(
+                                                    row
+                                                )
+                                            }>
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            className="button_style"
+                                            variant="outlined"
+                                            color="secondary"
+                                            size="small"
+                                            onClick={(e) =>
+                                                this.deleteProduct(row._id)
+                                            }>
+                                            Delete
+                                        </Button>
+                                    </TableCell>
 
-                                        <TableCell>
-                                            <Button
-                                                className="button_style"
-                                                variant="contained"
-                                                color="primary"
-                                                size="small">
-                                                {/* <MaterialLink
+                                    <TableCell align="center" >
+                                        <Button
+                                            className="button_style"
+                                            variant="contained"
+                                            color="primary"
+                                            size="small">
+                                            {/* <MaterialLink
                                                 style={{
                                                     textDecoration: "none",
                                                     color: "white",
@@ -644,22 +1100,30 @@ export default class Dashboard extends Component {
                                                 href="/profile">
                                                 BeneFiciary Details
                                             </MaterialLink> */}
-                                                <Link
-                                                    style={{
-                                                        textDecoration: "none",
-                                                        color: "white",
-                                                    }}
-                                                    to={`/profile/${row._id}`}
-                                                    state={row}>
-                                                    BeneFiciary Details
-                                                </Link>
-                                            </Button>
-                                        </TableCell>
+                                            <Link
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "white",
+                                                }}
+                                                to={`/profile/${row._id}`}
+                                                state={row}>
+                                                BeneFiciary Details
+                                            </Link>
+                                        </Button>
                                     </TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
+
+
+
+
+
+
+
+
                     <br />
                     <Pagination
                         count={this.state.pages}
