@@ -91,7 +91,7 @@ export default class Dashboard extends Component {
             });
         }
 
-        axios.get(`http://localhost:2000/user-details`).then((res) => {
+        axios.get(`http://172.104.191.159:2000/user-details`).then((res) => {
             const persons = res.data;
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
@@ -117,7 +117,7 @@ export default class Dashboard extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(`http://localhost:2000/beneficiary`, {
+            .get(`http://172.104.191.159:2000/beneficiary`, {
                 message: "hello",
                 headers: {
                     token: this.state.token,
@@ -147,7 +147,7 @@ export default class Dashboard extends Component {
     deleteProduct = (id) => {
         axios
             .post(
-                "http://localhost:2000/delete-product",
+                "http://172.104.191.159:2000/delete-product",
                 {
                     id: id,
                 },
@@ -204,7 +204,7 @@ export default class Dashboard extends Component {
     addProduct = () => {
         const fileInput = document.querySelector("#fileInput");
         axios
-            .post("http://localhost:2000/beneficiary/add", {
+            .post("http://172.104.191.159:2000/beneficiary/add", {
                 beneficiary: {
                     name: this.state.name,
                     f_nm: this.state.f_nm,
@@ -235,6 +235,10 @@ export default class Dashboard extends Component {
                     a_sts: this.state.a_sts,
                     u_nm: this.state.u_nm,
                     dob: this.state.dob,
+                    accre: this.state.accre,
+                    f_allow: this.state.f_allow,
+
+
                 },
                 token: localStorage.getItem("token"),
             })
@@ -281,7 +285,7 @@ export default class Dashboard extends Component {
         file.append("price", this.state.price);
 
         axios
-            .post("http://localhost:2000/update-product", file, {
+            .post("http://172.104.191.159:2000/update-product", file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,
@@ -918,11 +922,15 @@ export default class Dashboard extends Component {
                         <TextField
                             id="standard-basic"
                             type="date"
+                            label="date of birth"
                             autoComplete="off"
                             name="dob"
                             value={this.state.dob}
                             onChange={this.onChange}
                             placeholder="date of birth  "
+                            InputLabelProps={{
+                                shrink: true,
+                              }}
 
                         />
 
@@ -933,10 +941,14 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="date"
                             autoComplete="off"
+                            label="account created"
                             name="accre"
                             value={this.state.accre}
                             onChange={this.onChange}
                             placeholder="account created "
+                            InputLabelProps={{
+                                shrink: true,
+                              }}
 
                         />
 
@@ -947,10 +959,14 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="date"
                             autoComplete="off"
+                            label="first allow"
                             name="f_allow"
                             value={this.state.f_allow}
                             onChange={this.onChange}
                             placeholder=" f_allow   "
+                            InputLabelProps={{
+                                shrink: true,
+                              }}
 
                         />
                         <br />

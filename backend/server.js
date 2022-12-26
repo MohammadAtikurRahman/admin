@@ -11,7 +11,7 @@ const multer = require("multer"),
 const mongoose = require("mongoose").set("debug", true);
 const { router } = require("./routes.js");
 
-mongoose.connect("mongodb://localhost/testdatabase", {
+mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });

@@ -24,7 +24,7 @@ export default class Bene extends React.Component {
   const info =users.beneficiary
    console.log(users.beneficiary)
 
-    axios.post(`http://localhost:2000/beneficiary/add`, { ...users})
+    axios.post(`http://172.104.191.159:2000/beneficiary/add`, { ...users})
       .then(res => {
         
         // const info1=res.config.data;

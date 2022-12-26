@@ -87,34 +87,24 @@ export default function Profile() {
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Serial Number</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="123454"></input>
+                       <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.sl}</label>
                     </div>
                 </div>
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">
                             {" "}
-                            ID of the Beneficiary
+                         Beneficiary Nid
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="123454"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_nid}</label>
+
                     </div>
                 </div>
                 <div className="col">
                     <div className="input-group">
-                        <span className="input-group-text">National Id</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="19283744454"></input>
+                        <span className="input-group-text">Beneficiary Id</span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_id}</label>
+
                     </div>
                 </div>
             </div>
@@ -126,32 +116,23 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Name</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Md. Anowar Hossain"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.name}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
-                        <span className="input-group-text">Mother Name</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Nazmun Nahar"></input>
+                        <span className="input-group-text">Father Name</span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_id}</label>
+
                     </div>
                 </div>
 
                 <div className="col-4">
                     <div className="input-group">
-                        <span className="input-group-text"> Date of birth</span>
-                        <input
-                            type="date"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Nazmun Nahar"></input>
+                        <span className="input-group-text"> Mother Name</span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.m_nm}</label>
+
                     </div>
                 </div>
             </div>
@@ -164,21 +145,15 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Age</span>
-                        <input
-                            type="Number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="30"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.age}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">District name </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Dhaka"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.dis}</label>
+
                     </div>
                 </div>
 
@@ -188,11 +163,8 @@ export default function Profile() {
                             {" "}
                             Sub-district or Thana{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="mirpur-11"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.sub_dis}</label>
+
                     </div>
                 </div>
             </div>
@@ -205,32 +177,23 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Union name</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="avenue-5"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.uni}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
-                        <span className="input-group-text">Ward number</span>
-                        <input
-                            type="number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="7"></input>
+                        <span className="input-group-text"> village</span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.vill}</label>
+
                     </div>
                 </div>
 
                 <div className="col-4">
                     <div className="input-group">
-                        <span className="input-group-text"> Village Name </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="noepara"></input>
+                        <span className="input-group-text"> date of birth </span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.dob}</label>
+
                     </div>
                 </div>
             </div>
@@ -243,11 +206,8 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Religion</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Islam"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.relgn}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -255,22 +215,16 @@ export default function Profile() {
                         <span className="input-group-text">
                             Occupation Name{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="business"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.job}</label>
+
                     </div>
                 </div>
 
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text"> Gender </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Male"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.gen}</label>
+
                     </div>
                 </div>
             </div>
@@ -285,11 +239,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Primary Phone number
                         </span>
-                        <input
-                            type="Number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="01772392237"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -297,11 +248,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Name Of Program{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="cse fest"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.pgm}</label>
+
                     </div>
                 </div>
 
@@ -311,11 +259,8 @@ export default function Profile() {
                             {" "}
                             Passbook Number{" "}
                         </span>
-                        <input
-                            type="numbrt"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="56611"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.pass}</label>
+
                     </div>
                 </div>
             </div>
@@ -328,11 +273,8 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Bank Name</span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="AB Bank"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.bank}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -340,11 +282,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Branch name of bank{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Dhaka"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.branch}</label>
+
                     </div>
                 </div>
 
@@ -354,11 +293,8 @@ export default function Profile() {
                             {" "}
                             First account created{" "}
                         </span>
-                        <input
-                            type="date"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="mirpur-11"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.accre}</label>
+
                     </div>
                 </div>
             </div>
@@ -373,11 +309,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Bank routing number
                         </span>
-                        <input
-                            type="Number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="335356"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.r_out}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -386,11 +319,8 @@ export default function Profile() {
                             {" "}
                             first allowance{" "}
                         </span>
-                        <input
-                            type="date"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="123"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.f_allow}</label>
+
                     </div>
                 </div>
 
@@ -400,11 +330,8 @@ export default function Profile() {
                             {" "}
                             Secondary mobile number{" "}
                         </span>
-                        <input
-                            type="number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="01812858585"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob_1}</label>
+
                     </div>
                 </div>
             </div>
@@ -419,11 +346,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Ownership of that mobile{" "}
                         </span>
-                        <input
-                            type="Number"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="335356"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob_own}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -432,11 +356,8 @@ export default function Profile() {
                             {" "}
                             Beneficiary status{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="active"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_sts}</label>
+
                     </div>
                 </div>
 
@@ -446,11 +367,8 @@ export default function Profile() {
                             {" "}
                             National ID status{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="active"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.nid_sts}</label>
+
                     </div>
                 </div>
             </div>
@@ -465,11 +383,8 @@ export default function Profile() {
                         <span className="input-group-text">
                             Approval status{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="Accepted"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.a_sts}</label>
+
                     </div>
                 </div>
                 <div className="col-4">
@@ -478,11 +393,8 @@ export default function Profile() {
                             {" "}
                             Beneficiary username{" "}
                         </span>
-                        <input
-                            type="text"
-                            aria-label="First name"
-                            className="form-control"
-                            placeholder="atikur2342"></input>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.u_nm}</label>
+
                     </div>
                 </div>
             </div>

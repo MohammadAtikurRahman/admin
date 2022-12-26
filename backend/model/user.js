@@ -3,18 +3,18 @@ var Schema = mongoose.Schema;
 
 const beneficiarySchema = new Schema(
     {
-        name: String,
+        name: String,  // done
       
-        f_nm: String,
-        ben_nid: String,
-        sl: Number,
-        ben_id: Number,
-        m_nm: String,
-        age: Number,
-        dis: String,
-        sub_dis: String,
-        uni: String,
-        vill: String,
+        f_nm: String, //done
+        ben_nid: String, //done
+        sl: Number, //done
+        ben_id: Number, //done
+        m_nm: String,//done
+        age: Number,// done
+        dis: String,//done
+        sub_dis: String,// done
+        uni: String, // done
+        vill: String, // done
         relgn: String,
         job: String,
         gen: String,
