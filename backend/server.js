@@ -72,25 +72,25 @@ app.use(
 );
 
 app.use(router);
-app.post("/beneficiary", async (req, res) => {
-    try {
-        // const anotherData = JSON.parse(req.body)
-        const saveData = req.body;
-        const newData = new user({
-            username: saveData.username,
-            password: saveData.password,
+// app.post("/beneficiary", async (req, res) => {
+//     try {
+//         // const anotherData = JSON.parse(req.body)
+//         const saveData = req.body;
+//         const newData = new user({
+//             username: saveData.username,
+//             password: saveData.password,
 
-            beneficiary: {
-                // name: saveData.name,
-                name: saveData.beneficiary.name,
-            },
-        });
-        await newData.save();
-        res.status(201).json({ success: true, data: newData });
-    } catch (error) {
-        res.status(400).json({ success: false });
-    }
-});
+//             beneficiary: {
+//                 // name: saveData.name,
+//                 name: saveData.beneficiary.name,
+//             },
+//         });
+//         await newData.save();
+//         res.status(201).json({ success: true, data: newData });
+//     } catch (error) {
+//         res.status(400).json({ success: false });
+//     }
+// });
 
 app.put("/beneficiary/:id", async (req, res) => {
     try {
@@ -124,6 +124,7 @@ app.use("/", (req, res, next) => {
             req.path == "/register" ||
             req.path == "/" ||
             req.path == "/api" ||
+            req.path == "/token" ||
             req.path == "/user-details" ||
             req.path == "/enumerator" ||
             req.path == "/beneficiary"
@@ -156,11 +157,11 @@ app.use("/", (req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    res.send({ payload });
+    res.send({  });
 });
 
 app.get("/user-details", (req, res) => {
-    res.send({ payload });
+    res.send({  });
 });
 
 /* login api */
@@ -489,6 +490,22 @@ app.get("/api", (req, res) => {
     });
 });
 
+app.get("/token", (req, res) => {
+    user.find((err, val) => {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var obj = JSON.parse(val);
+            var mm = obj.username;
+
+             console.log(mm)
+            res.json(mm);
+        }
+    });
+});
+
+
 app.get("/enumerator", (req, res) => {
     product.find((err, val) => {
         if (err) {
@@ -517,6 +534,7 @@ app.post("/api", async (req, res) => {
 
 
 
+
 // const ssss = require('crypto').randomBytes(64).toString('hex')
 // // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
 
@@ -525,16 +543,18 @@ app.post("/api", async (req, res) => {
 // const datafromtoken = JSON.parse(localStorage.getItem('token'))['access_token'];
 //   console.log(datafromtoken)
 
-const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
 
-const base64Url = token.split(".")[1];
-const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-const buff = new Buffer(base64, "base64");
 
-const payloadinit = buff.toString("ascii");
-var payload = JSON.parse(payloadinit);
-console.log(payload);
+// const token =
+//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
+
+// const base64Url = token.split(".")[1];
+// const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+// const buff = new Buffer(base64, "base64");
+
+// const payloadinit = buff.toString("ascii");
+// var payload = JSON.parse(payloadinit);
+// console.log(payload);
 
 app.listen(PORT, () => {
     console.log("Server is Runing On port 2000");

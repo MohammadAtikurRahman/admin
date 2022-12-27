@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import jwt_decode from "jwt-decode";
+
+
 import {
     Button,
     TextField,
@@ -75,10 +78,12 @@ export default class Dashboard extends Component {
             page: 1,
             search: "",
             beneficiaries: [],
+            userinfo: [],
             persons: [],
             pages: 0,
             loading: false,
         };
+
     }
 
     componentDidMount = () => {
@@ -124,12 +129,19 @@ export default class Dashboard extends Component {
                 },
             })
             .then((res) => {
-                console.log("here", res.data.beneficiaries);
+
+
+                console.log("here", Object.values(jwt_decode(res.config.headers.token)));
+                console.log("here", (res.data.beneficiaries));
+
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
                     pages: res.data?.pages,
+                    userinfo: Object.values(jwt_decode(res.config.headers.token)),
+
                 });
+
             })
             .catch((err) => {
                 swal({
@@ -138,7 +150,7 @@ export default class Dashboard extends Component {
                     type: "error",
                 });
                 this.setState(
-                    { loading: false, beneficiaries: [], pages: 0 },
+                    { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
                     () => { }
                 );
             });
@@ -363,16 +375,18 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <div>
-                    {this.state.persons.payload ? (
-                        <p>
-                            Enumerator Dashboard{" "}
-                            {this.state.persons.payload.user}{" "}
-                        </p>
-                    ) : (
-                        ""
-                    )}
 
-                    {/* <h3> {this.enumerator_name}</h3> */}
+
+
+                    <ol>
+                        {this.state.userinfo.map(user => (
+                            <ul key={user}>{user}</ul>
+                        ))}
+                    </ol>
+
+
+
+
 
                     <Button
                         className="button_style"
@@ -930,12 +944,12 @@ export default class Dashboard extends Component {
                             placeholder="date of birth  "
                             InputLabelProps={{
                                 shrink: true,
-                              }}
+                            }}
 
                         />
 
 
-&nbsp;
+                        &nbsp;
                         &nbsp;
                         <TextField
                             id="standard-basic"
@@ -948,12 +962,12 @@ export default class Dashboard extends Component {
                             placeholder="account created "
                             InputLabelProps={{
                                 shrink: true,
-                              }}
+                            }}
 
                         />
 
 
-&nbsp;
+                        &nbsp;
                         &nbsp;
                         <TextField
                             id="standard-basic"
@@ -966,7 +980,7 @@ export default class Dashboard extends Component {
                             placeholder=" f_allow   "
                             InputLabelProps={{
                                 shrink: true,
-                              }}
+                            }}
 
                         />
                         <br />
