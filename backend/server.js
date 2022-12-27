@@ -12,18 +12,20 @@ const multer = require("multer"),
 const mongoose = require("mongoose").set("debug", true);
 const { router } = require("./routes.js");
 
-mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+mongoose.connect(
+    "mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift",
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }
+);
 
 const fs = require("fs");
 const product = require("./model/product.js");
 const user = require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
-
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -124,7 +126,7 @@ app.use("/", (req, res, next) => {
             req.path == "/register" ||
             req.path == "/" ||
             req.path == "/api" ||
-            req.path == "/token" ||
+            req.path == "/users" ||
             req.path == "/user-details" ||
             req.path == "/enumerator" ||
             req.path == "/beneficiary"
@@ -157,11 +159,11 @@ app.use("/", (req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-    res.send({  });
+    res.send({});
 });
 
 app.get("/user-details", (req, res) => {
-    res.send({  });
+    res.send({});
 });
 
 /* login api */
@@ -490,18 +492,10 @@ app.get("/api", (req, res) => {
     });
 });
 
-app.get("/token", (req, res) => {
-    user.find((err, val) => {
-        if (err) {
-            console.log(err);
-        } else {
-
-            console.log(val)
-            res.json(val);
-        }
-    });
+app.get("/users", async (req, res) => {
+    let users = await user.find({}).select("-beneficiary");
+    return res.status(200).json(users);
 });
-
 
 app.get("/enumerator", (req, res) => {
     product.find((err, val) => {
@@ -528,10 +522,6 @@ app.post("/api", async (req, res) => {
     }
 });
 
-
-
-
-
 // const ssss = require('crypto').randomBytes(64).toString('hex')
 // // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
 
@@ -539,8 +529,6 @@ app.post("/api", async (req, res) => {
 
 // const datafromtoken = JSON.parse(localStorage.getItem('token'))['access_token'];
 //   console.log(datafromtoken)
-
-
 
 // const token =
 //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
