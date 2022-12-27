@@ -496,11 +496,8 @@ app.get("/token", (req, res) => {
             console.log(err);
         } else {
 
-            var obj = JSON.parse(val);
-            var mm = obj.username;
-
-             console.log(mm)
-            res.json(mm);
+            console.log(val)
+            res.json(val);
         }
     });
 });
