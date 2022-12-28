@@ -1,6 +1,39 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
+
+
+
+const testSchema = new Schema (
+
+
+
+    {
+        
+        
+        Test_datetime: Date,
+        Test_duration: Date,
+        Test_question: Number,
+        Test_input: Number,
+        Test_score: Number,
+
+        Test_correct: Boolean
+
+
+
+
+    },
+    { timestamps: true }
+
+
+
+)
+
+
+
+
+
+
 const beneficiarySchema = new Schema(
     {
         name: String,  // done
@@ -41,6 +74,8 @@ const beneficiarySchema = new Schema(
         dob: Date,
         accre: Date,
         f_allow: Date,
+
+        test: [testSchema],
 
     },
 { timestamps: true }
