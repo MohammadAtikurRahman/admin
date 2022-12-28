@@ -26,7 +26,7 @@ export default function Login(props) {
     const login = () => {
         const pwd = bcrypt.hashSync(user.password, salt);
         axios
-            .post("http://localhost:2000/login", {
+            .post("http://172.104.191.159:2000/login", {
                 username: user.username,
                 password: pwd,
             })
