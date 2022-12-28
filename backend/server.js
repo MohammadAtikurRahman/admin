@@ -127,8 +127,12 @@ app.use("/", (req, res, next) => {
             req.path == "/" ||
             req.path == "/api" ||
             req.path == "/users" ||
+            req.path == "/get-beneficiary" ||
             req.path == "/user-details" ||
             req.path == "/enumerator" ||
+            req.path == "/get-enumerator" ||
+            req.path == "/get-all" ||
+            req.path == "/get-login" ||
             req.path == "/beneficiary"
         ) {
             next();
@@ -491,11 +495,51 @@ app.get("/api", (req, res) => {
         }
     });
 });
+app.get("/get-all", (req, res) => {
+    user.find((err, val) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json(val);
+        }
+    });
+});
 
-app.get("/users", async (req, res) => {
+app.get("/get-enumerator", async (req, res) => {
     let users = await user.find({}).select("-beneficiary");
     return res.status(200).json(users);
 });
+
+
+app.get("/get-only", async (req, res) => {
+    let users = await user.find({}).select("-beneficiary");
+    return res.status(200).json(users);
+});
+
+app.get("/get-beneficiary", async (req, res) => {
+    let users = await user.find({}).select("-username").select("-password").select("-created_at")
+    
+    ;
+    return res.status(200).json(users);
+});
+
+app.get("/get-login", async (req, res) => {
+    let users = await user.find({}).select("-password").select("-username").select("-beneficiary.name").select("-beneficiary.f_nm")
+    .select("-beneficiary.ben_nid").select("-beneficiary.ben_id").select("-beneficiary.sl").select("-beneficiary.m_nm").select("-beneficiary.age").select("-beneficiary.dis")
+    .select("-beneficiary.sub_dis").select("-beneficiary.uni").select("-beneficiary.vill").select("-beneficiary.relgn").select("-beneficiary.job").select("-beneficiary.gen")
+    
+    .select("-beneficiary.mob").select("-beneficiary.pgm").select("-beneficiary.pass").select("-beneficiary.bank").select("-beneficiary.branch").select("-beneficiary.r_out")
+
+    .select("-beneficiary.mob_1").select("-beneficiary.ben_sts").select("-beneficiary.nid_sts").select("-beneficiary.a_sts").select("-beneficiary.u_nm")
+
+    .select("-beneficiary.dob").select("-beneficiary.accre").select("-beneficiary.f_allow").select("-beneficiary.mob_own")
+    
+    
+    
+    ;
+    return res.status(200).json(users);
+});
+
 
 app.get("/enumerator", (req, res) => {
     product.find((err, val) => {
@@ -521,6 +565,8 @@ app.post("/api", async (req, res) => {
         res.status(400).json({ success: false });
     }
 });
+
+
 
 // const ssss = require('crypto').randomBytes(64).toString('hex')
 // // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
