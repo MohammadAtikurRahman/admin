@@ -2,8 +2,10 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 
+let nextId = 10000;
+nextId = Math.floor(10000 + Math.random() * 90000);
 
-
+const nextIdBen = 10000;
 const testSchema = new Schema (
 
 
@@ -34,8 +36,13 @@ const testSchema = new Schema (
 
 
 
+
 const beneficiarySchema = new Schema(
+    
     {
+
+        id: { type: Number, default: () => nextId++ },
+
         name: String,  // done
       
         f_nm: String, //done
@@ -81,8 +88,14 @@ const beneficiarySchema = new Schema(
 { timestamps: true }
 );
 
+
+
+
 const userSchema = new Schema(
     {
+
+        id: { type: Number, default: () => nextId++ },
+
         username: String,
         password: String,
         country: String,
@@ -90,6 +103,18 @@ const userSchema = new Schema(
     },
     { timestamps: true }
 );
+
+
+
+// userSchema.method('toClient', function() {
+//     var obj = this.toObject();
+
+//     //Rename fields
+//     obj.id = obj._id;
+//     delete obj._id;
+
+//     return obj;
+// });
 
 const user = mongoose.model("user", userSchema);
 module.exports = user;

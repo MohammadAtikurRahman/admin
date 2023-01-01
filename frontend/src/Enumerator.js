@@ -537,7 +537,7 @@ export default class Dashboard extends Component {
 
                                     </TableCell>
 
-                                    <TableCell align="center">{row.created_at}</TableCell>
+                                    <TableCell align="center">{row.createdAt}</TableCell>
 
 
                                     {/* <TableCell align="center">{row.price}</TableCell> */}

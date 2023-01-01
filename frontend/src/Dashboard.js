@@ -377,16 +377,16 @@ export default class Dashboard extends Component {
                 <div>
 
 
-
+{/* 
                     <ol>
                         {this.state.userinfo.map(user => (
                             <ul key={user}>{user}</ul>
                         ))}
-                    </ol>
+                    </ol> */}
 
 
 
-
+                    <h2>Dashboard</h2>
 
                     <Button
                         className="button_style"

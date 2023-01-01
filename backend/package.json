@@ -23,6 +23,7 @@
     "jwt-decode": "^3.1.2",
     "mongoose": "^5.11.7",
     "multer": "^1.4.2",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "shortid": "^2.2.16"
   }
 }

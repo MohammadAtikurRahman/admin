@@ -134,6 +134,8 @@ app.use("/", (req, res, next) => {
             req.path == "/get-all" ||
             req.path == "/get-testscore" ||
             req.path == "/get-login" ||
+            req.path == "/list-beneficiary"||
+
             req.path == "/beneficiary"
         ) {
             next();
@@ -527,27 +529,28 @@ app.get("/get-testscore", async (req, res) => {
 });
 
 app.get("/get-beneficiary", async (req, res) => {
-    let users = await user.find({}).select("-username").select("-password").select("-created_at").select("-beneficiary.test")
+    let users = await user.find({}). select("-_id"). select("-id"). select("-username").select("-password").select("-created_at").select("-beneficiary.test")
     
     ;
     return res.status(200).json(users);
 });
 
 app.get("/get-login", async (req, res) => {
-    let users = await user.find({}).select("-password").select("-username").select("-beneficiary.name").select("-beneficiary.f_nm")
-    .select("-beneficiary.ben_nid").select("-beneficiary.ben_id").select("-beneficiary.sl").select("-beneficiary.m_nm").select("-beneficiary.age").select("-beneficiary.dis")
-    .select("-beneficiary.sub_dis").select("-beneficiary.uni").select("-beneficiary.vill").select("-beneficiary.relgn").select("-beneficiary.job").select("-beneficiary.gen")
+    // let users = await user.find({}).select("-password").select("-username").select("-beneficiary.name").select("-beneficiary.f_nm")
+    // .select("-beneficiary.ben_nid").select("-beneficiary.ben_id").select("-beneficiary.sl").select("-beneficiary.m_nm").select("-beneficiary.age").select("-beneficiary.dis")
+    // .select("-beneficiary.sub_dis").select("-beneficiary.uni").select("-beneficiary.vill").select("-beneficiary.relgn").select("-beneficiary.job").select("-beneficiary.gen")
     
-    .select("-beneficiary.mob").select("-beneficiary.pgm").select("-beneficiary.pass").select("-beneficiary.bank").select("-beneficiary.branch").select("-beneficiary.r_out")
+    // .select("-beneficiary.mob").select("-beneficiary.pgm").select("-beneficiary.pass").select("-beneficiary.bank").select("-beneficiary.branch").select("-beneficiary.r_out")
 
-    .select("-beneficiary.mob_1").select("-beneficiary.ben_sts").select("-beneficiary.nid_sts").select("-beneficiary.a_sts").select("-beneficiary.u_nm")
+    // .select("-beneficiary.mob_1").select("-beneficiary.ben_sts").select("-beneficiary.nid_sts").select("-beneficiary.a_sts").select("-beneficiary.u_nm")
 
-    .select("-beneficiary.dob").select("-beneficiary.accre").select("-beneficiary.f_allow").select("-beneficiary.mob_own").select("-beneficiary.test")
+    // .select("-beneficiary.dob").select("-beneficiary.accre").select("-beneficiary.f_allow").select("-beneficiary.mob_own").select("-beneficiary.test")
     
-    
+    let users = await user.find({}).select("-beneficiary")
+    return res.status(200).json(users);
     
     ;
-    return res.status(200).json(users);
+ 
 });
 
 
