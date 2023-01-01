@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const dataSchema = new Schema({
     time: Date,
-    value: String
+    value: String,
 });
 
 const nodeSchema = new Schema({
@@ -12,7 +12,7 @@ const nodeSchema = new Schema({
     number: Number,
     status: String,
     lastSeen: Date,
-    data: [dataSchema]
+    data: [dataSchema],
 });
 
 const siteSchema = new Schema({
@@ -20,8 +20,9 @@ const siteSchema = new Schema({
     name: String,
     description: String,
     totalNodes: Number,
-    nodes: [nodeSchema]
+    nodes: [nodeSchema],
 });
 
-const Site = mongoose.model('site',siteSchema);
+const Site = mongoose.model("site", siteSchema);
 module.exports = Site;
+

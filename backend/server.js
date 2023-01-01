@@ -2,7 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const cors = require("cors");
 
 const multer = require("multer"),
@@ -10,15 +9,14 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", true);
-const { router } = require("./routes.js");
+const {router} = require("./routes.js");
+const {randomNumberNotInUserCollection} = require("./helpers/number");
 
-mongoose.connect(
-    "mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift",
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    }
-);
+mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+});
 
 const fs = require("fs");
 const product = require("./model/product.js");
@@ -33,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 const dir = "./uploads";
 const upload = multer({
@@ -45,13 +43,7 @@ const upload = multer({
             callback(null, "./uploads");
         },
         filename: function (req, file, callback) {
-            callback(
-                null,
-                file.fieldname +
-                    "-" +
-                    Date.now() +
-                    path.extname(file.originalname)
-            );
+            callback(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
         },
     }),
 
@@ -70,7 +62,7 @@ app.use(
     bodyParser.urlencoded({
         // to support URL-encoded bodies
         extended: false,
-    })
+    }),
 );
 
 app.use(router);
@@ -98,7 +90,7 @@ app.put("/beneficiary/:id", async (req, res) => {
     try {
         //   const rcvData = await user.findOne({ _id: req.params.id });
 
-        const rcvData1 = await user.findOne({ _id: req.params.id });
+        const rcvData1 = await user.findOne({_id: req.params.id});
 
         //   console.log("1 after updated "+rcvData1.beneficiary);
         console.log("2 child section  value" + req.params.id);
@@ -134,28 +126,23 @@ app.use("/", (req, res, next) => {
             req.path == "/get-all" ||
             req.path == "/get-testscore" ||
             req.path == "/get-login" ||
-            req.path == "/list-beneficiary"||
-
+            req.path == "/list-beneficiary" ||
             req.path == "/beneficiary"
         ) {
             next();
         } else {
             /* decode jwt token if authorized*/
-            jwt.verify(
-                req.headers.token,
-                "shhhhh11111",
-                function (err, decoded) {
-                    if (decoded && decoded.user) {
-                        req.user = decoded;
-                        next();
-                    } else {
-                        return res.status(401).json({
-                            errorMessage: "User unauthorized!",
-                            status: false,
-                        });
-                    }
+            jwt.verify(req.headers.token, "shhhhh11111", function (err, decoded) {
+                if (decoded && decoded.user) {
+                    req.user = decoded;
+                    next();
+                } else {
+                    return res.status(401).json({
+                        errorMessage: "User unauthorized!",
+                        status: false,
+                    });
                 }
-            );
+            });
         }
     } catch (e) {
         res.status(400).json({
@@ -173,52 +160,18 @@ app.get("/user-details", (req, res) => {
     res.send({});
 });
 
-/* login api */
-app.post("/login", (req, res) => {
+/* user register api */
+app.post("/register", async (req, res) => {
     try {
+        const userId = await randomNumberNotInUserCollection();
+        console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({ username: req.body.username }, (err, data) => {
-                if (data.length > 0) {
-                    if (
-                        bcrypt.compareSync(data[0].password, req.body.password)
-                    ) {
-                        checkUserAndGenerateToken(data[0], req, res);
-                    } else {
-                        res.status(400).json({
-                            errorMessage: "Username or password is incorrect!",
-                            status: false,
-                        });
-                    }
-                } else {
-                    res.status(400).json({
-                        errorMessage: "Username or password is incorrect!",
-                        status: false,
-                    });
-                }
-            });
-        } else {
-            res.status(400).json({
-                errorMessage: "Add proper parameter first!",
-                status: false,
-            });
-        }
-    } catch (e) {
-        res.status(400).json({
-            errorMessage: "Something went wrong!",
-            status: false,
-        });
-    }
-});
-
-/* register api */
-app.post("/register", (req, res) => {
-    try {
-        if (req.body && req.body.username && req.body.password) {
-            user.find({ username: req.body.username }, (err, data) => {
+            user.find({username: req.body.username}, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
                         password: req.body.password,
+                        userId: userId,
                     });
                     User.save((err, data) => {
                         if (err) {
@@ -253,28 +206,6 @@ app.post("/register", (req, res) => {
         });
     }
 });
-
-function checkUserAndGenerateToken(data, req, res) {
-    jwt.sign(
-        { user: data.username, id: data._id },
-        "shhhhh11111",
-        { expiresIn: "1d" },
-        (err, token) => {
-            if (err) {
-                res.status(400).json({
-                    status: false,
-                    errorMessage: err,
-                });
-            } else {
-                res.json({
-                    message: "Login Successfully.",
-                    token: token,
-                    status: true,
-                });
-            }
-        }
-    );
-}
 
 /* Api to add Product */
 app.post("/add-product", upload.any(), (req, res) => {
@@ -335,12 +266,7 @@ app.post("/update-product", upload.any(), (req, res) => {
         ) {
             product.findById(req.body.id, (err, new_product) => {
                 // if file already exist than remove it
-                if (
-                    req.files &&
-                    req.files[0] &&
-                    req.files[0].filename &&
-                    new_product.image
-                ) {
+                if (req.files && req.files[0] && req.files[0].filename && new_product.image) {
                     const path = `./uploads/${new_product.image}`;
                     fs.unlinkSync(path);
                 }
@@ -393,24 +319,19 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.id) {
-            product.findByIdAndUpdate(
-                req.body.id,
-                { is_delete: true },
-                { new: true },
-                (err, data) => {
-                    if (data.is_delete) {
-                        res.status(200).json({
-                            status: true,
-                            title: "Product deleted.",
-                        });
-                    } else {
-                        res.status(400).json({
-                            errorMessage: err,
-                            status: false,
-                        });
-                    }
+            product.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
+                if (data.is_delete) {
+                    res.status(200).json({
+                        status: true,
+                        title: "Product deleted.",
+                    });
+                } else {
+                    res.status(400).json({
+                        errorMessage: err,
+                        status: false,
+                    });
                 }
-            );
+            });
         } else {
             res.status(400).json({
                 errorMessage: "Add proper parameter first!",
@@ -436,7 +357,7 @@ app.get("/get-product", (req, res) => {
         });
         if (req.query && req.query.search) {
             query["$and"].push({
-                name: { $regex: req.query.search },
+                name: {$regex: req.query.search},
             });
         }
         const perPage = 5;
@@ -453,11 +374,11 @@ app.get("/get-product", (req, res) => {
             })
             .skip(perPage * page - perPage)
             .limit(perPage)
-            .then((data) => {
+            .then(data => {
                 product
                     .find(query)
                     .countDocuments()
-                    .then((countDocuments) => {
+                    .then(countDocuments => {
                         if (data && data.length > 0) {
                             res.status(200).json({
                                 status: true,
@@ -475,7 +396,7 @@ app.get("/get-product", (req, res) => {
                         }
                     });
             })
-            .catch((err) => {
+            .catch(err => {
                 res.status(400).json({
                     errorMessage: err.message || err,
                     status: false,
@@ -513,25 +434,58 @@ app.get("/get-enumerator", async (req, res) => {
     return res.status(200).json(users);
 });
 
-
 app.get("/get-testscore", async (req, res) => {
-    let users = await user.find({}).select("-username").select("-password").select("-created_at").select("-beneficiary.name").select("-beneficiary.f_nm")
-    .select("-beneficiary.ben_nid").select("-beneficiary.ben_id").select("-beneficiary.sl").select("-beneficiary.m_nm").select("-beneficiary.age").select("-beneficiary.dis")
-    .select("-beneficiary.sub_dis").select("-beneficiary.uni").select("-beneficiary.vill").select("-beneficiary.relgn").select("-beneficiary.job").select("-beneficiary.gen")
-    
-    .select("-beneficiary.mob").select("-beneficiary.pgm").select("-beneficiary.pass").select("-beneficiary.bank").select("-beneficiary.branch").select("-beneficiary.r_out")
+    let users = await user
+        .find({})
+        .select("-username")
+        .select("-password")
+        .select("-created_at")
+        .select("-beneficiary.name")
+        .select("-beneficiary.f_nm")
+        .select("-beneficiary.ben_nid")
+        .select("-beneficiary.ben_id")
+        .select("-beneficiary.sl")
+        .select("-beneficiary.m_nm")
+        .select("-beneficiary.age")
+        .select("-beneficiary.dis")
+        .select("-beneficiary.sub_dis")
+        .select("-beneficiary.uni")
+        .select("-beneficiary.vill")
+        .select("-beneficiary.relgn")
+        .select("-beneficiary.job")
+        .select("-beneficiary.gen")
 
-    .select("-beneficiary.mob_1").select("-beneficiary.ben_sts").select("-beneficiary.nid_sts").select("-beneficiary.a_sts").select("-beneficiary.u_nm")
+        .select("-beneficiary.mob")
+        .select("-beneficiary.pgm")
+        .select("-beneficiary.pass")
+        .select("-beneficiary.bank")
+        .select("-beneficiary.branch")
+        .select("-beneficiary.r_out")
 
-    .select("-beneficiary.dob").select("-beneficiary.accre").select("-beneficiary.f_allow").select("-beneficiary.mob_own")
-    
+        .select("-beneficiary.mob_1")
+        .select("-beneficiary.ben_sts")
+        .select("-beneficiary.nid_sts")
+        .select("-beneficiary.a_sts")
+        .select("-beneficiary.u_nm")
+
+        .select("-beneficiary.dob")
+        .select("-beneficiary.accre")
+        .select("-beneficiary.f_allow")
+        .select("-beneficiary.mob_own");
+
     return res.status(200).json(users);
 });
 
 app.get("/get-beneficiary", async (req, res) => {
-    let users = await user.find({}). select("-_id"). select("-id"). select("-username").select("-password").select("-created_at").select("-beneficiary.test")
-    
-    ;
+    let users = await user
+        .find({})
+        .select("-_id")
+        .select("-id")
+        .select("-username")
+        .select("-password")
+        .select("-created_at")
+        .select("-beneficiary.test");
+
     return res.status(200).json(users);
 });
 
@@ -539,20 +493,16 @@ app.get("/get-login", async (req, res) => {
     // let users = await user.find({}).select("-password").select("-username").select("-beneficiary.name").select("-beneficiary.f_nm")
     // .select("-beneficiary.ben_nid").select("-beneficiary.ben_id").select("-beneficiary.sl").select("-beneficiary.m_nm").select("-beneficiary.age").select("-beneficiary.dis")
     // .select("-beneficiary.sub_dis").select("-beneficiary.uni").select("-beneficiary.vill").select("-beneficiary.relgn").select("-beneficiary.job").select("-beneficiary.gen")
-    
+
     // .select("-beneficiary.mob").select("-beneficiary.pgm").select("-beneficiary.pass").select("-beneficiary.bank").select("-beneficiary.branch").select("-beneficiary.r_out")
 
     // .select("-beneficiary.mob_1").select("-beneficiary.ben_sts").select("-beneficiary.nid_sts").select("-beneficiary.a_sts").select("-beneficiary.u_nm")
 
     // .select("-beneficiary.dob").select("-beneficiary.accre").select("-beneficiary.f_allow").select("-beneficiary.mob_own").select("-beneficiary.test")
-    
-    let users = await user.find({}).select("-beneficiary")
-    return res.status(200).json(users);
-    
-    ;
- 
-});
 
+    let users = await user.find({}).select("-beneficiary");
+    return res.status(200).json(users);
+});
 
 app.get("/enumerator", (req, res) => {
     product.find((err, val) => {
@@ -573,13 +523,11 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({ success: true, data: newData });
+        res.status(201).json({success: true, data: newData});
     } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({success: false});
     }
 });
-
-
 
 // const ssss = require('crypto').randomBytes(64).toString('hex')
 // // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
@@ -600,6 +548,7 @@ app.post("/api", async (req, res) => {
 // var payload = JSON.parse(payloadinit);
 // console.log(payload);
 
-app.listen(2000, () => {
+app.listen(2000, (err, data) => {
+    console.log(err);
     console.log("Server is Runing On port 2000");
 });
