@@ -441,6 +441,7 @@ app.get("/get-testscore", async (req, res) => {
         .select("-password")
         .select("-created_at")
         .select("-beneficiary.name")
+        .select("-beneficiary._id")
         .select("-beneficiary.f_nm")
         .select("-beneficiary.ben_nid")
         .select("-beneficiary.ben_id")

@@ -14,7 +14,8 @@ router.get("/enumerator/:id", getEnumerator);
 
 router.get("/beneficiary", getBeneficiaries);
 router.post("/beneficiary/add", addBeneficiary);
-router.post("/beneficiary-login", beneficiaryLogin);
+router.post("/get-login", beneficiaryLogin); // beneficiary login
+
 
 /* adming login api */
 router.post("/login", userLogin);
