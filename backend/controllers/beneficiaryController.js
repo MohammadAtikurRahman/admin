@@ -52,12 +52,21 @@ function getBeneficiaryIndex(arr, beneficiaryId) {
 
 async function beneficiaryLogin(req, res) {
     const {userId, beneficiaryId} = req.body;
-    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
 
+    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+    const whoLoggedIn = (await User.findOne({userId: userId}).select("-beneficiary"));
+   
+    console.log("2",whoLoggedIn)
     if (existsInArray(beneficiaries, beneficiaryId)) {
-        console.log("here");
+      
+
+       
         const token = await getToken({userId, beneficiaryId});
-        return res.status(200).json({beneficiaryToken: token});
+
+        
+        return res.status(200).json({beneficiaryToken: token,whoLoggedIn});
+        
+            
     }
 
     return res.status(400).json({error: "Credentials does not exists"});

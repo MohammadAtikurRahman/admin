@@ -9,8 +9,8 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", true);
-const {router} = require("./routes.js");
-const {randomNumberNotInUserCollection} = require("./helpers/number");
+const { router } = require("./routes.js");
+const { randomNumberNotInUserCollection } = require("./helpers/number");
 
 mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift", {
     useNewUrlParser: true,
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 const dir = "./uploads";
 const upload = multer({
@@ -90,7 +90,7 @@ app.put("/beneficiary/:id", async (req, res) => {
     try {
         //   const rcvData = await user.findOne({ _id: req.params.id });
 
-        const rcvData1 = await user.findOne({_id: req.params.id});
+        const rcvData1 = await user.findOne({ _id: req.params.id });
 
         //   console.log("1 after updated "+rcvData1.beneficiary);
         console.log("2 child section  value" + req.params.id);
@@ -166,7 +166,7 @@ app.post("/register", async (req, res) => {
         const userId = await randomNumberNotInUserCollection();
         console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({username: req.body.username}, (err, data) => {
+            user.find({ username: req.body.username }, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
@@ -319,7 +319,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.id) {
-            product.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
+            product.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
@@ -357,7 +357,7 @@ app.get("/get-product", (req, res) => {
         });
         if (req.query && req.query.search) {
             query["$and"].push({
-                name: {$regex: req.query.search},
+                name: { $regex: req.query.search },
             });
         }
         const perPage = 5;
@@ -487,6 +487,18 @@ app.get("/get-beneficiary", async (req, res) => {
         .select("-created_at")
         .select("-beneficiary.test");
 
+
+    // const json = users;
+    // const object = JSON.parse(json);
+    // const string = JSON.stringify(object);
+ 
+ 
+   
+
+    // console.log( JSON.stringify(JSON.parse(users)))
+
+
+
     return res.status(200).json(users);
 });
 
@@ -524,9 +536,9 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({success: true, data: newData});
+        res.status(201).json({ success: true, data: newData });
     } catch (error) {
-        res.status(400).json({success: false});
+        res.status(400).json({ success: false });
     }
 });
 
