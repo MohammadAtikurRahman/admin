@@ -8,11 +8,16 @@ async function getEnumerator(req, res) {
 }
 
 async function getToken(data) {
-    let token = await jwt.sign({user: data.username, id: data._id, userId: data.userId}, "shhhhh11111", {expiresIn: "1d"});
+    let token = await jwt.sign(
+        {user: data.username, id: data._id, userId: data.userId},
+        "shhhhh11111",
+        {expiresIn: "1d"},
+    );
     return token;
 }
 
 async function userLogin(req, res) {
+    console.log(req.body);
     let user = await User.findOne({username: req.body.username});
     if (!req.body || !req.body.username || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
@@ -25,6 +30,7 @@ async function userLogin(req, res) {
             status: true,
         });
     }
+    return res.status(500).json({message: "Something went wrong."});
 }
 
 module.exports = {getEnumerator, userLogin};

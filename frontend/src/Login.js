@@ -24,11 +24,10 @@ export default function Login(props) {
     };
 
     const login = () => {
-        const pwd = bcrypt.hashSync(user.password, salt);
         axios
             .post("http://localhost:2000/login", {
                 username: user.username,
-                password: pwd,
+                password: user.password,
             })
             .then((res) => {
                 localStorage.setItem("token", res.data.token);
@@ -96,3 +95,4 @@ export default function Login(props) {
         </div>
     );
 }
+
