@@ -493,13 +493,19 @@ app.get("/get-beneficiary", async (req, res) => {
     // const string = JSON.stringify(object);
  
  
-   
+      const data = users;
+      const formatted_data = data[0]
 
     // console.log( JSON.stringify(JSON.parse(users)))
 
+        // console.log(formatted_data);
+
+        extact_data = formatted_data['beneficiary']
+        console.log(extact_data)
 
 
-    return res.status(200).json(users);
+
+    return res.status(200).json(extact_data);
 });
 
 app.get("/get-login", async (req, res) => {
