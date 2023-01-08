@@ -8,12 +8,16 @@ const {
     getBeneficiaries,
     beneficiaryLogin,
     saveTestScore,
+    saveTest,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
 
 router.get("/beneficiary", getBeneficiaries);
 router.post("/beneficiary/add", addBeneficiary);
+
+router.post("/save-test/add", saveTest);
+
 router.post("/get-login", beneficiaryLogin); // beneficiary login
 
 

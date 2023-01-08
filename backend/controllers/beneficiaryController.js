@@ -21,6 +21,40 @@ async function addBeneficiary(req, res) {
 
     return res.status(200).json({user: user});
 }
+
+
+async function saveTest(req, res) {
+    let user = jwt_decode(req.body.token);
+
+    user = (await User.findById(user.id)).toJSON();
+
+    const beneficiaryId = await randomNumberNotInBeneficiaryCollection(user.beneficiary);
+
+    req.body.beneficiary["beneficiaryId"] = beneficiaryId;
+
+    let beneficiary = [...user.beneficiary, req.body.beneficiary];
+    console.log(beneficiary);
+
+    user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true})
+    .select("-_id")
+    .select("-id")
+    .select("-username")
+    .select("-password")
+    .select("-created_at")
+    .select("-beneficiary.test");
+
+
+
+    // const data = user;
+    // const formatted_data = data[0]
+    // // extact_data = formatted_data['beneficiary']
+    //  console.log("done",user)
+
+
+
+    return res.status(200).json({user: user});
+}
+
 async function getBeneficiaries(req, res) {
     const user = jwt_decode(req.headers?.token);
     let beneficiaries = (await User.findById(user.id))?.toJSON()?.beneficiary;
@@ -79,7 +113,14 @@ async function saveTestScore(req, res) {
     console.log(beneficiaries);
     let index = getBeneficiaryIndex(beneficiaries, data.beneficiaryId);
     console.log(index);
+
+
     if (index) beneficiaries[index]["score"] = req.body.score;
+    
+    if (index) beneficiaries[index]["score2"] = req.body.score2;
+
+    if (index) beneficiaries[index]["duration"] = req.body.duration;
+
     console.log("at index", beneficiaries[index]);
 
     const user = (
@@ -95,4 +136,4 @@ async function saveTestScore(req, res) {
     return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
 
-module.exports = {addBeneficiary, getBeneficiaries, beneficiaryLogin, saveTestScore};
+module.exports = {addBeneficiary, getBeneficiaries, beneficiaryLogin, saveTestScore,saveTest};

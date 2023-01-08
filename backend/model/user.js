@@ -22,7 +22,8 @@ const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
         score: Number,
-
+        score2: Number,
+        duration: Date,
         name: String, // done
         f_nm: String, //done
         ben_nid: String, //done
