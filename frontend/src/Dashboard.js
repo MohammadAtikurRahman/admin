@@ -67,10 +67,10 @@ export default class Dashboard extends Component {
             ben_sts: "",
             nid_sts: "",
             a_sts: "",
+           
+           
             u_nm: "",
             dob: "",
-
-
             accre: "",
             f_allow: "",
 
@@ -331,6 +331,16 @@ export default class Dashboard extends Component {
         file.append("ben_sts", this.state.ben_sts);
 
         file.append("nid_sts", this.state.nid_sts);
+        file.append("a_sts", this.state.a_sts);
+
+
+  
+
+        file.append("u_nm", this.state.u_nm);
+        file.append("dob", this.state.dob);
+        file.append("accre", this.state.accre);
+        file.append("f_allow", this.state.f_allow);
+
 
         axios
             .post(baseUrl + '/update-product', file, {
@@ -348,7 +358,16 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "",bank: "",nid_sts: "",ben_sts: "",mob_own: "",mob_1: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
+                    { name: "",bank: "",
+                    
+                    u_nm: "",
+                    dob: "",
+                    accre: "",
+                    f_allow: "",
+
+
+                    
+                    a_sts: "",nid_sts: "",ben_sts: "",mob_own: "",mob_1: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -420,6 +439,13 @@ export default class Dashboard extends Component {
             mob_own: data.mob_own,
             ben_sts: data.ben_sts,
             nid_sts: data.nid_sts,
+            a_sts: data.a_sts,
+
+
+            u_nm: data.u_nm,
+            dob: data.dob,
+            accre: data.accre,
+            f_allow: data.f_allow,
 
             fileName: data.image,
         });
