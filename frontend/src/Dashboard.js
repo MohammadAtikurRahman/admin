@@ -323,7 +323,9 @@ export default class Dashboard extends Component {
         file.append("pgm", this.state.pgm);
         file.append("pass", this.state.pass);
         file.append("bank", this.state.bank);
+        file.append("branch", this.state.branch);
 
+        file.append("r_out", this.state.r_out);
 
 
         axios
@@ -342,7 +344,7 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "",bank: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
+                    { name: "",bank: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -408,6 +410,8 @@ export default class Dashboard extends Component {
             pgm: data.pgm,
             pass: data.pass,
             bank: data.bank,
+            branch: data.branch,
+            r_out: data.r_out,
 
             fileName: data.image,
         });
