@@ -293,6 +293,10 @@ export default class Dashboard extends Component {
         file.append("id", this.state.id);
         file.append("file", fileInput.files[0]);
         file.append("name", this.state.name);
+
+        file.append("sl", this.state.sl);
+
+
         file.append("desc", this.state.desc);
         file.append("discount", this.state.discount);
         file.append("price", this.state.price);
@@ -313,7 +317,7 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "", desc: "", discount: "", price: "", file: null },
+                    { name: "", sl: "", desc: "", discount: "", price: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -361,6 +365,7 @@ export default class Dashboard extends Component {
             openProductEditModal: true,
             id: data._id,
             name: data.name,
+            sl: data.sl,
             desc: data.desc,
             price: data.price,
             discount: data.discount,
@@ -459,6 +464,8 @@ export default class Dashboard extends Component {
                     <DialogTitle id="alert-dialog-title">
                         Edit Beneficiary
                     </DialogTitle>
+
+                    
                     <DialogContent>
                         <TextField
                             id="standard-basic"
