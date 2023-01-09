@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
+
+
 import { Button, TextField, Link } from '@material-ui/core';
 const axios = require('axios');
+const baseUrl = process.env.REACT_APP_URL;
 
 export default class Register extends React.Component {
   constructor(props) {
@@ -17,7 +20,7 @@ export default class Register extends React.Component {
 
   register = () => {
 
-    axios.post('http://172.104.191.159:2000/register', {
+    axios.post(baseUrl + '/register', {
       username: this.state.username,
       password: this.state.password,
     }).then((res) => {

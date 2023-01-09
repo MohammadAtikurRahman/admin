@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 
 
+
 import {
     Button,
     TextField,
@@ -24,6 +25,7 @@ import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const axios = require("axios");
+const baseUrl = process.env.REACT_APP_URL;
 
 export default class Dashboard extends Component {
     constructor() {
@@ -96,7 +98,7 @@ export default class Dashboard extends Component {
             });
         }
 
-        axios.get(`http://172.104.191.159:2000/user-details`).then((res) => {
+        axios.get(baseUrl + '/user-details').then((res) => {
             const persons = res.data;
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
@@ -122,7 +124,7 @@ export default class Dashboard extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(`http://172.104.191.159:2000/beneficiary`, {
+            .get(baseUrl + '/beneficiary', {
                 message: "hello",
                 headers: {
                     token: this.state.token,
@@ -158,8 +160,7 @@ export default class Dashboard extends Component {
 
     deleteProduct = (id) => {
         axios
-            .post(
-                "http://172.104.191.159:2000/delete-product",
+            .post( baseUrl + '/delete-product',
                 {
                     id: id,
                 },
@@ -216,7 +217,7 @@ export default class Dashboard extends Component {
     addProduct = () => {
         const fileInput = document.querySelector("#fileInput");
         axios
-            .post("http://172.104.191.159:2000/beneficiary/add", {
+            .post(baseUrl + '/beneficiary/add', {
                 beneficiary: {
                     name: this.state.name,
                     f_nm: this.state.f_nm,
@@ -297,7 +298,7 @@ export default class Dashboard extends Component {
         file.append("price", this.state.price);
 
         axios
-            .post("http://172.104.191.159:2000/update-product", file, {
+            .post(baseUrl + '/update-product', file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,

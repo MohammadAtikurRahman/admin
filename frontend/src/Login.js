@@ -2,9 +2,16 @@ import { useState } from "react";
 import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
+
+
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
 var salt = bcrypt.genSaltSync(10);
+
+const baseUrl = process.env.REACT_APP_URL;
+
+
+
 
 export default function Login(props) {
     const [user, setUser] = useState({
@@ -22,13 +29,13 @@ export default function Login(props) {
             };
         });
     };
-
     const login = () => {
         axios
-            .post("http://172.104.191.159:2000/login", {
+            .post( baseUrl + '/login', {
                 username: user.username,
                 password: user.password,
             })
+
             .then((res) => {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("user_id", res.data.id);
