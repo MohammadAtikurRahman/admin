@@ -106,16 +106,65 @@ async function beneficiaryLogin(req, res) {
     return res.status(400).json({error: "Credentials does not exists"});
 }
 
+
+
+async function benenScore(req, res) {
+    const {userId, beneficiaryId} = req.body;
+
+    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+
+    let index = getBeneficiaryIndex(beneficiaries,beneficiaryId);
+     console.log(index);
+     if (index) beneficiaries[index]["score1"] = req.body.score1;
+    
+     if (index) beneficiaries[index]["score2"] = req.body.score2;
+ 
+     if (index) beneficiaries[index]["duration"] = req.body.duration;
+ 
+     console.log("at index", beneficiaries[index]);
+ 
+     const user = (
+         await User.findOneAndUpdate(
+             {userId: userId},
+             {beneficiary: beneficiaries},
+             {new: true},
+         )
+     ).toJSON();
+ 
+     console.log(user);
+
+    const whoLoggedIn = (await User.findOne({userId: userId}));
+
+
+
+  
+   
+    console.log("2",whoLoggedIn)
+    if (existsInArray(beneficiaries, beneficiaryId)) {
+      
+
+
+        
+        return res.status(200).json({  message: "Date Saved Successfully."});
+        
+            
+    }
+
+    return res.status(400).json({error: "Credentials does not exists"});
+}
+
 async function saveTestScore(req, res) {
     const data = jwt_decode(req.body.beneficiaryToken);
     const beneficiaries = (await User.findOne({userId: data.userId})).toJSON().beneficiary;
 
     console.log(beneficiaries);
+
+
     let index = getBeneficiaryIndex(beneficiaries, data.beneficiaryId);
     console.log(index);
 
 
-    if (index) beneficiaries[index]["score"] = req.body.score;
+    if (index) beneficiaries[index]["score1"] = req.body.score1;
     
     if (index) beneficiaries[index]["score2"] = req.body.score2;
 
@@ -136,4 +185,4 @@ async function saveTestScore(req, res) {
     return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
 
-module.exports = {addBeneficiary, getBeneficiaries, beneficiaryLogin, saveTestScore,saveTest};
+module.exports = {addBeneficiary, getBeneficiaries, beneficiaryLogin,benenScore, saveTestScore,saveTest};

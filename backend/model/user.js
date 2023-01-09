@@ -21,9 +21,9 @@ const testSchema = new Schema(
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
-        score: Number,
+        score1: Number,
         score2: Number,
-        duration: Date,
+        duration: Number,
         name: String, // done
         f_nm: String, //done
         ben_nid: String, //done
