@@ -55,6 +55,9 @@ export default class Dashboard extends Component {
             gen: "",
             mob: "",
             pgm: "",
+
+
+
             pass: "",
             bank: "",
             branch: "",
@@ -307,9 +310,21 @@ export default class Dashboard extends Component {
         file.append("age", this.state.age);
 
 
-        file.append("desc", this.state.desc);
-        file.append("discount", this.state.discount);
-        file.append("price", this.state.price);
+        file.append("dis", this.state.dis);
+        file.append("sub_dis", this.state.sub_dis);
+        file.append("uni", this.state.uni);
+        file.append("vill", this.state.vill);
+        file.append("relgn", this.state.relgn);
+
+        file.append("job", this.state.job);
+        file.append("gen", this.state.gen);
+        file.append("mob", this.state.mob);
+
+        file.append("pgm", this.state.pgm);
+        file.append("pass", this.state.pass);
+        file.append("bank", this.state.bank);
+
+
 
         axios
             .post(baseUrl + '/update-product', file, {
@@ -327,7 +342,7 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "", age: "",ben_id: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", desc: "", discount: "", price: "", file: null },
+                    { name: "",bank: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -382,9 +397,18 @@ export default class Dashboard extends Component {
             ben_id: data.ben_id,
             ben_nid: data.ben_nid,
             m_nm: data.m_nm,
-            desc: data.desc,
-            price: data.price,
-            discount: data.discount,
+            dis: data.dis,
+            uni: data.uni,
+            sub_dis: data.sub_dis,
+            vill: data.vill,
+            relgn: data.relgn,
+            job: data.job,
+            gen: data.gen,
+            mob: data.mob,
+            pgm: data.pgm,
+            pass: data.pass,
+            bank: data.bank,
+
             fileName: data.image,
         });
     };
