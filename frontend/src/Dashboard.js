@@ -470,57 +470,427 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Name"
                             required
                         />
-                        <br />
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="desc"
-                            value={this.state.desc}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary Father"
-                            required
-                        />
-                        <br />
+                        &nbsp;
+                        &nbsp;
+
+
+
                         <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
-                            name="price"
-                            value={this.state.price}
+                            name="sl"
+                            value={this.state.sl}
+                            onChange={this.onChange}
+                            placeholder="Serail"
+                            required
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="ben_nid"
+                            value={this.state.ben_nid}
                             onChange={this.onChange}
                             placeholder="Beneficiary ben_nid"
                             required
                         />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="f_nm"
+                            value={this.state.f_nm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary Father"
+
+
+                        />
+
                         <br />
+
+
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="m_nm"
+                            value={this.state.m_nm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary mother"
+
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="ben_id"
+                            value={this.state.ben_id}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary id"
+
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
                         <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
-                            name="discount"
-                            value={this.state.discount}
+                            name="age"
+                            value={this.state.age}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Id"
-                            required
+                            placeholder="BeneFiciary age"
+
+
+                        />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="dis"
+                            value={this.state.dis}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary district"
+
+
                         />
                         <br />
-                        <br />
-                        <Button variant="contained" component="label">
-                            {" "}
-                            Upload
-                            <input
-                                id="fileInput"
-                                type="file"
-                                accept="image/*"
-                                name="file"
-                                value={this.state.file}
-                                onChange={this.onChange}
-                                placeholder="File"
-                                hidden
-                            />
-                        </Button>
+
+
                         &nbsp;
-                        {this.state.fileName}
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="sub_dis"
+                            value={this.state.sub_dis}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary thana"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="uni"
+                            value={this.state.uni}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary union"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="vill"
+                            value={this.state.vill}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary village"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="relgn"
+                            value={this.state.relgn}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary relgn"
+
+                        />
+                        <br />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="job"
+                            value={this.state.job}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary job"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="gen"
+                            value={this.state.gen}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary gen"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="mob"
+                            value={this.state.mob}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary mobile"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="pgm"
+                            value={this.state.pgm}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary pgm"
+
+                        />
+
+
+
+                        <br />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="pass"
+                            value={this.state.pass}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary passbook"
+
+                        />
+
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="bank"
+                            value={this.state.bank}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary bank"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="branch"
+                            value={this.state.branch}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary branch name"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="r_out"
+                            value={this.state.r_out}
+                            onChange={this.onChange}
+                            placeholder="BeneFiciary rout"
+
+                        />
+
+
+
+                        <br />
+
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_1"
+                            value={this.state.mob_1}
+                            onChange={this.onChange}
+                            placeholder="2nd mobile no"
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_own"
+                            value={this.state.mob_own}
+                            onChange={this.onChange}
+                            placeholder="owner of the mobile"
+
+                        />
+
+                        &nbsp;
+                        &nbsp;
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="ben_sts"
+                            value={this.state.ben_sts}
+                            onChange={this.onChange}
+                            placeholder="beneficiary sts"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="nid_sts"
+                            value={this.state.nid_sts}
+                            onChange={this.onChange}
+                            placeholder="nid sts"
+
+                        />
+                        <br />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="a_sts"
+                            value={this.state.a_sts}
+                            onChange={this.onChange}
+                            placeholder="Approval Status "
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="u_nm"
+                            value={this.state.u_nm}
+                            onChange={this.onChange}
+                            placeholder="username  "
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            label="date of birth"
+                            autoComplete="off"
+                            name="dob"
+                            value={this.state.dob}
+                            onChange={this.onChange}
+                            placeholder="date of birth  "
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            autoComplete="off"
+                            label="account created"
+                            name="accre"
+                            value={this.state.accre}
+                            onChange={this.onChange}
+                            placeholder="account created "
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+
+                        />
+
+
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="date"
+                            autoComplete="off"
+                            label="first allow"
+                            name="f_allow"
+                            value={this.state.f_allow}
+                            onChange={this.onChange}
+                            placeholder=" f_allow   "
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+
+                        />
+                        <br />
+                        &nbsp;
                     </DialogContent>
 
                     <DialogActions>
