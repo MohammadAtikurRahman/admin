@@ -296,6 +296,10 @@ export default class Dashboard extends Component {
 
         file.append("sl", this.state.sl);
         file.append("f_nm", this.state.f_nm);
+        file.append("ben_id", this.state.ben_id);
+        file.append("ben_nid", this.state.ben_nid);
+
+
 
 
         file.append("desc", this.state.desc);
@@ -318,7 +322,7 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "", sl: "",f_nm: "", desc: "", discount: "", price: "", file: null },
+                    { name: "", ben_id: "",  ben_nid: "",sl: "",f_nm: "", desc: "", discount: "", price: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -368,6 +372,9 @@ export default class Dashboard extends Component {
             name: data.name,
             sl: data.sl,
             f_nm: data.f_nm,
+
+            ben_id: data.ben_id,
+            ben_nid: data.ben_nid,
             desc: data.desc,
             price: data.price,
             discount: data.discount,
