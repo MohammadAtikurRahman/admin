@@ -326,7 +326,11 @@ export default class Dashboard extends Component {
         file.append("branch", this.state.branch);
 
         file.append("r_out", this.state.r_out);
+        file.append("mob_1", this.state.mob_1);
+        file.append("mob_own", this.state.mob_own);
+        file.append("ben_sts", this.state.ben_sts);
 
+        file.append("nid_sts", this.state.nid_sts);
 
         axios
             .post(baseUrl + '/update-product', file, {
@@ -344,7 +348,7 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "",bank: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
+                    { name: "",bank: "",nid_sts: "",ben_sts: "",mob_own: "",mob_1: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -412,6 +416,10 @@ export default class Dashboard extends Component {
             bank: data.bank,
             branch: data.branch,
             r_out: data.r_out,
+            mob_1: data.mob_1,
+            mob_own: data.mob_own,
+            ben_sts: data.ben_sts,
+            nid_sts: data.nid_sts,
 
             fileName: data.image,
         });
