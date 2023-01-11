@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
-    console.log("updated"+user);
+    console.log("updated" + user);
 
     user = (await User.findById(user.id)).toJSON();
 
@@ -23,7 +23,6 @@ async function addBeneficiary(req, res) {
     return res.status(200).json({user: user});
 }
 
-
 async function saveTest(req, res) {
     let user = jwt_decode(req.body.token);
 
@@ -37,21 +36,17 @@ async function saveTest(req, res) {
     console.log(beneficiary);
 
     user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true})
-    .select("-_id")
-    .select("-id")
-    .select("-username")
-    .select("-password")
-    .select("-created_at")
-    .select("-beneficiary.test");
-
-
+        .select("-_id")
+        .select("-id")
+        .select("-username")
+        .select("-password")
+        .select("-created_at")
+        .select("-beneficiary.test");
 
     // const data = user;
     // const formatted_data = data[0]
     // // extact_data = formatted_data['beneficiary']
     //  console.log("done",user)
-
-
 
     return res.status(200).json({user: user});
 }
@@ -89,68 +84,40 @@ async function beneficiaryLogin(req, res) {
     const {userId, beneficiaryId} = req.body;
 
     const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
-    const whoLoggedIn = (await User.findOne({userId: userId}).select("-beneficiary"));
-   
-    console.log("2",whoLoggedIn)
-    if (existsInArray(beneficiaries, beneficiaryId)) {
-      
+    const whoLoggedIn = await User.findOne({userId: userId}).select("-beneficiary");
 
-       
+    console.log("2", whoLoggedIn);
+    if (existsInArray(beneficiaries, beneficiaryId)) {
         const token = await getToken({userId, beneficiaryId});
 
-        
-        return res.status(200).json({beneficiaryToken: token,whoLoggedIn});
-        
-            
+        return res.status(200).json({beneficiaryToken: token, whoLoggedIn});
     }
 
     return res.status(400).json({error: "Credentials does not exists"});
 }
 
-
-
 async function benenScore(req, res) {
-   
-
     const {userId, beneficiaryId} = req.body;
+    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
 
-    const  beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+    let index = getBeneficiaryIndex(beneficiaries, beneficiaryId);
 
-    let index = getBeneficiaryIndex(beneficiaries,beneficiaryId);
-     console.log(index);
-     if (index) beneficiaries[index]["score1"] = req.body.score1;
-    
-     if (index) beneficiaries[index]["score2"] = req.body.score2;
- 
-     if (index) beneficiaries[index]["duration"] = req.body.duration;
- 
-     console.log("at index", beneficiaries[index]);
- 
-     const user = (
-         await User.findOneAndUpdate(
-             {userId: userId},
-             {beneficiary: beneficiaries},
-             {new: true},
-         )
-     ).toJSON();
- 
-     console.log(user);
+    if (index !== null) beneficiaries[index]["score1"] = req.body?.score1;
 
-    const whoLoggedIn = (await User.findOne({userId: userId}));
+    if (index !== null) beneficiaries[index]["score2"] = req.body?.score2;
 
+    if (index !== null) beneficiaries[index]["duration"] = req.body?.duration;
 
+    const user = (
+        await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
+    ).toJSON();
 
-  
-   
-    console.log("2",whoLoggedIn)
+    console.log(user);
+
+    const whoLoggedIn = await User.findOne({userId: userId});
+
     if (existsInArray(beneficiaries, beneficiaryId)) {
-      
-
-
-        
         return res.status(200).json({whoLoggedIn});
-        // return res.status(200).json({  message: "Date Saved Successfully."});
-            
     }
 
     return res.status(400).json({error: "Credentials does not exists"});
@@ -162,13 +129,11 @@ async function saveTestScore(req, res) {
 
     console.log(beneficiaries);
 
-
     let index = getBeneficiaryIndex(beneficiaries, data.beneficiaryId);
     console.log(index);
 
-
     if (index) beneficiaries[index]["score1"] = req.body.score1;
-    
+
     if (index) beneficiaries[index]["score2"] = req.body.score2;
 
     if (index) beneficiaries[index]["duration"] = req.body.duration;
@@ -188,4 +153,11 @@ async function saveTestScore(req, res) {
     return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
 
-module.exports = {addBeneficiary, getBeneficiaries, beneficiaryLogin,benenScore, saveTestScore,saveTest};
+module.exports = {
+    addBeneficiary,
+    getBeneficiaries,
+    beneficiaryLogin,
+    benenScore,
+    saveTestScore,
+    saveTest,
+};
