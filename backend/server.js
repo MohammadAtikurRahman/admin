@@ -480,32 +480,28 @@ app.get("/get-testscore", async (req, res) => {
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user
         .find({})
-        .select("-_id")
-        .select("-id")
+        // .select("-_id")
+        //  .select("-id")
         .select("-username")
         .select("-password")
         .select("-created_at")
-        .select("-beneficiary.test");
+        // .select("-beneficiary.test");
 
 
-    // const json = users;
-    // const object = JSON.parse(json);
-    // const string = JSON.stringify(object);
+    
  
  
-      const data = users;
-      const formatted_data = data[0]
+    //   const data = users;
+    //   const formatted_data = data[0]
 
-    // console.log( JSON.stringify(JSON.parse(users)))
+ 
 
-        // console.log(formatted_data);
-
-        extact_data = formatted_data['beneficiary']
-        console.log(extact_data)
+    //     extact_data = formatted_data['beneficiary']
+    //     console.log(extact_data)
 
 
 
-    return res.status(200).json(extact_data);
+    return res.status(200).json(users);
 });
 
 app.get("/get-login", async (req, res) => {

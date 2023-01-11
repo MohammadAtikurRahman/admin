@@ -213,9 +213,11 @@ export default class Dashboard extends Component {
             this.setState({ fileName: e.target.files[0].name }, () => { });
         }
         this.setState({ [e.target.name]: e.target.value }, () => { });
+  
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
+                console.log(e.target.name)
             });
         }
     };
@@ -1453,29 +1455,7 @@ export default class Dashboard extends Component {
                             Cancel
                         </Button>
                         <Button
-                            disabled={
-                                this.state.name == "" ||
-                                this.state.f_nm == "" ||
-                                this.state.ben_nid == "" ||
-                                this.state.sl == "" ||
-                                this.state.ben_id == "" ||
-                                this.state.m_nm == "" ||
-                                this.state.age == "" ||
-                                this.state.dis == "" ||
-                                this.state.sub_dis == "" ||
-                                this.state.uni == "" ||
-                                this.state.vill == "" ||
-                                this.state.relgn == "" ||
-                                this.state.job == "" ||
-                                this.state.gen == "" ||
-                                this.state.mob == ""
-
-
-
-
-
-
-                            }
+                     
                             onClick={(e) => this.addProduct()}
                             color="primary"
                             autoFocus>
@@ -1513,7 +1493,7 @@ export default class Dashboard extends Component {
                                     Beneficiary Name
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary Thana/Upozila
+                                    Beneficiary Id
                                 </TableCell>
                                 <TableCell align="center">
                                     Test Score 2                                </TableCell>
@@ -1538,7 +1518,7 @@ export default class Dashboard extends Component {
                                         align="center"
                                         component="th"
                                         scope="row">
-                                        {row.uni}
+                                        {row.beneficiaryId}
                                     </TableCell>
 
                                     <TableCell align="center">

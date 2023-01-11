@@ -532,7 +532,7 @@ export default class Dashboard extends Component {
                             {this.state.persons.reverse().map((row) => (
                                 <TableRow key={row.name}>
 
-                                    <TableCell align="center">{row._id}</TableCell>
+                                    <TableCell align="center">{row.userId}</TableCell>
 
                                     <TableCell align="center" component="th" scope="row">
                                         {row.username}

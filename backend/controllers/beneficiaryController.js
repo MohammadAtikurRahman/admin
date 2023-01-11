@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
+    console.log("updated"+user);
 
     user = (await User.findById(user.id)).toJSON();
 
@@ -109,9 +110,11 @@ async function beneficiaryLogin(req, res) {
 
 
 async function benenScore(req, res) {
+   
+
     const {userId, beneficiaryId} = req.body;
 
-    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+    const  beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
 
     let index = getBeneficiaryIndex(beneficiaries,beneficiaryId);
      console.log(index);
