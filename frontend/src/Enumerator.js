@@ -285,13 +285,14 @@ export default class Dashboard extends Component {
             <div>
                 {this.state.loading && <LinearProgress size={40} />}
                 <div>
+                          
+                          
 
-
-                    {this.state.upersons.payload ? <p> <b> Enumerator as a login  </b> {this.state.upersons.payload.user} </p> : ""}
+                    {/* {this.state.upersons.payload ? <p> <b> Enumerator as a login  </b> {this.state.upersons.payload.user} </p> : ""} */}
 
                     {/* <h3> {this.enumerator_name}</h3> */}
-
-
+                       <br></br>
+                         <h2>Dashboard</h2>
                     <Button
                         className="button_style"
                         variant="contained"
@@ -528,7 +529,7 @@ export default class Dashboard extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.persons.map((row) => (
+                            {this.state.persons.reverse().map((row) => (
                                 <TableRow key={row.name}>
 
                                     <TableCell align="center">{row._id}</TableCell>

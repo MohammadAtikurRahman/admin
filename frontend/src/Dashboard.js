@@ -67,8 +67,8 @@ export default class Dashboard extends Component {
             ben_sts: "",
             nid_sts: "",
             a_sts: "",
-           
-           
+
+
             u_nm: "",
             dob: "",
             accre: "",
@@ -166,7 +166,7 @@ export default class Dashboard extends Component {
 
     deleteProduct = (id) => {
         axios
-            .post( baseUrl + '/delete-product',
+            .post(baseUrl + '/delete-product',
                 {
                     id: id,
                 },
@@ -334,7 +334,7 @@ export default class Dashboard extends Component {
         file.append("a_sts", this.state.a_sts);
 
 
-  
+
 
         file.append("u_nm", this.state.u_nm);
         file.append("dob", this.state.dob);
@@ -358,16 +358,18 @@ export default class Dashboard extends Component {
 
                 this.handleProductEditClose();
                 this.setState(
-                    { name: "",bank: "",
-                    
-                    u_nm: "",
-                    dob: "",
-                    accre: "",
-                    f_allow: "",
+                    {
+                        name: "", bank: "",
+
+                        u_nm: "",
+                        dob: "",
+                        accre: "",
+                        f_allow: "",
 
 
-                    
-                    a_sts: "",nid_sts: "",ben_sts: "",mob_own: "",mob_1: "",r_out: "",branch: "",gen: "",pass: "",mob: "",pgm: "",  age: "",ben_id: "",job: "",m_nm: "",  ben_nid: "",sl: "",f_nm: "", dis: "", sub_dis: "",vill: "", uni: "",relgn: "", file: null },
+
+                        a_sts: "", nid_sts: "", ben_sts: "", mob_own: "", mob_1: "", r_out: "", branch: "", gen: "", pass: "", mob: "", pgm: "", age: "", ben_id: "", job: "", m_nm: "", ben_nid: "", sl: "", f_nm: "", dis: "", sub_dis: "", vill: "", uni: "", relgn: "", file: null
+                    },
                     () => {
                         this.getBeneficiaries();
                     }
@@ -461,7 +463,7 @@ export default class Dashboard extends Component {
                 <div>
 
 
-{/* 
+                    {/* 
                     <ol>
                         {this.state.userinfo.map(user => (
                             <ul key={user}>{user}</ul>
@@ -470,6 +472,7 @@ export default class Dashboard extends Component {
 
 
 
+                    <br></br>
                     <h2>Dashboard</h2>
 
                     <Button
@@ -543,7 +546,7 @@ export default class Dashboard extends Component {
                         Edit Beneficiary
                     </DialogTitle>
 
-                    
+
                     <DialogContent>
                         <TextField
                             id="standard-basic"
@@ -1525,7 +1528,7 @@ export default class Dashboard extends Component {
 
 
                         <TableBody>
-                            {this.state?.beneficiaries?.map((row) => (
+                            {this.state?.beneficiaries?.reverse().map((row) => (
                                 <TableRow key={row.name}>
 
                                     <TableCell align="center">
