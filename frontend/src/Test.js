@@ -217,6 +217,7 @@ export default class Test extends Component {
             this.setState({ fileName: e.target.files[0].name }, () => { });
         }
         this.setState({ [e.target.name]: e.target.value }, () => { });
+
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
@@ -490,6 +491,17 @@ export default class Test extends Component {
                         size="small"
                         onClick={this.handleProductOpen}>
                         Add Beneficiary
+                    </Button>
+                    <Button
+                        className="button_style"
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+
+                    >
+                        <MaterialLink style={{ textDecoration: 'none', color: 'white' }} href="/dashboard">
+                            List Of BeneFiciary
+                        </MaterialLink>
                     </Button>
 
                     <Button

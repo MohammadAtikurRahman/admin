@@ -1513,12 +1513,11 @@ export default class Dashboard extends Component {
                                     Beneficiary Name
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary Father
+                                    Beneficiary Thana/Upozila
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary ben_nid
-                                </TableCell>
-                                <TableCell align="center">Test Score</TableCell>
+                                    Test Score 2                                </TableCell>
+                                <TableCell align="center">Test Score 2</TableCell>
                                 <TableCell align="center">Action</TableCell>
                                 <TableCell align="center">
                                     View BeneFiciary{" "}
@@ -1539,15 +1538,15 @@ export default class Dashboard extends Component {
                                         align="center"
                                         component="th"
                                         scope="row">
-                                        {row.f_nm}
+                                        {row.uni}
                                     </TableCell>
 
                                     <TableCell align="center">
-                                        {row.ben_nid}
+                                        {row.score1}
                                     </TableCell>
 
                                     <TableCell align="center">
-                                        {row.created_at}
+                                        {row.score2}
                                     </TableCell>
 
                                     <TableCell align="center">
