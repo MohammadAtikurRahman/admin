@@ -73,6 +73,8 @@ export default class Dashboard extends Component {
             dob: "",
             accre: "",
             f_allow: "",
+            score1: "",
+            score2: "",
 
 
 
@@ -1495,9 +1497,8 @@ export default class Dashboard extends Component {
                                 <TableCell align="center">
                                     Beneficiary Id
                                 </TableCell>
-                                <TableCell align="center">
-                                    Test Score 2                                </TableCell>
-                                <TableCell align="center">Test Score 2</TableCell>
+                         
+                                <TableCell align="center">Test Score </TableCell>
                                 <TableCell align="center">Action</TableCell>
                                 <TableCell align="center">
                                     View BeneFiciary{" "}
@@ -1525,10 +1526,7 @@ export default class Dashboard extends Component {
                                         {row.score1}
                                     </TableCell>
 
-                                    <TableCell align="center">
-                                        {row.score2}
-                                    </TableCell>
-
+                               
                                     <TableCell align="center">
                                         <Button
                                             className="button_style"

@@ -1536,9 +1536,9 @@ export default class Test extends Component {
                                     Test ID
                                 </TableCell>
                                 <TableCell align="center">
-                                     Test Score 1
+                                     Test Score
                                 </TableCell>
-                                <TableCell align="center">Test Score 2</TableCell>
+                        
                                 <TableCell align="center">Duration</TableCell>
 
                                 {/* <TableCell align="center">Action</TableCell> */}
@@ -1572,9 +1572,6 @@ export default class Test extends Component {
                                         {row.score1}
                                     </TableCell>
 
-                                    <TableCell align="center">
-                                        {row.score2}
-                                    </TableCell>
 
                                     <TableCell align="center">
                                         { Math.floor(row.duration/60)} Minute {row.duration%60} Seconds
