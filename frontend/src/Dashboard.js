@@ -215,7 +215,7 @@ export default class Dashboard extends Component {
             this.setState({ fileName: e.target.files[0].name }, () => { });
         }
         this.setState({ [e.target.name]: e.target.value }, () => { });
-  
+
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
@@ -917,17 +917,7 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="u_nm"
-                            value={this.state.u_nm}
-                            onChange={this.onChange}
-                            placeholder="username  "
-
-                        />
-
+                   
 
                         &nbsp;
                         &nbsp;
@@ -1008,6 +998,7 @@ export default class Dashboard extends Component {
 
                 {/* Add Product */}
                 <Dialog
+
                     open={this.state.openProductModal}
                     onClose={this.handleProductClose}
                     aria-labelledby="alert-dialog-title"
@@ -1016,7 +1007,10 @@ export default class Dashboard extends Component {
                     <DialogTitle id="alert-dialog-title">
                         Add Beneficiary
                     </DialogTitle>
-                    <DialogContent>
+                    <DialogContent
+
+
+                    >
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1032,28 +1026,19 @@ export default class Dashboard extends Component {
 
 
 
-                        <TextField
+
+                   
+                           <TextField
                             id="standard-basic"
-                            type="number"
+                            type="text"
                             autoComplete="off"
-                            name="sl"
-                            value={this.state.sl}
+                            name="u_nm"
+                            value={this.state.u_nm}
                             onChange={this.onChange}
-                            placeholder="Serail"
-                            required
+                            placeholder="Beneficiary Username  "
+
                         />
-                        &nbsp;
-                        &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="ben_nid"
-                            value={this.state.ben_nid}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary ben_nid"
-                            required
-                        />
+
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1063,15 +1048,12 @@ export default class Dashboard extends Component {
                             name="f_nm"
                             value={this.state.f_nm}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary Father"
+                            placeholder="Beneficiary Father"
 
 
                         />
-
-                        <br />
-
-
-
+                            &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1079,28 +1061,13 @@ export default class Dashboard extends Component {
                             name="m_nm"
                             value={this.state.m_nm}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary mother"
+                            placeholder="Beneficiary Mother"
 
 
                         />
-                        &nbsp;
-                        &nbsp;
+                        <br />
 
 
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="ben_id"
-                            value={this.state.ben_id}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary id"
-
-
-                        />
-
-                        &nbsp;
-                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1109,16 +1076,13 @@ export default class Dashboard extends Component {
                             name="age"
                             value={this.state.age}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary age"
+                            placeholder="BeneFiciary Age"
 
 
                         />
-
-
-
-
                         &nbsp;
                         &nbsp;
+
 
                         <TextField
                             id="standard-basic"
@@ -1127,16 +1091,15 @@ export default class Dashboard extends Component {
                             name="dis"
                             value={this.state.dis}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary district"
+                            placeholder="Beneficiary District"
 
 
                         />
-                        <br />
-
 
                         &nbsp;
                         &nbsp;
 
+              
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1144,12 +1107,17 @@ export default class Dashboard extends Component {
                             name="sub_dis"
                             value={this.state.sub_dis}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary thana"
+                            placeholder="Beneficiary Thana"
 
                         />
+
+
+
+
                         &nbsp;
                         &nbsp;
 
+                  
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1157,13 +1125,13 @@ export default class Dashboard extends Component {
                             name="uni"
                             value={this.state.uni}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary union"
+                            placeholder="Benefciary Union"
 
                         />
+                        <br />
 
-                        &nbsp;
-                        &nbsp;
 
+                      
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1171,7 +1139,7 @@ export default class Dashboard extends Component {
                             name="vill"
                             value={this.state.vill}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary village"
+                            placeholder="Beneficiary Village"
 
                         />
                         &nbsp;
@@ -1184,10 +1152,9 @@ export default class Dashboard extends Component {
                             name="relgn"
                             value={this.state.relgn}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary relgn"
+                            placeholder="Beneficiary Religion"
 
                         />
-                        <br />
 
                         &nbsp;
                         &nbsp;
@@ -1199,10 +1166,9 @@ export default class Dashboard extends Component {
                             name="job"
                             value={this.state.job}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary job"
+                            placeholder="Beneficiary Job"
 
                         />
-
                         &nbsp;
                         &nbsp;
 
@@ -1213,11 +1179,12 @@ export default class Dashboard extends Component {
                             name="gen"
                             value={this.state.gen}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary gen"
+                            placeholder="Beneficiary Gender"
 
                         />
-                        &nbsp;
-                        &nbsp;
+                        <br />
+
+                     
 
                         <TextField
                             id="standard-basic"
@@ -1226,13 +1193,13 @@ export default class Dashboard extends Component {
                             name="mob"
                             value={this.state.mob}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary mobile"
+                            placeholder="Beneficiary Mobile"
 
                         />
-
                         &nbsp;
                         &nbsp;
 
+                 
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1240,17 +1207,9 @@ export default class Dashboard extends Component {
                             name="pgm"
                             value={this.state.pgm}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary pgm"
+                            placeholder="Beneficiary Program"
 
                         />
-
-
-
-                        <br />
-
-
-
-
                         &nbsp;
                         &nbsp;
 
@@ -1261,12 +1220,9 @@ export default class Dashboard extends Component {
                             name="pass"
                             value={this.state.pass}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary passbook"
+                            placeholder="Beneficiary Passbook"
 
                         />
-
-
-
 
                         &nbsp;
                         &nbsp;
@@ -1278,11 +1234,17 @@ export default class Dashboard extends Component {
                             name="bank"
                             value={this.state.bank}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary bank"
+                            placeholder="Beneficiary Bank "
 
                         />
-                        &nbsp;
-                        &nbsp;
+
+
+                        <br />
+
+
+
+
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1290,12 +1252,15 @@ export default class Dashboard extends Component {
                             name="branch"
                             value={this.state.branch}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary branch name"
+                            placeholder="Beneficiary Bank Branch "
 
                         />
 
+
+
                         &nbsp;
                         &nbsp;
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1303,7 +1268,31 @@ export default class Dashboard extends Component {
                             name="r_out"
                             value={this.state.r_out}
                             onChange={this.onChange}
-                            placeholder="BeneFiciary rout"
+                            placeholder="Beneficiary Rout"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_1"
+                            value={this.state.mob_1}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary 2nd Mobile"
+
+                        />
+                        &nbsp;
+                        &nbsp;
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="mob_own"
+                            value={this.state.mob_own}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary Mobile Owner"
 
                         />
 
@@ -1312,38 +1301,6 @@ export default class Dashboard extends Component {
                         <br />
 
 
-
-                        &nbsp;
-                        &nbsp;
-
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_1"
-                            value={this.state.mob_1}
-                            onChange={this.onChange}
-                            placeholder="2nd mobile no"
-
-                        />
-
-
-                        &nbsp;
-                        &nbsp;
-
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_own"
-                            value={this.state.mob_own}
-                            onChange={this.onChange}
-                            placeholder="owner of the mobile"
-
-                        />
-
-                        &nbsp;
-                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1352,11 +1309,14 @@ export default class Dashboard extends Component {
                             name="ben_sts"
                             value={this.state.ben_sts}
                             onChange={this.onChange}
-                            placeholder="beneficiary sts"
+                            placeholder="Beneficiary Status"
 
                         />
+
+
                         &nbsp;
                         &nbsp;
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1364,10 +1324,24 @@ export default class Dashboard extends Component {
                             name="nid_sts"
                             value={this.state.nid_sts}
                             onChange={this.onChange}
-                            placeholder="nid sts"
+                            placeholder="Beneficiary NID Status"
 
                         />
-                        <br />
+
+                        &nbsp;
+                        &nbsp;
+
+                    
+                             <TextField
+                            id="standard-basic"
+                            type="number"
+                            autoComplete="off"
+                            name="ben_nid"
+                            value={this.state.ben_nid}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary NID"
+                            required
+                        />
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1380,26 +1354,18 @@ export default class Dashboard extends Component {
                             placeholder="Approval Status "
 
                         />
-                        &nbsp;
-                        &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="u_nm"
-                            value={this.state.u_nm}
-                            onChange={this.onChange}
-                            placeholder="username  "
-
-                        />
-
+                        <br />
+                       
+                     
+                    
+                        <br/>
 
                         &nbsp;
                         &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
-                            label="date of birth"
+                            label="Date of Birth"
                             autoComplete="off"
                             name="dob"
                             value={this.state.dob}
@@ -1418,7 +1384,7 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="date"
                             autoComplete="off"
-                            label="account created"
+                            label="Account Created"
                             name="accre"
                             value={this.state.accre}
                             onChange={this.onChange}
@@ -1436,7 +1402,7 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="date"
                             autoComplete="off"
-                            label="first allow"
+                            label="First Allowance"
                             name="f_allow"
                             value={this.state.f_allow}
                             onChange={this.onChange}
@@ -1457,7 +1423,7 @@ export default class Dashboard extends Component {
                             Cancel
                         </Button>
                         <Button
-                     
+
                             onClick={(e) => this.addProduct()}
                             color="primary"
                             autoFocus>
@@ -1497,7 +1463,7 @@ export default class Dashboard extends Component {
                                 <TableCell align="center">
                                     Beneficiary Id
                                 </TableCell>
-                         
+
                                 <TableCell align="center">Test Score </TableCell>
                                 <TableCell align="center">Action</TableCell>
                                 <TableCell align="center">
@@ -1526,7 +1492,7 @@ export default class Dashboard extends Component {
                                         {row.score1}
                                     </TableCell>
 
-                               
+
                                     <TableCell align="center">
                                         <Button
                                             className="button_style"

@@ -17,7 +17,7 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    
+
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
@@ -90,13 +90,13 @@ export default class Test extends Component {
             userinfo: [],
             persons: [],
             pages: 0,
-            
+
             loading: false,
         };
 
     }
 
-    
+
 
     componentDidMount = () => {
         let token = localStorage.getItem("token");
@@ -393,7 +393,7 @@ export default class Test extends Component {
 
 
 
-    
+
     handleProductOpen = () => {
         this.setState({
             openProductModal: true,
@@ -1528,20 +1528,36 @@ export default class Test extends Component {
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
+                                <TableCell align="center">
+                                <b>Date</b>
+
+                                    
+                                    </TableCell>
+                                    <TableCell align="center">
+                                <b>Time</b>
+
+                                    
+                                    </TableCell>
+                             
 
                                 <TableCell align="center">
-                                    Beneficiary Name
+                                   <b>Beneficiary Name </b> 
                                 </TableCell>
                                 <TableCell align="center">
-                                    Test ID
+                                  <b>   Test ID </b> 
                                 </TableCell>
                                 <TableCell align="center">
-                                     Test Score
+                                    <b>
+                                    Test Score
+                                    </b>
                                 </TableCell>
-                        
-                                <TableCell align="center">Duration</TableCell>
 
-                                {/* <TableCell align="center">Action</TableCell> */}
+                                <TableCell align="center">
+                                 <b>  Duration</b>   
+                                    
+                                    </TableCell>
+
+
                                 {/* <TableCell align="center">
                                     View BeneFiciary{" "}
                                 </TableCell> */}
@@ -1552,10 +1568,25 @@ export default class Test extends Component {
                         <TableBody>
                             {this.state?.beneficiaries?.reverse().map((row) => (
 
-                                    
-                                
+
+
 
                                 <TableRow key={row.name}>
+
+                                    <TableCell align="center">
+
+                                        {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
+                                       
+                                      
+                            
+
+
+
+                                  
+                                    </TableCell>
+                                    <TableCell align="center">
+                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                    </TableCell>
 
                                     <TableCell align="center">
                                         {row.name}
@@ -1574,10 +1605,10 @@ export default class Test extends Component {
 
 
                                     <TableCell align="center">
-                                        { Math.floor(row.duration/60)} Minute {row.duration%60} Seconds
+                                        {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
                                     </TableCell>
 
-                                
+
 
                                 </TableRow>
                             ))}

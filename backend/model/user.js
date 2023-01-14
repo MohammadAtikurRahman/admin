@@ -1,9 +1,7 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-
 let nextId = 10000;
 nextId = Math.floor(10000 + Math.random() * 90000);
-
 const nextIdBen = 10000;
 const testSchema = new Schema(
     {
@@ -17,24 +15,23 @@ const testSchema = new Schema(
     },
     {timestamps: true},
 );
-
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
         score1: Number,
         score2: Number,
         duration: Number,
-        name: String, // done
-        f_nm: String, //done
-        ben_nid: String, //done
-        sl: Number, //done
-        ben_id: Number, //done
-        m_nm: String, //done
-        age: Number, // done
-        dis: String, //done
-        sub_dis: String, // done
-        uni: String, // done
-        vill: String, // done
+        name: String, 
+        f_nm: String, 
+        ben_nid: String, 
+        sl: Number, 
+        ben_id: Number, 
+        m_nm: String, 
+        age: Number,
+        dis: String, 
+        sub_dis: String, 
+        uni: String, 
+        vill: String, 
         relgn: String,
         job: String,
         gen: String,
@@ -43,27 +40,23 @@ const beneficiarySchema = new Schema(
         pass: Number,
         bank: String,
         branch: String,
-
         r_out: String,
-
         mob_1: String,
         mob_own: String,
-
         ben_sts: String,
         nid_sts: String,
-
         a_sts: String,
-
         u_nm: String,
         dob: Date,
         accre: Date,
         f_allow: Date,
+        timeanddate: { type: Date, default: Date.now },
+
 
         test: [testSchema],
     },
     {timestamps: true},
 );
-
 const userSchema = new Schema(
     {
         id: {type: Number, default: () => nextId++},
@@ -75,16 +68,5 @@ const userSchema = new Schema(
     },
     {timestamps: true},
 );
-
-// userSchema.method('toClient', function() {
-//     var obj = this.toObject();
-
-//     //Rename fields
-//     obj.id = obj._id;
-//     delete obj._id;
-
-//     return obj;
-// });
-
 const user = mongoose.model("user", userSchema);
 module.exports = user;
