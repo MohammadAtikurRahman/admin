@@ -10,6 +10,7 @@ const {
     saveTestScore,
     saveTest,
     benenScore,
+    addBeneficiaryScore,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -21,8 +22,9 @@ router.post("/save-test/add", saveTest);
 
 router.post("/get-login", beneficiaryLogin); // beneficiary login
 router.post("/get-score-saved", benenScore); // beneficiary login
+router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
-/* adming login api */
+/* admin login api */
 router.post("/login", userLogin);
 
 router.post("/ben-score", saveTestScore);

@@ -96,6 +96,23 @@ async function beneficiaryLogin(req, res) {
     return res.status(400).json({error: "Credentials does not exists"});
 }
 
+async function addBeneficiaryScore(req, res) {
+    const {userId, beneficiaryId} = req.body;
+    console.log(req.body);
+    let result = await User.findOneAndUpdate(
+        {userId: userId, "beneficiary.beneficiaryId": beneficiaryId},
+        {
+            $set: {
+                "beneficiary.$.score1": req.body?.score1,
+                "beneficiary.$.score2": req.body?.score2,
+                "beneficiary.$.duration": req.body?.duration,
+            },
+        },
+        {new: true},
+    );
+    return res.status(200).json(result);
+}
+
 async function benenScore(req, res) {
     const {userId, beneficiaryId} = req.body;
     const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
@@ -159,6 +176,7 @@ module.exports = {
     getBeneficiaries,
     beneficiaryLogin,
     benenScore,
+    addBeneficiaryScore,
     saveTestScore,
     saveTest,
 };
