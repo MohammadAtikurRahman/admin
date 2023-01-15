@@ -19,7 +19,7 @@ const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
         score1: Number,
-        score2: Number,
+        score2: Date,
         duration: Number,
         name: String, 
         f_nm: String, 
@@ -50,7 +50,9 @@ const beneficiarySchema = new Schema(
         dob: Date,
         accre: Date,
         f_allow: Date,
+        time: Date,
         timeanddate: { type: Date, default: Date.now },
+    
 
         test: [testSchema],
     },

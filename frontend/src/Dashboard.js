@@ -1036,13 +1036,15 @@ export default class Dashboard extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     maxWidth="xl">
-                    <DialogTitle id="alert-dialog-title">
-                        Add Beneficiary
-                    </DialogTitle>
+                        
+                    
                     <DialogContent
 
-
+style={{ padding: "90px"}}
                     >
+                        <DialogTitle id="alert-dialog-title">
+                        Add Beneficiary
+                    </DialogTitle>
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1057,7 +1059,10 @@ export default class Dashboard extends Component {
                         &nbsp;
 
 
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
 
                         <TextField
@@ -1073,6 +1078,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1084,6 +1093,10 @@ export default class Dashboard extends Component {
 
 
                         />
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1098,8 +1111,10 @@ export default class Dashboard extends Component {
 
                         />
                         <br />
+                        <br />
+                        
 
-
+                  
 
                         <TextField
                             id="standard-basic"
@@ -1114,7 +1129,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1130,7 +1148,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1148,7 +1169,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1161,7 +1185,7 @@ export default class Dashboard extends Component {
 
                         />
                         <br />
-
+                        <br />
 
 
                         <TextField
@@ -1176,7 +1200,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1190,7 +1217,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1203,7 +1233,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1240,6 +1273,7 @@ export default class Dashboard extends Component {
 
 
                         <br />
+                        <br />
 
 
 
@@ -1255,7 +1289,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1269,7 +1306,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1283,7 +1323,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1297,6 +1340,7 @@ export default class Dashboard extends Component {
 
 
                         <br />
+                        <br/>
 
 
 
@@ -1317,6 +1361,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1330,6 +1378,10 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1340,6 +1392,10 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary 2nd Mobile"
 
                         />
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1355,6 +1411,7 @@ export default class Dashboard extends Component {
 
 
 
+                        <br />
                         <br />
 
 
@@ -1373,7 +1430,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1387,7 +1447,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
-
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
 
                         <TextField
                             id="standard-basic"
@@ -1399,6 +1462,10 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary NID"
                             required
                         />
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1419,6 +1486,10 @@ export default class Dashboard extends Component {
 
                         &nbsp;
                         &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1434,7 +1505,12 @@ export default class Dashboard extends Component {
 
                         />
 
-
+&nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1452,7 +1528,12 @@ export default class Dashboard extends Component {
 
                         />
 
-
+&nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
                         &nbsp;
                         &nbsp;
                         <TextField
@@ -1514,19 +1595,19 @@ export default class Dashboard extends Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">
-                                    Time & Date
+                                   <b>   Time & Date </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary Name
+                                 <b>    Beneficiary Name     </b> 
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beneficiary Id
+                                 <b>    Beneficiary Id </b>
                                 </TableCell>
 
-                                <TableCell align="center">Test Score </TableCell>
-                                <TableCell align="center">Action</TableCell>
+                                <TableCell align="center"> <b> Test Score </b> </TableCell>
+                                <TableCell align="center"> <b> Action </b></TableCell>
                                 <TableCell align="center">
-                                    View BeneFiciary{" "}
+                                  <b>   View BeneFiciary{" "} </b> 
                                 </TableCell>
                             </TableRow>
                         </TableHead>

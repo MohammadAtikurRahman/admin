@@ -104,12 +104,13 @@ async function benenScore(req, res) {
 
     if (index !== null) beneficiaries[index]["score1"] = req.body?.score1;
 
-    if (index !== null) beneficiaries[index]["score2"] = req.body?.score2;
+    if (index !== null) beneficiaries[index]["time"] = req.body?.time;
 
     if (index !== null) beneficiaries[index]["duration"] = req.body?.duration;
 
     const user = (
         await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
+        
     ).toJSON();
 
     console.log(user);
@@ -134,7 +135,7 @@ async function saveTestScore(req, res) {
 
     if (index) beneficiaries[index]["score1"] = req.body.score1;
 
-    if (index) beneficiaries[index]["score2"] = req.body.score2;
+    if (index) beneficiaries[index]["time"] = req.body.time;
 
     if (index) beneficiaries[index]["duration"] = req.body.duration;
 
