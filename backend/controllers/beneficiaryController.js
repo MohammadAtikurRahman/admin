@@ -7,18 +7,16 @@ const jwt = require("jsonwebtoken");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
-    console.log("updated" + user);
-
-    user = (await User.findById(user.id)).toJSON();
 
     const beneficiaryId = await randomNumberNotInBeneficiaryCollection(user.beneficiary);
 
     req.body.beneficiary["beneficiaryId"] = beneficiaryId;
 
-    let beneficiary = [...user.beneficiary, req.body.beneficiary];
-    console.log(beneficiary);
-
-    user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true});
+    user = await User.findByIdAndUpdate(
+        user.id,
+        {$push: {beneficiary: req.body.beneficiary}},
+        {new: true},
+    );
 
     return res.status(200).json({user: user});
 }
@@ -127,7 +125,6 @@ async function benenScore(req, res) {
 
     const user = (
         await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
-        
     ).toJSON();
 
     console.log(user);
