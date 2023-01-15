@@ -19,7 +19,7 @@ const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
         score1: Number,
-        score2: Date,
+        time: Date,
         duration: Number,
         name: String, 
         f_nm: String, 

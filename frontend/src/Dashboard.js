@@ -296,6 +296,8 @@ export default class Dashboard extends Component {
                 token: localStorage.getItem("token"),
             })
             .then((res) => {
+                window.location.reload();
+
                 swal({
                     text: res.data.title,
                     icon: "success",

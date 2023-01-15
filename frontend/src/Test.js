@@ -24,9 +24,36 @@ import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import Papa from 'papaparse';
+import json2csv from 'json2csv';
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
+
+const getData = async () => {
+    try {
+        const res = await axios.get('http://172.104.191.159:2000/get-testscore');
+        return res.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+const exportData = async () => {
+    const data = await getData();
+    const fields = Object.keys(data[0]);
+    const csv = json2csv.parse(data, { fields });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "collection.csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
 
 export default class Test extends Component {
     constructor() {
@@ -531,7 +558,7 @@ export default class Test extends Component {
                         </MaterialLink>
                     </Button>
 
-                    <Button
+                    {/* <Button
                         className="button_style"
                         variant="contained"
                         color="inherit"
@@ -541,7 +568,23 @@ export default class Test extends Component {
                             href="/test">
                             Transactions
                         </MaterialLink>
+                    </Button> */}
+
+                    <Button
+                        className="button_style"
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        
+                        >
+                        <MaterialLink
+                            style={{ textDecoration: "none", color: "white" }}
+                            onClick={exportData}>
+                            Download Test Score
+                        </MaterialLink>
                     </Button>
+
+            
 
                     <Button
                         className="button_style"
