@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 
-
-
 import {
     Button,
     TextField,
@@ -17,43 +15,40 @@ import {
     TableHead,
     TableRow,
     TableCell,
-
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import Papa from 'papaparse';
-import json2csv from 'json2csv';
+import Papa from "papaparse";
+import json2csv from "json2csv";
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 const getData = async () => {
     try {
-        const res = await axios.get('http://172.104.191.159:2000/get-testscore');
+        const res = await axios.get("http://172.104.191.159:2000/get-testscore");
         return res.data;
     } catch (error) {
         console.error(error);
     }
-}
+};
 const exportData = async () => {
     const data = await getData();
     const fields = Object.keys(data[0]);
     const csv = json2csv.parse(data, { fields });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
     link.setAttribute("download", "collection.csv");
-    link.style.visibility = 'hidden';
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
-
-
+};
 
 export default class Test extends Component {
     constructor() {
@@ -71,8 +66,6 @@ export default class Test extends Component {
             ben_id: "",
             m_nm: "",
 
-
-
             age: "",
             dis: "",
             sub_dis: "",
@@ -84,8 +77,6 @@ export default class Test extends Component {
             mob: "",
             pgm: "",
 
-
-
             pass: "",
             bank: "",
             branch: "",
@@ -96,15 +87,10 @@ export default class Test extends Component {
             nid_sts: "",
             a_sts: "",
 
-
             u_nm: "",
             dob: "",
             accre: "",
             f_allow: "",
-
-
-
-
 
             desc: "",
             price: "",
@@ -120,10 +106,7 @@ export default class Test extends Component {
 
             loading: false,
         };
-
     }
-
-
 
     componentDidMount = () => {
         let token = localStorage.getItem("token");
@@ -135,7 +118,7 @@ export default class Test extends Component {
             });
         }
 
-        axios.get(baseUrl + '/user-details').then((res) => {
+        axios.get(baseUrl + "/user-details").then((res) => {
             const persons = res.data;
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
@@ -161,26 +144,22 @@ export default class Test extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(baseUrl + '/beneficiary', {
+            .get(baseUrl + "/beneficiary", {
                 message: "hello",
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
-
-
                 console.log("here", Object.values(jwt_decode(res.config.headers.token)));
-                console.log("here", (res.data.beneficiaries));
+                console.log("here", res.data.beneficiaries);
 
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
                     pages: res.data?.pages,
                     userinfo: Object.values(jwt_decode(res.config.headers.token)),
-
                 });
-
             })
             .catch((err) => {
                 swal({
@@ -190,14 +169,15 @@ export default class Test extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => { }
+                    () => {}
                 );
             });
     };
 
     deleteProduct = (id) => {
         axios
-            .post(baseUrl + '/delete-product',
+            .post(
+                baseUrl + "/delete-product",
                 {
                     id: id,
                 },
@@ -241,9 +221,9 @@ export default class Test extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => { });
+            this.setState({ fileName: e.target.files[0].name }, () => {});
         }
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({ [e.target.name]: e.target.value }, () => {});
 
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
@@ -255,7 +235,7 @@ export default class Test extends Component {
     addProduct = () => {
         const fileInput = document.querySelector("#fileInput");
         axios
-            .post(baseUrl + '/beneficiary/add', {
+            .post(baseUrl + "/beneficiary/add", {
                 beneficiary: {
                     name: this.state.name,
                     f_nm: this.state.f_nm,
@@ -288,8 +268,6 @@ export default class Test extends Component {
                     dob: this.state.dob,
                     accre: this.state.accre,
                     f_allow: this.state.f_allow,
-
-
                 },
                 token: localStorage.getItem("token"),
             })
@@ -341,7 +319,6 @@ export default class Test extends Component {
 
         file.append("age", this.state.age);
 
-
         file.append("dis", this.state.dis);
         file.append("sub_dis", this.state.sub_dis);
         file.append("uni", this.state.uni);
@@ -365,17 +342,13 @@ export default class Test extends Component {
         file.append("nid_sts", this.state.nid_sts);
         file.append("a_sts", this.state.a_sts);
 
-
-
-
         file.append("u_nm", this.state.u_nm);
         file.append("dob", this.state.dob);
         file.append("accre", this.state.accre);
         file.append("f_allow", this.state.f_allow);
 
-
         axios
-            .post(baseUrl + '/update-product', file, {
+            .post(baseUrl + "/update-product", file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,
@@ -391,16 +364,38 @@ export default class Test extends Component {
                 this.handleProductEditClose();
                 this.setState(
                     {
-                        name: "", bank: "",
+                        name: "",
+                        bank: "",
 
                         u_nm: "",
                         dob: "",
                         accre: "",
                         f_allow: "",
 
-
-
-                        a_sts: "", nid_sts: "", ben_sts: "", mob_own: "", mob_1: "", r_out: "", branch: "", gen: "", pass: "", mob: "", pgm: "", age: "", ben_id: "", job: "", m_nm: "", ben_nid: "", sl: "", f_nm: "", dis: "", sub_dis: "", vill: "", uni: "", relgn: "", file: null
+                        a_sts: "",
+                        nid_sts: "",
+                        ben_sts: "",
+                        mob_own: "",
+                        mob_1: "",
+                        r_out: "",
+                        branch: "",
+                        gen: "",
+                        pass: "",
+                        mob: "",
+                        pgm: "",
+                        age: "",
+                        ben_id: "",
+                        job: "",
+                        m_nm: "",
+                        ben_nid: "",
+                        sl: "",
+                        f_nm: "",
+                        dis: "",
+                        sub_dis: "",
+                        vill: "",
+                        uni: "",
+                        relgn: "",
+                        file: null,
                     },
                     () => {
                         this.getBeneficiaries();
@@ -416,10 +411,6 @@ export default class Test extends Component {
                 this.handleProductEditClose();
             });
     };
-
-
-
-
 
     handleProductOpen = () => {
         this.setState({
@@ -479,7 +470,6 @@ export default class Test extends Component {
             nid_sts: data.nid_sts,
             a_sts: data.a_sts,
 
-
             u_nm: data.u_nm,
             dob: data.dob,
             accre: data.accre,
@@ -497,8 +487,6 @@ export default class Test extends Component {
         return (
             <div>
                 <div>
-
-
                     {/* 
                     <ol>
                         {this.state.userinfo.map(user => (
@@ -506,13 +494,14 @@ export default class Test extends Component {
                         ))}
                     </ol> */}
 
-
-
                     <br></br>
-                    <h2   style={{
-                                color: "black",
-                            }}>DASHBOARD</h2>
-{/* 
+                    <h2
+                        style={{
+                            color: "black",
+                        }}>
+                        DASHBOARD
+                    </h2>
+                    {/* 
                     <Button
                         className="button_style"
                         variant="contained"
@@ -521,15 +510,15 @@ export default class Test extends Component {
                         onClick={this.handleProductOpen}>
                         Add Beneficiary
                     </Button> */}
-                    
+
                     <Button
                         className="button_style"
                         variant="contained"
                         color="secondary"
-                        size="small"
-
-                    >
-                        <MaterialLink style={{ textDecoration: 'none', color: 'white' }} href="/dashboard">
+                        size="small">
+                        <MaterialLink
+                            style={{ textDecoration: "none", color: "white" }}
+                            href="/dashboard">
                             List Of BeneFiciary
                         </MaterialLink>
                     </Button>
@@ -574,17 +563,13 @@ export default class Test extends Component {
                         className="button_style"
                         variant="contained"
                         color="secondary"
-                        size="small"
-                        
-                        >
+                        size="small">
                         <MaterialLink
                             style={{ textDecoration: "none", color: "white" }}
                             onClick={exportData}>
                             Download Test Score
                         </MaterialLink>
                     </Button>
-
-            
 
                     <Button
                         className="button_style"
@@ -608,10 +593,7 @@ export default class Test extends Component {
                     onClose={this.handleProductClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description">
-                    <DialogTitle id="alert-dialog-title">
-                        Edit Beneficiary
-                    </DialogTitle>
-
+                    <DialogTitle id="alert-dialog-title">Edit Beneficiary</DialogTitle>
 
                     <DialogContent>
                         <TextField
@@ -624,11 +606,7 @@ export default class Test extends Component {
                             placeholder="Beneficiary Name"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
-
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -639,8 +617,7 @@ export default class Test extends Component {
                             placeholder="Serail"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -651,8 +628,7 @@ export default class Test extends Component {
                             placeholder="Beneficiary ben_nid"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -661,14 +637,8 @@ export default class Test extends Component {
                             value={this.state.f_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Father"
-
-
                         />
-
                         <br />
-
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -677,13 +647,8 @@ export default class Test extends Component {
                             value={this.state.m_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mother"
-
-
                         />
-                        &nbsp;
-                        &nbsp;
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -692,13 +657,8 @@ export default class Test extends Component {
                             value={this.state.ben_id}
                             onChange={this.onChange}
                             placeholder="BeneFiciary id"
-
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -707,16 +667,8 @@ export default class Test extends Component {
                             value={this.state.age}
                             onChange={this.onChange}
                             placeholder="BeneFiciary age"
-
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -725,15 +677,9 @@ export default class Test extends Component {
                             value={this.state.dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary district"
-
-
                         />
                         <br />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -742,11 +688,8 @@ export default class Test extends Component {
                             value={this.state.sub_dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary thana"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -755,12 +698,8 @@ export default class Test extends Component {
                             value={this.state.uni}
                             onChange={this.onChange}
                             placeholder="BeneFiciary union"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -769,11 +708,8 @@ export default class Test extends Component {
                             value={this.state.vill}
                             onChange={this.onChange}
                             placeholder="BeneFiciary village"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -782,13 +718,9 @@ export default class Test extends Component {
                             value={this.state.relgn}
                             onChange={this.onChange}
                             placeholder="BeneFiciary relgn"
-
                         />
                         <br />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -797,12 +729,8 @@ export default class Test extends Component {
                             value={this.state.job}
                             onChange={this.onChange}
                             placeholder="BeneFiciary job"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -811,11 +739,8 @@ export default class Test extends Component {
                             value={this.state.gen}
                             onChange={this.onChange}
                             placeholder="BeneFiciary gen"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -824,12 +749,8 @@ export default class Test extends Component {
                             value={this.state.mob}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -838,19 +759,9 @@ export default class Test extends Component {
                             value={this.state.pgm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary pgm"
-
                         />
-
-
-
                         <br />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -859,15 +770,8 @@ export default class Test extends Component {
                             value={this.state.pass}
                             onChange={this.onChange}
                             placeholder="BeneFiciary passbook"
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -876,10 +780,8 @@ export default class Test extends Component {
                             value={this.state.bank}
                             onChange={this.onChange}
                             placeholder="BeneFiciary bank"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -888,11 +790,8 @@ export default class Test extends Component {
                             value={this.state.branch}
                             onChange={this.onChange}
                             placeholder="BeneFiciary branch name"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -901,18 +800,9 @@ export default class Test extends Component {
                             value={this.state.r_out}
                             onChange={this.onChange}
                             placeholder="BeneFiciary rout"
-
                         />
-
-
-
                         <br />
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -921,13 +811,8 @@ export default class Test extends Component {
                             value={this.state.mob_1}
                             onChange={this.onChange}
                             placeholder="2nd mobile no"
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -936,12 +821,8 @@ export default class Test extends Component {
                             value={this.state.mob_own}
                             onChange={this.onChange}
                             placeholder="owner of the mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -950,10 +831,8 @@ export default class Test extends Component {
                             value={this.state.ben_sts}
                             onChange={this.onChange}
                             placeholder="beneficiary sts"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -962,11 +841,9 @@ export default class Test extends Component {
                             value={this.state.nid_sts}
                             onChange={this.onChange}
                             placeholder="nid sts"
-
                         />
                         <br />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -975,10 +852,8 @@ export default class Test extends Component {
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             placeholder="Approval Status "
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -987,12 +862,8 @@ export default class Test extends Component {
                             value={this.state.u_nm}
                             onChange={this.onChange}
                             placeholder="username  "
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1005,12 +876,8 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1023,12 +890,8 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1041,16 +904,13 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
                         <br />
                         &nbsp;
                     </DialogContent>
 
                     <DialogActions>
-                        <Button
-                            onClick={this.handleProductEditClose}
-                            color="primary">
+                        <Button onClick={this.handleProductEditClose} color="primary">
                             Cancel
                         </Button>
                         <Button
@@ -1075,9 +935,7 @@ export default class Test extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     maxWidth="xl">
-                    <DialogTitle id="alert-dialog-title">
-                        Add Beneficiary
-                    </DialogTitle>
+                    <DialogTitle id="alert-dialog-title">Add Beneficiary</DialogTitle>
                     <DialogContent>
                         <TextField
                             id="standard-basic"
@@ -1089,11 +947,7 @@ export default class Test extends Component {
                             placeholder="Beneficiary Name"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
-
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1104,8 +958,7 @@ export default class Test extends Component {
                             placeholder="Serail"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1116,8 +969,7 @@ export default class Test extends Component {
                             placeholder="Beneficiary ben_nid"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1126,14 +978,8 @@ export default class Test extends Component {
                             value={this.state.f_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Father"
-
-
                         />
-
                         <br />
-
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1142,13 +988,8 @@ export default class Test extends Component {
                             value={this.state.m_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mother"
-
-
                         />
-                        &nbsp;
-                        &nbsp;
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1157,13 +998,8 @@ export default class Test extends Component {
                             value={this.state.ben_id}
                             onChange={this.onChange}
                             placeholder="BeneFiciary id"
-
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1172,16 +1008,8 @@ export default class Test extends Component {
                             value={this.state.age}
                             onChange={this.onChange}
                             placeholder="BeneFiciary age"
-
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1190,15 +1018,9 @@ export default class Test extends Component {
                             value={this.state.dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary district"
-
-
                         />
                         <br />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1207,11 +1029,8 @@ export default class Test extends Component {
                             value={this.state.sub_dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary thana"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1220,12 +1039,8 @@ export default class Test extends Component {
                             value={this.state.uni}
                             onChange={this.onChange}
                             placeholder="BeneFiciary union"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1234,11 +1049,8 @@ export default class Test extends Component {
                             value={this.state.vill}
                             onChange={this.onChange}
                             placeholder="BeneFiciary village"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1247,13 +1059,9 @@ export default class Test extends Component {
                             value={this.state.relgn}
                             onChange={this.onChange}
                             placeholder="BeneFiciary relgn"
-
                         />
                         <br />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1262,12 +1070,8 @@ export default class Test extends Component {
                             value={this.state.job}
                             onChange={this.onChange}
                             placeholder="BeneFiciary job"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1276,11 +1080,8 @@ export default class Test extends Component {
                             value={this.state.gen}
                             onChange={this.onChange}
                             placeholder="BeneFiciary gen"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1289,12 +1090,8 @@ export default class Test extends Component {
                             value={this.state.mob}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1303,19 +1100,9 @@ export default class Test extends Component {
                             value={this.state.pgm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary pgm"
-
                         />
-
-
-
                         <br />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1324,15 +1111,8 @@ export default class Test extends Component {
                             value={this.state.pass}
                             onChange={this.onChange}
                             placeholder="BeneFiciary passbook"
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1341,10 +1121,8 @@ export default class Test extends Component {
                             value={this.state.bank}
                             onChange={this.onChange}
                             placeholder="BeneFiciary bank"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1353,11 +1131,8 @@ export default class Test extends Component {
                             value={this.state.branch}
                             onChange={this.onChange}
                             placeholder="BeneFiciary branch name"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1366,18 +1141,9 @@ export default class Test extends Component {
                             value={this.state.r_out}
                             onChange={this.onChange}
                             placeholder="BeneFiciary rout"
-
                         />
-
-
-
                         <br />
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1386,13 +1152,8 @@ export default class Test extends Component {
                             value={this.state.mob_1}
                             onChange={this.onChange}
                             placeholder="2nd mobile no"
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1401,12 +1162,8 @@ export default class Test extends Component {
                             value={this.state.mob_own}
                             onChange={this.onChange}
                             placeholder="owner of the mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1415,10 +1172,8 @@ export default class Test extends Component {
                             value={this.state.ben_sts}
                             onChange={this.onChange}
                             placeholder="beneficiary sts"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1427,11 +1182,9 @@ export default class Test extends Component {
                             value={this.state.nid_sts}
                             onChange={this.onChange}
                             placeholder="nid sts"
-
                         />
                         <br />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1440,10 +1193,8 @@ export default class Test extends Component {
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             placeholder="Approval Status "
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1452,12 +1203,8 @@ export default class Test extends Component {
                             value={this.state.u_nm}
                             onChange={this.onChange}
                             placeholder="username  "
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1470,12 +1217,8 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1488,12 +1231,8 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1506,16 +1245,13 @@ export default class Test extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
                         <br />
                         &nbsp;
                     </DialogContent>
 
                     <DialogActions>
-                        <Button
-                            onClick={this.handleProductClose}
-                            color="primary">
+                        <Button onClick={this.handleProductClose} color="primary">
                             Cancel
                         </Button>
                         <Button
@@ -1535,12 +1271,6 @@ export default class Test extends Component {
                                 this.state.job == "" ||
                                 this.state.gen == "" ||
                                 this.state.mob == ""
-
-
-
-
-
-
                             }
                             onClick={(e) => this.addProduct()}
                             color="primary"
@@ -1564,45 +1294,29 @@ export default class Test extends Component {
                         required
                     />
 
-
-
-
-
-
-
-
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">
-                                <b>Date</b>
-
-                                    
-                                    </TableCell>
-                                    <TableCell align="center">
-                                <b>Time</b>
-
-                                    
-                                    </TableCell>
-                             
-
-                                <TableCell align="center">
-                                   <b>Beneficiary Name </b> 
+                                    <b>Date</b>
                                 </TableCell>
                                 <TableCell align="center">
-                                  <b>   Test ID </b> 
-                                </TableCell>
-                                <TableCell align="center">
-                                    <b>
-                                    Test Score
-                                    </b>
+                                    <b>Time</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                 <b>  Duration</b>   
-                                    
-                                    </TableCell>
+                                    <b>Beneficiary Name </b>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <b> Test ID </b>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <b>Test Score</b>
+                                </TableCell>
 
+                                <TableCell align="center">
+                                    <b> Duration</b>
+                                </TableCell>
 
                                 {/* <TableCell align="center">
                                     View BeneFiciary{" "}
@@ -1610,7 +1324,7 @@ export default class Test extends Component {
                             </TableRow>
                         </TableHead>
 
-{/* 
+                        {/* 
                      <TableBody>
                             {this.state?.beneficiaries?.reverse().map((row) => (
 
@@ -1660,45 +1374,39 @@ export default class Test extends Component {
                             ))}
                         </TableBody>   */}
 
-                     <TableBody>
-                        {this.state?.beneficiaries
-                        .filter(row => row.score1 !== null && row.score1 !== undefined)
-                        .reverse()
-                        .map((row) => (
-                            <TableRow key={row.name}>
-                            <TableCell align="center">
-                            {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
-                            </TableCell>
-                            <TableCell align="center">
-                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                            </TableCell>
-                            <TableCell align="center">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="center" component="th" scope="row">
-                                {row.beneficiaryId}
-                            </TableCell>
-                            <TableCell align="center">
-                                {row.score1}
-                            </TableCell>
-                            <TableCell align="center">
-                                {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
-                            </TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>  
-
-
-
-
+                        <TableBody>
+                            {this.state?.beneficiaries
+                                .filter((row) => row.score1 !== null && row.score1 !== undefined)
+                                .reverse()
+                                .map((row) => (
+                                    <TableRow key={row.name}>
+                                        <TableCell align="center">
+                                            {new Date(row.updatedAt).toLocaleString("en-US", {
+                                                month: "2-digit",
+                                                day: "2-digit",
+                                                year: "numeric",
+                                            })}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {new Date(row.updatedAt).toLocaleString("en-US", {
+                                                hour: "numeric",
+                                                minute: "numeric",
+                                                hour12: true,
+                                            })}
+                                        </TableCell>
+                                        <TableCell align="center">{row.name}</TableCell>
+                                        <TableCell align="center" component="th" scope="row">
+                                            {row.beneficiaryId}
+                                        </TableCell>
+                                        <TableCell align="center">{row.score1}</TableCell>
+                                        <TableCell align="center">
+                                            {Math.floor(row.duration / 60)} Minute{" "}
+                                            {row.duration % 60} Seconds
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
                     </Table>
-
-
-
-
-
-
-
 
                     <br />
                     <Pagination

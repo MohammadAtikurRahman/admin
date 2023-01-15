@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 
-
-
 import {
     Button,
     TextField,
@@ -43,8 +41,6 @@ export default class Dashboard extends Component {
             ben_id: "",
             m_nm: "",
 
-
-
             age: "",
             dis: "",
             sub_dis: "",
@@ -56,8 +52,6 @@ export default class Dashboard extends Component {
             mob: "",
             pgm: "",
 
-
-
             pass: "",
             bank: "",
             branch: "",
@@ -68,17 +62,12 @@ export default class Dashboard extends Component {
             nid_sts: "",
             a_sts: "",
 
-
             u_nm: "",
             dob: "",
             accre: "",
             f_allow: "",
             score1: "",
             score2: "",
-
-
-
-
 
             desc: "",
             price: "",
@@ -93,25 +82,12 @@ export default class Dashboard extends Component {
             pages: 0,
             loading: false,
 
-
             anchorEl: null,
-            selectedItem: null
-
-
-
-
-
-
-
-
-
-
+            selectedItem: null,
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-
-
     }
     handleClick(event) {
         this.setState({ anchorEl: event.currentTarget });
@@ -136,7 +112,7 @@ export default class Dashboard extends Component {
             });
         }
 
-        axios.get(baseUrl + '/user-details').then((res) => {
+        axios.get(baseUrl + "/user-details").then((res) => {
             const persons = res.data;
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
@@ -162,26 +138,22 @@ export default class Dashboard extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(baseUrl + '/beneficiary', {
+            .get(baseUrl + "/beneficiary", {
                 message: "hello",
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
-
-
                 console.log("here", Object.values(jwt_decode(res.config.headers.token)));
-                console.log("here", (res.data.beneficiaries));
+                console.log("here", res.data.beneficiaries);
 
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
                     pages: res.data?.pages,
                     userinfo: Object.values(jwt_decode(res.config.headers.token)),
-
                 });
-
             })
             .catch((err) => {
                 swal({
@@ -191,14 +163,15 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => { }
+                    () => {}
                 );
             });
     };
 
     deleteProduct = (id) => {
         axios
-            .post(baseUrl + '/delete-product',
+            .post(
+                baseUrl + "/delete-product",
                 {
                     id: id,
                 },
@@ -242,14 +215,14 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => { });
+            this.setState({ fileName: e.target.files[0].name }, () => {});
         }
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({ [e.target.name]: e.target.value }, () => {});
 
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
-                console.log(e.target.name)
+                console.log(e.target.name);
             });
         }
     };
@@ -257,7 +230,7 @@ export default class Dashboard extends Component {
     addProduct = () => {
         const fileInput = document.querySelector("#fileInput");
         axios
-            .post(baseUrl + '/beneficiary/add', {
+            .post(baseUrl + "/beneficiary/add", {
                 beneficiary: {
                     name: this.state.name,
                     f_nm: this.state.f_nm,
@@ -290,8 +263,6 @@ export default class Dashboard extends Component {
                     dob: this.state.dob,
                     accre: this.state.accre,
                     f_allow: this.state.f_allow,
-
-
                 },
                 token: localStorage.getItem("token"),
             })
@@ -345,7 +316,6 @@ export default class Dashboard extends Component {
 
         file.append("age", this.state.age);
 
-
         file.append("dis", this.state.dis);
         file.append("sub_dis", this.state.sub_dis);
         file.append("uni", this.state.uni);
@@ -369,17 +339,13 @@ export default class Dashboard extends Component {
         file.append("nid_sts", this.state.nid_sts);
         file.append("a_sts", this.state.a_sts);
 
-
-
-
         file.append("u_nm", this.state.u_nm);
         file.append("dob", this.state.dob);
         file.append("accre", this.state.accre);
         file.append("f_allow", this.state.f_allow);
 
-
         axios
-            .post(baseUrl + '/update-product', file, {
+            .post(baseUrl + "/update-product", file, {
                 headers: {
                     "content-type": "multipart/form-data",
                     token: this.state.token,
@@ -395,16 +361,38 @@ export default class Dashboard extends Component {
                 this.handleProductEditClose();
                 this.setState(
                     {
-                        name: "", bank: "",
+                        name: "",
+                        bank: "",
 
                         u_nm: "",
                         dob: "",
                         accre: "",
                         f_allow: "",
 
-
-
-                        a_sts: "", nid_sts: "", ben_sts: "", mob_own: "", mob_1: "", r_out: "", branch: "", gen: "", pass: "", mob: "", pgm: "", age: "", ben_id: "", job: "", m_nm: "", ben_nid: "", sl: "", f_nm: "", dis: "", sub_dis: "", vill: "", uni: "", relgn: "", file: null
+                        a_sts: "",
+                        nid_sts: "",
+                        ben_sts: "",
+                        mob_own: "",
+                        mob_1: "",
+                        r_out: "",
+                        branch: "",
+                        gen: "",
+                        pass: "",
+                        mob: "",
+                        pgm: "",
+                        age: "",
+                        ben_id: "",
+                        job: "",
+                        m_nm: "",
+                        ben_nid: "",
+                        sl: "",
+                        f_nm: "",
+                        dis: "",
+                        sub_dis: "",
+                        vill: "",
+                        uni: "",
+                        relgn: "",
+                        file: null,
                     },
                     () => {
                         this.getBeneficiaries();
@@ -479,7 +467,6 @@ export default class Dashboard extends Component {
             nid_sts: data.nid_sts,
             a_sts: data.a_sts,
 
-
             u_nm: data.u_nm,
             dob: data.dob,
             accre: data.accre,
@@ -499,16 +486,12 @@ export default class Dashboard extends Component {
         return (
             <div>
                 <div>
-
-
                     {/* 
                     <ol>
                         {this.state.userinfo.map(user => (
                             <ul key={user}>{user}</ul>
                         ))}
                     </ol> */}
-
-
 
                     <br></br>
                     <h2>Dashboard</h2>
@@ -580,10 +563,7 @@ export default class Dashboard extends Component {
                     onClose={this.handleProductClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description">
-                    <DialogTitle id="alert-dialog-title">
-                        Edit Beneficiary
-                    </DialogTitle>
-
+                    <DialogTitle id="alert-dialog-title">Edit Beneficiary</DialogTitle>
 
                     <DialogContent>
                         <TextField
@@ -596,11 +576,7 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Name"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
-
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -611,8 +587,7 @@ export default class Dashboard extends Component {
                             placeholder="Serail"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -623,8 +598,7 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary ben_nid"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -633,14 +607,8 @@ export default class Dashboard extends Component {
                             value={this.state.f_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Father"
-
-
                         />
-
                         <br />
-
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -649,13 +617,8 @@ export default class Dashboard extends Component {
                             value={this.state.m_nm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mother"
-
-
                         />
-                        &nbsp;
-                        &nbsp;
-
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -664,13 +627,8 @@ export default class Dashboard extends Component {
                             value={this.state.ben_id}
                             onChange={this.onChange}
                             placeholder="BeneFiciary id"
-
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -679,16 +637,8 @@ export default class Dashboard extends Component {
                             value={this.state.age}
                             onChange={this.onChange}
                             placeholder="BeneFiciary age"
-
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -697,15 +647,9 @@ export default class Dashboard extends Component {
                             value={this.state.dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary district"
-
-
                         />
                         <br />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -714,11 +658,8 @@ export default class Dashboard extends Component {
                             value={this.state.sub_dis}
                             onChange={this.onChange}
                             placeholder="BeneFiciary thana"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -727,12 +668,8 @@ export default class Dashboard extends Component {
                             value={this.state.uni}
                             onChange={this.onChange}
                             placeholder="BeneFiciary union"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -741,11 +678,8 @@ export default class Dashboard extends Component {
                             value={this.state.vill}
                             onChange={this.onChange}
                             placeholder="BeneFiciary village"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -754,13 +688,9 @@ export default class Dashboard extends Component {
                             value={this.state.relgn}
                             onChange={this.onChange}
                             placeholder="BeneFiciary relgn"
-
                         />
                         <br />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -769,12 +699,8 @@ export default class Dashboard extends Component {
                             value={this.state.job}
                             onChange={this.onChange}
                             placeholder="BeneFiciary job"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -783,11 +709,8 @@ export default class Dashboard extends Component {
                             value={this.state.gen}
                             onChange={this.onChange}
                             placeholder="BeneFiciary gen"
-
                         />
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -796,12 +719,8 @@ export default class Dashboard extends Component {
                             value={this.state.mob}
                             onChange={this.onChange}
                             placeholder="BeneFiciary mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -810,19 +729,9 @@ export default class Dashboard extends Component {
                             value={this.state.pgm}
                             onChange={this.onChange}
                             placeholder="BeneFiciary pgm"
-
                         />
-
-
-
                         <br />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -831,15 +740,8 @@ export default class Dashboard extends Component {
                             value={this.state.pass}
                             onChange={this.onChange}
                             placeholder="BeneFiciary passbook"
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -848,10 +750,8 @@ export default class Dashboard extends Component {
                             value={this.state.bank}
                             onChange={this.onChange}
                             placeholder="BeneFiciary bank"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -860,11 +760,8 @@ export default class Dashboard extends Component {
                             value={this.state.branch}
                             onChange={this.onChange}
                             placeholder="BeneFiciary branch name"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -873,18 +770,9 @@ export default class Dashboard extends Component {
                             value={this.state.r_out}
                             onChange={this.onChange}
                             placeholder="BeneFiciary rout"
-
                         />
-
-
-
                         <br />
-
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -893,13 +781,8 @@ export default class Dashboard extends Component {
                             value={this.state.mob_1}
                             onChange={this.onChange}
                             placeholder="2nd mobile no"
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -908,12 +791,8 @@ export default class Dashboard extends Component {
                             value={this.state.mob_own}
                             onChange={this.onChange}
                             placeholder="owner of the mobile"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -922,10 +801,8 @@ export default class Dashboard extends Component {
                             value={this.state.ben_sts}
                             onChange={this.onChange}
                             placeholder="beneficiary sts"
-
                         />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -934,11 +811,9 @@ export default class Dashboard extends Component {
                             value={this.state.nid_sts}
                             onChange={this.onChange}
                             placeholder="nid sts"
-
                         />
                         <br />
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -947,14 +822,8 @@ export default class Dashboard extends Component {
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             placeholder="Approval Status "
-
                         />
-                        &nbsp;
-                        &nbsp;
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -967,12 +836,8 @@ export default class Dashboard extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -985,12 +850,8 @@ export default class Dashboard extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1003,16 +864,13 @@ export default class Dashboard extends Component {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
                         <br />
                         &nbsp;
                     </DialogContent>
 
                     <DialogActions>
-                        <Button
-                            onClick={this.handleProductEditClose}
-                            color="primary">
+                        <Button onClick={this.handleProductEditClose} color="primary">
                             Cancel
                         </Button>
                         <Button
@@ -1032,21 +890,13 @@ export default class Dashboard extends Component {
 
                 {/* Add Product */}
                 <Dialog
-
                     open={this.state.openProductModal}
                     onClose={this.handleProductClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                     maxWidth="xl">
-                        
-                    
-                    <DialogContent
-
-style={{ padding: "90px"}}
-                    >
-                        <DialogTitle id="alert-dialog-title">
-                        Add Beneficiary
-                    </DialogTitle>
+                    <DialogContent style={{ padding: "90px" }}>
+                        <DialogTitle id="alert-dialog-title">Add Beneficiary</DialogTitle>
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1057,16 +907,7 @@ style={{ padding: "90px"}}
                             placeholder="Beneficiary Name"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
-
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1075,15 +916,8 @@ style={{ padding: "90px"}}
                             value={this.state.u_nm}
                             onChange={this.onChange}
                             placeholder="Beneficiary Username  "
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1092,15 +926,8 @@ style={{ padding: "90px"}}
                             value={this.state.f_nm}
                             onChange={this.onChange}
                             placeholder="Beneficiary Father"
-
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1109,15 +936,9 @@ style={{ padding: "90px"}}
                             value={this.state.m_nm}
                             onChange={this.onChange}
                             placeholder="Beneficiary Mother"
-
-
                         />
                         <br />
                         <br />
-                        
-
-                  
-
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1126,16 +947,8 @@ style={{ padding: "90px"}}
                             value={this.state.age}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Age"
-
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1144,17 +957,8 @@ style={{ padding: "90px"}}
                             value={this.state.dis}
                             onChange={this.onChange}
                             placeholder="Beneficiary District"
-
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1163,19 +967,8 @@ style={{ padding: "90px"}}
                             value={this.state.sub_dis}
                             onChange={this.onChange}
                             placeholder="Beneficiary Thana"
-
                         />
-
-
-
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1184,12 +977,9 @@ style={{ padding: "90px"}}
                             value={this.state.uni}
                             onChange={this.onChange}
                             placeholder="Benefciary Union"
-
                         />
                         <br />
                         <br />
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1198,14 +988,8 @@ style={{ padding: "90px"}}
                             value={this.state.vill}
                             onChange={this.onChange}
                             placeholder="Beneficiary Village"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1214,15 +998,8 @@ style={{ padding: "90px"}}
                             value={this.state.relgn}
                             onChange={this.onChange}
                             placeholder="Beneficiary Religion"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1231,14 +1008,8 @@ style={{ padding: "90px"}}
                             value={this.state.job}
                             onChange={this.onChange}
                             placeholder="Beneficiary Job"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1247,38 +1018,9 @@ style={{ padding: "90px"}}
                             value={this.state.gen}
                             onChange={this.onChange}
                             placeholder="Beneficiary Gender"
-
                         />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         <br />
                         <br />
-
-
-
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1287,15 +1029,8 @@ style={{ padding: "90px"}}
                             value={this.state.mob}
                             onChange={this.onChange}
                             placeholder="Beneficiary Mobile"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1304,14 +1039,8 @@ style={{ padding: "90px"}}
                             value={this.state.pgm}
                             onChange={this.onChange}
                             placeholder="Beneficiary Program"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1320,15 +1049,8 @@ style={{ padding: "90px"}}
                             value={this.state.pass}
                             onChange={this.onChange}
                             placeholder="Beneficiary Passbook"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1337,17 +1059,9 @@ style={{ padding: "90px"}}
                             value={this.state.bank}
                             onChange={this.onChange}
                             placeholder="Beneficiary Bank "
-
                         />
-
-
                         <br />
-                        <br/>
-
-
-
-
-
+                        <br />
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1356,18 +1070,8 @@ style={{ padding: "90px"}}
                             value={this.state.branch}
                             onChange={this.onChange}
                             placeholder="Beneficiary Bank Branch "
-
                         />
-
-
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1376,14 +1080,8 @@ style={{ padding: "90px"}}
                             value={this.state.r_out}
                             onChange={this.onChange}
                             placeholder="Beneficiary Rout"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1392,14 +1090,8 @@ style={{ padding: "90px"}}
                             value={this.state.mob_1}
                             onChange={this.onChange}
                             placeholder="Beneficiary 2nd Mobile"
-
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1408,16 +1100,9 @@ style={{ padding: "90px"}}
                             value={this.state.mob_own}
                             onChange={this.onChange}
                             placeholder="Beneficiary Mobile Owner"
-
                         />
-
-
-
                         <br />
                         <br />
-
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1426,16 +1111,8 @@ style={{ padding: "90px"}}
                             value={this.state.ben_sts}
                             onChange={this.onChange}
                             placeholder="Beneficiary Status"
-
                         />
-
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1444,16 +1121,8 @@ style={{ padding: "90px"}}
                             value={this.state.nid_sts}
                             onChange={this.onChange}
                             placeholder="Beneficiary NID Status"
-
                         />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1464,12 +1133,7 @@ style={{ padding: "90px"}}
                             placeholder="Beneficiary NID"
                             required
                         />
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1478,20 +1142,10 @@ style={{ padding: "90px"}}
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             placeholder="Approval Status "
-
                         />
                         <br />
-
-
-
                         <br />
-
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1504,17 +1158,8 @@ style={{ padding: "90px"}}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-&nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1527,17 +1172,8 @@ style={{ padding: "90px"}}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
-
-&nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
-                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
                             type="date"
@@ -1550,23 +1186,16 @@ style={{ padding: "90px"}}
                             InputLabelProps={{
                                 shrink: true,
                             }}
-
                         />
                         <br />
                         &nbsp;
                     </DialogContent>
 
                     <DialogActions>
-                        <Button
-                            onClick={this.handleProductClose}
-                            color="primary">
+                        <Button onClick={this.handleProductClose} color="primary">
                             Cancel
                         </Button>
-                        <Button
-
-                            onClick={(e) => this.addProduct()}
-                            color="primary"
-                            autoFocus>
+                        <Button onClick={(e) => this.addProduct()} color="primary" autoFocus>
                             Add Beneficiary
                         </Button>
                     </DialogActions>
@@ -1586,60 +1215,56 @@ style={{ padding: "90px"}}
                         required
                     />
 
-
-
-
-
-
-
-
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">
-                                   <b>   Time & Date </b>
+                                    <b> Time & Date </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                 <b>    Beneficiary Name     </b> 
+                                    <b> Beneficiary Name </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                 <b>    Beneficiary Id </b>
+                                    <b> Beneficiary Id </b>
                                 </TableCell>
 
-                                <TableCell align="center"> <b> Test Score </b> </TableCell>
-                                <TableCell align="center"> <b> Action </b></TableCell>
                                 <TableCell align="center">
-                                  <b>   View BeneFiciary{" "} </b> 
+                                    {" "}
+                                    <b> Test Score </b>{" "}
+                                </TableCell>
+                                <TableCell align="center">
+                                    {" "}
+                                    <b> Action </b>
+                                </TableCell>
+                                <TableCell align="center">
+                                    <b> View BeneFiciary </b>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-
 
                         <TableBody>
                             {this.state?.beneficiaries?.reverse().map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell align="center">
-                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                                    ---
-                                    {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
-
-                                  
+                                        {new Date(row.updatedAt).toLocaleString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            hour12: true,
+                                        })}
+                                        ---
+                                        {new Date(row.updatedAt).toLocaleString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })}
                                     </TableCell>
-                                    <TableCell align="center">
-                                        {row.name}
-                                    </TableCell>
+                                    <TableCell align="center">{row.name}</TableCell>
 
-                                    <TableCell
-                                        align="center"
-                                        component="th"
-                                        scope="row">
+                                    <TableCell align="center" component="th" scope="row">
                                         {row.beneficiaryId}
                                     </TableCell>
 
-                                    <TableCell align="center">
-                                        {row.score1}
-                                    </TableCell>
-
+                                    <TableCell align="center">{row.score1}</TableCell>
 
                                     <TableCell align="center">
                                         <Button
@@ -1647,11 +1272,7 @@ style={{ padding: "90px"}}
                                             variant="outlined"
                                             color="primary"
                                             size="small"
-                                            onClick={(e) =>
-                                                this.handleProductEditOpen(
-                                                    row
-                                                )
-                                            }>
+                                            onClick={(e) => this.handleProductEditOpen(row)}>
                                             Edit
                                         </Button>
                                         <Button
@@ -1659,14 +1280,12 @@ style={{ padding: "90px"}}
                                             variant="outlined"
                                             color="secondary"
                                             size="small"
-                                            onClick={(e) =>
-                                                this.deleteProduct(row._id)
-                                            }>
+                                            onClick={(e) => this.deleteProduct(row._id)}>
                                             Delete
                                         </Button>
                                     </TableCell>
 
-                                    <TableCell align="center" >
+                                    <TableCell align="center">
                                         <Button
                                             className="button_style"
                                             variant="contained"
@@ -1691,18 +1310,10 @@ style={{ padding: "90px"}}
                                             </Link>
                                         </Button>
                                     </TableCell>
-
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
-
-
-
-
-
-
-
 
                     <br />
                     <Pagination
