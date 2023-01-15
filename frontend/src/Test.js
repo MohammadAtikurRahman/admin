@@ -484,6 +484,30 @@ export default class Test extends Component {
     };
 
     render() {
+
+
+
+
+        const beneficiaries = this.state?.beneficiaries?.filter((row) => row.score1 !== null && row.score1 !== undefined)
+        .sort((a, b) => {
+          const dateA = new Date(a.updatedAt);
+          const dateB = new Date(b.updatedAt);
+          return dateB - dateA;
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
         return (
             <div>
                 <div>
@@ -1375,10 +1399,7 @@ export default class Test extends Component {
                         </TableBody>   */}
 
                         <TableBody>
-                            {this.state?.beneficiaries
-                                .filter((row) => row.score1 !== null && row.score1 !== undefined)
-                                .reverse()
-                                .map((row) => (
+                        {beneficiaries.map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell align="center">
                                             {new Date(row.updatedAt).toLocaleString("en-US", {

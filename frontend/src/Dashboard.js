@@ -1219,7 +1219,7 @@ export default class Dashboard extends Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">
-                                    <b> Time & Date </b>
+                                    <b> Beneficiary Created Time </b>
                                 </TableCell>
                                 <TableCell align="center">
                                     <b> Beneficiary Name </b>
@@ -1251,7 +1251,10 @@ export default class Dashboard extends Component {
                                             minute: "numeric",
                                             hour12: true,
                                         })}
-                                        ---
+                                        &nbsp;                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+
                                         {new Date(row.updatedAt).toLocaleString("en-US", {
                                             month: "2-digit",
                                             day: "2-digit",
