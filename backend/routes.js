@@ -21,7 +21,7 @@ router.post("/beneficiary/add", addBeneficiary);
 router.post("/save-test/add", saveTest);
 
 router.post("/get-login", beneficiaryLogin); // beneficiary login
-router.post("/get-score-saved", benenScore); // beneficiary login
+router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
 router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
 /* admin login api */
