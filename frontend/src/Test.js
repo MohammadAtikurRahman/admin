@@ -482,8 +482,10 @@ export default class Test extends Component {
 
 
                     <br></br>
-                    <h2>Dashboard</h2>
-
+                    <h2   style={{
+                                color: "black",
+                            }}>DASHBOARD</h2>
+{/* 
                     <Button
                         className="button_style"
                         variant="contained"
@@ -491,7 +493,8 @@ export default class Test extends Component {
                         size="small"
                         onClick={this.handleProductOpen}>
                         Add Beneficiary
-                    </Button>
+                    </Button> */}
+                    
                     <Button
                         className="button_style"
                         variant="contained"
@@ -1564,8 +1567,8 @@ export default class Test extends Component {
                             </TableRow>
                         </TableHead>
 
-
-                        <TableBody>
+{/* 
+                     <TableBody>
                             {this.state?.beneficiaries?.reverse().map((row) => (
 
 
@@ -1612,7 +1615,39 @@ export default class Test extends Component {
 
                                 </TableRow>
                             ))}
-                        </TableBody>
+                        </TableBody>   */}
+
+                     <TableBody>
+                        {this.state?.beneficiaries
+                        .filter(row => row.score1 !== null && row.score1 !== undefined)
+                        .reverse()
+                        .map((row) => (
+                            <TableRow key={row.name}>
+                            <TableCell align="center">
+                            {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
+                            </TableCell>
+                            <TableCell align="center">
+                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                            </TableCell>
+                            <TableCell align="center">
+                                {row.name}
+                            </TableCell>
+                            <TableCell align="center" component="th" scope="row">
+                                {row.beneficiaryId}
+                            </TableCell>
+                            <TableCell align="center">
+                                {row.score1}
+                            </TableCell>
+                            <TableCell align="center">
+                                {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>  
+
+
+
+
                     </Table>
 
 

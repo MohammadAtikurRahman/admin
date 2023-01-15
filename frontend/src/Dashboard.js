@@ -92,8 +92,38 @@ export default class Dashboard extends Component {
             persons: [],
             pages: 0,
             loading: false,
-        };
 
+
+            anchorEl: null,
+            selectedItem: null
+
+
+
+
+
+
+
+
+
+
+        };
+        this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
+
+
+    }
+    handleClick(event) {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+
+    handleClose() {
+        this.setState({ anchorEl: null });
+    }
+
+    handleSelect(item) {
+        this.setState({ selectedItem: item });
+        this.handleClose();
     }
 
     componentDidMount = () => {
@@ -462,6 +492,8 @@ export default class Dashboard extends Component {
     };
 
     render() {
+        const open = Boolean(this.state.anchorEl);
+
         return (
             <div>
                 <div>
@@ -917,7 +949,7 @@ export default class Dashboard extends Component {
                         />
                         &nbsp;
                         &nbsp;
-                   
+
 
                         &nbsp;
                         &nbsp;
@@ -1027,8 +1059,8 @@ export default class Dashboard extends Component {
 
 
 
-                   
-                           <TextField
+
+                        <TextField
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
@@ -1052,7 +1084,7 @@ export default class Dashboard extends Component {
 
 
                         />
-                            &nbsp;
+                        &nbsp;
                         &nbsp;
                         <TextField
                             id="standard-basic"
@@ -1099,7 +1131,7 @@ export default class Dashboard extends Component {
                         &nbsp;
                         &nbsp;
 
-              
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1117,7 +1149,7 @@ export default class Dashboard extends Component {
                         &nbsp;
                         &nbsp;
 
-                  
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1131,7 +1163,7 @@ export default class Dashboard extends Component {
                         <br />
 
 
-                      
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1182,9 +1214,34 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Gender"
 
                         />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <br />
 
-                     
+
 
                         <TextField
                             id="standard-basic"
@@ -1199,7 +1256,7 @@ export default class Dashboard extends Component {
                         &nbsp;
                         &nbsp;
 
-                 
+
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1331,8 +1388,8 @@ export default class Dashboard extends Component {
                         &nbsp;
                         &nbsp;
 
-                    
-                             <TextField
+
+                        <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
@@ -1355,10 +1412,10 @@ export default class Dashboard extends Component {
 
                         />
                         <br />
-                       
-                     
-                    
-                        <br/>
+
+
+
+                        <br />
 
                         &nbsp;
                         &nbsp;
@@ -1456,7 +1513,9 @@ export default class Dashboard extends Component {
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-
+                                <TableCell align="center">
+                                    Time & Date
+                                </TableCell>
                                 <TableCell align="center">
                                     Beneficiary Name
                                 </TableCell>
@@ -1476,7 +1535,13 @@ export default class Dashboard extends Component {
                         <TableBody>
                             {this.state?.beneficiaries?.reverse().map((row) => (
                                 <TableRow key={row.name}>
+                                    <TableCell align="center">
+                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                                    ---
+                                    {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
 
+                                  
+                                    </TableCell>
                                     <TableCell align="center">
                                         {row.name}
                                     </TableCell>

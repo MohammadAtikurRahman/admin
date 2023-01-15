@@ -16,6 +16,7 @@
         "jsonwebtoken": "^9.0.0",
         "jwt-decode": "^3.1.2",
         "material-ui": "^0.15.0",
+        "moment": "^2.29.4",
         "react": "^16.13.1",
         "react-bootstrap-sweetalert": "^5.2.0",
         "react-dom": "^16.13.1",

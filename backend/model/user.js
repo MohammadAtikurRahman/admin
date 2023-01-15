@@ -52,7 +52,6 @@ const beneficiarySchema = new Schema(
         f_allow: Date,
         timeanddate: { type: Date, default: Date.now },
 
-
         test: [testSchema],
     },
     {timestamps: true},
