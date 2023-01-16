@@ -7,7 +7,8 @@ import {
 } from '@material-ui/core';
 import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
-
+import { InputAdornment, IconButton } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -35,10 +36,14 @@ export default class Dashboard extends Component {
             persons: [],
             upersons: [],
             pages: 0,
+            showPassword: false,
+
             loading: false
         };
     }
-
+    handleClickShowPassword = () => {
+        this.setState({ showPassword: !this.state.showPassword });
+    };
     componentDidMount = () => {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -49,7 +54,7 @@ export default class Dashboard extends Component {
             });
         }
 
-        axios.get( baseUrl + '/api')
+        axios.get(baseUrl + '/api')
             .then(res => {
                 const persons = res.data;
                 this.setState({ persons });
@@ -69,7 +74,7 @@ export default class Dashboard extends Component {
 
 
             })
-        axios.get( baseUrl + '/user-details')
+        axios.get(baseUrl + '/user-details')
             .then(res => {
                 const upersons = res.data;
                 this.setState({ upersons });
@@ -105,7 +110,7 @@ export default class Dashboard extends Component {
         if (this.state.search) {
             data = `${data}&search=${this.state.search}`;
         }
-        axios.get( baseUrl + '/get-product${data}', {
+        axios.get(baseUrl + '/get-product${data}', {
             headers: {
                 'token': this.state.token
             }
@@ -113,7 +118,7 @@ export default class Dashboard extends Component {
             this.setState({ loading: false, products: res.data.products, pages: res.data.pages });
         }).catch((err) => {
             // swal({
-             
+
             // });
             this.setState({ loading: false, products: [], pages: 0 }, () => { });
         });
@@ -121,7 +126,7 @@ export default class Dashboard extends Component {
 
 
     deleteProduct = (id) => {
-        axios.post( baseUrl + '/delete-product', {
+        axios.post(baseUrl + '/delete-product', {
             id: id
         }, {
             headers: {
@@ -180,7 +185,7 @@ export default class Dashboard extends Component {
         file.append('discount', this.state.discount);
         file.append('price', this.state.price);
 
-        axios.post( baseUrl + '/add-product', file, {
+        axios.post(baseUrl + '/add-product', file, {
             headers: {
                 'content-type': 'multipart/form-data',
                 'token': this.state.token
@@ -218,7 +223,7 @@ export default class Dashboard extends Component {
         file.append('discount', this.state.discount);
         file.append('price', this.state.price);
 
-        axios.post( baseUrl + '/update-product', file, {
+        axios.post(baseUrl + '/update-product', file, {
             headers: {
                 'content-type': 'multipart/form-data',
                 'token': this.state.token
@@ -283,14 +288,14 @@ export default class Dashboard extends Component {
             <div>
                 {this.state.loading && <LinearProgress size={40} />}
                 <div>
-                          
-                          
+
+
 
                     {/* {this.state.upersons.payload ? <p> <b> Enumerator as a login  </b> {this.state.upersons.payload.user} </p> : ""} */}
 
                     {/* <h3> {this.enumerator_name}</h3> */}
-                       <br></br>
-                         <h2>Dashboard</h2>
+                    <br></br>
+                    <h2>Dashboard</h2>
                     <Button
                         className="button_style"
                         variant="contained"
@@ -528,7 +533,7 @@ export default class Dashboard extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.persons.reverse().map((row) => (
+                            {this.state.persons.slice(0).reverse().map((row) => (
                                 <TableRow key={row.name}>
 
                                     <TableCell align="center">{row.userId}</TableCell>
@@ -540,11 +545,11 @@ export default class Dashboard extends Component {
                                     </TableCell>
 
                                     <TableCell align="center">
-                                    
-                                    
-                                    
-                                    
-                                    {new Date(row.createdAt).toLocaleString("en-GB", {
+
+
+
+
+                                        {new Date(row.createdAt).toLocaleString("en-GB", {
                                             hour: "numeric",
                                             minute: "numeric",
                                             hour12: true,
@@ -558,21 +563,28 @@ export default class Dashboard extends Component {
                                             day: "2-digit",
                                             year: "numeric",
                                         })}
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+
+
+
+
+
+
+
+
+
+
                                     </TableCell>
-                                    <TableCell align="center" component="th" scope="row">
-                                        {row.password}
-
-
+                                    <TableCell align="center">
+                                        {this.state.showPassword ? row.password : '*'.repeat(row.password.length)}
+                                        <InputAdornment position="middle">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                style={{paddingBottom: "34px"}}
+                                            >
+                                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
                                     </TableCell>
 
 
