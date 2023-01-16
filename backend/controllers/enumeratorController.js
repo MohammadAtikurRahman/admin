@@ -22,7 +22,10 @@ async function userLogin(req, res) {
     if (!req.body || !req.body.username || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
     }
-    if (user.password === req.body.password) {
+    if(!user){
+        return res.status(401).json({error: "User Not Found"});
+    }
+    if (user.password === req.body.password ) {
         let token = await getToken(user);
         return res.status(200).json({
             message: "Login Successfully.",

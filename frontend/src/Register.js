@@ -19,7 +19,15 @@ export default class Register extends React.Component {
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   register = () => {
-
+    
+    if (this.state.password !== this.state.confirm_password) {
+      swal({
+        text: "Passwords do not match",
+        icon: "error",
+        type: "error"
+      });
+      return;
+    }
     axios.post(baseUrl + '/register', {
       username: this.state.username,
       password: this.state.password,
@@ -85,7 +93,7 @@ export default class Register extends React.Component {
             variant="contained"
             color="primary"
             size="small"
-            disabled={this.state.username == '' && this.state.password == ''}
+            disabled={this.state.username == '' && this.state.password == '' }
             onClick={this.register}
           >
             Register

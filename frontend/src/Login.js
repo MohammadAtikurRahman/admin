@@ -40,8 +40,19 @@ export default function Login(props) {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("user_id", res.data.id);
                 if (res.status === 200) navigate("/dashboard");
+                swal({
+                    text: "Successfully login",
+                    icon: "success",
+                    type: "success",
+                    timer: 1000
+                  });
             })
             .catch((err) => {
+                swal({
+                    text: "Wrong Username or Password",
+                    icon: "error",
+                    type: "error",
+                });
                 if (
                     err.response &&
                     err.response.data &&

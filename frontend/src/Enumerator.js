@@ -522,6 +522,7 @@ export default class Dashboard extends Component {
                                 <TableCell align="center"><b> Enumerator Name </b> </TableCell>
                                 <TableCell align="center"><b>Enumerator Creation Time </b> </TableCell>
                                 {/* <TableCell align="center">Enumerator's BeneFiciary</TableCell> */}
+                                <TableCell align="center"><b>Password </b> </TableCell>
 
 
                             </TableRow>
@@ -543,7 +544,7 @@ export default class Dashboard extends Component {
                                     
                                     
                                     
-                                    {new Date(row.createdAt).toLocaleString("en-US", {
+                                    {new Date(row.createdAt).toLocaleString("en-GB", {
                                             hour: "numeric",
                                             minute: "numeric",
                                             hour12: true,
@@ -552,7 +553,7 @@ export default class Dashboard extends Component {
                                         &nbsp;
                                         &nbsp;
 
-                                        {new Date(row.createdAt).toLocaleString("en-US", {
+                                        {new Date(row.createdAt).toLocaleString("en-GB", {
                                             month: "2-digit",
                                             day: "2-digit",
                                             year: "numeric",
@@ -567,6 +568,11 @@ export default class Dashboard extends Component {
                                     
                                     
                                     
+                                    </TableCell>
+                                    <TableCell align="center" component="th" scope="row">
+                                        {row.password}
+
+
                                     </TableCell>
 
 
