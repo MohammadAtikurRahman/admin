@@ -79,19 +79,37 @@ function getBeneficiaryIndex(arr, beneficiaryId) {
 }
 
 async function beneficiaryLogin(req, res) {
-    const {userId, beneficiaryId} = req.body;
+    // const {userId, beneficiaryId} = req.body;
 
-    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
-    const whoLoggedIn = await User.findOne({userId: userId}).select("-beneficiary");
+    // const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+    // const whoLoggedIn = await User.findOne({userId: userId}).select("-beneficiary");
 
-    console.log("2", whoLoggedIn);
-    if (existsInArray(beneficiaries, beneficiaryId)) {
-        const token = await getToken({userId, beneficiaryId});
+    // console.log("2", whoLoggedIn);
+    // if (existsInArray(beneficiaries, beneficiaryId)) {
+    //     const token = await getToken({userId, beneficiaryId});
 
-        return res.status(200).json({beneficiaryToken: token, whoLoggedIn});
+    //     return res.status(200).json({beneficiaryToken: token, whoLoggedIn});
+    // }
+
+    // return res.status(400).json({error: "Credentials does not exists"});
+
+      console.log(req.body);
+    let user = await User.findOne({username: req.body.username});
+    if (!req.body || !req.body.username || !req.body.password) {
+        return res.status(400).json({error: "Username or Password missing"});
     }
-
-    return res.status(400).json({error: "Credentials does not exists"});
+     if(!user){
+        return res.status(401).json({error: "User Not Found"});
+    }
+    if (user.password === req.body.password ) {
+        let token = await getToken(user);
+        return res.status(200).json({
+            message: "Login Successfully.",
+            token: token,
+            status: true,
+        });
+    }
+    return res.status(500).json({message: "Something went wrong."});
 }
 
 async function addBeneficiaryScore(req, res) {

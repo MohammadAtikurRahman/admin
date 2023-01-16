@@ -63,7 +63,7 @@ const userSchema = new Schema(
         id: {type: Number, default: () => nextId++},
         userId: Number,
         username: String,
-        password: Number,
+        password: String,
         country: String,
         beneficiary: [beneficiarySchema],
     },

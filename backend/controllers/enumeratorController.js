@@ -18,22 +18,19 @@ async function getToken(data) {
 
 async function userLogin(req, res) {
     console.log(req.body);
-    let user = await User.findOne({userId: req.body.userId});
-    if (!req.body || !req.body.userId || !req.body.password) {
+    let user = await User.findOne({username: req.body.username});
+    if (!req.body || !req.body.username || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
     }
-    if(!user){
+     if(!user){
         return res.status(401).json({error: "User Not Found"});
     }
     if (user.password === req.body.password ) {
         let token = await getToken(user);
-        return res.status(200).json(
-            
-            {
+        return res.status(200).json({
             message: "Login Successfully.",
-            // token: token,
+            token: token,
             status: true,
-           
         });
     }
     return res.status(500).json({message: "Something went wrong."});
