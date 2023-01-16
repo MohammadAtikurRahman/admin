@@ -94,8 +94,8 @@ async function beneficiaryLogin(req, res) {
     // return res.status(400).json({error: "Credentials does not exists"});
 
       console.log(req.body);
-    let user = await User.findOne({username: req.body.username});
-    if (!req.body || !req.body.username || !req.body.password) {
+    let user = await User.findOne({userId: req.body.userId});
+    if (!req.body || !req.body.userId || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
     }
      if(!user){

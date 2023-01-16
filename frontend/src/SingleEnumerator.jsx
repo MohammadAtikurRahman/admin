@@ -14,7 +14,7 @@ export function SingleEnumerator(props) {
 
     return (
         <TableRow key={row.name}>
-            <TableCell align="center">{row.id}</TableCell>
+            <TableCell align="center">{row.userId}</TableCell>
             <TableCell align="center" component="th" scope="row">
                 {row.username}
             </TableCell>
