@@ -1402,14 +1402,14 @@ export default class Test extends Component {
                         {beneficiaries.map((row) => (
                                     <TableRow key={row.name}>
                                         <TableCell align="center">
-                                            {new Date(row.updatedAt).toLocaleString("en-US", {
+                                            {new Date(row.updatedAt).toLocaleString("en-GB", {
                                                 month: "2-digit",
                                                 day: "2-digit",
                                                 year: "numeric",
                                             })}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {new Date(row.updatedAt).toLocaleString("en-US", {
+                                            {new Date(row.updatedAt).toLocaleString("en-GB", {
                                                 hour: "numeric",
                                                 minute: "numeric",
                                                 hour12: true,

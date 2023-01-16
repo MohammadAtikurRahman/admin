@@ -1255,7 +1255,7 @@ export default class Dashboard extends Component {
                                         &nbsp;
                                         &nbsp;
 
-                                        {new Date(row.updatedAt).toLocaleString("en-US", {
+                                        {new Date(row.updatedAt).toLocaleString("en-GB", {
                                             month: "2-digit",
                                             day: "2-digit",
                                             year: "numeric",
