@@ -518,9 +518,9 @@ export default class Dashboard extends Component {
                             <TableRow>
 
 
-                                <TableCell align="center">Enumerator Id</TableCell>
-                                <TableCell align="center">Enumerator Name</TableCell>
-                                <TableCell align="center">Enumerator Creation Time</TableCell>
+                                <TableCell align="center"> <b> Enumerator Id</b> </TableCell>
+                                <TableCell align="center"><b> Enumerator Name </b> </TableCell>
+                                <TableCell align="center"><b>Enumerator Creation Time </b> </TableCell>
                                 {/* <TableCell align="center">Enumerator's BeneFiciary</TableCell> */}
 
 
@@ -538,12 +538,41 @@ export default class Dashboard extends Component {
 
                                     </TableCell>
 
-                                    <TableCell align="center">{row.createdAt}</TableCell>
+                                    <TableCell align="center">
+                                    
+                                    
+                                    
+                                    
+                                    {new Date(row.createdAt).toLocaleString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            hour12: true,
+                                        })}
+                                        &nbsp;                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
+
+                                        {new Date(row.createdAt).toLocaleString("en-US", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })}
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    </TableCell>
 
 
                                     {/* <TableCell align="center">{row.price}</TableCell> */}
 
-                                    <Button
+                                    {/* <Button
                                         className="button_style"
                                         variant="contained"
                                         color=""
@@ -553,7 +582,7 @@ export default class Dashboard extends Component {
                                         <Link style={{ textDecoration: 'none', color: 'black' }} href="/test">
                                             BeneFiciary of enumerator
                                         </Link>
-                                    </Button>
+                                    </Button> */}
 
 
                                 </TableRow>

@@ -66,25 +66,7 @@ app.use(
 );
 
 app.use(router);
-// app.post("/beneficiary", async (req, res) => {
-//     try {
-//         // const anotherData = JSON.parse(req.body)
-//         const saveData = req.body;
-//         const newData = new user({
-//             username: saveData.username,
-//             password: saveData.password,
 
-//             beneficiary: {
-//                 // name: saveData.name,
-//                 name: saveData.beneficiary.name,
-//             },
-//         });
-//         await newData.save();
-//         res.status(201).json({ success: true, data: newData });
-//     } catch (error) {
-//         res.status(400).json({ success: false });
-//     }
-// });
 
 app.put("/beneficiary/:id", async (req, res) => {
     try {
@@ -319,7 +301,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.id) {
-            product.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
