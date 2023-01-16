@@ -112,11 +112,9 @@ export default class Dashboard extends Component {
         }).then((res) => {
             this.setState({ loading: false, products: res.data.products, pages: res.data.pages });
         }).catch((err) => {
-            swal({
-                text: err.response.data.errorMessage,
-                icon: "error",
-                type: "error"
-            });
+            // swal({
+             
+            // });
             this.setState({ loading: false, products: [], pages: 0 }, () => { });
         });
     }
