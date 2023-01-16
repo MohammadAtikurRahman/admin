@@ -17,6 +17,9 @@ const baseUrl = process.env.REACT_APP_URL;
 const axios = require('axios');
 
 export default class Dashboard extends Component {
+
+
+    
     constructor() {
         super();
         this.state = {
@@ -41,9 +44,7 @@ export default class Dashboard extends Component {
             loading: false
         };
     }
-    handleClickShowPassword = () => {
-        this.setState({ showPassword: !this.state.showPassword });
-    };
+
     componentDidMount = () => {
         let token = localStorage.getItem('token');
         if (!token) {
@@ -99,8 +100,13 @@ export default class Dashboard extends Component {
 
     }
 
+    handleClickShowPassword = (e) => {
+        this.setState({ showPassword: !this.state.showPassword });
 
+    };
+    
 
+  
     getProduct = () => {
 
         this.setState({ loading: true });
@@ -532,23 +538,14 @@ export default class Dashboard extends Component {
 
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        {/* <TableBody>
                             {this.state.persons.slice(0).reverse().map((row) => (
                                 <TableRow key={row.name}>
-
                                     <TableCell align="center">{row.userId}</TableCell>
-
                                     <TableCell align="center" component="th" scope="row">
                                         {row.username}
-
-
                                     </TableCell>
-
                                     <TableCell align="center">
-
-
-
-
                                         {new Date(row.createdAt).toLocaleString("en-GB", {
                                             hour: "numeric",
                                             minute: "numeric",
@@ -563,16 +560,6 @@ export default class Dashboard extends Component {
                                             day: "2-digit",
                                             year: "numeric",
                                         })}
-
-
-
-
-
-
-
-
-
-
                                     </TableCell>
                                     <TableCell align="center">
                                         {this.state.showPassword ? row.password : '*'.repeat(row.password.length)}
@@ -580,29 +567,50 @@ export default class Dashboard extends Component {
                                             <IconButton
                                                 aria-label="toggle password visibility"
                                                 onClick={this.handleClickShowPassword}
-                                                style={{paddingBottom: "34px"}}
+                                                style={{ paddingBottom: "34px" }}
                                             >
                                                 {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
                                             </IconButton>
                                         </InputAdornment>
                                     </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody> */}
+                        <TableBody>
+                            {this.state.persons.slice(0).reverse().map((row) => (
+                                <TableRow key={row.name}>
+                                    <TableCell align="center">{row.id}</TableCell>
+                                    <TableCell align="center" component="th" scope="row">
+                                        {row.username}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {new Date(row.createdAt).toLocaleString("en-GB", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            hour12: true,
+                                        })}
+                                        &nbsp;                                        &nbsp;
+                                        &nbsp;
+                                        &nbsp;
 
-
-                                    {/* <TableCell align="center">{row.price}</TableCell> */}
-
-                                    {/* <Button
-                                        className="button_style"
-                                        variant="contained"
-                                        color=""
-                                        size="small"
-
-                                    >
-                                        <Link style={{ textDecoration: 'none', color: 'black' }} href="/test">
-                                            BeneFiciary of enumerator
-                                        </Link>
-                                    </Button> */}
-
-
+                                        {new Date(row.createdAt).toLocaleString("en-GB", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {this.state.showPassword ? row.password : '*'.repeat(row.password.length)}
+                                        <InputAdornment position="middle">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={this.handleClickShowPassword}
+                                                style={{ paddingBottom: "34px" }}
+                                            >
+                                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -634,51 +642,3 @@ export default class Dashboard extends Component {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-// import axios from 'axios';
-
-// import {
-//     Button, TextField, Dialog, DialogActions, LinearProgress,
-//     DialogTitle, DialogContent, TableBody, Table,
-//     TableContainer, TableHead, TableRow, TableCell
-//   } from '@material-ui/core';
-//   import { Pagination } from '@material-ui/lab';
-
-// export default class Enumerator extends React.Component {
-//   state = {
-//     persons: []
-//   }
-
-//   componentDidMount() {
-//     axios.get( baseUrl + /api`)
-//       .then(res => {
-//         const persons = res.data;
-//         this.setState({ persons });
-//       })
-//   }
-
-//   render() {
-//     return (
-//       <ul>
-//         {
-//           this.state.persons
-//             .map(person =>
-//               <li key={person.id}>{person.username}</li>
-//             )
-//         }
-//       </ul>
-//     )
-//   }
-// }
