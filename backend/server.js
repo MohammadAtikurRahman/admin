@@ -487,7 +487,8 @@ app.get("/get-beneficiary", async (req, res) => {
          .select("-id")
         .select("-username")
         .select("-password")
-        .select("-created_at")
+        .select("-createdAt")
+
         .select("-beneficiary.test");
 
 
@@ -495,14 +496,23 @@ app.get("/get-beneficiary", async (req, res) => {
  
  
       const data = users;
+      const data1= users;
       const formatted_data = data[0]
 
- 
 
-        extact_data = formatted_data['beneficiary']
-        console.log(extact_data)
+      
+    
+
+    //   const formatted_data1= data1[1]
+
+        // extact_data1 = formatted_data1['beneficiary']
+
+         extact_data = formatted_data['beneficiary']
+
+        // let obj3 = Object.assign(extact_data, extact_data1);
 
 
+        //  console.log(obj3)
 
     return res.status(200).json(extact_data);
 });
@@ -546,25 +556,6 @@ app.post("/api", async (req, res) => {
         res.status(400).json({ success: false });
     }
 });
-
-// const ssss = require('crypto').randomBytes(64).toString('hex')
-// // '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
-
-// console.log(ssss);
-
-// const datafromtoken = JSON.parse(localStorage.getItem('token'))['access_token'];
-//   console.log(datafromtoken)
-
-// const token =
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiYW5vbm5hMTk5OUB5YWhvby5jb20iLCJpZCI6IjYzOTQzNTA0ZGZmNTRiMWViYzVlOTQxNSIsImlhdCI6MTY3MDg1ODIwMSwiZXhwIjoxNjcwOTQ0NjAxfQ.uoev7vSGpDJZIzITKJkSy5r9sS2CVpH84cwvJcOeLXE";
-
-// const base64Url = token.split(".")[1];
-// const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-// const buff = new Buffer(base64, "base64");
-
-// const payloadinit = buff.toString("ascii");
-// var payload = JSON.parse(payloadinit);
-// console.log(payload);
 
 app.listen(2000, (err, data) => {
     console.log(err);
