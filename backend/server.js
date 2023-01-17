@@ -60,49 +60,22 @@ app.use(express.static("uploads"));
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
     bodyParser.urlencoded({
-        // to support URL-encoded bodies
         extended: false,
     }),
 );
 
 app.use(router);
-// app.post("/beneficiary", async (req, res) => {
-//     try {
-//         // const anotherData = JSON.parse(req.body)
-//         const saveData = req.body;
-//         const newData = new user({
-//             username: saveData.username,
-//             password: saveData.password,
 
-//             beneficiary: {
-//                 // name: saveData.name,
-//                 name: saveData.beneficiary.name,
-//             },
-//         });
-//         await newData.save();
-//         res.status(201).json({ success: true, data: newData });
-//     } catch (error) {
-//         res.status(400).json({ success: false });
-//     }
-// });
 
 app.put("/beneficiary/:id", async (req, res) => {
     try {
-        //   const rcvData = await user.findOne({ _id: req.params.id });
 
         const rcvData1 = await user.findOne({ _id: req.params.id });
 
-        //   console.log("1 after updated "+rcvData1.beneficiary);
         console.log("2 child section  value" + req.params.id);
 
-        //   rcvData1.username = req.body.username;
 
         rcvData1.name = req.body.name;
-
-        //   console.log("3 "+rcvData.username)
-        //   console.log("4 "+rcvData1)
-
-        //   console.log("5 "+rcvData1.beneficiary)
 
         await rcvData1.save();
         res.status(200).json(rcvData1);
@@ -442,8 +415,9 @@ app.get("/get-testscore", async (req, res) => {
         .select("-id")
         .select("-_id")
         .select("-userId")
-        .select("-created_at")
-        .select("-beneficiary.name")
+        .select("-createdAt")
+        .select("-updatedAt")
+        .select("-__v")
         .select("-beneficiary._id")
         .select("-beneficiary.f_nm")
         .select("-beneficiary.ben_nid")
@@ -458,6 +432,9 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.relgn")
         .select("-beneficiary.job")
         .select("-beneficiary.gen")
+        .select("-beneficiary.test")
+        .select("-beneficiary.timeanddate")
+        .select("-beneficiary.createdAt")
 
         .select("-beneficiary.mob")
         .select("-beneficiary.pgm")
@@ -476,8 +453,27 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own");
+        const data = users;
+        const data1= users;
+        const formatted_data = data[0]
+  
+  
+        
+      
+  
+      //   const formatted_data1= data1[1]
+  
+          // extact_data1 = formatted_data1['beneficiary']
+  
+           extact_data = formatted_data['beneficiary']
+  
+          // let obj3 = Object.assign(extact_data, extact_data1);
+  
+  
+          //  console.log(obj3)
+  
+      return res.status(200).json(extact_data);
 
-    return res.status(200).json(users);
 });
 
 app.get("/get-beneficiary", async (req, res) => {
