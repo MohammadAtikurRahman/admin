@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
-
+import {
+    MuiPickersUtilsProvider,
+    KeyboardTimePicker,
+    KeyboardDatePicker,
+} from '@material-ui/pickers';
 import {
     Button,
     TextField,
@@ -1009,10 +1013,10 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="relgn"
-                            value={this.state.relgn}
+                            name="bank"
+                            value={this.state.bank}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Religion"
+                            placeholder="Beneficiary Bank"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
@@ -1054,10 +1058,10 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="mob_1"
-                            value={this.state.mob_1}
+                            name="r_out"
+                            value={this.state.r_out}
                             onChange={this.onChange}
-                            placeholder="Beneficiary 2nd Mobile"
+                            placeholder="Beneficiary Rout"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
@@ -1070,17 +1074,6 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Mobile Owner"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="bank"
-                            value={this.state.bank}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary Bank "
-                        />
-                        <br />
-                        <br />
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1090,46 +1083,20 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="Beneficiary Bank Branch "
                         />
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="r_out"
-                            value={this.state.r_out}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary Rout"
-                        />
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        {/* <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_1"
-                            value={this.state.mob_1}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary 2nd Mobile"
-                        /> */}
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        {/* <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_own"
-                            value={this.state.mob_own}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary Mobile Owner"
-                        /> */}
                         <br />
                         <br />
+                 
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  
                         <select
                             id="standard-basic"
                             name="gen"
                             value={this.state.gen}
                             onChange={this.onChange}
-                            style={{    border: "none", padding: "8px", color: "grey",
-                        background: "white"
-                        }}
+                            style={{
+                                border: "none", padding: "8px", color: "grey",
+                                background: "white"
+                            }}
                         >
                             <option value="" disabled>Select Gender</option>
                             <option value="male">Male</option>
@@ -1138,23 +1105,16 @@ export default class Dashboard extends Component {
                         </select>
                         &nbsp;
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        {/* <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="a_sts"
-                            value={this.state.a_sts}
-                            onChange={this.onChange}
-                            placeholder="Approval Status "
-                        /> */}
+                    
 
                         <select
                             id="standard-basic"
                             name="a_sts"
                             value={this.state.a_sts}
                             onChange={this.onChange}
-                            style={{    border: "none", padding: "8px", color: "grey",
-                            background: "white"
+                            style={{
+                                border: "none", padding: "8px", color: "grey",
+                                background: "white"
                             }}
                         >
                             <option value="" disabled>Approval Status</option>
@@ -1170,15 +1130,53 @@ export default class Dashboard extends Component {
                             name="age"
                             value={this.state.age}
                             onChange={this.onChange}
-                            style={{    border: "none", padding: "8px", color: "grey",
-                            background: "white"
+                            style={{
+                                border: "none", padding: "8px", color: "grey",
+                                background: "white"
                             }}
                         >
                             <option value="" disabled>Beneficiary Age</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Not Approved">Not Approvved</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                            <option value="60">60</option>
+                            
                         </select>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+                        <select
+                            id="standard-basic"
+                            name="age"
+                            value={this.state.relgn}
+                            onChange={this.onChange}
+                            style={{
+                                border: "none", padding: "8px", color: "grey",
+                                background: "white"
+                            }}
+                        >
+                            <option value="" disabled>Beneficiary Religion</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Other">Other</option>
+
+                        </select>
                         {/* <TextField
                             id="standard-basic"
                             type="number"
@@ -1210,10 +1208,14 @@ export default class Dashboard extends Component {
                             name="dob"
                             value={this.state.dob}
                             onChange={this.onChange}
-                            placeholder="date of birth  "
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            InputProps={{
+                                style: { color: "grey" },
+                            }}
+                            placeholder="date of birth  "
+
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
@@ -1224,24 +1226,35 @@ export default class Dashboard extends Component {
                             name="accre"
                             value={this.state.accre}
                             onChange={this.onChange}
-                            placeholder="account created "
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            InputProps={{
+                                style: { color: "grey" },
+                            }}
+                            placeholder="Account created "
+
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+
                         <TextField
-                            id="standard-basic"
-                            type="date"
+                            id="date-picker-dialog" type="date"
                             autoComplete="off"
                             label="First Allowance"
+                            format="dd/MM/yyyy"
                             name="f_allow"
+
                             value={this.state.f_allow}
                             onChange={this.onChange}
-                            placeholder=" f_allow   "
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            InputProps={{
+                                style: { color: "grey" },
+                            }}
+
+                            placeholder=" f_allow   "
                         />
                         <br />
                         &nbsp;
