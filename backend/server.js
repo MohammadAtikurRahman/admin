@@ -433,8 +433,8 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.job")
         .select("-beneficiary.gen")
         .select("-beneficiary.test")
-        .select("-beneficiary.timeanddate")
         .select("-beneficiary.createdAt")
+        .select("-beneficiary.updatedAt")
 
         .select("-beneficiary.mob")
         .select("-beneficiary.pgm")
@@ -453,34 +453,90 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own");
-        const data = users;
-        const data1= users;
-        const formatted_data = data[0]
-  
-  
-        
-      
-  
-      //   const formatted_data1= data1[1]
-  
-          // extact_data1 = formatted_data1['beneficiary']
-  
-           extact_data = formatted_data['beneficiary']
-  
-          // let obj3 = Object.assign(extact_data, extact_data1);
-  
-  
-          //  console.log(obj3)
-  
-      return res.status(200).json(extact_data);
+
+
+    const data = users;
+    const data1 = users;
+
+    const formatted_data = data[0]
+    extact_data = formatted_data['beneficiary']
+
+
+    extact_data.forEach(item => {
+
+        if (item.timeanddate) {
+
+
+            const date = item.timeanddate;
+
+            var dateString = date.toLocaleString();
+            var date_time = dateString.split(' ');
+
+            var options = {
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+                hour12: true
+            };
+
+            const time = date_time[4]
+            var timeArray = time.split(":");
+            var hour = parseInt(timeArray[0]);
+            var minute = timeArray[1];
+            var second = timeArray[2];
+            var amPm = hour >= 12 ? 'PM' : 'AM';
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            console.log(date_time[0] +  ' ' + date_time[2] + ' ' + date_time[1] + ' ' + date_time[3] + ' '+hour + ':' + minute + ':' + second + ' ' + amPm);
+           
+
+           
+            item.timeanddate = date_time[0] +  ' ' + date_time[2] + ' ' + date_time[1] + ' ' + date_time[3] + ' '+hour + ':' + minute + ':' + second + ' ' + amPm;
+
+
+        }
+        if (item.duration) {
+            const minutes = Math.floor(item.duration / 60);
+            const seconds = item.duration % 60;
+            item.duration = `${minutes} minutes and ${seconds} seconds`;
+        } else {
+            item.duration = null;
+        }
+    });
+
+
+    return res.status(200).json(extact_data);
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user
         .find({})
         .select("-_id")
-         .select("-id")
+        .select("-id")
         .select("-username")
         .select("-password")
         .select("-createdAt")
@@ -488,27 +544,26 @@ app.get("/get-beneficiary", async (req, res) => {
         .select("-beneficiary.test");
 
 
-    
- 
- 
-      const data = users;
-      const data1= users;
-      const formatted_data = data[0]
 
 
-      
-    
+    const data = users;
+    const data1 = users;
+    const formatted_data = data[0]
+
+
+
+
 
     //   const formatted_data1= data1[1]
 
-        // extact_data1 = formatted_data1['beneficiary']
+    // extact_data1 = formatted_data1['beneficiary']
 
-         extact_data = formatted_data['beneficiary']
+    extact_data = formatted_data['beneficiary']
 
-        // let obj3 = Object.assign(extact_data, extact_data1);
+    // let obj3 = Object.assign(extact_data, extact_data1);
 
 
-        //  console.log(obj3)
+    //  console.log(obj3)
 
     return res.status(200).json(extact_data);
 });
@@ -554,6 +609,6 @@ app.post("/api", async (req, res) => {
 });
 
 app.listen(2000, (err, data) => {
-    console.log(err);
+    // console.log(err);
     console.log("Server is Runing On port 2000");
 });
