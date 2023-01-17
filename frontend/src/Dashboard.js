@@ -163,7 +163,7 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => {}
+                    () => { }
                 );
             });
     };
@@ -215,9 +215,9 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
+            this.setState({ fileName: e.target.files[0].name }, () => { });
         }
-        this.setState({ [e.target.name]: e.target.value }, () => {});
+        this.setState({ [e.target.name]: e.target.value }, () => { });
 
         if (e.target.name == "search") {
             this.setState({ page: 1 }, () => {
@@ -741,6 +741,9 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="BeneFiciary passbook"
                         />
+
+
+
                         &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
@@ -939,7 +942,7 @@ export default class Dashboard extends Component {
                         />
                         <br />
                         <br />
-                        <TextField
+                        {/* <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
@@ -947,8 +950,7 @@ export default class Dashboard extends Component {
                             value={this.state.age}
                             onChange={this.onChange}
                             placeholder="BeneFiciary Age"
-                        />
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        /> */}
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -977,6 +979,19 @@ export default class Dashboard extends Component {
                             value={this.state.uni}
                             onChange={this.onChange}
                             placeholder="Benefciary Union"
+                        />
+
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="pgm"
+                            value={this.state.pgm}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary Program"
                         />
                         <br />
                         <br />
@@ -1010,14 +1025,18 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Job"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+
+
                         <TextField
                             id="standard-basic"
-                            type="text"
+                            type="number"
                             autoComplete="off"
-                            name="gen"
-                            value={this.state.gen}
+                            name="ben_nid"
+                            value={this.state.ben_nid}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Gender"
+                            placeholder="Beneficiary NID"
+                            required
                         />
                         <br />
                         <br />
@@ -1035,20 +1054,20 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="pgm"
-                            value={this.state.pgm}
+                            name="mob_1"
+                            value={this.state.mob_1}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Program"
+                            placeholder="Beneficiary 2nd Mobile"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
-                            type="number"
+                            type="text"
                             autoComplete="off"
-                            name="pass"
-                            value={this.state.pass}
+                            name="mob_own"
+                            value={this.state.mob_own}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Passbook"
+                            placeholder="Beneficiary Mobile Owner"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
@@ -1082,7 +1101,7 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Rout"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
+                        {/* <TextField
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
@@ -1090,9 +1109,9 @@ export default class Dashboard extends Component {
                             value={this.state.mob_1}
                             onChange={this.onChange}
                             placeholder="Beneficiary 2nd Mobile"
-                        />
+                        /> */}
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
+                        {/* <TextField
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
@@ -1100,30 +1119,67 @@ export default class Dashboard extends Component {
                             value={this.state.mob_own}
                             onChange={this.onChange}
                             placeholder="Beneficiary Mobile Owner"
-                        />
+                        /> */}
                         <br />
                         <br />
-                        <TextField
+                        <select
+                            id="standard-basic"
+                            name="gen"
+                            value={this.state.gen}
+                            onChange={this.onChange}
+                            style={{    border: "none", padding: "8px", color: "grey",
+                        background: "white"
+                        }}
+                        >
+                            <option value="" disabled>Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        &nbsp;
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        {/* <TextField
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="ben_sts"
-                            value={this.state.ben_sts}
+                            name="a_sts"
+                            value={this.state.a_sts}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Status"
-                        />
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
+                            placeholder="Approval Status "
+                        /> */}
+
+                        <select
                             id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="nid_sts"
-                            value={this.state.nid_sts}
+                            name="a_sts"
+                            value={this.state.a_sts}
                             onChange={this.onChange}
-                            placeholder="Beneficiary NID Status"
-                        />
+                            style={{    border: "none", padding: "8px", color: "grey",
+                            background: "white"
+                            }}
+                        >
+                            <option value="" disabled>Approval Status</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Not Approved">Not Approvved</option>
+                        </select>
+
+
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
+
+                        <select
+                            id="standard-basic"
+                            name="age"
+                            value={this.state.age}
+                            onChange={this.onChange}
+                            style={{    border: "none", padding: "8px", color: "grey",
+                            background: "white"
+                            }}
+                        >
+                            <option value="" disabled>Beneficiary Age</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Not Approved">Not Approvved</option>
+                        </select>
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        {/* <TextField
                             id="standard-basic"
                             type="number"
                             autoComplete="off"
@@ -1132,9 +1188,9 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="Beneficiary NID"
                             required
-                        />
+                        /> */}
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
+                        {/* <TextField
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
@@ -1142,7 +1198,7 @@ export default class Dashboard extends Component {
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             placeholder="Approval Status "
-                        />
+                        /> */}
                         <br />
                         <br />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
