@@ -2,17 +2,11 @@ import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 
 import moment from 'moment';
-import DatePicker from "react-datepicker";
-
-import { KeyboardDatePicker } from "@material-ui/pickers";
-
-
 import {
     Button,
     TextField,
     Dialog,
     DialogActions,
-    LinearProgress,
     DialogTitle,
     DialogContent,
     TableBody,
@@ -93,8 +87,11 @@ export default class Dashboard extends Component {
 
             anchorEl: null,
             selectedItem: null,
-          
-              
+            beneficiary: {},
+            error: null,
+            beneficiaryList: []
+
+
 
 
         };
@@ -102,6 +99,11 @@ export default class Dashboard extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
     }
+
+  
+
+
+
     handleClick(event) {
         this.setState({ anchorEl: event.currentTarget });
     }
@@ -117,7 +119,6 @@ export default class Dashboard extends Component {
 
     componentDidMount = () => {
 
-        this._isMounted = true;
 
         let token = localStorage.getItem("token");
         if (!token) {
@@ -140,7 +141,7 @@ export default class Dashboard extends Component {
         });
     };
 
-  
+
 
 
     getBeneficiaries = () => {
@@ -182,7 +183,13 @@ export default class Dashboard extends Component {
             });
     };
 
- 
+
+    
+
+
+    
+
+
 
     pageChange = (e, page) => {
         this.setState({ page: page }, () => {
@@ -462,10 +469,16 @@ export default class Dashboard extends Component {
         this.setState({ openProductEditModal: false });
     };
 
+ 
+    
+
+
+ 
+    
     render() {
         const open = Boolean(this.state.anchorEl);
 
-        
+
 
         return (
             <div>
@@ -1343,6 +1356,8 @@ export default class Dashboard extends Component {
                                             onClick={(e) => this.deleteProduct(row._id)}>
                                             Delete
                                         </Button>
+
+
                                     </TableCell>
 
                                     <TableCell align="center">
