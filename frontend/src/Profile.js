@@ -88,23 +88,23 @@ export default function Profile() {
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Serial Number</span>
-                       <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.sl}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.sl}</label>
                     </div>
                 </div>
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">
                             {" "}
-                         Beneficiary Nid
+                            Beneficiary Nid
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_nid}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_nid}</label>
 
                     </div>
                 </div>
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Beneficiary Id</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_id}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_id}</label>
 
                     </div>
                 </div>
@@ -117,14 +117,14 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.name}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.name}</label>
 
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Father Name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_id}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_id}</label>
 
                     </div>
                 </div>
@@ -132,7 +132,7 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text"> Mother Name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.m_nm}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.m_nm}</label>
 
                     </div>
                 </div>
@@ -146,14 +146,14 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Age</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.age}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.age}</label>
 
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">District name </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.dis}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.dis}</label>
 
                     </div>
                 </div>
@@ -164,7 +164,7 @@ export default function Profile() {
                             {" "}
                             Sub-district or Thana{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.sub_dis}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.sub_dis}</label>
 
                     </div>
                 </div>
@@ -178,14 +178,14 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Union name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.uni}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.uni}</label>
 
                     </div>
                 </div>
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text"> village</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.vill}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.vill}</label>
 
                     </div>
                 </div>
@@ -193,7 +193,26 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text"> date of birth </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.dob}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+
+
+                            {/* {new Date(userProfile?.dob).toLocaleString("en-GB", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                })} */}
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                            {new Date(userProfile?.dob).toLocaleString("en-GB", {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                            })}
+
+
+
+
+
+                        </label>
 
                     </div>
                 </div>
@@ -207,7 +226,7 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Religion</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.relgn}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.relgn}</label>
 
                     </div>
                 </div>
@@ -216,7 +235,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Occupation Name{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.job}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.job}</label>
 
                     </div>
                 </div>
@@ -224,7 +243,7 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text"> Gender </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.gen}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.gen}</label>
 
                     </div>
                 </div>
@@ -240,7 +259,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Primary Phone number
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.mob}</label>
 
                     </div>
                 </div>
@@ -249,7 +268,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Name Of Program{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.pgm}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.pgm}</label>
 
                     </div>
                 </div>
@@ -260,7 +279,7 @@ export default function Profile() {
                             {" "}
                             Passbook Number{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.pass}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.pass}</label>
 
                     </div>
                 </div>
@@ -274,7 +293,7 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Bank Name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.bank}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.bank}</label>
 
                     </div>
                 </div>
@@ -283,7 +302,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Branch name of bank{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.branch}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.branch}</label>
 
                     </div>
                 </div>
@@ -294,7 +313,19 @@ export default function Profile() {
                             {" "}
                             First account created{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.accre}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}>
+
+
+
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                            {new Date(userProfile?.accre).toLocaleString("en-GB", {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                            })}
+
+
+                        </label>
 
                     </div>
                 </div>
@@ -310,7 +341,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Bank routing number
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.r_out}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.r_out}</label>
 
                     </div>
                 </div>
@@ -320,7 +351,17 @@ export default function Profile() {
                             {" "}
                             first allowance{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.f_allow}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> 
+                        
+                        
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                            {new Date(userProfile?.f_allow).toLocaleString("en-GB", {
+                                month: "2-digit",
+                                day: "2-digit",
+                                year: "numeric",
+                            })}
+                        
+                        </label>
 
                     </div>
                 </div>
@@ -331,7 +372,7 @@ export default function Profile() {
                             {" "}
                             Secondary mobile number{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob_1}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.mob_1}</label>
 
                     </div>
                 </div>
@@ -347,7 +388,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Ownership of that mobile{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.mob_own}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.mob_own}</label>
 
                     </div>
                 </div>
@@ -357,7 +398,7 @@ export default function Profile() {
                             {" "}
                             Beneficiary status{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.ben_sts}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_sts}</label>
 
                     </div>
                 </div>
@@ -368,7 +409,7 @@ export default function Profile() {
                             {" "}
                             National ID status{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.nid_sts}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.nid_sts}</label>
 
                     </div>
                 </div>
@@ -384,7 +425,7 @@ export default function Profile() {
                         <span className="input-group-text">
                             Approval status{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.a_sts}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.a_sts}</label>
 
                     </div>
                 </div>
@@ -394,7 +435,7 @@ export default function Profile() {
                             {" "}
                             Beneficiary username{" "}
                         </span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px"}}> {userProfile?.u_nm}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.u_nm}</label>
 
                     </div>
                 </div>

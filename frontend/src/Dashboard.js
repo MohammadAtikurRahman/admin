@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
+
+import moment from 'moment';
+import DatePicker from "react-datepicker";
+
+import { KeyboardDatePicker } from "@material-ui/pickers";
+
+
 import {
     Button,
     TextField,
@@ -30,6 +32,9 @@ const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 export default class Dashboard extends Component {
+
+
+
     constructor() {
         super();
         this.state = {
@@ -107,6 +112,9 @@ export default class Dashboard extends Component {
     }
 
     componentDidMount = () => {
+
+        this._isMounted = true;
+
         let token = localStorage.getItem("token");
         if (!token) {
             this.props.history.push("/login");
@@ -124,14 +132,11 @@ export default class Dashboard extends Component {
             var enumerator_name = userDetails.user;
 
             var enumerator_id = userDetails.id;
-            // console.log(enumerator_name); urgent
-            // console.log(enumerator_id);
 
-            // const propertyNames = Object.keys(userDetails);
-
-            // console.log(propertyNames);
         });
     };
+
+  
 
     getBeneficiaries = () => {
         this.setState({ loading: true });
@@ -1085,9 +1090,9 @@ export default class Dashboard extends Component {
                         />
                         <br />
                         <br />
-                 
+
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                  
+
                         <select
                             id="standard-basic"
                             name="gen"
@@ -1105,7 +1110,7 @@ export default class Dashboard extends Component {
                         </select>
                         &nbsp;
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    
+
 
                         <select
                             id="standard-basic"
@@ -1157,7 +1162,7 @@ export default class Dashboard extends Component {
                             <option value="58">58</option>
                             <option value="59">59</option>
                             <option value="60">60</option>
-                            
+
                         </select>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
@@ -1206,7 +1211,10 @@ export default class Dashboard extends Component {
                             label="Date of Birth"
                             autoComplete="off"
                             name="dob"
-                            value={this.state.dob}
+
+
+
+                            value={moment(this.state.dob).format('DD/MM/YYYY')}
                             onChange={this.onChange}
                             InputLabelProps={{
                                 shrink: true,
@@ -1215,8 +1223,13 @@ export default class Dashboard extends Component {
                                 style: { color: "grey" },
                             }}
                             placeholder="date of birth  "
+                            format="dd/mm/yyyy"
+
 
                         />
+
+
+
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
