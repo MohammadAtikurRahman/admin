@@ -23,13 +23,14 @@ import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Papa from "papaparse";
 import json2csv from "json2csv";
+import { searchBeneficiary } from "./utils/search";
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 const getData = async () => {
     try {
-        const res = await axios.get(baseUrl +"/get-testscore");
+        const res = await axios.get(baseUrl + "/get-testscore");
         return res.data;
     } catch (error) {
         console.error(error);
@@ -105,6 +106,7 @@ export default class Test extends Component {
             pages: 0,
 
             loading: false,
+            filteredBeneficiary: [],
         };
     }
 
@@ -157,6 +159,7 @@ export default class Test extends Component {
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
+                    filteredBeneficiary: res.data.beneficiaries,
                     pages: res.data?.pages,
                     userinfo: Object.values(jwt_decode(res.config.headers.token)),
                 });
@@ -226,8 +229,9 @@ export default class Test extends Component {
         this.setState({ [e.target.name]: e.target.value }, () => {});
 
         if (e.target.name == "search") {
-            this.setState({ page: 1 }, () => {
-                this.getBeneficiaries();
+            const needle = e.target.value;
+            this.setState({
+                filteredBeneficiary: searchBeneficiary(this.state.beneficiaries, needle),
             });
         }
     };
@@ -484,29 +488,13 @@ export default class Test extends Component {
     };
 
     render() {
-
-
-
-
-        const beneficiaries = this.state?.beneficiaries?.filter((row) => row.score1 !== null && row.score1 !== undefined)
-        .sort((a, b) => {
-          const dateA = new Date(a.updatedAt);
-          const dateB = new Date(b.updatedAt);
-          return dateB - dateA;
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-           
+        const beneficiaries = this.state?.beneficiaries
+            ?.filter((row) => row.score1 !== null && row.score1 !== undefined)
+            .sort((a, b) => {
+                const dateA = new Date(a.updatedAt);
+                const dateB = new Date(b.updatedAt);
+                return dateB - dateA;
+            });
 
         return (
             <div>
@@ -1399,33 +1387,33 @@ export default class Test extends Component {
                         </TableBody>   */}
 
                         <TableBody>
-                        {beneficiaries.map((row) => (
-                                    <TableRow key={row.name}>
-                                        <TableCell align="center">
-                                            {new Date(row.updatedAt).toLocaleString("en-GB", {
-                                                month: "2-digit",
-                                                day: "2-digit",
-                                                year: "numeric",
-                                            })}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {new Date(row.updatedAt).toLocaleString("en-GB", {
-                                                hour: "numeric",
-                                                minute: "numeric",
-                                                hour12: true,
-                                            })}
-                                        </TableCell>
-                                        <TableCell align="center">{row.name}</TableCell>
-                                        <TableCell align="center" component="th" scope="row">
-                                            {row.beneficiaryId}
-                                        </TableCell>
-                                        <TableCell align="center">{row.score1}</TableCell>
-                                        <TableCell align="center">
-                                            {Math.floor(row.duration / 60)} Minute{" "}
-                                            {row.duration % 60} Seconds
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                            {this.state?.filteredBeneficiary?.map((row) => (
+                                <TableRow key={row.name}>
+                                    <TableCell align="center">
+                                        {new Date(row.updatedAt).toLocaleString("en-GB", {
+                                            month: "2-digit",
+                                            day: "2-digit",
+                                            year: "numeric",
+                                        })}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {new Date(row.updatedAt).toLocaleString("en-GB", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            hour12: true,
+                                        })}
+                                    </TableCell>
+                                    <TableCell align="center">{row.name}</TableCell>
+                                    <TableCell align="center" component="th" scope="row">
+                                        {row.beneficiaryId}
+                                    </TableCell>
+                                    <TableCell align="center">{row.score1}</TableCell>
+                                    <TableCell align="center">
+                                        {Math.floor(row.duration / 60)} Minute {row.duration % 60}{" "}
+                                        Seconds
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
 
