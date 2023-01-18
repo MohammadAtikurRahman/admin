@@ -29,7 +29,7 @@ const baseUrl = process.env.REACT_APP_URL;
 
 const getData = async () => {
     try {
-        const res = await axios.get("http://localhost:2000/get-testscore");
+        const res = await axios.get(baseUrl +"/get-testscore");
         return res.data;
     } catch (error) {
         console.error(error);
