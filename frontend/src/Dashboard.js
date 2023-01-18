@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
 
-import moment from 'moment';
+import moment from "moment";
 import {
     Button,
     TextField,
@@ -21,15 +21,13 @@ import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import BeneficiaryDelete, { beneficiarydelete} from "./BeneficiaryDelete"
+import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
+import { searchBeneficiary } from "./utils/search";
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 export default class Dashboard extends Component {
-
-
-
     constructor() {
         super();
         this.state = {
@@ -90,20 +88,12 @@ export default class Dashboard extends Component {
             selectedItem: null,
             beneficiary: {},
             error: null,
-            beneficiaryList: []
-
-
-
-
+            filteredBeneficiary: [],
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
     }
-
-  
-
-
 
     handleClick(event) {
         this.setState({ anchorEl: event.currentTarget });
@@ -119,8 +109,6 @@ export default class Dashboard extends Component {
     }
 
     componentDidMount = () => {
-
-
         let token = localStorage.getItem("token");
         if (!token) {
             this.props.history.push("/login");
@@ -138,12 +126,8 @@ export default class Dashboard extends Component {
             var enumerator_name = userDetails.user;
 
             var enumerator_id = userDetails.id;
-
         });
     };
-
-
-
 
     getBeneficiaries = () => {
         this.setState({ loading: true });
@@ -167,6 +151,7 @@ export default class Dashboard extends Component {
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
+                    filteredBeneficiary: res.data.beneficiaries,
                     pages: res.data?.pages,
                     userinfo: Object.values(jwt_decode(res.config.headers.token)),
                 });
@@ -179,18 +164,10 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => { }
+                    () => {}
                 );
             });
     };
-
-
-    
-
-
-    
-
-
 
     pageChange = (e, page) => {
         this.setState({ page: page }, () => {
@@ -205,14 +182,20 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => { });
+            this.setState({ fileName: e.target.files[0].name }, () => {});
         }
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({ [e.target.name]: e.target.value }, () => {});
 
         if (e.target.name == "search") {
+            /*
             this.setState({ page: 1 }, () => {
                 this.getBeneficiaries();
                 console.log(e.target.name);
+            });
+            */
+            const needle = e.target.value;
+            this.setState({
+                filteredBeneficiary: searchBeneficiary(this.state.beneficiaries, needle),
             });
         }
     };
@@ -470,16 +453,8 @@ export default class Dashboard extends Component {
         this.setState({ openProductEditModal: false });
     };
 
- 
-    
-
-
- 
-    
     render() {
         const open = Boolean(this.state.anchorEl);
-
-
 
         return (
             <div>
@@ -739,9 +714,6 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="BeneFiciary passbook"
                         />
-
-
-
                         &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
@@ -978,10 +950,7 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="Benefciary Union"
                         />
-
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -1023,9 +992,6 @@ export default class Dashboard extends Component {
                             placeholder="Beneficiary Job"
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-
-
                         <TextField
                             id="standard-basic"
                             type="number"
@@ -1079,57 +1045,58 @@ export default class Dashboard extends Component {
                         />
                         <br />
                         <br />
-
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
                         <select
                             id="standard-basic"
                             name="gen"
                             value={this.state.gen}
                             onChange={this.onChange}
                             style={{
-                                border: "none", padding: "8px", color: "grey",
-                                background: "white"
-                            }}
-                        >
-                            <option value="" disabled>Select Gender</option>
+                                border: "none",
+                                padding: "8px",
+                                color: "grey",
+                                background: "white",
+                            }}>
+                            <option value="" disabled>
+                                Select Gender
+                            </option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>
                         </select>
-                        &nbsp;
-                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <select
                             id="standard-basic"
                             name="a_sts"
                             value={this.state.a_sts}
                             onChange={this.onChange}
                             style={{
-                                border: "none", padding: "8px", color: "grey",
-                                background: "white"
-                            }}
-                        >
-                            <option value="" disabled>Approval Status</option>
+                                border: "none",
+                                padding: "8px",
+                                color: "grey",
+                                background: "white",
+                            }}>
+                            <option value="" disabled>
+                                Approval Status
+                            </option>
                             <option value="Approved">Approved</option>
                             <option value="Not Approved">Not Approvved</option>
                         </select>
-
-
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
                         <select
                             id="standard-basic"
                             name="age"
                             value={this.state.age}
                             onChange={this.onChange}
                             style={{
-                                border: "none", padding: "8px", color: "grey",
-                                background: "white"
-                            }}
-                        >
-                            <option value="" disabled>Beneficiary Age</option>
+                                border: "none",
+                                padding: "8px",
+                                color: "grey",
+                                background: "white",
+                            }}>
+                            <option value="" disabled>
+                                Beneficiary Age
+                            </option>
                             <option value="40">40</option>
                             <option value="41">41</option>
                             <option value="42">42</option>
@@ -1151,25 +1118,25 @@ export default class Dashboard extends Component {
                             <option value="58">58</option>
                             <option value="59">59</option>
                             <option value="60">60</option>
-
                         </select>
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
                         <select
                             id="standard-basic"
                             name="age"
                             value={this.state.relgn}
                             onChange={this.onChange}
                             style={{
-                                border: "none", padding: "8px", color: "grey",
-                                background: "white"
-                            }}
-                        >
-                            <option value="" disabled>Beneficiary Religion</option>
+                                border: "none",
+                                padding: "8px",
+                                color: "grey",
+                                background: "white",
+                            }}>
+                            <option value="" disabled>
+                                Beneficiary Religion
+                            </option>
                             <option value="Islam">Islam</option>
                             <option value="Hindu">Hindu</option>
                             <option value="Other">Other</option>
-
                         </select>
                         {/* <TextField
                             id="standard-basic"
@@ -1200,10 +1167,7 @@ export default class Dashboard extends Component {
                             label="Date of Birth"
                             autoComplete="off"
                             name="dob"
-
-
-
-                            value={moment(this.state.dob).format('DD/MM/YYYY')}
+                            value={moment(this.state.dob).format("DD/MM/YYYY")}
                             onChange={this.onChange}
                             InputLabelProps={{
                                 shrink: true,
@@ -1213,12 +1177,7 @@ export default class Dashboard extends Component {
                             }}
                             placeholder="date of birth  "
                             format="dd/mm/yyyy"
-
-
                         />
-
-
-
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
                             id="standard-basic"
@@ -1235,18 +1194,15 @@ export default class Dashboard extends Component {
                                 style: { color: "grey" },
                             }}
                             placeholder="Account created "
-
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-
-
                         <TextField
-                            id="date-picker-dialog" type="date"
+                            id="date-picker-dialog"
+                            type="date"
                             autoComplete="off"
                             label="First Allowance"
                             format="dd/MM/yyyy"
                             name="f_allow"
-
                             value={this.state.f_allow}
                             onChange={this.onChange}
                             InputLabelProps={{
@@ -1255,7 +1211,6 @@ export default class Dashboard extends Component {
                             InputProps={{
                                 style: { color: "grey" },
                             }}
-
                             placeholder=" f_allow   "
                         />
                         <br />
@@ -1285,7 +1240,6 @@ export default class Dashboard extends Component {
                         placeholder="Search by Beneficiary"
                         required
                     />
-
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -1314,7 +1268,7 @@ export default class Dashboard extends Component {
                         </TableHead>
 
                         <TableBody>
-                            {this.state?.beneficiaries?.reverse().map((row) => (
+                            {this.state?.filteredBeneficiary?.reverse().map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell align="center">
                                         {new Date(row.updatedAt).toLocaleString("en-US", {
@@ -1322,10 +1276,7 @@ export default class Dashboard extends Component {
                                             minute: "numeric",
                                             hour12: true,
                                         })}
-                                        &nbsp;                                        &nbsp;
-                                        &nbsp;
-                                        &nbsp;
-
+                                        &nbsp; &nbsp; &nbsp; &nbsp;
                                         {new Date(row.updatedAt).toLocaleString("en-GB", {
                                             month: "2-digit",
                                             day: "2-digit",
@@ -1349,9 +1300,8 @@ export default class Dashboard extends Component {
                                             onClick={(e) => this.handleProductEditOpen(row)}>
                                             Edit
                                         </Button>
-                                      
-                                        <BeneficiaryDelete row={row} />
 
+                                        <BeneficiaryDelete row={row} />
                                     </TableCell>
 
                                     <TableCell align="center">
