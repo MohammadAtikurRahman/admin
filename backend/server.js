@@ -84,6 +84,17 @@ app.put("/beneficiary/:id", async (req, res) => {
     }
 });
 
+app.delete("/beneficiary/:id", (req, res) => {
+    user.findOneAndUpdate({}, { $pull: { beneficiary: { beneficiaryId: req.params.id } } }, (err, data) => {
+      if (err) return res.status(400).send(err);
+      if (!data) return res.status(404).send("Beneficiary not found");
+      res.send("Beneficiary deleted successfully");
+    });
+  });
+  
+
+
+
 app.use("/", (req, res, next) => {
     try {
         if (
@@ -291,8 +302,8 @@ app.post("/update-product", upload.any(), (req, res) => {
 /* Api to delete Product */
 app.post("/delete-product", (req, res) => {
     try {
-        if (req.body && req.body.id) {
-            product.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+        if (req.body && req.body.beneficiaryId) {
+            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,

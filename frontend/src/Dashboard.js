@@ -93,6 +93,10 @@ export default class Dashboard extends Component {
 
             anchorEl: null,
             selectedItem: null,
+          
+              
+
+
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -138,6 +142,7 @@ export default class Dashboard extends Component {
 
   
 
+
     getBeneficiaries = () => {
         this.setState({ loading: true });
 
@@ -177,39 +182,7 @@ export default class Dashboard extends Component {
             });
     };
 
-    deleteProduct = (id) => {
-        axios
-            .post(
-                baseUrl + "/delete-product",
-                {
-                    id: id,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        token: this.state.token,
-                    },
-                }
-            )
-            .then((res) => {
-                swal({
-                    text: res.data.title,
-                    icon: "success",
-                    type: "success",
-                });
-
-                this.setState({ page: 1 }, () => {
-                    this.pageChange(null, 1);
-                });
-            })
-            .catch((err) => {
-                swal({
-                    text: err.response.data.errorMessage,
-                    icon: "error",
-                    type: "error",
-                });
-            });
-    };
+ 
 
     pageChange = (e, page) => {
         this.setState({ page: page }, () => {
@@ -491,6 +464,8 @@ export default class Dashboard extends Component {
 
     render() {
         const open = Boolean(this.state.anchorEl);
+
+        
 
         return (
             <div>
