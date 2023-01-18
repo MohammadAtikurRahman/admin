@@ -85,7 +85,7 @@ app.put("/beneficiary/:id", async (req, res) => {
 });
 
 app.delete("/beneficiary/:id", (req, res) => {
-    user.findOneAndUpdate({}, { $pull: { beneficiary: { beneficiaryId: req.params.id } } }, (err, data) => {
+    user.findOneAndUpdate({}, { $pull: { beneficiary: { _id: req.params.id } } }, (err, data) => {
       if (err) return res.status(400).send(err);
       if (!data) return res.status(404).send("Beneficiary not found");
       res.send("Beneficiary deleted successfully");
