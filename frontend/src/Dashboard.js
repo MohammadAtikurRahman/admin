@@ -21,6 +21,7 @@ import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import BeneficiaryDelete, { beneficiarydelete} from "./BeneficiaryDelete"
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
@@ -1348,15 +1349,8 @@ export default class Dashboard extends Component {
                                             onClick={(e) => this.handleProductEditOpen(row)}>
                                             Edit
                                         </Button>
-                                        <Button
-                                            className="button_style"
-                                            variant="outlined"
-                                            color="secondary"
-                                            size="small"
-                                            onClick={(e) => this.deleteProduct(row._id)}>
-                                            Delete
-                                        </Button>
-
+                                      
+                                        <BeneficiaryDelete row={row} />
 
                                     </TableCell>
 
