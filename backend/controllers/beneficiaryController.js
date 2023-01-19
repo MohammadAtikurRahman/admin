@@ -25,7 +25,6 @@ async function addBeneficiary(req, res) {
 async function addBeneficiaryInBulk(req, res) {
     let user = jwt_decode(req.body.token);
     for (let i = 0; i < req.body.beneficiary.length; i++) {
-        console.log("ben", req.body.beneficiary[i]);
         user = await User.findByIdAndUpdate(
             user.id,
             {$push: {beneficiary: req.body.beneficiary[i]}},
