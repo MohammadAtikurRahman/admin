@@ -4,6 +4,7 @@ const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -17,6 +18,19 @@ async function addBeneficiary(req, res) {
         {$push: {beneficiary: req.body.beneficiary}},
         {new: true},
     );
+
+    return res.status(200).json({user: user});
+}
+
+async function addBeneficiaryInBulk(req, res) {
+    let user = jwt_decode(req.body.token);
+    for (let i = 0; i < req.body.beneficiary.length; i++) {
+        user = await User.findByIdAndUpdate(
+            user.id,
+            {$push: {beneficiary: req.body.beneficiary[i]}},
+            {new: true},
+        );
+    }
 
     return res.status(200).json({user: user});
 }
@@ -93,15 +107,15 @@ async function beneficiaryLogin(req, res) {
 
     // return res.status(400).json({error: "Credentials does not exists"});
 
-      console.log(req.body);
+    console.log(req.body);
     let user = await User.findOne({userId: req.body.userId});
     if (!req.body || !req.body.userId || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
     }
-     if(!user){
+    if (!user) {
         return res.status(401).json({error: "User Not Found"});
     }
-    if (user.password === req.body.password ) {
+    if (user.password === req.body.password) {
         let token = await getToken(user);
         return res.status(200).json({
             message: "Login Successfully.",
@@ -188,6 +202,7 @@ async function saveTestScore(req, res) {
 
 module.exports = {
     addBeneficiary,
+    addBeneficiaryInBulk,
     getBeneficiaries,
     beneficiaryLogin,
     benenScore,

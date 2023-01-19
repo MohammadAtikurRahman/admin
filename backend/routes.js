@@ -11,12 +11,14 @@ const {
     saveTest,
     benenScore,
     addBeneficiaryScore,
+    addBeneficiaryInBulk,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
 
 router.get("/beneficiary", getBeneficiaries);
 router.post("/beneficiary/add", addBeneficiary);
+router.post("/beneficiary/add/bulk", addBeneficiaryInBulk);
 
 router.post("/save-test/add", saveTest);
 
