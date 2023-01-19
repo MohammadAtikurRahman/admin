@@ -66,23 +66,33 @@ app.use(
 
 app.use(router);
 
-
-app.put("/beneficiary/:id", async (req, res) => {
+app.put('/updateBeneficiary/:id', async (req, res) => {
     try {
-
-        const rcvData1 = await user.findOne({ _id: req.params.id });
-
-        console.log("2 child section  value" + req.params.id);
-
-
-        rcvData1.name = req.body.name;
-
-        await rcvData1.save();
-        res.status(200).json(rcvData1);
+      const updatedBeneficiary = await user.findOneAndUpdate(
+        { "beneficiary._id": req.params.id },
+        { 
+          $set: { 
+            
+            "beneficiary.$.name": req.body.name,
+            // add more fields to update here
+          }
+        },
+        { new: true }
+      );
+  
+      if (!updatedBeneficiary) {
+        return res.status(404).json({ error: "Beneficiary not found" });
+      }
+  
+      return res.status(200).json({ updatedBeneficiary });
     } catch (error) {
-        res.status(500).send(error.message);
+      return res.status(500).json({ error: error.message });
     }
-});
+  });
+  
+
+
+
 
 app.delete("/beneficiary/:id", (req, res) => {
     user.findOneAndUpdate({}, { $pull: { beneficiary: { _id: req.params.id } } }, (err, data) => {
