@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
+import SearchIcon from '@material-ui/icons/Search';
 
 import moment from "moment";
 import {
@@ -164,7 +165,7 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => {}
+                    () => { }
                 );
             });
     };
@@ -182,9 +183,9 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
+            this.setState({ fileName: e.target.files[0].name }, () => { });
         }
-        this.setState({ [e.target.name]: e.target.value }, () => {});
+        this.setState({ [e.target.name]: e.target.value }, () => { });
 
         if (e.target.name == "search") {
             /*
@@ -1230,16 +1231,38 @@ export default class Dashboard extends Component {
                 <br />
 
                 <TableContainer>
-                    <TextField
-                        id="standard-basic"
-                        type="search"
-                        autoComplete="off"
-                        name="search"
-                        value={this.state.search}
-                        onChange={this.onChange}
-                        placeholder="Search by Beneficiary"
-                        required
-                    />
+                    <div className="search-container">
+                        <TextField
+                            id="standard-basic"
+                            type="search"
+                            autoComplete="off"
+                            name="search"
+                            value={this.state.search}
+                            onChange={this.onChange}
+                            placeholder="Search by Beneficiary"
+                            required
+                                style={{border: "1px solid grey", padding: "1px"}}
+                                InputProps={{ disableUnderline: true ,
+                                        style: { paddingRight: "5px", paddingLeft: "60px"}
+
+                                
+                                }}
+
+
+                        />
+                        <Button variant="contained" color="primary" className="search-button"
+                        
+                        style={{ backgroundColor: "#243763"}}
+                        
+                        >
+                            <SearchIcon className="search-icon" />
+                        </Button>
+                    </div>
+
+
+
+
+
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
