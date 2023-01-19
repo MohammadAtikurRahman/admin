@@ -125,9 +125,9 @@ export default class Test extends Component {
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
 
-            var enumerator_name = userDetails.user;
+            var enumerator_name = userDetails?.user;
 
-            var enumerator_id = userDetails.id;
+            var enumerator_id = userDetails?.id;
             // console.log(enumerator_name); urgent
             // console.log(enumerator_id);
 
@@ -1387,8 +1387,8 @@ export default class Test extends Component {
                         </TableBody>   */}
 
                         <TableBody>
-                            {this.state?.filteredBeneficiary?.map((row) => (
-                                <TableRow key={row.name}>
+                            {this.state?.filteredBeneficiary?.map((row, index) => (
+                                <TableRow key={index}>
                                     <TableCell align="center">
                                         {new Date(row.updatedAt).toLocaleString("en-GB", {
                                             month: "2-digit",
