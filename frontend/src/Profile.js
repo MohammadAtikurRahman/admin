@@ -433,7 +433,7 @@ export default function Profile() {
                     <div className="input-group">
                         <span className="input-group-text">
                             {" "}
-                            Beneficiary username{" "}
+                             Beneficiary's Husband/Wife names{" "}
                         </span>
                         <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.u_nm}</label>
 

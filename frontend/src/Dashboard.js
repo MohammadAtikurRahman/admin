@@ -889,7 +889,7 @@ export default class Dashboard extends Component {
                             name="u_nm"
                             value={this.state.u_nm}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Username  "
+                            placeholder="Beneficiary's Husband/Wife names  "
                         />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <TextField
