@@ -1302,8 +1302,13 @@ export default class Test extends Component {
                         name="search"
                         value={this.state.search}
                         onChange={this.onChange}
-                        placeholder="Search by test id"
+                        placeholder="Search by Test Id"
                         required
+                        style={{ border: "1px solid grey", padding: "1px" }}
+                        InputProps={{
+                            disableUnderline: true,
+                            style: { paddingRight: "5px", paddingLeft: "60px" },
+                        }}
                     />
 
                     <Table aria-label="simple table">

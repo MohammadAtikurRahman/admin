@@ -1244,16 +1244,16 @@ export default class Dashboard extends Component {
                             style={{ border: "1px solid grey", padding: "1px" }}
                             InputProps={{
                                 disableUnderline: true,
-                                style: { paddingRight: "5px", paddingLeft: "60px" },
+                                style: { paddingRight: "5px", paddingLeft: "50px" },
                             }}
                         />
-                        <Button
+                        {/* <Button
                             variant="contained"
                             color="primary"
                             className="search-button"
                             style={{ backgroundColor: "#243763" }}>
                             <SearchIcon className="search-icon" />
-                        </Button>
+                        </Button> */}
                     </div>
 
                     <Table aria-label="simple table">
