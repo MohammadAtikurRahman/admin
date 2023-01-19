@@ -104,7 +104,7 @@ export default function Profile() {
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Beneficiary Id</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_id}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.beneficiaryId}</label>
 
                     </div>
                 </div>

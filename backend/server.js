@@ -8,7 +8,7 @@ const multer = require("multer"),
     bodyParser = require("body-parser"),
     path = require("path");
 
-const mongoose = require("mongoose").set("debug", true);
+const mongoose = require("mongoose").set("debug", false);
 const { router } = require("./routes.js");
 const { randomNumberNotInUserCollection } = require("./helpers/number");
 
