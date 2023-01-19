@@ -21,17 +21,17 @@ const beneficiarySchema = new Schema(
         score1: Number,
         time: Date,
         duration: String,
-        name: String, 
-        f_nm: String, 
-        ben_nid: String, 
-        sl: Number, 
-        ben_id: Number, 
-        m_nm: String, 
+        name: String,
+        f_nm: String,
+        ben_nid: String,
+        sl: Number,
+        ben_id: Number,
+        m_nm: String,
         age: Number,
-        dis: String, 
-        sub_dis: String, 
-        uni: String, 
-        vill: String, 
+        dis: String,
+        sub_dis: String,
+        uni: String,
+        vill: String,
         relgn: String,
         job: String,
         gen: String,
@@ -52,7 +52,6 @@ const beneficiarySchema = new Schema(
         f_allow: Date,
         time: Date,
         timeanddate: String,
-    
 
         test: [testSchema],
     },
@@ -60,7 +59,6 @@ const beneficiarySchema = new Schema(
 );
 const userSchema = new Schema(
     {
-        id: {type: Number, default: () => nextId++},
         userId: Number,
         username: String,
         password: String,
