@@ -92,6 +92,7 @@ export default class Test extends Component {
             dob: "",
             accre: "",
             f_allow: "",
+            score1: "",
 
             desc: "",
             price: "",
@@ -111,6 +112,7 @@ export default class Test extends Component {
     }
 
     componentDidMount = () => {
+
         let token = localStorage.getItem("token");
         if (!token) {
             this.props.history.push("/login");
@@ -172,7 +174,7 @@ export default class Test extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => {}
+                    () => { }
                 );
             });
     };
@@ -224,9 +226,9 @@ export default class Test extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
+            this.setState({ fileName: e.target.files[0].name }, () => { });
         }
-        this.setState({ [e.target.name]: e.target.value }, () => {});
+        this.setState({ [e.target.name]: e.target.value }, () => { });
 
         if (e.target.name == "search") {
             const needle = e.target.value;
@@ -272,6 +274,7 @@ export default class Test extends Component {
                     dob: this.state.dob,
                     accre: this.state.accre,
                     f_allow: this.state.f_allow,
+                    score1: this.state.score1,
                 },
                 token: localStorage.getItem("token"),
             })
@@ -478,6 +481,7 @@ export default class Test extends Component {
             dob: data.dob,
             accre: data.accre,
             f_allow: data.f_allow,
+            score1: data.score1,
 
             fileName: data.image,
         });
@@ -513,15 +517,7 @@ export default class Test extends Component {
                         }}>
                         DASHBOARD
                     </h2>
-                    {/* 
-                    <Button
-                        className="button_style"
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={this.handleProductOpen}>
-                        Add Beneficiary
-                    </Button> */}
+
 
                     <Button
                         className="button_style"
@@ -559,17 +555,7 @@ export default class Test extends Component {
                         </MaterialLink>
                     </Button>
 
-                    {/* <Button
-                        className="button_style"
-                        variant="contained"
-                        color="inherit"
-                        size="small">
-                        <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
-                            href="/test">
-                            Transactions
-                        </MaterialLink>
-                    </Button> */}
+
 
                     <Button
                         className="button_style"
@@ -1334,66 +1320,18 @@ export default class Test extends Component {
                                 <TableCell align="center">
                                     <b> Duration</b>
                                 </TableCell>
-
-                                {/* <TableCell align="center">
-                                    View BeneFiciary{" "}
-                                </TableCell> */}
                             </TableRow>
                         </TableHead>
 
-                        {/* 
-                     <TableBody>
-                            {this.state?.beneficiaries?.reverse().map((row) => (
 
-
-
-
-                                <TableRow key={row.name}>
-
-                                    <TableCell align="center">
-
-                                        {new Date(row.timeanddate).toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })} 
-                                       
-                                      
-                            
-
-
+                        {/* <TableBody>
+                            {  this.state?.filteredBeneficiary?.map((row, index) => (    
 
                                   
-                                    </TableCell>
-                                    <TableCell align="center">
-                                    {new Date(row.timeanddate).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
-                                    </TableCell>
-
-                                    <TableCell align="center">
-                                        {row.name}
-                                    </TableCell>
-
-                                    <TableCell
-                                        align="center"
-                                        component="th"
-                                        scope="row">
-                                        {row.beneficiaryId}
-                                    </TableCell>
-
-                                    <TableCell align="center">
-                                        {row.score1}
-                                    </TableCell>
 
 
-                                    <TableCell align="center">
-                                        {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
-                                    </TableCell>
-
-
-
-                                </TableRow>
-                            ))}
-                        </TableBody>   */}
-
-                        <TableBody>
-                            {this.state?.filteredBeneficiary?.map((row, index) => (
-                                <TableRow key={index}>
+                                <TableRow key={index}>   
+                                    
                                     <TableCell align="center">
                                         {new Date(row.updatedAt).toLocaleString("en-GB", {
                                             month: "2-digit",
@@ -1417,9 +1355,57 @@ export default class Test extends Component {
                                         {Math.floor(row.duration / 60)} Minute {row.duration % 60}{" "}
                                         Seconds
                                     </TableCell>
+                                    
                                 </TableRow>
                             ))}
+                        </TableBody> */}
+
+
+
+
+
+                        <TableBody>
+                            {this.state?.filteredBeneficiary?.sort((a, b) => {
+                                const dateA = new Date(a.updatedAt);
+                                const dateB = new Date(b.updatedAt);
+                                return dateB - dateA;
+                            })
+
+
+                                .map((row, index) =>
+                                    row.score1 ?
+
+
+                                        (
+                                            <TableRow key={index}>
+                                                <TableCell align="center">
+                                                    {new Date(row.updatedAt).toLocaleString("en-GB", {
+                                                        month: "2-digit",
+                                                        day: "2-digit",
+                                                        year: "numeric",
+                                                    })}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    {new Date(row.updatedAt).toLocaleString("en-GB", {
+                                                        hour: "numeric",
+                                                        minute: "numeric",
+                                                        hour12: true,
+                                                    })}
+                                                </TableCell>
+                                                <TableCell align="center">{row.name}</TableCell>
+                                                <TableCell align="center" component="th" scope="row">
+                                                    {row.beneficiaryId}
+                                                </TableCell>
+                                                <TableCell align="center">{row.score1}</TableCell>
+                                                <TableCell align="center">
+                                                    {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
+                                                </TableCell>
+                                            </TableRow>
+                                        ) : null
+                                )}
                         </TableBody>
+
+
                     </Table>
 
                     <br />

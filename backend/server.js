@@ -12,7 +12,7 @@ const mongoose = require("mongoose").set("debug", true);
 const { router } = require("./routes.js");
 const { randomNumberNotInUserCollection } = require("./helpers/number");
 
-mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test-thrift", {
+mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

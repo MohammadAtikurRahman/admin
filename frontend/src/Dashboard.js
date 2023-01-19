@@ -237,6 +237,8 @@ export default class Dashboard extends Component {
                     dob: this.state.dob,
                     accre: this.state.accre,
                     f_allow: this.state.f_allow,
+                    score1: this.state.score1,
+
                 },
                 token: localStorage.getItem("token"),
             })
