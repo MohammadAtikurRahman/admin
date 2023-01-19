@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import jwt_decode from "jwt-decode";
-import SearchIcon from '@material-ui/icons/Search';
+import SearchIcon from "@material-ui/icons/Search";
 
 import moment from "moment";
 import {
@@ -124,9 +124,9 @@ export default class Dashboard extends Component {
             this.setState({ persons });
             const userDetails = this.state.persons.payload;
 
-            var enumerator_name = userDetails.user;
+            var enumerator_name = userDetails?.user;
 
-            var enumerator_id = userDetails.id;
+            var enumerator_id = userDetails?.id;
         });
     };
 
@@ -146,8 +146,8 @@ export default class Dashboard extends Component {
                 },
             })
             .then((res) => {
-                console.log("here", Object.values(jwt_decode(res.config.headers.token)));
-                console.log("here", res.data.beneficiaries);
+                //console.log("here", Object.values(jwt_decode(res.config.headers.token)));
+                //console.log("here", res.data.beneficiaries);
 
                 this.setState({
                     loading: false,
@@ -165,7 +165,7 @@ export default class Dashboard extends Component {
                 });
                 this.setState(
                     { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => { }
+                    () => {}
                 );
             });
     };
@@ -183,9 +183,9 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => { });
+            this.setState({ fileName: e.target.files[0].name }, () => {});
         }
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({ [e.target.name]: e.target.value }, () => {});
 
         if (e.target.name == "search") {
             /*
@@ -1241,27 +1241,20 @@ export default class Dashboard extends Component {
                             onChange={this.onChange}
                             placeholder="Search by Beneficiary"
                             required
-                                style={{border: "1px solid grey", padding: "1px"}}
-                                InputProps={{ disableUnderline: true ,
-                                        style: { paddingRight: "5px", paddingLeft: "60px"}
-
-                                
-                                }}
-
-
+                            style={{ border: "1px solid grey", padding: "1px" }}
+                            InputProps={{
+                                disableUnderline: true,
+                                style: { paddingRight: "5px", paddingLeft: "60px" },
+                            }}
                         />
-                        <Button variant="contained" color="primary" className="search-button"
-                        
-                        style={{ backgroundColor: "#243763"}}
-                        
-                        >
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className="search-button"
+                            style={{ backgroundColor: "#243763" }}>
                             <SearchIcon className="search-icon" />
                         </Button>
                     </div>
-
-
-
-
 
                     <Table aria-label="simple table">
                         <TableHead>
@@ -1291,8 +1284,8 @@ export default class Dashboard extends Component {
                         </TableHead>
 
                         <TableBody>
-                            {this.state?.filteredBeneficiary?.reverse().map((row) => (
-                                <TableRow key={row.name}>
+                            {this.state?.filteredBeneficiary?.reverse().map((row, index) => (
+                                <TableRow key={index}>
                                     <TableCell align="center">
                                         {new Date(row.updatedAt).toLocaleString("en-US", {
                                             hour: "numeric",
