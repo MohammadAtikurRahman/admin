@@ -956,10 +956,10 @@ export default class Dashboard extends Component {
                             id="standard-basic"
                             type="text"
                             autoComplete="off"
-                            name="pgm"
-                            value={this.state.pgm}
+                            name="sl"
+                            value={this.state.sl}
                             onChange={this.onChange}
-                            placeholder="Beneficiary Program"
+                            placeholder="Beneficiary Ward No"
                         />
                         <br />
                         <br />
@@ -1123,7 +1123,7 @@ export default class Dashboard extends Component {
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                         <select
                             id="standard-basic"
-                            name="age"
+                            name="relgn"
                             value={this.state.relgn}
                             onChange={this.onChange}
                             style={{
