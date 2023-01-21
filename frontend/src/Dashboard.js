@@ -24,6 +24,7 @@ import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
 import { searchBeneficiary } from "./utils/search";
+import { EditBeneficiary } from "./EditBeneficiary";
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
@@ -80,7 +81,6 @@ export default class Dashboard extends Component {
             page: 1,
             search: "",
             beneficiaries: [],
-            userinfo: [],
             persons: [],
             pages: 0,
             loading: false,
@@ -88,8 +88,9 @@ export default class Dashboard extends Component {
             anchorEl: null,
             selectedItem: null,
             beneficiary: {},
-            error: null,
+            error: "",
             filteredBeneficiary: [],
+            currentBeneficiary: "",
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -122,39 +123,22 @@ export default class Dashboard extends Component {
         axios.get(baseUrl + "/user-details").then((res) => {
             const persons = res.data;
             this.setState({ persons });
-            const userDetails = this.state.persons.payload;
-
-            var enumerator_name = userDetails?.user;
-
-            var enumerator_id = userDetails?.id;
         });
     };
 
     getBeneficiaries = () => {
         this.setState({ loading: true });
-
-        let data = "?";
-        data = `${data}page=${this.state.page}`;
-        if (this.state.search) {
-            data = `${data}&search=${this.state.search}`;
-        }
         axios
             .get(baseUrl + "/beneficiary", {
-                message: "hello",
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
-                //console.log("here", Object.values(jwt_decode(res.config.headers.token)));
-                //console.log("here", res.data.beneficiaries);
-
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
                     filteredBeneficiary: res.data.beneficiaries,
-                    pages: res.data?.pages,
-                    userinfo: Object.values(jwt_decode(res.config.headers.token)),
                 });
             })
             .catch((err) => {
@@ -163,37 +147,18 @@ export default class Dashboard extends Component {
                     icon: "error",
                     type: "error",
                 });
-                this.setState(
-                    { loading: false, beneficiaries: [], userinfo: [], pages: 0 },
-                    () => {}
-                );
+                this.setState({ loading: false, beneficiaries: [], userinfo: [] }, () => {});
             });
     };
-
-    pageChange = (e, page) => {
-        this.setState({ page: page }, () => {
-            this.getBeneficiaries();
-        });
-    };
-
     logOut = () => {
         localStorage.setItem("token", null);
         this.props.history.push("/");
     };
 
     onChange = (e) => {
-        if (e.target.files && e.target.files[0] && e.target.files[0].name) {
-            this.setState({ fileName: e.target.files[0].name }, () => {});
-        }
         this.setState({ [e.target.name]: e.target.value }, () => {});
 
-        if (e.target.name == "search") {
-            /*
-            this.setState({ page: 1 }, () => {
-                this.getBeneficiaries();
-                console.log(e.target.name);
-            });
-            */
+        if (e.target.name === "search") {
             const needle = e.target.value;
             this.setState({
                 filteredBeneficiary: searchBeneficiary(this.state.beneficiaries, needle),
@@ -202,7 +167,6 @@ export default class Dashboard extends Component {
     };
 
     addProduct = () => {
-        const fileInput = document.querySelector("#fileInput");
         axios
             .post(baseUrl + "/beneficiary/add", {
                 beneficiary: {
@@ -238,13 +202,11 @@ export default class Dashboard extends Component {
                     accre: this.state.accre,
                     f_allow: this.state.f_allow,
                     score1: this.state.score1,
-
                 },
                 token: localStorage.getItem("token"),
             })
             .then((res) => {
                 window.location.reload();
-
                 swal({
                     text: res.data.title,
                     icon: "success",
@@ -258,7 +220,7 @@ export default class Dashboard extends Component {
                         desc: "",
                         discount: "",
                         price: "",
-                        file: null,
+                        file: "",
                         page: 1,
                     },
                     () => {
@@ -273,115 +235,6 @@ export default class Dashboard extends Component {
                     type: "error",
                 });
                 this.handleProductClose();
-            });
-    };
-
-    updateProduct = () => {
-        const fileInput = document.querySelector("#fileInput");
-        const file = new FormData();
-        file.append("id", this.state.id);
-        file.append("file", fileInput.files[0]);
-        file.append("name", this.state.name);
-
-        file.append("sl", this.state.sl);
-        file.append("f_nm", this.state.f_nm);
-        file.append("ben_id", this.state.ben_id);
-        file.append("ben_nid", this.state.ben_nid);
-
-        file.append("m_nm", this.state.m_nm);
-
-        file.append("age", this.state.age);
-
-        file.append("dis", this.state.dis);
-        file.append("sub_dis", this.state.sub_dis);
-        file.append("uni", this.state.uni);
-        file.append("vill", this.state.vill);
-        file.append("relgn", this.state.relgn);
-
-        file.append("job", this.state.job);
-        file.append("gen", this.state.gen);
-        file.append("mob", this.state.mob);
-
-        file.append("pgm", this.state.pgm);
-        file.append("pass", this.state.pass);
-        file.append("bank", this.state.bank);
-        file.append("branch", this.state.branch);
-
-        file.append("r_out", this.state.r_out);
-        file.append("mob_1", this.state.mob_1);
-        file.append("mob_own", this.state.mob_own);
-        file.append("ben_sts", this.state.ben_sts);
-
-        file.append("nid_sts", this.state.nid_sts);
-        file.append("a_sts", this.state.a_sts);
-
-        file.append("u_nm", this.state.u_nm);
-        file.append("dob", this.state.dob);
-        file.append("accre", this.state.accre);
-        file.append("f_allow", this.state.f_allow);
-
-        axios
-            .post(baseUrl + "/update-product", file, {
-                headers: {
-                    "content-type": "multipart/form-data",
-                    token: this.state.token,
-                },
-            })
-            .then((res) => {
-                swal({
-                    text: res.data.title,
-                    icon: "success",
-                    type: "success",
-                });
-
-                this.handleProductEditClose();
-                this.setState(
-                    {
-                        name: "",
-                        bank: "",
-
-                        u_nm: "",
-                        dob: "",
-                        accre: "",
-                        f_allow: "",
-
-                        a_sts: "",
-                        nid_sts: "",
-                        ben_sts: "",
-                        mob_own: "",
-                        mob_1: "",
-                        r_out: "",
-                        branch: "",
-                        gen: "",
-                        pass: "",
-                        mob: "",
-                        pgm: "",
-                        age: "",
-                        ben_id: "",
-                        job: "",
-                        m_nm: "",
-                        ben_nid: "",
-                        sl: "",
-                        f_nm: "",
-                        dis: "",
-                        sub_dis: "",
-                        vill: "",
-                        uni: "",
-                        relgn: "",
-                        file: null,
-                    },
-                    () => {
-                        this.getBeneficiaries();
-                    }
-                );
-            })
-            .catch((err) => {
-                swal({
-                    text: err.response.data.errorMessage,
-                    icon: "error",
-                    type: "error",
-                });
-                this.handleProductEditClose();
             });
     };
 
@@ -412,43 +265,10 @@ export default class Dashboard extends Component {
         this.setState({ openProductModal: false });
     };
 
-    handleProductEditOpen = (data) => {
+    handleProductEditOpen = (row) => {
         this.setState({
             openProductEditModal: true,
-            id: data._id,
-            name: data.name,
-            sl: data.sl,
-            f_nm: data.f_nm,
-            age: data.age,
-
-            ben_id: data.ben_id,
-            ben_nid: data.ben_nid,
-            m_nm: data.m_nm,
-            dis: data.dis,
-            uni: data.uni,
-            sub_dis: data.sub_dis,
-            vill: data.vill,
-            relgn: data.relgn,
-            job: data.job,
-            gen: data.gen,
-            mob: data.mob,
-            pgm: data.pgm,
-            pass: data.pass,
-            bank: data.bank,
-            branch: data.branch,
-            r_out: data.r_out,
-            mob_1: data.mob_1,
-            mob_own: data.mob_own,
-            ben_sts: data.ben_sts,
-            nid_sts: data.nid_sts,
-            a_sts: data.a_sts,
-
-            u_nm: data.u_nm,
-            dob: data.dob,
-            accre: data.accre,
-            f_allow: data.f_allow,
-
-            fileName: data.image,
+            currentBeneficiary: row,
         });
     };
 
@@ -457,18 +277,9 @@ export default class Dashboard extends Component {
     };
 
     render() {
-        const open = Boolean(this.state.anchorEl);
-
         return (
             <div>
                 <div>
-                    {/* 
-                    <ol>
-                        {this.state.userinfo.map(user => (
-                            <ul key={user}>{user}</ul>
-                        ))}
-                    </ol> */}
-
                     <br></br>
                     <h2>Dashboard</h2>
 
@@ -532,337 +343,6 @@ export default class Dashboard extends Component {
                         </MaterialLink>
                     </Button>
                 </div>
-
-                {/* Edit Product */}
-                <Dialog
-                    open={this.state.openProductEditModal}
-                    onClose={this.handleProductClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description">
-                    <DialogTitle id="alert-dialog-title">Edit Beneficiary</DialogTitle>
-
-                    <DialogContent>
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="name"
-                            value={this.state.name}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary Name"
-                            required
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="sl"
-                            value={this.state.sl}
-                            onChange={this.onChange}
-                            placeholder="Serail"
-                            required
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="ben_nid"
-                            value={this.state.ben_nid}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary ben_nid"
-                            required
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="f_nm"
-                            value={this.state.f_nm}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary Father"
-                        />
-                        <br />
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="m_nm"
-                            value={this.state.m_nm}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary mother"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="ben_id"
-                            value={this.state.ben_id}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary id"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="age"
-                            value={this.state.age}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary age"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="dis"
-                            value={this.state.dis}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary district"
-                        />
-                        <br />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="sub_dis"
-                            value={this.state.sub_dis}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary thana"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="uni"
-                            value={this.state.uni}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary union"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="vill"
-                            value={this.state.vill}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary village"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="relgn"
-                            value={this.state.relgn}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary relgn"
-                        />
-                        <br />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="job"
-                            value={this.state.job}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary job"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="gen"
-                            value={this.state.gen}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary gen"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="mob"
-                            value={this.state.mob}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary mobile"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="pgm"
-                            value={this.state.pgm}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary pgm"
-                        />
-                        <br />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="pass"
-                            value={this.state.pass}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary passbook"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="bank"
-                            value={this.state.bank}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary bank"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="branch"
-                            value={this.state.branch}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary branch name"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="r_out"
-                            value={this.state.r_out}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary rout"
-                        />
-                        <br />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_1"
-                            value={this.state.mob_1}
-                            onChange={this.onChange}
-                            placeholder="2nd mobile no"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="mob_own"
-                            value={this.state.mob_own}
-                            onChange={this.onChange}
-                            placeholder="owner of the mobile"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="ben_sts"
-                            value={this.state.ben_sts}
-                            onChange={this.onChange}
-                            placeholder="beneficiary sts"
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="nid_sts"
-                            value={this.state.nid_sts}
-                            onChange={this.onChange}
-                            placeholder="nid sts"
-                        />
-                        <br />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="a_sts"
-                            value={this.state.a_sts}
-                            onChange={this.onChange}
-                            placeholder="Approval Status "
-                        />
-                        &nbsp; &nbsp; &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="date"
-                            label="date of birth"
-                            autoComplete="off"
-                            name="dob"
-                            value={this.state.dob}
-                            onChange={this.onChange}
-                            placeholder="date of birth  "
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="date"
-                            autoComplete="off"
-                            label="account created"
-                            name="accre"
-                            value={this.state.accre}
-                            onChange={this.onChange}
-                            placeholder="account created "
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        &nbsp; &nbsp;
-                        <TextField
-                            id="standard-basic"
-                            type="date"
-                            autoComplete="off"
-                            label="first allow"
-                            name="f_allow"
-                            value={this.state.f_allow}
-                            onChange={this.onChange}
-                            placeholder=" f_allow   "
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <br />
-                        &nbsp;
-                    </DialogContent>
-
-                    <DialogActions>
-                        <Button onClick={this.handleProductEditClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            disabled={
-                                this.state.name == "" ||
-                                this.state.desc == "" ||
-                                this.state.discount == "" ||
-                                this.state.price == ""
-                            }
-                            onClick={(e) => this.updateProduct()}
-                            color="primary"
-                            autoFocus>
-                            Edit Beneficiary
-                        </Button>
-                    </DialogActions>
-                </Dialog>
 
                 {/* Add Product */}
                 <Dialog
@@ -1272,11 +752,9 @@ export default class Dashboard extends Component {
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    {" "}
-                                    <b> Test Score </b>{" "}
+                                    <b> Test Score </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                    {" "}
                                     <b> Action </b>
                                 </TableCell>
                                 <TableCell align="center">
@@ -1315,7 +793,7 @@ export default class Dashboard extends Component {
                                             variant="outlined"
                                             color="primary"
                                             size="small"
-                                            onClick={(e) => this.handleProductEditOpen(row)}>
+                                            onClick={() => this.handleProductEditOpen(row)}>
                                             Edit
                                         </Button>
 
@@ -1360,6 +838,14 @@ export default class Dashboard extends Component {
                         color="primary"
                     />
                 </TableContainer>
+                {this.state.openProductEditModal && (
+                    <EditBeneficiary
+                        beneficiary={this.state.currentBeneficiary}
+                        isEditModalOpen={this.state.openProductEditModal}
+                        handleEditModalClose={this.handleProductEditClose}
+                        getBeneficiaries={this.getBeneficiaries}
+                    />
+                )}
             </div>
         );
     }
