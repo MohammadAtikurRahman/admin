@@ -9,8 +9,8 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", false);
-const { router } = require("./routes.js");
-const { randomNumberNotInUserCollection } = require("./helpers/number");
+const {router} = require("./routes.js");
+const {randomNumberNotInUserCollection} = require("./helpers/number");
 
 mongoose.connect("mongodb+srv://atik:1234@cluster0.qxnid.mongodb.net/test", {
     useNewUrlParser: true,
@@ -24,14 +24,14 @@ const user = require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
 const PORT = process.env.PORT;
-app.use(express.json({limit: '50mb'}));
+app.use(express.json({limit: "50mb"}));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
 });
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 const dir = "./uploads";
 const upload = multer({
@@ -65,46 +65,6 @@ app.use(
 );
 
 app.use(router);
-
-app.put('/updateBeneficiary/:id', async (req, res) => {
-    try {
-      const updatedBeneficiary = await user.findOneAndUpdate(
-        { "beneficiary._id": req.params.id },
-        { 
-          $set: { 
-            
-            "beneficiary.$.name": req.body.name,
-            // add more fields to update here
-          }
-        },
-        { new: true }
-      );
-  
-      if (!updatedBeneficiary) {
-        return res.status(404).json({ error: "Beneficiary not found" });
-      }
-  
-      return res.status(200).json({ updatedBeneficiary });
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  });
-  
-
-
-
-
-app.delete("/beneficiary/:id", (req, res) => {
-    user.findOneAndUpdate({}, { $pull: { beneficiary: { _id: req.params.id } } }, (err, data) => {
-      if (err) return res.status(400).send(err);
-      if (!data) return res.status(404).send("Beneficiary not found");
-      res.send("Beneficiary deleted successfully");
-    });
-  });
-  
-
-
-
 app.use("/", (req, res, next) => {
     try {
         if (
@@ -160,7 +120,7 @@ app.post("/register", async (req, res) => {
         const userId = await randomNumberNotInUserCollection();
         console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({ username: req.body.username }, (err, data) => {
+            user.find({username: req.body.username}, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
@@ -313,7 +273,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.beneficiaryId) {
-            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+            user.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
@@ -351,7 +311,7 @@ app.get("/get-product", (req, res) => {
         });
         if (req.query && req.query.search) {
             query["$and"].push({
-                name: { $regex: req.query.search },
+                name: {$regex: req.query.search},
             });
         }
         const perPage = 5;
@@ -475,46 +435,68 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own");
 
-
     const data = users;
     const data1 = users;
 
-    const formatted_data = data[0]
-    extact_data = formatted_data['beneficiary']
-
+    const formatted_data = data[0];
+    extact_data = formatted_data["beneficiary"];
 
     extact_data.forEach(item => {
-
         if (item.timeanddate) {
-
-
             const date = item.timeanddate;
 
             var dateString = date.toLocaleString();
-            var date_time = dateString.split(' ');
+            var date_time = dateString.split(" ");
 
             var options = {
                 hour: "numeric",
                 minute: "numeric",
                 second: "numeric",
-                hour12: true
+                hour12: true,
             };
 
-            const time = date_time[4]
+            const time = date_time[4];
             var timeArray = time.split(":");
             var hour = parseInt(timeArray[0]);
             var minute = timeArray[1];
             var second = timeArray[2];
-            var amPm = hour >= 12 ? 'PM' : 'AM';
+            var amPm = hour >= 12 ? "PM" : "AM";
             hour = hour % 12;
             hour = hour ? hour : 12;
-            console.log(date_time[0] +  ' ' + date_time[2] + ' ' + date_time[1] + ' ' + date_time[3] + ' '+hour + ':' + minute + ':' + second + ' ' + amPm);
-           
+            console.log(
+                date_time[0] +
+                    " " +
+                    date_time[2] +
+                    " " +
+                    date_time[1] +
+                    " " +
+                    date_time[3] +
+                    " " +
+                    hour +
+                    ":" +
+                    minute +
+                    ":" +
+                    second +
+                    " " +
+                    amPm,
+            );
 
-           
-            item.timeanddate = date_time[0] +  ' ' + date_time[2] + ' ' + date_time[1] + ' ' + date_time[3] + ' '+hour + ':' + minute + ':' + second + ' ' + amPm;
-
-
+            item.timeanddate =
+                date_time[0] +
+                " " +
+                date_time[2] +
+                " " +
+                date_time[1] +
+                " " +
+                date_time[3] +
+                " " +
+                hour +
+                ":" +
+                minute +
+                ":" +
+                second +
+                " " +
+                amPm;
         }
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
@@ -525,33 +507,8 @@ app.get("/get-testscore", async (req, res) => {
         }
     });
 
-
     return res.status(200).json(extact_data);
-
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user
@@ -564,25 +521,17 @@ app.get("/get-beneficiary", async (req, res) => {
 
         .select("-beneficiary.test");
 
-
-
-
     const data = users;
     const data1 = users;
-    const formatted_data = data[0]
-
-
-
-
+    const formatted_data = data[0];
 
     //   const formatted_data1= data1[1]
 
     // extact_data1 = formatted_data1['beneficiary']
 
-    extact_data = formatted_data['beneficiary']
+    extact_data = formatted_data["beneficiary"];
 
     // let obj3 = Object.assign(extact_data, extact_data1);
-
 
     //  console.log(obj3)
 
@@ -623,9 +572,9 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({ success: true, data: newData });
+        res.status(201).json({success: true, data: newData});
     } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({success: false});
     }
 });
 

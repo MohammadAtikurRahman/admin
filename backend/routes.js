@@ -5,6 +5,7 @@ const {getEnumerator, userLogin} = require("./controllers/enumeratorController")
 
 const {
     addBeneficiary,
+    updateBeneficiary,
     getBeneficiaries,
     beneficiaryLogin,
     saveTestScore,
@@ -12,12 +13,16 @@ const {
     benenScore,
     addBeneficiaryScore,
     addBeneficiaryInBulk,
+    deleteBeneficiary,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
 
 router.get("/beneficiary", getBeneficiaries);
+router.patch("/beneficiary/:id", updateBeneficiary);
 router.post("/beneficiary/add", addBeneficiary);
+router.delete("/beneficiary/:id", deleteBeneficiary);
+
 router.post("/beneficiary/add/bulk", addBeneficiaryInBulk);
 
 router.post("/save-test/add", saveTest);

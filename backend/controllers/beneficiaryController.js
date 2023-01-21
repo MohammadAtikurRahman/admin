@@ -22,6 +22,97 @@ async function addBeneficiary(req, res) {
     return res.status(200).json({user: user});
 }
 
+async function updateBeneficiary(req, res) {
+    const {
+        name,
+        accre,
+        age,
+        bank,
+        ben_id,
+        ben_nid,
+        ben_sts,
+        beneficiaryId,
+        branch,
+        dis,
+        dob,
+        duration,
+        f_allow,
+        f_nm,
+        gen,
+        job,
+        m_nm,
+        mob,
+        mob_1,
+        mob_own,
+        nid_sts,
+        pass,
+        pgm,
+        r_out,
+        relgn,
+        score1,
+        sl,
+        sub_dis,
+        test,
+        u_nm,
+        uni,
+        vill,
+    } = req.body.beneficiary;
+    const updatedBeneficiary = await User.findOneAndUpdate(
+        {"beneficiary._id": req.params.id},
+        {
+            $set: {
+                "beneficiary.$.name": name,
+                "beneficiary.$.accre": accre,
+                "beneficiary.$.age": age,
+                "beneficiary.$.bank": bank,
+                "beneficiary.$.ben_id": ben_id,
+                "beneficiary.$.ben_nid": ben_nid,
+                "beneficiary.$.ben_sts": ben_sts,
+                "beneficiary.$.beneficiaryId": beneficiaryId,
+                "beneficiary.$.branch": branch,
+                "beneficiary.$.dis": dis,
+                "beneficiary.$.dob": dob,
+                "beneficiary.$.duration": duration,
+                "beneficiary.$.f_allow": f_allow,
+                "beneficiary.$.f_nm": f_nm,
+                "beneficiary.$.gen": gen,
+                "beneficiary.$.job": job,
+                "beneficiary.$.m_nm": m_nm,
+                "beneficiary.$.mob": mob,
+                "beneficiary.$.mob_1": mob_1,
+                "beneficiary.$.mob_own": mob_own,
+                "beneficiary.$.name": name,
+                "beneficiary.$.nid_sts": nid_sts,
+                "beneficiary.$.pass": pass,
+                "beneficiary.$.pgm": pgm,
+                "beneficiary.$.r_out": r_out,
+                "beneficiary.$.relgn": relgn,
+                "beneficiary.$.score1": score1,
+                "beneficiary.$.sl": sl,
+                "beneficiary.$.sub_dis": sub_dis,
+                "beneficiary.$.test": test,
+                "beneficiary.$.u_nm": u_nm,
+                "beneficiary.$.uni": uni,
+                "beneficiary.$.vill": vill,
+            },
+        },
+        {new: true},
+    );
+
+    if (!updatedBeneficiary) {
+        return res.status(404).json({error: "Beneficiary not found"});
+    }
+
+    return res.status(200).json({updatedBeneficiary});
+}
+
+async function deleteBeneficiary(req, res) {
+    User.findOneAndUpdate({}, {$pull: {beneficiary: {_id: req.params.id}}}, (err, data) => {
+        if (err) return res.status(400).send(err);
+        if (!data) return res.status(404).send("Beneficiary not found");
+        res.send("Beneficiary deleted successfully");
+    });
+}
 async function addBeneficiaryInBulk(req, res) {
     let user = jwt_decode(req.body.token);
     for (let i = 0; i < req.body.beneficiary.length; i++) {
@@ -209,4 +300,6 @@ module.exports = {
     addBeneficiaryScore,
     saveTestScore,
     saveTest,
+    updateBeneficiary,
+    deleteBeneficiary,
 };
