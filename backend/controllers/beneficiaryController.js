@@ -1,7 +1,7 @@
-const { request } = require("express");
+const {request} = require("express");
 const jwt_decode = require("jwt-decode");
-const { randomNumberNotInBeneficiaryCollection } = require("../helpers/number");
-const { findById, findOneAndUpdate, findByIdAndUpdate } = require("../model/user");
+const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
+const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -17,11 +17,11 @@ async function addBeneficiary(req, res) {
 
     user = await User.findByIdAndUpdate(
         user.id,
-        { $push: { beneficiary: req.body.beneficiary } },
-        { new: true },
+        {$push: {beneficiary: req.body.beneficiary}},
+        {new: true},
     );
 
-    return res.status(200).json({ user: user });
+    return res.status(200).json({user: user});
 }
 
 async function updateBeneficiary(req, res) {
@@ -60,7 +60,7 @@ async function updateBeneficiary(req, res) {
         vill,
     } = req.body.beneficiary;
     const updatedBeneficiary = await User.findOneAndUpdate(
-        { "beneficiary._id": req.params.id },
+        {"beneficiary._id": req.params.id},
         {
             $set: {
                 "beneficiary.$.name": name,
@@ -98,18 +98,18 @@ async function updateBeneficiary(req, res) {
                 "beneficiary.$.vill": vill,
             },
         },
-        { new: true },
+        {new: true},
     );
 
     if (!updatedBeneficiary) {
-        return res.status(404).json({ error: "Beneficiary not found" });
+        return res.status(404).json({error: "Beneficiary not found"});
     }
 
-    return res.status(200).json({ updatedBeneficiary });
+    return res.status(200).json({updatedBeneficiary});
 }
 
 async function deleteBeneficiary(req, res) {
-    User.findOneAndUpdate({}, { $pull: { beneficiary: { _id: req.params.id } } }, (err, data) => {
+    User.findOneAndUpdate({}, {$pull: {beneficiary: {_id: req.params.id}}}, (err, data) => {
         if (err) return res.status(400).send(err);
         if (!data) return res.status(404).send("Beneficiary not found");
         res.send("Beneficiary deleted successfully");
@@ -120,12 +120,12 @@ async function addBeneficiaryInBulk(req, res) {
     for (let i = 0; i < req.body.beneficiary.length; i++) {
         user = await User.findByIdAndUpdate(
             user.id,
-            { $push: { beneficiary: req.body.beneficiary[i] } },
-            { new: true },
+            {$push: {beneficiary: req.body.beneficiary[i]}},
+            {new: true},
         );
     }
 
-    return res.status(200).json({ user: user });
+    return res.status(200).json({user: user});
 }
 
 async function saveTest(req, res) {
@@ -140,7 +140,7 @@ async function saveTest(req, res) {
     let beneficiary = [...user.beneficiary, req.body.beneficiary];
     console.log(beneficiary);
 
-    user = await User.findByIdAndUpdate(user._id, { beneficiary }, { new: true })
+    user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true})
         .select("-_id")
         .select("-id")
         .select("-username")
@@ -153,17 +153,17 @@ async function saveTest(req, res) {
     // // extact_data = formatted_data['beneficiary']
     //  console.log("done",user)
 
-    return res.status(200).json({ user: user });
+    return res.status(200).json({user: user});
 }
 
 async function getBeneficiaries(req, res) {
     const user = jwt_decode(req.headers?.token);
     let beneficiaries = (await User.findById(user.id))?.toJSON()?.beneficiary;
-    return res.status(200).json({ beneficiaries });
+    return res.status(200).json({beneficiaries});
 }
 
-async function getToken({ beneficiaryId, userId }) {
-    let token = await jwt.sign({ beneficiaryId, userId }, "shhhhh11111", { expiresIn: "1d" });
+async function getToken({beneficiaryId, userId}) {
+    let token = await jwt.sign({beneficiaryId, userId}, "shhhhh11111", {expiresIn: "1d"});
     return token;
 }
 
@@ -201,12 +201,12 @@ async function beneficiaryLogin(req, res) {
     // return res.status(400).json({error: "Credentials does not exists"});
 
     console.log(req.body);
-    let user = await User.findOne({ userId: req.body.userId });
+    let user = await User.findOne({userId: req.body.userId});
     if (!req.body || !req.body.userId || !req.body.password) {
-        return res.status(400).json({ error: "Username or Password missing" });
+        return res.status(400).json({error: "Username or Password missing"});
     }
     if (!user) {
-        return res.status(401).json({ error: "User Not Found" });
+        return res.status(401).json({error: "User Not Found"});
     }
     if (user.password === req.body.password) {
         let token = await getToken(user);
@@ -216,14 +216,14 @@ async function beneficiaryLogin(req, res) {
             status: true,
         });
     }
-    return res.status(500).json({ message: "Something went wrong." });
+    return res.status(500).json({message: "Something went wrong."});
 }
 
 async function addBeneficiaryScore(req, res) {
-    const { userId, beneficiaryId } = req.body;
+    const {userId, beneficiaryId} = req.body;
     console.log(req.body);
     let result = await User.findOneAndUpdate(
-        { userId: userId, "beneficiary.beneficiaryId": beneficiaryId },
+        {userId: userId, "beneficiary.beneficiaryId": beneficiaryId},
         {
             $set: {
                 "beneficiary.$.score1": req.body?.score1,
@@ -231,21 +231,18 @@ async function addBeneficiaryScore(req, res) {
                 "beneficiary.$.duration": req.body?.duration,
             },
         },
-        { new: true },
+        {new: true},
     );
     return res.status(200).json(result);
 }
-
-
-
 
 async function saveMultiScore(req, res) {
     const beneficiaries = req.body;
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let { userId, beneficiaryId, score1, score2, duration } = beneficiary;
+        let {userId, beneficiaryId, score1, score2, duration} = beneficiary;
         let result = await User.findOneAndUpdate(
-            { userId: userId, "beneficiary.beneficiaryId": beneficiaryId },
+            {userId: userId, "beneficiary.beneficiaryId": beneficiaryId},
             {
                 $set: {
                     "beneficiary.$.score1": score1,
@@ -253,20 +250,15 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.duration": duration,
                 },
             },
-            { new: true },
+            {new: true},
         );
     }
-    return res.status(200).json({ message: "Multiple beneficiaries updated" });
-
+    return res.status(200).json({message: "Multiple beneficiaries updated"});
 }
 
-
-
-
-
 async function benenScore(req, res) {
-    const { userId, beneficiaryId } = req.body;
-    const beneficiaries = (await User.findOne({ userId: userId })).toJSON().beneficiary;
+    const {userId, beneficiaryId} = req.body;
+    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
 
     let index = getBeneficiaryIndex(beneficiaries, beneficiaryId);
 
@@ -277,23 +269,23 @@ async function benenScore(req, res) {
     if (index !== null) beneficiaries[index]["duration"] = req.body?.duration;
 
     const user = (
-        await User.findOneAndUpdate({ userId: userId }, { beneficiary: beneficiaries }, { new: true })
+        await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
     ).toJSON();
 
     console.log(user);
 
-    const whoLoggedIn = await User.findOne({ userId: userId });
+    const whoLoggedIn = await User.findOne({userId: userId});
 
     if (existsInArray(beneficiaries, beneficiaryId)) {
-        return res.status(200).json({ whoLoggedIn });
+        return res.status(200).json({whoLoggedIn});
     }
 
-    return res.status(400).json({ error: "Credentials does not exists" });
+    return res.status(400).json({error: "Credentials does not exists"});
 }
 
 async function saveTestScore(req, res) {
     const data = jwt_decode(req.body.beneficiaryToken);
-    const beneficiaries = (await User.findOne({ userId: data.userId })).toJSON().beneficiary;
+    const beneficiaries = (await User.findOne({userId: data.userId})).toJSON().beneficiary;
 
     console.log(beneficiaries);
 
@@ -310,15 +302,15 @@ async function saveTestScore(req, res) {
 
     const user = (
         await User.findOneAndUpdate(
-            { userId: data.userId },
-            { beneficiary: beneficiaries },
-            { new: true },
+            {userId: data.userId},
+            {beneficiary: beneficiaries},
+            {new: true},
         )
     ).toJSON();
 
     console.log(user);
 
-    return res.json({ message: "score saved", beneficiary: user.beneficiary[index] });
+    return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
 
 module.exports = {
