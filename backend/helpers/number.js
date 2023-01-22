@@ -1,7 +1,7 @@
 const User = require("../model/user");
 
 function getRandomNumber() {
-    return Math.floor(Math.random() * 90000) + 10000;
+    return Math.floor(Math.random() * 90000000) + 10000000;
 }
 
 async function randomNumberNotInUserCollection() {

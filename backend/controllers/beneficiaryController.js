@@ -11,7 +11,12 @@ async function addBeneficiary(req, res) {
 
     const beneficiaryId = await randomNumberNotInBeneficiaryCollection(user.beneficiary);
 
-    req.body.beneficiary["beneficiaryId"] = beneficiaryId;
+    if (
+        req.body.beneficiary?.beneficiaryId === null ||
+        req.body.beneficiary?.beneficiary.beneficiaryId === ""
+    ) {
+        req.body.beneficiary["beneficiaryId"] = beneficiaryId;
+    }
 
     user = await User.findByIdAndUpdate(
         user.id,
