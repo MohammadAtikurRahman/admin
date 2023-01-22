@@ -35,7 +35,7 @@ const beneficiarySchema = new Schema(
         relgn: String,
         job: String,
         gen: String,
-        mob: Number,
+        mob: String,
         pgm: String,
         pass: Number,
         bank: String,
