@@ -60,7 +60,21 @@ export function AddBeneficiary(props) {
             aria-describedby="alert-dialog-description"
             maxWidth="xl">
             <DialogContent style={{ padding: "90px" }}>
-                <DialogTitle id="alert-dialog-title">Edit Beneficiary</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Add Beneficiary</DialogTitle>
+
+                <TextField
+                    id="standard-basic"
+                    type="text"
+                    autoComplete="off"
+                    name="beneficiaryId"
+                    value={beneficiary.beneficiaryId}
+                    onChange={update}
+                    placeholder="Beneficiary Id"
+                    required
+                    fullWidth
+                />
+                <br />
+                <br />
                 <TextField
                     id="standard-basic"
                     type="text"
@@ -279,7 +293,7 @@ export function AddBeneficiary(props) {
                     <option value="" disabled>
                         Beneficiary Age
                     </option>
-                    <option value="40">40</option>
+                    <option value="" >Age</option>
                     <option value="41">41</option>
                     <option value="42">42</option>
                     <option value="43">43</option>
