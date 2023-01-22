@@ -234,6 +234,34 @@ async function addBeneficiaryScore(req, res) {
     return res.status(200).json(result);
 }
 
+
+
+
+async function saveMultiScore(req, res) {
+    const beneficiaries = req.body;
+    for (let i = 0; i < beneficiaries.length; i++) {
+        let beneficiary = beneficiaries[i];
+        let { userId, beneficiaryId, score1, score2, duration } = beneficiary;
+        let result = await User.findOneAndUpdate(
+            { userId: userId, "beneficiary.beneficiaryId": beneficiaryId },
+            {
+                $set: {
+                    "beneficiary.$.score1": score1,
+                    "beneficiary.$.score2": score2,
+                    "beneficiary.$.duration": duration,
+                },
+            },
+            { new: true },
+        );
+    }
+    return res.status(200).json({ message: "Multiple beneficiaries updated" });
+
+}
+
+
+
+
+
 async function benenScore(req, res) {
     const {userId, beneficiaryId} = req.body;
     const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
@@ -302,4 +330,5 @@ module.exports = {
     saveTest,
     updateBeneficiary,
     deleteBeneficiary,
+    saveMultiScore,
 };

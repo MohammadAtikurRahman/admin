@@ -14,6 +14,8 @@ const {
     addBeneficiaryScore,
     addBeneficiaryInBulk,
     deleteBeneficiary,
+    saveMultiScore,
+    
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -29,6 +31,11 @@ router.post("/save-test/add", saveTest);
 
 router.post("/get-login", beneficiaryLogin); // beneficiary login
 router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
+
+router.post("/get-saved-multi-score",saveMultiScore ); // beneficiary login
+
+
+
 router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
 /* admin login api */
