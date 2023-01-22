@@ -353,6 +353,21 @@ export default class Dashboard extends Component {
                     maxWidth="xl">
                     <DialogContent style={{ padding: "90px" }}>
                         <DialogTitle id="alert-dialog-title" >Add Beneficiary</DialogTitle>
+                       
+                        <TextField
+                            id="standard-basic"
+                            type="text"
+                            autoComplete="off"
+                            name="beneficiaryId"
+                            value={this.state.beneficiaryId}
+                            onChange={this.onChange}
+                            placeholder="Beneficiary Id"
+                            required
+                            fullWidth
+                        />
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+                        <br />
                         <TextField
                             id="standard-basic"
                             type="text"
