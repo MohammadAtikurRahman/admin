@@ -15,14 +15,13 @@ const {
     addBeneficiaryInBulk,
     deleteBeneficiary,
     saveMultiScore,
-    
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
 
 router.get("/beneficiary", getBeneficiaries);
 router.patch("/beneficiary/:id", updateBeneficiary);
-router.post("/beneficiary/add", addBeneficiary);
+router.post("/beneficiary", addBeneficiary);
 router.delete("/beneficiary/:id", deleteBeneficiary);
 
 router.post("/beneficiary/add/bulk", addBeneficiaryInBulk);
@@ -32,9 +31,7 @@ router.post("/save-test/add", saveTest);
 router.post("/get-login", beneficiaryLogin); // beneficiary login
 router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
 
-router.post("/get-saved-multi-score",saveMultiScore ); // beneficiary login
-
-
+router.post("/get-saved-multi-score", saveMultiScore); // beneficiary login
 
 router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
