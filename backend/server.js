@@ -301,68 +301,68 @@ app.post("/delete-product", (req, res) => {
 });
 
 /*Api to get and search product with pagination and search by name*/
-app.get("/get-product", (req, res) => {
-    try {
-        const query = {};
-        query["$and"] = [];
-        query["$and"].push({
-            is_delete: false,
-            user_id: req.user.id,
-        });
-        if (req.query && req.query.search) {
-            query["$and"].push({
-                name: {$regex: req.query.search},
-            });
-        }
-        const perPage = 5;
-        const page = req.query.page || 1;
-        product
-            .find(query, {
-                date: 1,
-                name: 1,
-                id: 1,
-                desc: 1,
-                price: 1,
-                discount: 1,
-                image: 1,
-            })
-            .skip(perPage * page - perPage)
-            .limit(perPage)
-            .then(data => {
-                product
-                    .find(query)
-                    .countDocuments()
-                    .then(countDocuments => {
-                        if (data && data.length > 0) {
-                            res.status(200).json({
-                                status: true,
-                                title: "Product retrived.",
-                                products: data,
-                                current_page: page,
-                                total: countDocuments,
-                                pages: Math.ceil(countDocuments / perPage),
-                            });
-                        } else {
-                            res.status(400).json({
-                                errorMessage: "There is no beneficiary!",
-                                status: false,
-                            });
-                        }
-                    });
-            })
-            .catch(err => {
-                res.status(400).json({
-                    errorMessage: err.message || err,
-                    status: false,
-                });
-            });
-    } catch (e) {
-        res.status(400).json({
-            errorMessage: "Something went wrong!",
-            status: false,
-        });
-    }
-});
+// app.get("/get-product", (req, res) => {
+//     try {
+//         const query = {};
+//         query["$and"] = [];
+//         query["$and"].push({
+//             is_delete: false,
+//             user_id: req.user.id,
+//         });
+//         if (req.query && req.query.search) {
+//             query["$and"].push({
+//                 name: {$regex: req.query.search},
+//             });
+//         }
+//         const perPage = 5;
+//         const page = req.query.page || 1;
+//         product
+//             .find(query, {
+//                 date: 1,
+//                 name: 1,
+//                 id: 1,
+//                 desc: 1,
+//                 price: 1,
+//                 discount: 1,
+//                 image: 1,
+//             })
+//             .skip(perPage * page - perPage)
+//             .limit(perPage)
+//             .then(data => {
+//                 product
+//                     .find(query)
+//                     .countDocuments()
+//                     .then(countDocuments => {
+//                         if (data && data.length > 0) {
+//                             res.status(200).json({
+//                                 status: true,
+//                                 title: "Product retrived.",
+//                                 products: data,
+//                                 current_page: page,
+//                                 total: countDocuments,
+//                                 pages: Math.ceil(countDocuments / perPage),
+//                             });
+//                         } else {
+//                             res.status(400).json({
+//                                 errorMessage: "There is no beneficiary!",
+//                                 status: false,
+//                             });
+//                         }
+//                     });
+//             })
+//             .catch(err => {
+//                 res.status(400).json({
+//                     errorMessage: err.message || err,
+//                     status: false,
+//                 });
+//             });
+//     } catch (e) {
+//         res.status(400).json({
+//             errorMessage: "Something went wrong!",
+//             status: false,
+//         });
+//     }
+// });
 
 app.get("/api", (req, res) => {
     user.find((err, val) => {

@@ -344,7 +344,7 @@ export default class Dashboard extends Component {
                     </Button>
                 </div>
 
-                {/* Add Product */}
+                {/* Add Beneficiary */}
                 <Dialog
                     open={this.state.openProductModal}
                     onClose={this.handleProductClose}
@@ -352,7 +352,7 @@ export default class Dashboard extends Component {
                     aria-describedby="alert-dialog-description"
                     maxWidth="xl">
                     <DialogContent style={{ padding: "90px" }}>
-                        <DialogTitle id="alert-dialog-title">Add Beneficiary</DialogTitle>
+                        <DialogTitle id="alert-dialog-title" >Add Beneficiary</DialogTitle>
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -395,15 +395,7 @@ export default class Dashboard extends Component {
                         />
                         <br />
                         <br />
-                        {/* <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="age"
-                            value={this.state.age}
-                            onChange={this.onChange}
-                            placeholder="BeneFiciary Age"
-                        /> */}
+                   
                         <TextField
                             id="standard-basic"
                             type="text"
@@ -621,26 +613,9 @@ export default class Dashboard extends Component {
                             <option value="Hindu">Hindu</option>
                             <option value="Other">Other</option>
                         </select>
-                        {/* <TextField
-                            id="standard-basic"
-                            type="number"
-                            autoComplete="off"
-                            name="ben_nid"
-                            value={this.state.ben_nid}
-                            onChange={this.onChange}
-                            placeholder="Beneficiary NID"
-                            required
-                        /> */}
+                
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                        {/* <TextField
-                            id="standard-basic"
-                            type="text"
-                            autoComplete="off"
-                            name="a_sts"
-                            value={this.state.a_sts}
-                            onChange={this.onChange}
-                            placeholder="Approval Status "
-                        /> */}
+                   
                         <br />
                         <br />
                         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -650,7 +625,7 @@ export default class Dashboard extends Component {
                             label="Date of Birth"
                             autoComplete="off"
                             name="dob"
-                            value={moment(this.state.dob).format("DD/MM/YYYY")}
+                            value={this.state.dob}
                             onChange={this.onChange}
                             InputLabelProps={{
                                 shrink: true,
@@ -696,15 +671,22 @@ export default class Dashboard extends Component {
                             }}
                             placeholder=" f_allow   "
                         />
-                        <br />
                         &nbsp;
                     </DialogContent>
 
-                    <DialogActions>
-                        <Button onClick={this.handleProductClose} color="primary">
+                    <DialogActions style={{ paddingRight: "80px", paddingBottom: "50px"}}>
+                        <Button
+                        
+                        style={{ backgroundColor: '#FF0063', color: 'white' }}
+
+                        onClick={this.handleProductClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={(e) => this.addProduct()} color="primary" autoFocus>
+                        <Button 
+                        
+                        style={{ backgroundColor: '#3D1766', color: 'white' }}
+
+                        onClick={(e) => this.addProduct()} color="primary" autoFocus>
                             Add Beneficiary
                         </Button>
                     </DialogActions>
@@ -729,13 +711,7 @@ export default class Dashboard extends Component {
                                 style: { paddingRight: "5px", paddingLeft: "50px" },
                             }}
                         />
-                        {/* <Button
-                            variant="contained"
-                            color="primary"
-                            className="search-button"
-                            style={{ backgroundColor: "#243763" }}>
-                            <SearchIcon className="search-icon" />
-                        </Button> */}
+                    
                     </div>
 
                     <Table aria-label="simple table">
