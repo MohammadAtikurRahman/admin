@@ -8,29 +8,20 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import swal from "sweetalert";
-import moment from "moment";
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
-export function EditBeneficiary(props) {
+export function AddBeneficiary(props) {
     const { isEditModalOpen, handleEditModalClose, getBeneficiaries } = props;
-    const [beneficiary, setBeneficiary] = useState(props.beneficiary);
+    const [beneficiary, setBeneficiary] = useState({});
 
-    async function updateBeneficiary() {
+    async function addBeneficiary() {
         console.log(beneficiary);
 
-        /*
-        axios
-            .patch(baseUrl + "beneficiary/" + beneficiary._id, { beneficiary })
-            .then((res) => {
-                       })
-            .catch((err) => {
-                           });
-            */
-
-        const res = await axios.patch("http://localhost:2000/beneficiary/" + beneficiary._id, {
+        const res = await axios.post(baseUrl + "/beneficiary/", {
             beneficiary: beneficiary,
+            token: localStorage.getItem("token"),
         });
 
         if (res.status === 200) {
@@ -397,11 +388,11 @@ export function EditBeneficiary(props) {
                     Cancel
                 </Button>
                 <Button
-                    onClick={updateBeneficiary}
+                    onClick={addBeneficiary}
                     color="primary"
                     autoFocus
                     style={{ backgroundColor: "#3D1766", color: "white" }}>
-                    Updated Beneficiary
+                    Add Beneficiary
                 </Button>
             </DialogActions>
         </Dialog>
