@@ -10,9 +10,6 @@ var salt = bcrypt.genSaltSync(10);
 
 const baseUrl = process.env.REACT_APP_URL;
 
-
-
-
 export default function Login(props) {
     const [user, setUser] = useState({
         username: "",
