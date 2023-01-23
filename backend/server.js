@@ -8,7 +8,7 @@ const multer = require("multer"),
     bodyParser = require("body-parser"),
     path = require("path");
 
-const mongoose = require("mongoose").set("debug", false);
+const mongoose = require("mongoose").set("debug", true);
 const {router} = require("./routes.js");
 const {randomNumberNotInUserCollection} = require("./helpers/number");
 
@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI_LOCAL, {
     useUnifiedTopology: true,
     useFindAndModify: false,
 });
+
 
 const fs = require("fs");
 const product = require("./model/product.js");
