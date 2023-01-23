@@ -8,8 +8,6 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import swal from "sweetalert";
-import moment from "moment";
-
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
@@ -19,17 +17,7 @@ export function EditBeneficiary(props) {
 
     async function updateBeneficiary() {
         console.log(beneficiary);
-
-        /*
-        axios
-            .patch(baseUrl + "beneficiary/" + beneficiary._id, { beneficiary })
-            .then((res) => {
-                       })
-            .catch((err) => {
-                           });
-            */
-
-        const res = await axios.patch("http://localhost:2000/beneficiary/" + beneficiary._id, {
+        const res = await axios.patch(baseUrl + beneficiary._id, {
             beneficiary: beneficiary,
         });
 
