@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import swal from "sweetalert";
+import moment from "moment";
+
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
@@ -17,7 +19,7 @@ export function EditBeneficiary(props) {
 
     async function updateBeneficiary() {
         console.log(beneficiary);
-        const res = await axios.patch(baseUrl + beneficiary._id, {
+        const res = await axios.patch(baseUrl +"/beneficiary/" + beneficiary._id, {
             beneficiary: beneficiary,
         });
 
@@ -258,7 +260,10 @@ export function EditBeneficiary(props) {
                     <option value="other">Other</option>
                 </select>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <select
+
+
+
+                   <select
                     id="standard-basic"
                     name="a_sts"
                     value={beneficiary.a_sts}
@@ -270,11 +275,14 @@ export function EditBeneficiary(props) {
                         background: "white",
                     }}>
                     <option value="" disabled>
-                        Approval Status
+                        Select Approval Status
                     </option>
                     <option value="Approved">Approved</option>
-                    <option value="Not Approved">Not Approvved</option>
+                    <option value="Not Approved">Not Approved</option>
                 </select>
+
+
+
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 <select
                     id="standard-basic"

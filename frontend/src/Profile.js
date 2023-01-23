@@ -70,8 +70,8 @@ export default function Profile() {
             <div className="row  p-3">
                 <div className="col">
                     <div className="input-group">
-                        <span className="input-group-text">Ben ETC</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> </label>
+                        <span className="input-group-text">Approverd status</span>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}>{userProfile?.a_sts} </label>
                     </div>
                 </div>
                 <div className="col">
@@ -107,7 +107,7 @@ export default function Profile() {
                 <div className="col-4">
                     <div className="input-group">
                         <span className="input-group-text">Father Name</span>
-                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.ben_id}</label>
+                        <label style={{ paddingTop: "10px", paddingLeft: "10px" }}> {userProfile?.f_nm}</label>
 
                     </div>
                 </div>

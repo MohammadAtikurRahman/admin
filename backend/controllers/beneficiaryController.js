@@ -58,6 +58,7 @@ async function updateBeneficiary(req, res) {
         u_nm,
         uni,
         vill,
+        a_sts,
     } = req.body.beneficiary;
     const updatedBeneficiary = await User.findOneAndUpdate(
         {"beneficiary._id": req.params.id},
@@ -96,6 +97,8 @@ async function updateBeneficiary(req, res) {
                 "beneficiary.$.u_nm": u_nm,
                 "beneficiary.$.uni": uni,
                 "beneficiary.$.vill": vill,
+                "beneficiary.$.a_sts": a_sts,
+
             },
         },
         {new: true},
@@ -148,10 +151,7 @@ async function saveTest(req, res) {
         .select("-created_at")
         .select("-beneficiary.test");
 
-    // const data = user;
-    // const formatted_data = data[0]
-    // // extact_data = formatted_data['beneficiary']
-    //  console.log("done",user)
+  
 
     return res.status(200).json({user: user});
 }
@@ -186,19 +186,7 @@ function getBeneficiaryIndex(arr, beneficiaryId) {
 }
 
 async function beneficiaryLogin(req, res) {
-    // const {userId, beneficiaryId} = req.body;
 
-    // const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
-    // const whoLoggedIn = await User.findOne({userId: userId}).select("-beneficiary");
-
-    // console.log("2", whoLoggedIn);
-    // if (existsInArray(beneficiaries, beneficiaryId)) {
-    //     const token = await getToken({userId, beneficiaryId});
-
-    //     return res.status(200).json({beneficiaryToken: token, whoLoggedIn});
-    // }
-
-    // return res.status(400).json({error: "Credentials does not exists"});
 
     console.log(req.body);
     let user = await User.findOne({userId: req.body.userId});

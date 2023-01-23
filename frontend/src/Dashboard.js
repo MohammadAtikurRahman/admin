@@ -354,14 +354,7 @@ export default class Dashboard extends Component {
                                             variant="contained"
                                             color="primary"
                                             size="small">
-                                            {/* <MaterialLink
-                                                style={{
-                                                    textDecoration: "none",
-                                                    color: "white",
-                                                }}
-                                                href="/profile">
-                                                BeneFiciary Details
-                                            </MaterialLink> */}
+                
                                             <Link
                                                 style={{
                                                     textDecoration: "none",

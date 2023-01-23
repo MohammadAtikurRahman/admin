@@ -38,7 +38,7 @@ export default function Login(props) {
                 localStorage.setItem("user_id", res.data.id);
                 if (res.status === 200) navigate("/dashboard");
                 swal({
-                    text: "Successfully login",
+                    text: "Successfully Login",
                     icon: "success",
                     type: "success",
                     timer: 1000

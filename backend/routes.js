@@ -10,7 +10,7 @@ const {
     beneficiaryLogin,
     saveTestScore,
     saveTest,
-    benenScore,
+
     addBeneficiaryScore,
     addBeneficiaryInBulk,
     deleteBeneficiary,
