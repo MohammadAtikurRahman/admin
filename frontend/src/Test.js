@@ -6,7 +6,6 @@ import {
     TextField,
     Dialog,
     DialogActions,
-    LinearProgress,
     DialogTitle,
     DialogContent,
     TableBody,
@@ -20,8 +19,6 @@ import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import Papa from "papaparse";
 import json2csv from "json2csv";
 import { searchBeneficiary } from "./utils/search";
 
@@ -130,12 +127,7 @@ export default class Test extends Component {
             var enumerator_name = userDetails?.user;
 
             var enumerator_id = userDetails?.id;
-            // console.log(enumerator_name); urgent
-            // console.log(enumerator_id);
-
-            // const propertyNames = Object.keys(userDetails);
-
-            // console.log(propertyNames);
+          ;
         });
     };
 
@@ -1322,48 +1314,6 @@ export default class Test extends Component {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-
-
-                        {/* <TableBody>
-                            {  this.state?.filteredBeneficiary?.map((row, index) => (    
-
-                                  
-
-
-                                <TableRow key={index}>   
-                                    
-                                    <TableCell align="center">
-                                        {new Date(row.updatedAt).toLocaleString("en-GB", {
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            year: "numeric",
-                                        })}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {new Date(row.updatedAt).toLocaleString("en-GB", {
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                            hour12: true,
-                                        })}
-                                    </TableCell>
-                                    <TableCell align="center">{row.name}</TableCell>
-                                    <TableCell align="center" component="th" scope="row">
-                                        {row.beneficiaryId}
-                                    </TableCell>
-                                    <TableCell align="center">{row.score1}</TableCell>
-                                    <TableCell align="center">
-                                        {Math.floor(row.duration / 60)} Minute {row.duration % 60}{" "}
-                                        Seconds
-                                    </TableCell>
-                                    
-                                </TableRow>
-                            ))}
-                        </TableBody> */}
-
-
-
-
-
                         <TableBody>
                             {this.state?.filteredBeneficiary?.sort((a, b) => {
                                 const dateA = new Date(a.updatedAt);
