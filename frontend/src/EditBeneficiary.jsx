@@ -36,9 +36,10 @@ export function EditBeneficiary(props) {
         if (res.status === 200) {
             handleEditModalClose();
             swal({
-                text: res.data.title,
+                text: "Beneficiary Successfully Updated",
                 icon: "success",
                 type: "success",
+                timer: 3000
             });
             getBeneficiaries();
         } else {
@@ -402,7 +403,7 @@ export function EditBeneficiary(props) {
                 &nbsp;
             </DialogContent>
 
-            <DialogActions style={{ paddingRight: "80px", paddingBottom: "50px" }}>
+            <DialogActions style={{ paddingRight: "80px", paddingBottom: "30px" }}>
                 <Button
                     onClick={handleEditModalClose}
                     color="primary"

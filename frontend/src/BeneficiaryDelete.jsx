@@ -25,16 +25,21 @@ function BeneficiaryDelete({ row }) {
           try {
             const response = await axios.delete(baseUrl + `/beneficiary/${row._id}`);
             window.location.reload();
-            swal.fire(
-              'Deleted!',
-              'Your file has been deleted.',
-              'success'
-            )
+            setTimeout(function() {
+              swal.fire(
+                'Error!',
+                'Error deleting beneficiary.',
+                'error'
+              )
+            }, 5000);
+            
           } catch (error) {
             swal.fire(
               'Error!',
               'Error deleting beneficiary.',
-              'error'
+              'error',
+              
+
             )
           }
       } else if (

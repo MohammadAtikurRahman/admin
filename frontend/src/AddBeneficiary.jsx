@@ -27,9 +27,11 @@ export function AddBeneficiary(props) {
         if (res.status === 200) {
             handleEditModalClose();
             swal({
-                text: res.data.title,
+                text: "Beneficiary Successfully Added",
                 icon: "success",
                 type: "success",
+                timer: 2000
+
             });
             getBeneficiaries();
         } else {
