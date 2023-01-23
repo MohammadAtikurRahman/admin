@@ -1,27 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import env from "react-dotenv";
-
 import {
     Button,
-    TextField,
-    Dialog,
-    DialogActions,
-    LinearProgress,
-    DialogTitle,
-    DialogContent,
-    TableBody,
-    Table,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TableCell,
+  
 } from "@material-ui/core";
-import { Pagination } from "@material-ui/lab";
-import swal from "sweetalert";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
 export default function Profile() {
     const [persons, setPerson] = useState([]);
     const location = useLocation();
