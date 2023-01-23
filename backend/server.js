@@ -12,7 +12,7 @@ const mongoose = require("mongoose").set("debug", true);
 const {router} = require("./routes.js");
 const {randomNumberNotInUserCollection} = require("./helpers/number");
 
-mongoose.connect(process.env.MONGO_URI_LOCAL, {
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
