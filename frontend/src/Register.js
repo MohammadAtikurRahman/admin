@@ -18,7 +18,24 @@ export default class Register extends React.Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  
+  
+  
   register = () => {
+
+    // e.preventDefault();
+     
+ 
+
+    // if( typeof(beneficiary.beneficiaryId) === 'string') {
+    //     swal("Oops!", "Username Should be ", "error");
+    //     return;
+    // }
+
+
+
+
+
     
     if (this.state.password !== this.state.confirm_password) {
       swal({
