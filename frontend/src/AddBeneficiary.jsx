@@ -296,8 +296,8 @@ export function AddBeneficiary(props) {
                     <option value="" >
                         Select Gender
                     </option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option value="পুরুষ">Male</option>
+                    <option value="মহিলা">Female</option>
                     <option value="other">Other</option>
                 </select>
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
