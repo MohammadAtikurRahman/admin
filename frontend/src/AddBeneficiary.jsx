@@ -293,7 +293,7 @@ export function AddBeneficiary(props) {
                         color: "grey",
                         background: "white",
                     }}>
-                    <option value="" disabled>
+                    <option value="" >
                         Select Gender
                     </option>
                     <option value="male">Male</option>
@@ -312,7 +312,7 @@ export function AddBeneficiary(props) {
                         color: "grey",
                         background: "white",
                     }}>
-                    <option value="" disabled>
+                    <option value="" >
                         Approval Status
                     </option>
                     <option value="Approved">Approved</option>
@@ -330,7 +330,7 @@ export function AddBeneficiary(props) {
                         color: "grey",
                         background: "white",
                     }}>
-                    <option value="" disabled>
+                    <option value="" >
                         Beneficiary Age
                     </option>
                     <option value="" >Age</option>
@@ -367,7 +367,7 @@ export function AddBeneficiary(props) {
                         color: "grey",
                         background: "white",
                     }}>
-                    <option value="" disabled>
+                    <option value="" >
                         Beneficiary Religion
                     </option>
                     <option value="Islam">Islam</option>
