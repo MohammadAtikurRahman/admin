@@ -17,8 +17,28 @@ export function EditBeneficiary(props) {
     const { isEditModalOpen, handleEditModalClose, getBeneficiaries } = props;
     const [beneficiary, setBeneficiary] = useState(props.beneficiary);
 
-    async function updateBeneficiary() {
+    async function updateBeneficiary(e) {
         console.log(beneficiary);
+
+
+
+
+        e.preventDefault();
+     
+        if(!beneficiary.beneficiaryId) {
+            swal("Oops!", "Beneficiary Id is required!", "error");
+            return;
+        }
+
+        if(isNaN(beneficiary.beneficiaryId)) {
+            swal("Oops!", "Please enter a number", "error");
+            return;
+        }
+        if(!beneficiary.name) {
+            swal("Oops!", "Beneficiary Name is required!", "error");
+            return;
+        }
+
         const res = await axios.patch(baseUrl +"/beneficiary/" + beneficiary._id, {
             beneficiary: beneficiary,
         });

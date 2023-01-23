@@ -15,14 +15,36 @@ const baseUrl = process.env.REACT_APP_URL;
 export function AddBeneficiary(props) {
     const { isEditModalOpen, handleEditModalClose, getBeneficiaries } = props;
     const [beneficiary, setBeneficiary] = useState({});
+    const [error, setError] = useState(false);
 
-    async function addBeneficiary() {
+    async function addBeneficiary(e) {
         console.log(beneficiary);
+
+ 
+
+        e.preventDefault();
+     
+        if(!beneficiary.beneficiaryId) {
+            swal("Oops!", "Beneficiary Id is required!", "error");
+            return;
+        }
+
+        if(isNaN(beneficiary.beneficiaryId)) {
+            swal("Oops!", "Please enter a number", "error");
+            return;
+        }
+        if(!beneficiary.name) {
+            swal("Oops!", "Beneficiary Name is required!", "error");
+            return;
+        }
+
 
         const res = await axios.post(baseUrl + "/beneficiary/", {
             beneficiary: beneficiary,
             token: localStorage.getItem("token"),
         });
+
+       
 
         if (res.status === 200) {
             handleEditModalClose();
@@ -53,7 +75,16 @@ export function AddBeneficiary(props) {
         setBeneficiary((beneficiary) => {
             return { ...beneficiary, [name]: value };
         });
+        
     }
+    function checkNumber(e) {
+        if(isNaN(e.target.value)){
+            swal("Oops!", "Please enter a number", "error");
+        }
+    }
+    
+
+ 
     return (
         <Dialog
             open={isEditModalOpen}
@@ -71,9 +102,16 @@ export function AddBeneficiary(props) {
                     name="beneficiaryId"
                     value={beneficiary.beneficiaryId}
                     onChange={update}
+
+                    onBlur={checkNumber}
+
                     placeholder="Beneficiary Id"
                     required
+                    pattern="[0-9]*"
+
                     fullWidth
+
+                   
                 />
                 <br />
                 <br />
