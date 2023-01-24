@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import swal from "sweetalert";
+import Swal from 'sweetalert2'
 
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
@@ -48,11 +49,10 @@ export function AddBeneficiary(props) {
 
         if (res.status === 200) {
             handleEditModalClose();
-            swal({
+            Swal.fire({
                 text: "Beneficiary Successfully Added",
                 icon: "success",
                 type: "success",
-                timer: 2000
 
             });
             getBeneficiaries();
