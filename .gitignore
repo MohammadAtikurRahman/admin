@@ -132,3 +132,4 @@ dist
 *.swp
 *.swo
 package-lock.json
+.env
