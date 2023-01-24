@@ -2,6 +2,7 @@ import { useState } from "react";
 import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 
 const axios = require("axios");
@@ -37,15 +38,16 @@ export default function Login(props) {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("user_id", res.data.id);
                 if (res.status === 200) navigate("/dashboard");
-                swal({
-                    text: "Successfully Login",
-                    icon: "success",
-                    type: "success",
+                Swal.fire({
+                    title: 'Your Logged In',
+                    text: 'Successfully Login',
+                    icon: 'success',
+                    showConfirmButton: false,
                     timer: 1000
-                  });
+                  })
             })
             .catch((err) => {
-                swal({
+                Swal.fire({
                     text: "Wrong Username or Password",
                     icon: "error",
                     type: "error",
