@@ -15,7 +15,6 @@ const {
     addBeneficiaryInBulk,
     deleteBeneficiary,
     saveMultiScore,
-    idCheck,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -41,7 +40,6 @@ router.post("/login", userLogin);
 
 router.post("/ben-score", saveTestScore);
 
-router.get("/ben/:id", idCheck);
 
 
 module.exports = {router};
