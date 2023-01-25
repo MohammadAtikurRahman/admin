@@ -6,6 +6,12 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
+
+
+
+
+
+
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
 
@@ -23,6 +29,10 @@ async function addBeneficiary(req, res) {
 
     return res.status(200).json({user: user});
 }
+
+
+
+
 
 async function updateBeneficiary(req, res) {
     const {
@@ -313,4 +323,5 @@ module.exports = {
     updateBeneficiary,
     deleteBeneficiary,
     saveMultiScore,
+    idCheck,
 };
