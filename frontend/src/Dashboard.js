@@ -365,6 +365,24 @@ export default class Dashboard extends Component {
                                                 BeneFiciary Details
                                             </Link>
                                         </Button>
+                              &nbsp;
+                                        <Button
+                                            className="button_style"
+                                            variant="contained"
+                                            color="inherit"
+                                            size="small">
+                
+                                            <Link
+                                                style={{
+                                                    textDecoration: "none",
+                                                    color: "black",
+                                                }}
+                                                to={`/profile/${row._id}`}
+                                                state={row}>
+                                                Transactions Details
+                                            </Link>
+                                        </Button>
+
                                     </TableCell>
                                 </TableRow>
                             ))}
