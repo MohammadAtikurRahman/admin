@@ -222,11 +222,11 @@ async function transaction(req, res) {
     // User.findOneAndUpdate(
     //     { "beneficiary.beneficiaryId": req.body.beneficiaryId },
     //     { $push: { "beneficiary.$.transaction": {
-    //         transactionID: req.body.beneficiaryId,
     //       cashIn: req.body.cashIn,
     //       cashInTime: req.body.cashInTime,
     //       cashOutTime: req.body.cashOutTime,
     //       cashOut: req.body.cashOut
+    //       beneficiaryMobile: req.body.beneficiaryMobile
     //     } } },
     //     { new: true }
     //   )
@@ -246,7 +246,8 @@ async function transaction(req, res) {
                 cashIn: transaction.cashIn,
                 cashInTime: transaction.cashInTime,
                 cashOutTime: transaction.cashOutTime,
-                cashOut: transaction.cashOut
+                cashOut: transaction.cashOut,
+                beneficiaryMobile: transaction.beneficiaryMobile
             } } },
             { new: true }
         )
