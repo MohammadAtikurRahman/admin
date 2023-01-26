@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert';
 
+import Swal from 'sweetalert2';
 
 import { Button, TextField, Link } from '@material-ui/core';
 const axios = require('axios');
@@ -21,47 +22,53 @@ export default class Register extends React.Component {
   
   
   
-  register = () => {
-
-    // e.preventDefault();
-     
- 
-
-    // if( typeof(beneficiary.beneficiaryId) === 'string') {
-    //     swal("Oops!", "Username Should be ", "error");
-    //     return;
-    // }
+  register = (event) => {
 
 
-
-
-
-    
     if (this.state.password !== this.state.confirm_password) {
-      swal({
+      Swal.fire({
         text: "Passwords do not match",
         icon: "error",
-        type: "error"
+        type: "error",
+        showConfirmButton: false,
+        timer: 2000
       });
       return;
     }
-    axios.post(baseUrl + '/register', {
-      username: this.state.username,
-      password: this.state.password,
-    }).then((res) => {
-      swal({
-        text: res.data.title,
-        icon: "success",
-        type: "success"
+    event.preventDefault();
+    if (isNaN(this.state.username)) {
+      axios.post(baseUrl + '/register', {
+        username: this.state.username,
+        password: this.state.password,
+      }).then((res) => {
+
+        Swal.fire({
+          text: res.data.title,
+          icon: "success",
+          type: "success",
+          showConfirmButton: false,
+          timer: 2000
+        });
+        this.props.history.push('/');
+      }).catch((err) => {
+        Swal.fire({
+          text: err.response.data.errorMessage,
+          icon: "error",
+          type: "error",
+          showConfirmButton: false,
+          timer: 2000
+        });
       });
-      this.props.history.push('/');
-    }).catch((err) => {
-      swal({
-        text: err.response.data.errorMessage,
+    }
+    else {
+      Swal.fire({
         icon: "error",
-        type: "error"
+        type: "error",
+        text: "wrong entry or textfeild empty",
+        showConfirmButton: false,
+        timer: 2000
       });
-    });
+    }
   }
 
   render() {
