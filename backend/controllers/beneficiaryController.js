@@ -216,6 +216,26 @@ async function beneficiaryLogin(req, res) {
     }
     return res.status(500).json({message: "Something went wrong."});
 }
+async function newlogin(req,res){
+    const beneficiaryId = req.body.beneficiaryId;
+    const mob = req.body.mob;
+  
+    // Find a user document with a matching beneficiaryId and mob
+    User.findOne({ 'beneficiary.beneficiaryId': beneficiaryId, 'beneficiary.mob': mob }, (err, user) => {
+      if (err) {
+        // Handle error
+        res.status(500).send({ error: err });
+      } else {
+        if (user) {
+          // Login successful
+          res.status(200).send({ message: 'Login successful' });
+        } else {
+          // Login failed
+          res.status(401).send({ message: 'Invalid beneficiaryId or mob' });
+        }
+      }
+    });
+}
 
 async function addBeneficiaryScore(req, res) {
     const {userId, beneficiaryId} = req.body;
@@ -323,5 +343,6 @@ module.exports = {
     updateBeneficiary,
     deleteBeneficiary,
     saveMultiScore,
+    newlogin,
  
 };
