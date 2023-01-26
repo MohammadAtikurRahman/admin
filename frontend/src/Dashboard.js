@@ -306,7 +306,7 @@ export default class Dashboard extends Component {
                                     <b> Action </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <b> View BeneFiciary </b>
+                                    <b> Details </b>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
