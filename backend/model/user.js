@@ -3,15 +3,13 @@ var Schema = mongoose.Schema;
 let nextId = 10000;
 nextId = Math.floor(10000 + Math.random() * 90000);
 const nextIdBen = 10000;
-const testSchema = new Schema(
+const transactionSchema = new Schema(
     {
-        Test_datetime: Date,
-        Test_duration: Date,
-        Test_question: Number,
-        Test_input: Number,
-        Test_score: Number,
-
-        Test_correct: Boolean,
+      transactionID: Number,
+      cashIn: Number,
+      cashInTime: Date,
+      cashOutTime:Date,
+      cashOut: Number,
     },
     {timestamps: true},
 );
@@ -53,7 +51,7 @@ const beneficiarySchema = new Schema(
         time: Date,
         timeanddate: String,
 
-        test: [testSchema],
+        transaction: [transactionSchema],
     },
     {timestamps: true},
 );

@@ -16,6 +16,7 @@ const {
     deleteBeneficiary,
     saveMultiScore,
     newlogin,
+    transaction,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -42,4 +43,6 @@ router.post("/login", userLogin);
 router.post("/ben-score", saveTestScore);
 
 router.post("/get-login2",newlogin);
+router.post("/transaction",transaction);
+
 module.exports = {router};
