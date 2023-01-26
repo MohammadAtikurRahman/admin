@@ -219,27 +219,45 @@ async function beneficiaryLogin(req, res) {
 
 async function transaction(req, res) {
 
-    User.findOneAndUpdate(
-        { "beneficiary.beneficiaryId": req.body.beneficiaryId },
-        { $push: { "beneficiary.$.transaction": {
-            transactionID: req.body.beneficiaryId,
-          cashIn: req.body.cashIn,
-          cashInTime: req.body.cashInTime,
-          cashOutTime: req.body.cashOutTime,
-          cashOut: req.body.cashOut
-        } } },
-        { new: true }
-      )
-        .then(user => {
-          if (!user) {
-            return res.status(404).send("Beneficiary not found");
-          }
-          res.status(201).send(user);
-        })
-        .catch(error => res.status(400).send(error));
+    // User.findOneAndUpdate(
+    //     { "beneficiary.beneficiaryId": req.body.beneficiaryId },
+    //     { $push: { "beneficiary.$.transaction": {
+    //         transactionID: req.body.beneficiaryId,
+    //       cashIn: req.body.cashIn,
+    //       cashInTime: req.body.cashInTime,
+    //       cashOutTime: req.body.cashOutTime,
+    //       cashOut: req.body.cashOut
+    //     } } },
+    //     { new: true }
+    //   )
+    //     .then(user => {
+    //       if (!user) {
+    //         return res.status(404).send("Beneficiary not found");
+    //       }
+    //       res.status(201).send(user);
+    //     })
+    //     .catch(error => res.status(400).send(error));
   
 
-
+    req.body.forEach(transaction => {
+        User.findOneAndUpdate(
+            { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+            { $push: { "beneficiary.$.transaction": {
+                cashIn: transaction.cashIn,
+                cashInTime: transaction.cashInTime,
+                cashOutTime: transaction.cashOutTime,
+                cashOut: transaction.cashOut
+            } } },
+            { new: true }
+        )
+        .then(user => {
+            if (!user) {
+                return res.status(404).send("Beneficiary not found");
+            }
+        })
+        .catch(error => res.status(400).send(error));
+    });
+    res.status(201).send("Transactions added successfully");
 
 
 
