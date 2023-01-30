@@ -36,7 +36,8 @@ export default function Transaction() {
     return (
         <div className="container text-center p-5 ">
             <div>
-                <h3>Beneficiary Name {userProfile?.transaction?.type}</h3>
+                <h3>Beneficiary Name: {userProfile?.name}</h3>
+                <h3>Beneficiary Id: {userProfile?.beneficiaryId}</h3>
 
                 <Button
                     className="button_style"
