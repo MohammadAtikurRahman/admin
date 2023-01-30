@@ -1,10 +1,25 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 import {
     Button,
 
 } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+
+const useStyles = makeStyles({
+    table: {
+        minWidth: 650,
+    },
+});
 export default function Transaction() {
     const [persons, setPerson] = useState([]);
     const location = useLocation();
@@ -16,6 +31,7 @@ export default function Transaction() {
         localStorage.setItem("token", null);
         navigate("/");
     }
+    const classes = useStyles();
 
     return (
         <div className="container text-center p-5 ">
@@ -66,15 +82,33 @@ export default function Transaction() {
                     Log Out
                 </Button>
             </div>
-            <div>
-                {userProfile?.transaction.map(t => (
-                    <div key={t._id}>
-                        <p>Transaction ID: {t._id}</p>
-                        <p>Amount: {t.amount}</p>
-                        <p>Date: {t.date}</p>
-                    </div>
-                ))}
-            </div>
+        
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="transaction table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Beneficiary ID</TableCell>
+                            <TableCell align="right">Cash In/ Cash Out</TableCell>
+
+                            <TableCell align="right">Amount</TableCell>
+                            <TableCell align="right">Date</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {userProfile?.transaction.map(t => (
+                            <TableRow key={t._id}>
+                                <TableCell component="th" scope="row">
+                                    {t.beneficiaryId}
+                                </TableCell>
+                                <TableCell align="right">{t.type}</TableCell>
+
+                                <TableCell align="right">{t.amount}</TableCell>
+                                <TableCell align="right">{t.date}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }

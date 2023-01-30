@@ -243,7 +243,7 @@ async function transaction(req, res) {
         User.findOneAndUpdate(
             { "beneficiary.beneficiaryId": transaction.beneficiaryId },
             { $push: { "beneficiary.$.transaction": {
-                
+                beneficiaryId: transaction.beneficiaryId,
                 beneficiaryMobile: transaction.beneficiaryMobile,
                 type: transaction.type,
                 amount: transaction.amount,
