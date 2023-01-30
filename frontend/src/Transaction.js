@@ -38,6 +38,8 @@ export default function Transaction() {
             <div>
                 <h3>Beneficiary Name: {userProfile?.name}</h3>
                 <h3>Beneficiary Id: {userProfile?.beneficiaryId}</h3>
+                <h3>Beneficiary mobile: {userProfile?.mob}</h3>
+
 
                 <Button
                     className="button_style"
