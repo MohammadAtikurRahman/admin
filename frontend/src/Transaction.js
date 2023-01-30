@@ -85,28 +85,55 @@ export default function Transaction() {
                     Log Out
                 </Button>
             </div>
-        
+
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="transaction table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Beneficiary ID</TableCell>
-                            <TableCell align="right">Cash In/ Cash Out</TableCell>
-
-                            <TableCell align="right">Amount</TableCell>
-                            <TableCell align="right">Date</TableCell>
+                            <TableCell align="center">Beneficiary ID</TableCell>
+                            <TableCell align="center">Cash In</TableCell>
+                            <TableCell align="center">Cash Out</TableCell>
+                            <TableCell align="center">Amount</TableCell>
+                            <TableCell align="center">Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {userProfile?.transaction.map(t => (
                             <TableRow key={t._id}>
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row"
+                                    align="center"
+                                >
                                     {t.beneficiaryId}
                                 </TableCell>
-                                <TableCell align="right">{t.type}</TableCell>
+                                <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
+                                    {t.type === 'in' ? t.amount : ''}
+                                </TableCell>
 
-                                <TableCell align="right">{t.amount}</TableCell>
-                                <TableCell align="right">{t.date}</TableCell>
+                                <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}  >
+                                    {t.type === 'out' ? t.amount : ''}
+                                </TableCell>
+                                <TableCell align="center">{t.amount}</TableCell>
+                                <TableCell align="center">
+
+
+                                    {new Date(t.date).toLocaleString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                        hour12: true,
+                                    })}
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {new Date(t.date).toLocaleString("en-GB", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })}
+
+
+
+
+
+
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
