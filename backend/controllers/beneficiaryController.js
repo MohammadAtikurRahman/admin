@@ -243,11 +243,11 @@ async function transaction(req, res) {
         User.findOneAndUpdate(
             { "beneficiary.beneficiaryId": transaction.beneficiaryId },
             { $push: { "beneficiary.$.transaction": {
-                cashIn: transaction.cashIn,
-                cashInTime: transaction.cashInTime,
-                cashOutTime: transaction.cashOutTime,
-                cashOut: transaction.cashOut,
-                beneficiaryMobile: transaction.beneficiaryMobile
+                
+                beneficiaryMobile: transaction.beneficiaryMobile,
+                type: transaction.type,
+                amount: transaction.amount,
+                date: transaction.date
             } } },
             { new: true }
         )

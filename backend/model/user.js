@@ -5,12 +5,10 @@ nextId = Math.floor(10000 + Math.random() * 90000);
 const nextIdBen = 10000;
 const transactionSchema = new Schema(
     {
-      transactionID: Number,
       beneficiaryMobile: String,
-      cashIn: Number,
-      cashInTime: Date,
-      cashOutTime:Date,
-      cashOut: Number,
+      type: String,
+      amount: Number,
+      date: Date
     },
     {timestamps: true},
 );
