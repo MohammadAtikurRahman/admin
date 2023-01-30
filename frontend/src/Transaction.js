@@ -154,33 +154,50 @@ export default function Transaction() {
                 <Table className={classes.table} aria-label="transaction table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">Beneficiary ID</TableCell>
+                            {/* <TableCell align="center">Beneficiary ID</TableCell> */}
                             <TableCell align="center">Cash In</TableCell>
                             <TableCell align="center">Cash Out</TableCell>
-                            <TableCell align="center">Amount</TableCell>
+                            {/* <TableCell align="center">Amount</TableCell> */}
                             <TableCell align="center">Date</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {userProfile?.transaction.map(t => (
+                        {userProfile?.transaction.sort((a, b) => {
+                                const dateA = new Date(a.date);
+                                const dateB = new Date(b.date);
+                                return dateB - dateA;
+                            })
+                        
+                        
+                        
+                        .map(t => (
                             <TableRow key={t._id}>
-                                <TableCell component="th" scope="row" align="center">
+                                {/* <TableCell component="th" scope="row" align="center">
                                     {t.beneficiaryId}
-                                </TableCell>
+                                </TableCell> */}
                                 <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
                                     {t.type === 'in' ? t.amount : ''}
                                 </TableCell>
                                 <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
                                     {t.type === 'out' ? t.amount : ''}
                                 </TableCell>
-                                <TableCell align="center">{t.amount}</TableCell>
+                                {/* <TableCell align="center">{t.amount}</TableCell> */}
                                 <TableCell align="center">
+
+
+
+
+
                                     {new Date(t.date).toLocaleString('en-US', {
                                         hour: 'numeric',
                                         minute: 'numeric',
                                         hour12: true,
                                     })}{' '}
+
+
                                     &nbsp; &nbsp; &nbsp; &nbsp;
+
+
                                     {new Date(t.date).toLocaleString('en-GB', {
                                         month: '2-digit',
                                         day: '2-digit',
@@ -190,14 +207,12 @@ export default function Transaction() {
                             </TableRow>
                         ))}
                         <TableRow>
-                            <TableCell colSpan={1} />
                             <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
                                 Total Cash In: {totalCashIn}
                             </TableCell>
                             <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
                                 Total Cash Out: {totalCashOut}
                             </TableCell>
-                            <TableCell colSpan={2} />
                         </TableRow>
                     </TableBody>
                 </Table>
