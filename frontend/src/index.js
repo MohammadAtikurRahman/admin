@@ -6,6 +6,7 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 import Test from "./Test";
 import Profile from "./Profile";
+import Transaction from "./Transaction";
 import Enumerator from "./Enumerator";
 import "./Login.css";
 
@@ -18,6 +19,8 @@ ReactDOM.render(
             <Route path="/enumerator" element={<Enumerator />} />
             <Route path="/test" element={<Test />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/transaction/:id" element={<Transaction />} />
+
         </Routes>
     </BrowserRouter>,
     document.getElementById("root")

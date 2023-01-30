@@ -377,7 +377,7 @@ export default class Dashboard extends Component {
                                                     textDecoration: "none",
                                                     color: "black",
                                                 }}
-                                                to={`/profile/${row._id}`}
+                                                to={`/transaction/${row._id}`}
                                                 state={row}>
                                                 Transactions Details
                                             </Link>
