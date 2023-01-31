@@ -29,7 +29,7 @@ export default function Login(props) {
     };
     const login = () => {
         axios
-            .post( baseUrl + '/login', {
+            .post(baseUrl + '/login', {
                 username: user.username,
                 password: user.password,
             })
@@ -44,13 +44,15 @@ export default function Login(props) {
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 1000
-                  })
+                })
             })
             .catch((err) => {
                 Swal.fire({
                     text: "Wrong Username or Password",
                     icon: "error",
                     type: "error",
+                    showConfirmButton: false,
+                    timer: 2000
                 });
                 if (
                     err.response &&
@@ -65,35 +67,51 @@ export default function Login(props) {
                 }
             });
     };
+    const inputStyle = { WebkitBoxShadow: "0 0 0 1000px white inset" };
 
     return (
-        <div style={{ marginTop: "200px" }}>
+        <div style={{ marginTop: "100px" }}>
             <div>
-                <h2>Login</h2>
+                <h2 style={{ color: "#334D9F" }}
+                >LOGIN</h2>
+
+                <br />
             </div>
 
             <div>
                 <TextField
                     id="standard-basic"
                     type="text"
+
                     autoComplete="off"
                     name="username"
                     value={user.username}
                     onChange={onChange}
-                    placeholder="User Name"
+                    placeholder="Username"
                     required
+                    variant="outlined"
+
+                    size="small"
+                    inputProps={{ style: inputStyle }}
+
                 />
                 <br />
                 <br />
                 <TextField
+                    size="small"
+
                     id="standard-basic"
                     type="password"
                     autoComplete="off"
                     name="password"
+                    variant="outlined"
+
                     value={user.password}
                     onChange={onChange}
                     placeholder="Password"
                     required
+                    inputProps={{ style: inputStyle }}
+
                 />
                 <br />
                 <br />
@@ -101,15 +119,27 @@ export default function Login(props) {
                     className="button_style"
                     variant="contained"
                     color="primary"
-                    size="small"
+                    size="normal"
                     disabled={user.username == "" && user.password == ""}
-                    onClick={login}>
+                    onClick={login}
+                    style={{ backgroundColor: "#334D9F", color: "white" }}
+
+
+                >
                     Login
                 </Button>{" "}
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Link href="/register">Register</Link>
+                <Link href="/register" size="normal"
+
+                    style={{ color: "#334D9F" }}
+
+                >Register</Link>
             </div>
+
+
+
+
+
         </div>
     );
 }
-

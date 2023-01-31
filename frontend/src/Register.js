@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import swal from 'sweetalert';
-
 import Swal from 'sweetalert2';
+
 
 import { Button, TextField, Link } from '@material-ui/core';
 const axios = require('axios');
@@ -19,9 +18,6 @@ export default class Register extends React.Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  
-  
-  
   register = (event) => {
 
 
@@ -69,14 +65,22 @@ export default class Register extends React.Component {
         timer: 2000
       });
     }
-  }
 
+  }
   render() {
+
+    const inputStyle = { WebkitBoxShadow: "0 0 0 1000px white inset" };
+
     return (
-      <div style={{ marginTop: '200px' }}>
+      <div style={{ marginTop: '100px' }}>
         <div>
-          <h2>Register</h2>
+          <h2
+            style={{ color: "#334D9F" }}
+
+          >Register</h2>
         </div>
+        <br />
+
 
         <div>
           <TextField
@@ -86,10 +90,21 @@ export default class Register extends React.Component {
             name="username"
             value={this.state.username}
             onChange={this.onChange}
-            placeholder="User Name"
+            placeholder="Username"
             required
+            variant="outlined"
+
+            size="small"
+            inputProps={{ style: inputStyle }}
+            // helperText={this.state.username.length === 0 ? "This field is required" : ""}
+            // error={this.state.username.length === 0}
           />
           <br /><br />
+
+          {/* helperText={this.state.helperText}
+  error={this.state.error}
+  onFocus={() => this.setState({ helperText: "This field is required", error: true })}
+  onBlur={() => this.setState({ helperText: "", error: false })} */}
           <TextField
             id="standard-basic"
             type="password"
@@ -99,6 +114,11 @@ export default class Register extends React.Component {
             onChange={this.onChange}
             placeholder="Password"
             required
+            variant="outlined"
+
+            size="small"
+            inputProps={{ style: inputStyle }}
+            
           />
           <br /><br />
           <TextField
@@ -110,19 +130,29 @@ export default class Register extends React.Component {
             onChange={this.onChange}
             placeholder="Confirm Password"
             required
+            variant="outlined"
+
+            size="small"
+            inputProps={{ style: inputStyle }}
           />
           <br /><br />
           <Button
             className="button_style"
             variant="contained"
             color="primary"
-            size="small"
-            disabled={this.state.username == '' && this.state.password == '' }
+            size="normal"
+            disabled={this.state.username == '' && this.state.password == ''}
             onClick={this.register}
+            style={{ backgroundColor: "#334D9F", color: "white" }}
+
           >
             Register
           </Button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Link href="/">
+          <Link
+
+            style={{ color: "#334D9F" }}
+
+            href="/">
             Login
           </Link>
         </div>
