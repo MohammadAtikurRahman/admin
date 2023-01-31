@@ -239,7 +239,7 @@ export default class Dashboard extends Component {
                         </MaterialLink>
                     </Button>
 
-                    <Button
+                    {/* <Button
                         className="button_style"
                         variant="contained"
                         color="inherit"
@@ -249,7 +249,7 @@ export default class Dashboard extends Component {
                             href="/test">
                             Transactions
                         </MaterialLink>
-                    </Button>
+                    </Button> */}
 
                     <Button
                         className="button_style"
