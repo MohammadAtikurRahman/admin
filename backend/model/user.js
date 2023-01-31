@@ -6,7 +6,10 @@ const nextIdBen = 10000;
 const transactionSchema = new Schema(
     {
       beneficiaryId: Number,  
-      beneficiaryMobile: String,
+      beneficiaryMobile: {
+        type: String,
+        required: true
+      },
       type: String,
       amount: Number,
       date: Date

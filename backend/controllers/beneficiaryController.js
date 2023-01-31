@@ -240,6 +240,10 @@ async function transaction(req, res) {
   
 
     req.body.forEach(transaction => {
+       
+     
+       
+       
         User.findOneAndUpdate(
             { "beneficiary.beneficiaryId": transaction.beneficiaryId },
             { $push: { "beneficiary.$.transaction": {

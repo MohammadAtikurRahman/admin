@@ -162,50 +162,52 @@ export default function Transaction() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {userProfile?.transaction.sort((a, b) => {
-                                const dateA = new Date(a.date);
-                                const dateB = new Date(b.date);
-                                return dateB - dateA;
-                            })
-                        
-                        
-                        
-                        .map(t => (
-                            <TableRow key={t._id}>
-                                {/* <TableCell component="th" scope="row" align="center">
+                        {
+                            userProfile.transaction = userProfile.transaction.filter(t => t.date)
+                                .sort((a, b) => {
+                                    const dateA = new Date(a.date);
+                                    const dateB = new Date(b.date);
+                                    return dateB - dateA;
+                                })
+
+
+
+                                .map(t => (
+                                    <TableRow key={t._id}>
+                                        {/* <TableCell component="th" scope="row" align="center">
                                     {t.beneficiaryId}
                                 </TableCell> */}
-                                <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
-                                    {t.type === 'in' ? t.amount : ''}
-                                </TableCell>
-                                <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
-                                    {t.type === 'out' ? t.amount : ''}
-                                </TableCell>
-                                {/* <TableCell align="center">{t.amount}</TableCell> */}
-                                <TableCell align="center">
+                                        <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
+                                            {t.type === 'in' ? t.amount : ''}
+                                        </TableCell>
+                                        <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
+                                            {t.type === 'out' ? t.amount : ''}
+                                        </TableCell>
+                                        {/* <TableCell align="center">{t.amount}</TableCell> */}
+                                        <TableCell align="center">
 
 
 
 
 
-                                    {new Date(t.date).toLocaleString('en-US', {
-                                        hour: 'numeric',
-                                        minute: 'numeric',
-                                        hour12: true,
-                                    })}{' '}
+                                            {new Date(t.date).toLocaleString('en-US', {
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                hour12: true,
+                                            })}{' '}
 
 
-                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                            &nbsp; &nbsp; &nbsp; &nbsp;
 
 
-                                    {new Date(t.date).toLocaleString('en-GB', {
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        year: 'numeric',
-                                    })}
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                            {new Date(t.date).toLocaleString('en-GB', {
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                year: 'numeric',
+                                            })}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                         <TableRow>
                             <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
                                 Total Cash In: {totalCashIn}
