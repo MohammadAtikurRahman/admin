@@ -9,8 +9,8 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", true);
-const {router} = require("./routes.js");
-const {randomNumberNotInUserCollection} = require("./helpers/number");
+const { router } = require("./routes.js");
+const { randomNumberNotInUserCollection } = require("./helpers/number");
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -25,14 +25,14 @@ const user = require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
 const PORT = process.env.PORT;
-app.use(express.json({limit: "50mb"}));
+app.use(express.json({ limit: "50mb" }));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
 });
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 const dir = "./uploads";
 const upload = multer({
@@ -127,7 +127,7 @@ app.post("/register", async (req, res) => {
         const userId = await randomNumberNotInUserCollection();
         console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({username: req.body.username}, (err, data) => {
+            user.find({ username: req.body.username }, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
@@ -280,7 +280,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.beneficiaryId) {
-            user.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
+            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
@@ -448,7 +448,7 @@ app.get("/get-testscore", async (req, res) => {
     const formatted_data = data[0];
     extact_data = formatted_data["beneficiary"];
 
-    
+
     extact_data = extact_data.filter(item => item.duration && item.score1);
 
 
@@ -456,11 +456,12 @@ app.get("/get-testscore", async (req, res) => {
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
             const seconds = item.duration % 60;
-            item.duration = `${minutes} minutes and ${seconds} seconds`;
+            item.duration = minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
         } else {
             item.duration = null;
         }
     });
+
 
     return res.status(200).json(extact_data);
 });
@@ -527,9 +528,9 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({success: true, data: newData});
+        res.status(201).json({ success: true, data: newData });
     } catch (error) {
-        res.status(400).json({success: false});
+        res.status(400).json({ success: false });
     }
 });
 
