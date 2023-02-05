@@ -422,7 +422,6 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.gen")
         .select("-beneficiary.test")
         .select("-beneficiary.createdAt")
-        .select("-beneficiary.updatedAt")
 
         .select("-beneficiary.mob")
         .select("-beneficiary.pgm")
