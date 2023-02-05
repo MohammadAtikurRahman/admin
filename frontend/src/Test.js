@@ -33,7 +33,7 @@ const getData = async () => {
         console.error(error);
     }
 };
-const exportData = async () => {
+const                                     exportData = async () => {
     const data = await getData();
     const fields = Object.keys(data[0]);
     const csv = json2csv.parse(data, { fields });
