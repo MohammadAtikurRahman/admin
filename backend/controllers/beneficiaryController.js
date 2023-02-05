@@ -434,7 +434,7 @@ async function saveMultiScore(req, res) {
         let beneficiary = beneficiaries[i];
         let { userId, beneficiaryId, score1, score2, duration } = beneficiary;
         let result = await User.findOneAndUpdate(
-            { userId: userId, "beneficiary.beneficiaryId": beneficiaryId },
+            {  "beneficiary.beneficiaryId": beneficiaryId },
             {
                 $set: {
                     "beneficiary.$.score1": score1,

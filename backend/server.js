@@ -436,6 +436,7 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.nid_sts")
         .select("-beneficiary.a_sts")
         .select("-beneficiary.u_nm")
+        .select("-transaction")
 
         .select("-beneficiary.dob")
         .select("-beneficiary.accre")
