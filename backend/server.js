@@ -430,13 +430,13 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.bank")
         .select("-beneficiary.branch")
         .select("-beneficiary.r_out")
+        .select("-beneficiary.transaction")
 
         .select("-beneficiary.mob_1")
         .select("-beneficiary.ben_sts")
         .select("-beneficiary.nid_sts")
         .select("-beneficiary.a_sts")
         .select("-beneficiary.u_nm")
-        .select("-transaction")
 
         .select("-beneficiary.dob")
         .select("-beneficiary.accre")
