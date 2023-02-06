@@ -28,14 +28,48 @@ const baseUrl = process.env.REACT_APP_URL;
 const getData = async () => {
     try {
         const res = await axios.get(baseUrl + "/get-testscore");
-        return res.data;
+        let updatedData = res.data.map(item => {
+            let updatedAt = new Date(item.updatedAt );
+            let dob= new Date(item.dob)
+            item.date = updatedAt.toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' });
+            item.time = updatedAt.toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true });
+           
+            item.dateofbirth = dob.toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+           
+            return item;
+        });
+        return updatedData;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        
+
+
     } catch (error) {
         console.error(error);
     }
 };
-const  exportData = async () => {
+const exportData = async () => {
     const data = await getData();
-    const fields = Object.keys(data[0]);
+    const fields = ["date", "time", ...Object.keys(data[0]).filter(key => key !== "updatedAt")];
     const csv = json2csv.parse(data, { fields });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -127,7 +161,7 @@ export default class Test extends Component {
             var enumerator_name = userDetails?.user;
 
             var enumerator_id = userDetails?.id;
-          ;
+            ;
         });
     };
 
