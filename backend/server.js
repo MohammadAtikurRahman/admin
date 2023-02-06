@@ -407,19 +407,14 @@ app.get("/get-testscore", async (req, res) => {
         .select("-updatedAt")
         .select("-__v")
         .select("-beneficiary._id")
-        .select("-beneficiary.f_nm")
         .select("-beneficiary.ben_nid")
         .select("-beneficiary.ben_id")
         .select("-beneficiary.sl")
-        .select("-beneficiary.m_nm")
         .select("-beneficiary.age")
         .select("-beneficiary.dis")
-        .select("-beneficiary.sub_dis")
-        .select("-beneficiary.uni")
-        .select("-beneficiary.vill")
+      
         .select("-beneficiary.relgn")
         .select("-beneficiary.job")
-        .select("-beneficiary.gen")
         .select("-beneficiary.test")
         .select("-beneficiary.createdAt")
 
@@ -435,9 +430,7 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.ben_sts")
         .select("-beneficiary.nid_sts")
         .select("-beneficiary.a_sts")
-        .select("-beneficiary.u_nm")
 
-        .select("-beneficiary.dob")
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own");
@@ -455,12 +448,13 @@ app.get("/get-testscore", async (req, res) => {
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
             const seconds = item.duration % 60;
+            
             item.duration = minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
-        } else {
-            item.duration = null;
         }
+         else {
+            item.duration = null;
+         }
     });
-
 
     return res.status(200).json(extact_data);
 });

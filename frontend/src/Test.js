@@ -33,7 +33,7 @@ const getData = async () => {
         console.error(error);
     }
 };
-const                                     exportData = async () => {
+const  exportData = async () => {
     const data = await getData();
     const fields = Object.keys(data[0]);
     const csv = json2csv.parse(data, { fields });
@@ -1303,6 +1303,19 @@ export default class Test extends Component {
                                     <b>Beneficiary Name </b>
                                 </TableCell>
                                 <TableCell align="center">
+                                    <b>Beneficiary Thana </b>
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    <b>Beneficiary Union </b>
+                                </TableCell>
+
+                                <TableCell align="center">
+                                    <b>Beneficiary Village </b>
+                                </TableCell>
+
+
+                                <TableCell align="center">
                                     <b> Test ID </b>
                                 </TableCell>
                                 <TableCell align="center">
@@ -1343,6 +1356,17 @@ export default class Test extends Component {
                                                     })}
                                                 </TableCell>
                                                 <TableCell align="center">{row.name}</TableCell>
+                                                <TableCell align="center" component="th" scope="row">
+                                                    {row.sub_dis}
+                                                </TableCell>
+
+                                                <TableCell align="center" component="th" scope="row">
+                                                    {row.uni}
+                                                </TableCell>
+                                                <TableCell align="center" component="th" scope="row">
+                                                    {row.vill}
+                                                </TableCell>
+
                                                 <TableCell align="center" component="th" scope="row">
                                                     {row.beneficiaryId}
                                                 </TableCell>
