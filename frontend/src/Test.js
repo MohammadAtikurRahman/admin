@@ -1394,9 +1394,12 @@ export default class Test extends Component {
                                                 <TableCell align="center">{row.score1}</TableCell>
                                                 <TableCell align="center">
                                                     {Math.floor(row.duration / 60) > 0
-                                                        ? `${Math.floor(row.duration / 60)} Minutes ${row.duration % 60} Seconds`
+                                                        ? row.duration % 60 === 0
+                                                            ? `${Math.floor(row.duration / 60)} Minutes`
+                                                            : `${Math.floor(row.duration / 60)} Minutes ${row.duration % 60} Seconds`
                                                         : `${row.duration % 60} Seconds`}
                                                 </TableCell>
+
 
                                             </TableRow>
                                         ) : null
