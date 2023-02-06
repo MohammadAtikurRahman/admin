@@ -25,27 +25,20 @@ Below noted things you need to install to run this project in your system
 ### To Setup
 Clone or download this repository
 
-1. `cd Registration-and-Login-using-MERN-stack/backend`
-2. `npm install`
-3. `cd Registration-and-Login-using-MERN-stack/frontend`
-4. `npm install`
+1. `cd admin/backend`
+2. `npm install` 
+3. `cd admin/frontend`
+4. `npm install` if npm install not working then `npm install --legacy-peer-deps`
+
+
 
 ### To Run
 To run node server
-1. `cd Registration-and-Login-using-MERN-stack/backend`
+1. `cd admin/backend`
 2. `node server.js`
 
 To run react frontend
-1. `cd Registration-and-Login-using-MERN-stack/frontend`
+1. `cd admin/frontend`
 2. `npm start`
 
-<!-- ### Login and Register screen
-[![login](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/login.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/login.png)[![register](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/register.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/register.png)
 
-### Product Add and Edit screen
-[![add](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/add.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/add.png)  [![edit](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/edit.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/edit.png)
-
-### Product Pagination screen
-[![dashboard](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/dashboard.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/dashboard.png) -->
-
-### Do not forget to leave a star! :hugs:
