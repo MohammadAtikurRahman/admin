@@ -29,14 +29,14 @@ const getData = async () => {
     try {
         const res = await axios.get(baseUrl + "/get-testscore");
         let updatedData = res.data.map(item => {
-            let updatedAt = new Date(item.updatedAt );
-            let dob= new Date(item.dob)
+            let updatedAt = new Date(item.updatedAt);
+            let dob = new Date(item.dob)
             item.date = updatedAt.toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' });
             item.time = updatedAt.toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit', hour12: true });
-           
+
             item.dateofbirth = dob.toLocaleDateString("en-GB", { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-           
+
             return item;
         });
         return updatedData;
@@ -47,15 +47,15 @@ const getData = async () => {
 };
 const exportData = async () => {
     const data = await getData();
-    const fields = [ { label: "Test Date", value: "date" },{ label: "Test Time", value: "time" },{ label: "Beneficiary Name", value: "name" },{ label: "Beneficiary Gender", value: "gen" },{ label: "Beneficiary Thana", value: "sub_dis" },{ label: "Beneficiary Union", value: "uni" },{ label: "Beneficiary Village", value: "vill" }, { label: "Beneficiary Test Id", value: "beneficiaryId" },{ label: "Test Duration", value: "duration" },{ label: "Test Score", value: "score1" }, 
-    ...Object.keys(data[0]).filter(key => key !== "updatedAt" && key !== "dob" && key !== "beneficiaryId"  && key !== "name"  && key !== "m_nm"  && key !== "f_nm"  && key !== "sub_dis"  && key !== "uni"  && key !== "vill"
+    const fields = [{ label: "Test Date", value: "date" }, { label: "Test Time", value: "time" }, { label: "Beneficiary Name", value: "name" }, { label: "Beneficiary Gender", value: "gen" }, { label: "Beneficiary Thana", value: "sub_dis" }, { label: "Beneficiary Union", value: "uni" }, { label: "Beneficiary Village", value: "vill" }, { label: "Beneficiary Test Id", value: "beneficiaryId" }, { label: "Test Duration", value: "duration" }, { label: "Test Score", value: "score1" },
+    ...Object.keys(data[0]).filter(key => key !== "updatedAt" && key !== "dob" && key !== "beneficiaryId" && key !== "name" && key !== "m_nm" && key !== "f_nm" && key !== "sub_dis" && key !== "uni" && key !== "vill"
 
-    && key !== "gen"  && key !== "duration"  && key !== "score1"  && key !== "date"  && key !== "time"
-    && key !== "dateofbirth"
-    
-    
-    
-    
+        && key !== "gen" && key !== "duration" && key !== "score1" && key !== "date" && key !== "time"
+        && key !== "dateofbirth"
+
+
+
+
     )];
     const csv = json2csv.parse(data, { fields });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -1393,8 +1393,11 @@ export default class Test extends Component {
                                                 </TableCell>
                                                 <TableCell align="center">{row.score1}</TableCell>
                                                 <TableCell align="center">
-                                                    {Math.floor(row.duration / 60)} Minute {row.duration % 60} Seconds
+                                                    {Math.floor(row.duration / 60) > 0
+                                                        ? `${Math.floor(row.duration / 60)} Minutes ${row.duration % 60} Seconds`
+                                                        : `${row.duration % 60} Seconds`}
                                                 </TableCell>
+
                                             </TableRow>
                                         ) : null
                                 )}
