@@ -412,7 +412,7 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.sl")
         .select("-beneficiary.age")
         .select("-beneficiary.dis")
-      
+
         .select("-beneficiary.relgn")
         .select("-beneficiary.job")
         .select("-beneficiary.test")

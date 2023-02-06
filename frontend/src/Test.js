@@ -41,35 +41,22 @@ const getData = async () => {
         });
         return updatedData;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-        
-
-
     } catch (error) {
         console.error(error);
     }
 };
 const exportData = async () => {
     const data = await getData();
-    const fields = ["date", "time", ...Object.keys(data[0]).filter(key => key !== "updatedAt")];
+    const fields = [ { label: "Test Date", value: "date" },{ label: "Test Time", value: "time" },{ label: "Beneficiary Name", value: "name" },{ label: "Beneficiary Gender", value: "gen" },{ label: "Beneficiary Thana", value: "sub_dis" },{ label: "Beneficiary Union", value: "uni" },{ label: "Beneficiary Village", value: "vill" }, { label: "Beneficiary Test Id", value: "beneficiaryId" },{ label: "Test Duration", value: "duration" },{ label: "Test Score", value: "score1" }, 
+    ...Object.keys(data[0]).filter(key => key !== "updatedAt" && key !== "dob" && key !== "beneficiaryId"  && key !== "name"  && key !== "m_nm"  && key !== "f_nm"  && key !== "sub_dis"  && key !== "uni"  && key !== "vill"
+
+    && key !== "gen"  && key !== "duration"  && key !== "score1"  && key !== "date"  && key !== "time"
+    && key !== "dateofbirth"
+    
+    
+    
+    
+    )];
     const csv = json2csv.parse(data, { fields });
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
