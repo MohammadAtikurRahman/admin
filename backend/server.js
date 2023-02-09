@@ -88,7 +88,8 @@ app.use("/", (req, res, next) => {
             req.path == "/get-testscore" ||
             req.path == "/get-login" ||
             req.path == "/list-beneficiary" ||
-            req.path == "/beneficiary"
+            req.path == "/beneficiary" ||
+            req.path == "/get-last-page-text"
         ) {
             next();
         } else {
@@ -458,6 +459,89 @@ app.get("/get-testscore", async (req, res) => {
 
     return res.status(200).json(extact_data);
 });
+
+
+
+app.get("/get-last-page-text", async (req, res) => {
+    let users = await user
+        .find({})
+        .select("-username")
+        .select("-password")
+        .select("-id")
+        .select("-_id")
+        .select("-userId")
+        .select("-createdAt")
+        .select("-updatedAt")
+        .select("-__v")
+        .select("-beneficiary._id")
+        .select("-beneficiary.ben_nid")
+        .select("-beneficiary.ben_id")
+
+        .select("-beneficiary.m_nm")
+
+        .select("-beneficiary.f_nm")
+        .select("-beneficiary.dob")
+
+        .select("-beneficiary.sub_dis")
+
+        .select("-beneficiary.uni")
+
+        .select("-beneficiary.vill")
+        .select("-beneficiary.gen")
+
+
+        .select("-beneficiary.sl")
+        .select("-beneficiary.age")
+        .select("-beneficiary.dis")
+
+        .select("-beneficiary.relgn")
+        .select("-beneficiary.job")
+        .select("-beneficiary.test")
+        .select("-beneficiary.createdAt")
+
+        .select("-beneficiary.mob")
+        .select("-beneficiary.pgm")
+        .select("-beneficiary.pass")
+        .select("-beneficiary.bank")
+        .select("-beneficiary.branch")
+        .select("-beneficiary.r_out")
+        .select("-beneficiary.transaction")
+
+        .select("-beneficiary.mob_1")
+        .select("-beneficiary.ben_sts")
+        .select("-beneficiary.nid_sts")
+        .select("-beneficiary.a_sts")
+
+        .select("-beneficiary.accre")
+        .select("-beneficiary.f_allow")
+        .select("-beneficiary.mob_own")
+        .select("-beneficiary.updatedAt")
+
+
+    const data = users;
+
+    const formatted_data = data[0];
+    extact_data = formatted_data["beneficiary"];
+
+
+    // extact_data = extact_data.filter(item => item.duration && item.score1);
+
+
+    // extact_data.forEach(item => {
+    //     if (item.duration) {
+    //         const minutes = Math.floor(item.duration / 60);
+    //         const seconds = item.duration % 60;
+            
+    //         item.duration = minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
+    //     }
+    //      else {
+    //         item.duration = null;
+    //      }
+    // });
+
+    return res.status(200).json(extact_data);
+});
+
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user

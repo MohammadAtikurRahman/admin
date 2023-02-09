@@ -18,6 +18,7 @@ const {
     newlogin,
     transaction,
     examStatus,
+    enumeratorObservation,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -43,6 +44,7 @@ router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
 
 router.post("/nowillingtoexam", examStatus); // beneficiary login
 
+router.post("/observation", enumeratorObservation); // beneficiary login
 
 
 
