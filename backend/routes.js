@@ -17,6 +17,7 @@ const {
     saveMultiScore,
     newlogin,
     transaction,
+    examStatus,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -32,6 +33,25 @@ router.post("/save-test/add", saveTest);
 
 router.post("/get-login", beneficiaryLogin); // beneficiary login
 router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
+
+
+
+
+
+
+
+
+router.post("/nowillingtoexam", examStatus); // beneficiary login
+
+
+
+
+
+
+
+
+
+
 
 router.post("/get-saved-multi-score", saveMultiScore); // beneficiary login
 

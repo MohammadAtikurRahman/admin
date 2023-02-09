@@ -388,6 +388,7 @@ export default class Dashboard extends Component {
                             ))}
                         </TableBody>
                     </Table>
+                    
 
                     <br />
                     <Pagination

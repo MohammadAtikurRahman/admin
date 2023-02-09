@@ -19,6 +19,20 @@ const transactionSchema = new Schema(
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
+
+        test_status: {
+            type: String,
+            default: "present"
+        },
+        excuses: String,
+
+        enumerator_observation: String,
+
+
+
+
+
+
         score1: Number,
         time: Date,
         duration: String,

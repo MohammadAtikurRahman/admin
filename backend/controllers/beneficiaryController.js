@@ -428,6 +428,35 @@ async function addBeneficiaryScore(req, res) {
 
 
 
+
+async function examStatus(req, res) {
+    const { beneficiaryId } = req.body;
+    console.log(req.body);
+    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
+    if (!user) {
+        return res.status(400).json({ message: 'User not found' });
+    }
+    let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
+    if (!beneficiary) {
+        return res.status(400).json({ message: 'Beneficiary not found' });
+    }
+    let result = await User.updateOne(
+        { "beneficiary.beneficiaryId": beneficiaryId },
+        {
+            $set: {
+                "beneficiary.$.test_status": req.body?.test_status,
+                "beneficiary.$.excuses": req.body?.excuses,
+
+            },
+        }
+    );
+    if (result.nModified == 0) {
+        return res.status(400).json({ message: 'Failed to update ' });
+    }
+    return res.status(200).json({ message: 'Beneficiary test status and excuess saved' });
+}
+
+
 async function saveMultiScore(req, res) {
     const beneficiaries = req.body;
     for (let i = 0; i < beneficiaries.length; i++) {
@@ -519,5 +548,6 @@ module.exports = {
     saveMultiScore,
     newlogin,
     transaction,
+    examStatus
 
 };
