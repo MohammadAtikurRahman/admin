@@ -19,6 +19,7 @@ const {
     transaction,
     examStatus,
     enumeratorObservation,
+    lastPagetext,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -48,6 +49,7 @@ router.post("/observation", enumeratorObservation); // beneficiary login
 
 
 
+router.get("/get-last-page-text/:beneficiaryId",lastPagetext); // beneficiary login
 
 
 
