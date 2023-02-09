@@ -617,7 +617,7 @@ export default class Test extends Component {
               style={{ textDecoration: "none", color: "white" }}
               href="/notest"
             >
-              Disagree
+              Disagree of test
             </MaterialLink>
           </Button>
 

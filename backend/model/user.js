@@ -20,10 +20,8 @@ const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
 
-        test_status: {
-            type: String,
-            default: "present"
-        },
+        test_status: String,
+         
         excuses: String,
 
         enumerator_observation: String,

@@ -123,6 +123,7 @@ export default class Notest extends Component {
             userinfo: [],
             persons: [],
             pages: 0,
+            excuses: "",
 
             loading: false,
             filteredBeneficiary: [],
@@ -1334,17 +1335,21 @@ export default class Notest extends Component {
                                 <TableCell align="center">
                                     <b>Beneficiary Village </b>
                                 </TableCell>
+                                <TableCell align="center">
+                                    <b>
+                                        Enumerator Observation </b>
+                                </TableCell>
 
 
                                 <TableCell align="center">
                                     <b> Test ID </b>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <b>Test Score</b>
+                                    <b>Test Status</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <b> Duration</b>
+                                    <b> Reason</b>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -1357,7 +1362,7 @@ export default class Notest extends Component {
 
 
                                 .map((row, index) =>
-                                    row.score1 ?
+                                    row.test_status ?
 
 
                                         (
@@ -1389,15 +1394,14 @@ export default class Notest extends Component {
                                                 </TableCell>
 
                                                 <TableCell align="center" component="th" scope="row">
+                                                    {row.enumerator_observation}
+                                                </TableCell>
+                                                <TableCell align="center" component="th" scope="row">
                                                     {row.beneficiaryId}
                                                 </TableCell>
-                                                <TableCell align="center">{row.score1}</TableCell>
+                                                <TableCell align="center">{row.test_status}</TableCell>
                                                 <TableCell align="center">
-                                                    {Math.floor(row.duration / 60) > 0
-                                                        ? row.duration % 60 === 0
-                                                            ? `${Math.floor(row.duration / 60)} Minutes`
-                                                            : `${Math.floor(row.duration / 60)} Minutes ${row.duration % 60} Seconds`
-                                                        : `${row.duration % 60} Seconds`}
+                                                    {row.excuses}
                                                 </TableCell>
 
 
