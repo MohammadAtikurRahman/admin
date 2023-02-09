@@ -571,7 +571,7 @@ export default class Notest extends Component {
 
 
 
-                    <Button
+                    {/* <Button
                         className="button_style"
                         variant="contained"
                         color="secondary"
@@ -581,7 +581,7 @@ export default class Notest extends Component {
                             onClick={exportData}>
                             Download Test Score
                         </MaterialLink>
-                    </Button>
+                    </Button> */}
 
                     <Button
                         className="button_style"
