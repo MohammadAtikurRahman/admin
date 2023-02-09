@@ -448,7 +448,25 @@ async function lastPagetext(req, res) {
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own")
-        .select("-beneficiary.updatedAt");
+        .select("-beneficiary.updatedAt")
+        .select("-beneficiary.m_nm")
+        .select("-beneficiary.f_nm")
+        .select("-beneficiary.dob")
+        .select("-beneficiary.sub_dis")
+        .select("-beneficiary.uni")
+        .select("-beneficiary.vill")
+        .select("-beneficiary.gen")
+        .select("-beneficiary.duration")
+        .select("-beneficiary.score1");
+
+
+
+
+
+
+
+
+
 
 
 
