@@ -411,7 +411,47 @@ async function enumeratorObservation(req, res) {
 
 async function lastPagetext(req, res) {
     try {
-        const user = await User.findOne({ "beneficiary.beneficiaryId": req.params.beneficiaryId });
+        const user = await User.findOne({ "beneficiary.beneficiaryId": req.params.beneficiaryId })
+        .select("-username")
+        .select("-password")
+        .select("-id")
+        .select("-_id")
+        .select("-userId")
+        .select("-createdAt")
+        .select("-updatedAt")
+        .select("-__v")
+        .select("-beneficiary._id")
+        .select("-beneficiary.ben_nid")
+        .select("-beneficiary.ben_id")
+        .select("-beneficiary.sl")
+        .select("-beneficiary.age")
+        .select("-beneficiary.dis")
+
+        .select("-beneficiary.relgn")
+        .select("-beneficiary.job")
+        .select("-beneficiary.test")
+        .select("-beneficiary.createdAt")
+
+        .select("-beneficiary.mob")
+        .select("-beneficiary.pgm")
+        .select("-beneficiary.pass")
+        .select("-beneficiary.bank")
+        .select("-beneficiary.branch")
+        .select("-beneficiary.r_out")
+        .select("-beneficiary.transaction")
+
+        .select("-beneficiary.mob_1")
+        .select("-beneficiary.ben_sts")
+        .select("-beneficiary.nid_sts")
+        .select("-beneficiary.a_sts")
+
+        .select("-beneficiary.accre")
+        .select("-beneficiary.f_allow")
+        .select("-beneficiary.mob_own")
+        .select("-beneficiary.updatedAt");
+
+
+
         if (!user) {
           return res.status(404).send("Beneficiary not found");
         }
