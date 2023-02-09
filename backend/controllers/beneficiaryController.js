@@ -400,6 +400,10 @@ async function enumeratorObservation(req, res) {
         {
             $set: {
                 "beneficiary.$.enumerator_observation": req.body?.enumerator_observation,
+                "beneficiary.$.excuses": req.body?.excuses,
+                "beneficiary.$.test_status": req.body?.test_status,
+
+
             },
         },
     );
