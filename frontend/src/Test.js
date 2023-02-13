@@ -68,6 +68,10 @@ const exportData = async () => {
     { label: "Beneficiary Test Id", value: "beneficiaryId" },
     { label: "Test Duration", value: "duration" },
     { label: "Test Score", value: "score1" },
+    { label: "Test Status", value: "test_status" },
+    { label: "Test Excuess", value: "excuess" },
+    { label: " Enumerator observation", value: "enumerator_observation" },
+
     ...Object.keys(data[0]).filter(
       (key) =>
         key !== "updatedAt" &&
@@ -84,7 +88,12 @@ const exportData = async () => {
         key !== "score1" &&
         key !== "date" &&
         key !== "time" &&
-        key !== "dateofbirth"
+        key !== "dateofbirth" &&
+        key !== "test_status" &&
+        key !== "excuess" &&
+        key !== "enumerator_observation" 
+
+
     ),
   ];
   const csv = json2csv.parse(data, { fields });

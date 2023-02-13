@@ -380,7 +380,7 @@ app.get("/get-testscore", async (req, res) => {
     extact_data = formatted_data["beneficiary"];
 
 
-    extact_data = extact_data.filter(item => item.duration && item.score1);
+    // extact_data = extact_data.filter(item => item.duration && item.score1 );
 
 
     extact_data.forEach(item => {
