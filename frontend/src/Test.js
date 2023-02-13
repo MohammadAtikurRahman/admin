@@ -619,7 +619,7 @@ export default class Test extends Component {
           <Button
             className="button_style"
             variant="contained"
-            color="primary"
+            color="secondary"
             size="small"
           >
             <MaterialLink
@@ -631,6 +631,8 @@ export default class Test extends Component {
           </Button>
 
           <Button
+                                style={{ backgroundColor: "green", color: "white" }}
+
             className="button_style"
             variant="contained"
             color="secondary"
