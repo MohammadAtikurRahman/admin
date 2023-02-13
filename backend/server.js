@@ -380,8 +380,9 @@ app.get("/get-testscore", async (req, res) => {
     extact_data = formatted_data["beneficiary"];
 
 
-    extact_data = extact_data.filter(item => item.duration && item.score1  );
+     extact_data = extact_data.filter(item => item.duration && item.score1 || item.test_status && item.excuses && item.enumerator_observation );
 
+    extact_data.sort((a, b) => b.updatedAt - a.updatedAt);
 
     extact_data.forEach(item => {
         if (item.duration) {
