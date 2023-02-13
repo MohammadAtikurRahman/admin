@@ -69,7 +69,7 @@ const exportData = async () => {
     { label: "Test Duration", value: "duration" },
     { label: "Test Score", value: "score1" },
     { label: "Test Status", value: "test_status" },
-    { label: "Test Excuess", value: "excuess" },
+    { label: "Test Excuess", value: "excuses" },
     { label: " Enumerator observation", value: "enumerator_observation" },
 
     ...Object.keys(data[0]).filter(
@@ -90,7 +90,7 @@ const exportData = async () => {
         key !== "time" &&
         key !== "dateofbirth" &&
         key !== "test_status" &&
-        key !== "excuess" &&
+        key !== "excuses" &&
         key !== "enumerator_observation" 
 
 
