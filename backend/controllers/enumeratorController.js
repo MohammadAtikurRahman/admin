@@ -33,7 +33,7 @@ async function userLogin(req, res) {
             status: true,
         });
     }
-    return res.status(500).json({message: "Something went wrong."});
+    return res.status(401).json({message: "Something went wrong."});
 }
 
 module.exports = {getEnumerator, userLogin};
