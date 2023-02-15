@@ -513,6 +513,32 @@ async function saveMultiScore(req, res) {
     return res.status(200).json({message: "Multiple beneficiaries updated"});
 }
 
+
+async function saveMultiObservation(req, res) {
+    const beneficiaries = req.body;
+    for (let i = 0; i < beneficiaries.length; i++) {
+        let beneficiary = beneficiaries[i];
+        let {userId, beneficiaryId, enumerator_observation, test_status} = beneficiary;
+        let result = await User.findOneAndUpdate(
+            {"beneficiary.beneficiaryId": beneficiaryId},
+            {
+                $set: {
+                    "beneficiary.$.enumerator_observation": enumerator_observation,
+                    "beneficiary.$.test_status": test_status,
+                   
+                },
+            },
+            {new: true},
+        );
+    }
+    return res.status(200).json({message: "Multiple enumerator observation and ofline after data updated"});
+}
+
+
+
+
+
+
 async function benenScore(req, res) {
     const {userId, beneficiaryId} = req.body;
     const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
@@ -587,4 +613,5 @@ module.exports = {
     examStatus,
     enumeratorObservation,
     lastPagetext,
+    saveMultiObservation,
 };

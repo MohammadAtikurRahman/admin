@@ -20,6 +20,7 @@ const {
     examStatus,
     enumeratorObservation,
     lastPagetext,
+    saveMultiObservation,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -57,7 +58,13 @@ router.get("/get-last-page-text/:beneficiaryId",lastPagetext); // beneficiary lo
 
 
 
-router.post("/get-saved-multi-score", saveMultiScore); // beneficiary login
+router.post("/get-saved-multi-score", saveMultiScore); 
+
+
+router.post("/get-saved-multi-observation", saveMultiObservation); 
+
+
+
 
 router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
