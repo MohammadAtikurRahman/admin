@@ -21,6 +21,7 @@ const beneficiarySchema = new Schema(
         beneficiaryId: Number,
 
         test_status: String,
+        
          
         excuses: String,
 

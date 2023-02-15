@@ -69,10 +69,19 @@ const exportData = async () => {
     { label: "Test Duration", value: "duration" },
     { label: "Test Score", value: "score1" },
     { label: "Test Status", value: "test_status" },
-    { label: "Reason", value: "excuses" },
-    { label: " Enumerator observation", value: "enumerator_observation" },
-    { label: "  observation", value: "observation" },
-
+    // { label: " Enumerator observation", value: "enumerator_observation" },
+    // { label: "Observation", value: row => `${row.enumerator_observation} ${row.observation}` },
+    {
+      label: "Observation",
+      value: (row) => {
+        const enumObs =
+          row.enumerator_observation !== undefined
+            ? row.enumerator_observation
+            : "";
+        const obs = row.observation !== undefined ? row.observation : "";
+        return `${enumObs} ${obs}`;
+      },
+    },
 
     ...Object.keys(data[0]).filter(
       (key) =>
@@ -92,12 +101,8 @@ const exportData = async () => {
         key !== "time" &&
         key !== "dateofbirth" &&
         key !== "test_status" &&
-        key !== "excuses" &&
         key !== "enumerator_observation" &&
-        key !== "observation" 
-
-
-
+        key !== "observation"
     ),
   ];
   const csv = json2csv.parse(data, { fields });
@@ -635,8 +640,7 @@ export default class Test extends Component {
           </Button>
 
           <Button
-                                style={{ backgroundColor: "green", color: "white" }}
-
+            style={{ backgroundColor: "green", color: "white" }}
             className="button_style"
             variant="contained"
             color="secondary"

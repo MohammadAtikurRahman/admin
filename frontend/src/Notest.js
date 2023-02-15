@@ -141,6 +141,7 @@ export default class Notest extends Component {
       accre: "",
       f_allow: "",
       score1: "",
+      test_status: "",
 
       desc: "",
       price: "",
@@ -323,6 +324,8 @@ export default class Notest extends Component {
           accre: this.state.accre,
           f_allow: this.state.f_allow,
           score1: this.state.score1,
+          test_status: this.state.score1,
+
         },
         token: localStorage.getItem("token"),
       })
@@ -530,6 +533,7 @@ export default class Notest extends Component {
       accre: data.accre,
       f_allow: data.f_allow,
       score1: data.score1,
+      test_status: data.test_status,
 
       fileName: data.image,
     });
@@ -541,7 +545,7 @@ export default class Notest extends Component {
 
   render() {
     const beneficiaries = this.state?.beneficiaries
-      ?.filter((row) => row.score1 !== null && row.score1 !== undefined)
+      ?.filter((row) => row.score1 !== null && row.score1 !== undefined &&  row.test_status !== 'অংশগ্রণকারী')
       .sort((a, b) => {
         const dateA = new Date(a.updatedAt);
         const dateB = new Date(b.updatedAt);

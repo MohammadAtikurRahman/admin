@@ -336,7 +336,14 @@ export default class Dashboard extends Component {
             </TableHead>
 
             <TableBody>
-              {this.state?.filteredBeneficiary?.reverse().map((row, index) => (
+              {this.state?.filteredBeneficiary?.reverse().filter(row => row.test_status !== "পরীক্ষা দিতে অসম্মত")
+              
+              
+              .map((row, index) => (
+
+
+
+
                 <TableRow key={index}>
                   <TableCell align="center">
                     {new Date(row.updatedAt).toLocaleString("en-US", {
@@ -411,6 +418,8 @@ export default class Dashboard extends Component {
                     </Button>
                   </TableCell>
                 </TableRow>
+
+                
               ))}
             </TableBody>
           </Table>
