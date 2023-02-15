@@ -199,7 +199,7 @@ async function beneficiaryLogin(req, res) {
             status: true,
         });
     }
-    return res.status(500).json({message: "Something went wrong."});
+    return res.status(401).json({message: "Something went wrong."});
 }
 
 async function transaction(req, res) {
