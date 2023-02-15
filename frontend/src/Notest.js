@@ -1434,7 +1434,7 @@ export default class Notest extends Component {
                         {row.beneficiaryId}
                       </TableCell>
                       <TableCell align="center" component="th" scope="row">
-                        {row.observation}
+                        {row.enumerator_observation}
                       </TableCell>
                     
                       <TableCell align="center">{row.test_status}</TableCell>
