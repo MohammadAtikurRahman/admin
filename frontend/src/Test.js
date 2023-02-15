@@ -71,6 +71,8 @@ const exportData = async () => {
     { label: "Test Status", value: "test_status" },
     { label: "Reason", value: "excuses" },
     { label: " Enumerator observation", value: "enumerator_observation" },
+    { label: "  observation", value: "observation" },
+
 
     ...Object.keys(data[0]).filter(
       (key) =>
@@ -91,7 +93,9 @@ const exportData = async () => {
         key !== "dateofbirth" &&
         key !== "test_status" &&
         key !== "excuses" &&
-        key !== "enumerator_observation" 
+        key !== "enumerator_observation" &&
+        key !== "observation" 
+
 
 
     ),
@@ -1408,6 +1412,10 @@ export default class Test extends Component {
                 <TableCell align="center">
                   <b> Test ID </b>
                 </TableCell>
+
+                <TableCell align="center">
+                  <b> Enumerator observation </b>
+                </TableCell>
                 <TableCell align="center">
                   <b>Test Score</b>
                 </TableCell>
@@ -1457,6 +1465,8 @@ export default class Test extends Component {
                       <TableCell align="center" component="th" scope="row">
                         {row.beneficiaryId}
                       </TableCell>
+                      <TableCell align="center">{row.enumerator_observation}</TableCell>
+
                       <TableCell align="center">{row.score1}</TableCell>
                       <TableCell align="center">
                         {Math.floor(row.duration / 60) > 0
