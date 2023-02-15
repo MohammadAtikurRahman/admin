@@ -29,7 +29,7 @@ const beneficiarySchema = new Schema(
 
 
 
-
+        observation: String,
 
         score1: Number,
         time: Date,

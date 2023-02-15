@@ -347,7 +347,7 @@ async function addBeneficiaryScore(req, res) {
         {
             $set: {
                 "beneficiary.$.score1": req.body?.score1,
-                "beneficiary.$.score2": req.body?.score2,
+                "beneficiary.$.observation": req.body?.observation,
                 "beneficiary.$.duration": req.body?.duration,
             },
         },
@@ -355,7 +355,7 @@ async function addBeneficiaryScore(req, res) {
     if (result.nModified == 0) {
         return res.status(400).json({message: "Failed to update beneficiary score"});
     }
-    return res.status(200).json({message: "Beneficiary score saved"});
+    return res.status(200).json({message: "Beneficiary score & observation  saved"});
 }
 
 async function examStatus(req, res) {
