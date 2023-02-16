@@ -1471,7 +1471,7 @@ export default class Test extends Component {
                       <TableCell align="center" component="th" scope="row">
                         {row.beneficiaryId}
                       </TableCell>
-                      <TableCell align="center">{row.enumerator_observation}</TableCell>
+                      <TableCell align="center">{row.observation}</TableCell>
 
                       <TableCell align="center">{row.score1}</TableCell>
                       <TableCell align="center">
