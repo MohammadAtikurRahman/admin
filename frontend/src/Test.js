@@ -1438,7 +1438,7 @@ export default class Test extends Component {
                 })
 
                 .map((row, index) =>
-                  row.score1 ? (
+                row.score1 >= 0 ? (
                     <TableRow key={index}>
                       <TableCell align="center">
                         {new Date(row.updatedAt).toLocaleString("en-GB", {
