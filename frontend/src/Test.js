@@ -581,7 +581,7 @@ export default class Test extends Component {
               color: "black",
             }}
           >
-            DASHBOARD
+            অংশগ্রহণকারী{" "}
           </h2>
 
           <Button
@@ -1438,7 +1438,9 @@ export default class Test extends Component {
                 })
 
                 .map((row, index) =>
-                row.score1 !== undefined && row.score1 !== null && row.score1 >= 0 ? (
+                  row.score1 !== undefined &&
+                  row.score1 !== null &&
+                  row.score1 >= 0 ? (
                     <TableRow key={index}>
                       <TableCell align="center">
                         {new Date(row.updatedAt).toLocaleString("en-GB", {

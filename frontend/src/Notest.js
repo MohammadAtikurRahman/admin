@@ -568,7 +568,7 @@ export default class Notest extends Component {
               color: "black",
             }}
           >
-            DASHBOARD
+            পরীক্ষা দিতে অসম্মত
           </h2>
 
           <Button
