@@ -386,7 +386,7 @@ app.get("/get-testscore", async (req, res) => {
 
     extact_data = extact_data.filter(item => {
         if (item.duration || item.score1 || item.enumerator_observation) {
-          if (item.score1) {
+          if (item.score1 || item.score1 == 0) {
             item.test_status = "অংশগ্রহণকারী";
           }
           return true;
