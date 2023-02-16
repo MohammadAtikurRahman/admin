@@ -373,7 +373,8 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own")
-        .select("-beneficiary.excuses");
+        .select("-beneficiary.excuses")
+        .select("-beneficiary.u_nm");
 
 
     const data = users;
