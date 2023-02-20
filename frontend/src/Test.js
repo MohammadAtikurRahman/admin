@@ -58,6 +58,9 @@ const getData = async () => {
 const exportData = async () => {
   const data = await getData();
   const fields = [
+
+    { label: "Examiner", value: "whotaketheexam" },
+
     { label: "Test Date", value: "date" },
     { label: "Test Time", value: "time" },
     { label: "Beneficiary Name", value: "name" },
@@ -102,7 +105,8 @@ const exportData = async () => {
         key !== "dateofbirth" &&
         key !== "test_status" &&
         key !== "enumerator_observation" &&
-        key !== "observation"
+        key !== "observation" &&
+        key !== "whotaketheexam"
     ),
   ];
   const csv = json2csv.parse(data, { fields });

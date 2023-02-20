@@ -349,6 +349,8 @@ async function addBeneficiaryScore(req, res) {
                 "beneficiary.$.score1": req.body?.score1,
                 "beneficiary.$.observation": req.body?.observation,
                 "beneficiary.$.duration": req.body?.duration,
+                "beneficiary.$.whotaketheexam": req.body?.userId,
+                
             },
         },
     );
@@ -406,6 +408,7 @@ async function enumeratorObservation(req, res) {
                 "beneficiary.$.enumerator_observation": req.body?.enumerator_observation,
                 "beneficiary.$.excuses": req.body?.excuses,
                 "beneficiary.$.test_status": req.body?.test_status,
+                "beneficiary.$.whotaketheexam": req.body?.userId,
 
 
             },
@@ -505,6 +508,8 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.score1": score1,
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
+                    "beneficiary.$.whotaketheexam": req.body?.userId,
+
                 },
             },
             {new: true},
@@ -525,7 +530,8 @@ async function saveMultiObservation(req, res) {
                 $set: {
                     "beneficiary.$.enumerator_observation": enumerator_observation,
                     "beneficiary.$.test_status": test_status,
-                   
+                    "beneficiary.$.whotaketheexam": req.body?.userId,
+
                 },
             },
             {new: true},

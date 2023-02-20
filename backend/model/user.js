@@ -21,7 +21,7 @@ const beneficiarySchema = new Schema(
         beneficiaryId: Number,
 
         test_status: String,
-        
+        whotaketheexam: Number,
          
         excuses: String,
 
