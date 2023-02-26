@@ -233,6 +233,7 @@ async function transaction(req, res) {
                         type: transaction.type,
                         amount: transaction.amount,
                         date: transaction.date,
+                        duration: transaction.duration,
                     },
                 },
             },

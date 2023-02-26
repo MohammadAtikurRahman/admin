@@ -12,6 +12,7 @@ const transactionSchema = new Schema(
       },
       type: String,
       amount: Number,
+      duration: Number,
       date: Date
     },
     {timestamps: true},
