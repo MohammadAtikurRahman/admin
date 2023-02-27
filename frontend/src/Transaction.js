@@ -230,7 +230,10 @@ export default function Transaction() {
                                 Total Cash Out: {totalCashOut}
 
                             </TableCell>
-                            <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
+                            <TableCell align="center" style={{ color: 'purple', fontWeight: 'bold' }}>
+                            </TableCell>
+
+                            <TableCell align="center" style={{ color: 'purple', fontWeight: 'bold' }}>
                                 Total minute: {totalMinutes}
                             </TableCell>
                         </TableRow>
