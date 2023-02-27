@@ -43,6 +43,14 @@ export default function Transaction() {
     }, 0);
 
 
+    const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
+        return t.type != isNaN ? acc + t.duration : acc;
+    }, 0);
+
+
+
+
+
     return (
         <div className="container text-center p-5 ">
             <div>
@@ -220,8 +228,15 @@ export default function Transaction() {
                             </TableCell>
                             <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
                                 Total Cash Out: {totalCashOut}
+
+                            </TableCell>
+                            <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
+                                Total minute: {totalMinutes}
                             </TableCell>
                         </TableRow>
+
+                        
+
                     </TableBody>
                 </Table>
             </TableContainer>
