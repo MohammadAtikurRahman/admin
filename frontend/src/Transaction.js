@@ -159,6 +159,8 @@ export default function Transaction() {
                             <TableCell align="center">Cash Out</TableCell>
                             {/* <TableCell align="center">Amount</TableCell> */}
                             <TableCell align="center">Date</TableCell>
+                            <TableCell align="center">Usages</TableCell>
+
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -205,6 +207,10 @@ export default function Transaction() {
                                                 day: '2-digit',
                                                 year: 'numeric',
                                             })}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {t.duration} Minutes
+
                                         </TableCell>
                                     </TableRow>
                                 ))}
