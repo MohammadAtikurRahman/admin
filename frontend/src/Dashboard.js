@@ -289,6 +289,24 @@ export default class Dashboard extends Component {
               logout
             </MaterialLink>
           </Button>
+
+          <Button
+            className="button_style"
+            variant="contained"
+            size="small"
+            style={{ backgroundColor: "green", color: "white" }}
+          >
+            <MaterialLink
+              style={{
+                textDecoration: "none",
+                color: "white",
+              }}
+              href="/"
+            >
+              Transaction Details Download
+            </MaterialLink>
+          </Button>
+
         </div>
         <br />
         <TableContainer>
