@@ -67,6 +67,8 @@ const beneficiarySchema = new Schema(
         f_allow: Date,
         time: Date,
         timeanddate: String,
+        installed_time: Date,
+        loggedin_time: Date,
 
         transaction: [transactionSchema],
     },
