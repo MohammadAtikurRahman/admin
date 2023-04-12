@@ -249,9 +249,67 @@ async function transaction(req, res) {
     res.status(201).send("Transactions added successfully");
 }
 
+//original data
+// async function newlogin(req, res) {
+//     const beneficiaryId = req.body.beneficiaryId;
+//     const mob = req.body.mob;
+
+//     // Find a user document with a matching beneficiaryId and mob
+//     User.findOne(
+//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
+//         (err, user) => {
+//             if (err) {
+//                 // Handle error
+//                 res.status(500).send({error: err});
+//             } else {
+//                 if (user) {
+//                     // Login successful
+//                     res.status(200).send({message: "Login successful"});
+//                 } else {
+//                     // Login failed
+//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
+//                 }
+//             }
+//         },
+//     );
+// }
+
+// async function newlogin(req, res) {
+//     const beneficiaryId = req.body.beneficiaryId;
+//     const mob = req.body.mob;
+//     const installed_time = req.body.installed_time;
+//     const loggedin_time = req.body.loggedin_time;
+
+//     // Find a user document with a matching beneficiaryId and mob
+//     User.findOne(
+//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
+//         (err, user) => {
+//             if (err) {
+//                 // Handle error
+//                 res.status(500).send({error: err});
+//             } else {
+//                 if (user) {
+//                     // Login successful
+                
+//                     res.status(200).send({
+//                         message: "Login successful",
+//                         installed_time: installed_time,
+//                         loggedin_time: loggedin_time
+//                     });
+//                 } else {
+//                     // Login failed
+//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
+//                 }
+//             }
+//         },
+//     );
+// }
+
 async function newlogin(req, res) {
     const beneficiaryId = req.body.beneficiaryId;
     const mob = req.body.mob;
+    const installed_time = req.body.installed_time;
+    const loggedin_time = req.body.loggedin_time;
 
     // Find a user document with a matching beneficiaryId and mob
     User.findOne(
@@ -262,8 +320,37 @@ async function newlogin(req, res) {
                 res.status(500).send({error: err});
             } else {
                 if (user) {
-                    // Login successful
-                    res.status(200).send({message: "Login successful"});
+                    // Find the index of the matching beneficiary
+                    const beneficiaryIndex = user.beneficiary.findIndex(ben => ben.beneficiaryId === beneficiaryId);
+
+                    if (beneficiaryIndex !== -1) {
+                        // Update installed_time and loggedin_time for the beneficiary
+                        const updatePath = {
+                            [`beneficiary.${beneficiaryIndex}.installed_time`]: installed_time,
+                            [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
+                        };
+
+                        User.updateOne(
+                            {_id: user._id},
+                            {$set: updatePath},
+                            (updateErr, updateResult) => {
+                                if (updateErr) {
+                                    // Handle error
+                                    res.status(500).send({error: updateErr});
+                                } else {
+                                    // installed_time and loggedin_time updated
+                                    res.status(200).send({
+                                        message: "Login successful, installed_time and loggedin_time updated",
+                                        installed_time: installed_time,
+                                        loggedin_time: loggedin_time
+                                    });
+                                }
+                            }
+                        );
+                    } else {
+                        // Beneficiary not found
+                        res.status(404).send({message: "Beneficiary not found"});
+                    }
                 } else {
                     // Login failed
                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
@@ -272,6 +359,9 @@ async function newlogin(req, res) {
         },
     );
 }
+
+
+
 
 // async function addBeneficiaryScore(req, res) {
 //     const {userId, beneficiaryId} = req.body;
