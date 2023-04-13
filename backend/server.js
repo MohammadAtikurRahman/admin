@@ -86,6 +86,8 @@ app.use("/", (req, res, next) => {
             req.path == "/get-enumerator" ||
             req.path == "/get-all" ||
             req.path == "/get-testscore" ||
+            req.path == "/get-transaction" ||
+
             req.path == "/get-login" ||
             req.path == "/list-beneficiary" ||
             req.path == "/beneficiary" ||
@@ -414,6 +416,104 @@ app.get("/get-testscore", async (req, res) => {
     return res.status(200).json(extact_data);
 });
 
+
+app.get("/get-transaction", async (req, res) => {
+    let users = await user
+        .find({})
+        .select("-username")
+        .select("-password")
+        .select("-id")
+        .select("-_id")
+        .select("-userId")
+        .select("-createdAt")
+        .select("-updatedAt")
+        .select("-__v")
+        .select("-beneficiary._id")
+        .select("-beneficiary.m_nm")
+        .select("-beneficiary.f_nm")
+
+
+        .select("-beneficiary.dob")
+
+        .select("-beneficiary.sub_dis")
+        .select("-beneficiary.uni")
+        .select("-beneficiary.vill")
+        .select("-beneficiary.gen")
+
+        .select("-beneficiary.updatedAt")
+
+        .select("-beneficiary.ben_nid")
+        .select("-beneficiary.ben_id")
+        .select("-beneficiary.sl")
+        .select("-beneficiary.age")
+        .select("-beneficiary.dis")
+
+        .select("-beneficiary.relgn")
+        .select("-beneficiary.job")
+        .select("-beneficiary.test")
+        .select("-beneficiary.createdAt")
+
+        .select("-beneficiary.mob")
+        .select("-beneficiary.pgm")
+        .select("-beneficiary.pass")
+        .select("-beneficiary.bank")
+        .select("-beneficiary.branch")
+        .select("-beneficiary.r_out")
+
+        .select("-beneficiary.mob_1")
+        .select("-beneficiary.ben_sts")
+        .select("-beneficiary.nid_sts")
+        .select("-beneficiary.a_sts")
+
+        .select("-beneficiary.accre")
+        .select("-beneficiary.f_allow")
+        .select("-beneficiary.mob_own")
+        .select("-beneficiary.excuses")
+        .select("-beneficiary.u_nm")
+        .select("-beneficiary.transaction._id")
+        
+        .select("-beneficiary.transaction.beneficiaryId")
+        .select("-beneficiary.duration")
+        .select("-beneficiary.score1")
+        .select("-beneficiary.installed_time")
+
+        
+        
+        ;
+
+
+
+
+
+
+
+
+
+    const data = users;
+
+    const formatted_data = data[0];
+ 
+
+    extact_data = formatted_data["beneficiary"];
+
+// Filter extact_data based on the condition that both "in" and "out" types exist in the transaction arrays and loggedin_time is not null
+const filtered_data = extact_data.filter(obj => {
+    const hasTransaction = Array.isArray(obj.transaction) && obj.transaction.length > 0;
+    const hasInType = hasTransaction && obj.transaction.some(transaction => transaction.type === 'in');
+    const hasOutType = hasTransaction && obj.transaction.some(transaction => transaction.type === 'out');
+    const hasLoggedInTime = obj.loggedin_time !== null && obj.loggedin_time !== undefined;
+    return hasInType && hasOutType && hasLoggedInTime;
+});
+
+if (filtered_data.length > 0) {
+    return res.status(200).json(filtered_data);
+} else {
+    return res.status(404).json({message: "No objects found with both 'in' and 'out' types in the transaction arrays and loggedin_time not null"});
+}
+
+  
+
+});
 
 
 

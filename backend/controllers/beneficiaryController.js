@@ -5,7 +5,7 @@ const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user")
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const moment = require('moment','moment-timezone');
+const moment = require('moment-timezone');
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -308,6 +308,68 @@ async function transaction(req, res) {
 
 
 
+
+// async function newlogin(req, res) {
+//     const beneficiaryId = req.body.beneficiaryId;
+//     const mob = req.body.mob;
+
+//     // Find a user document with a matching beneficiaryId and mob
+//     User.findOne(
+//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
+//         (err, user) => {
+//             if (err) {
+//                 // Handle error
+//                 res.status(500).send({error: err});
+//             } else {
+//                 if (user) {
+//                     // Find the index of the matching beneficiary
+//                     const beneficiaryIndex = user.beneficiary.findIndex(ben => ben.beneficiaryId === beneficiaryId);
+
+//                     if (beneficiaryIndex !== -1) {
+//                         // Check if loggedin_time is not set
+//                         if (!user.beneficiary[beneficiaryIndex].loggedin_time) {
+//                             const loggedin_time = moment().tz('Asia/Dhaka').format('YYYY-MM-DDTHH:mm:ss.SSS');
+//                             const updatePath = {
+//                                 [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
+//                             };
+
+//                             User.updateOne(
+//                                 {_id: user._id},
+//                                 {$set: updatePath},
+//                                 (updateErr, updateResult) => {
+//                                     if (updateErr) {
+//                                         // Handle error
+//                                         res.status(500).send({error: updateErr});
+//                                     } else {
+//                                         // loggedin_time updated
+//                                         res.status(200).send({
+//                                             message: "Login successful, loggedin_time set for the first time",
+//                                             loggedin_time: loggedin_time
+//                                         });
+//                                     }
+//                                 }
+//                             );
+//                         } else {
+//                             // loggedin_time is already set, login successful without updating loggedin_time
+//                             res.status(200).send({
+//                                 message: "Login successful, loggedin_time not updated",
+//                                 loggedin_time: user.beneficiary[beneficiaryIndex].loggedin_time
+//                             });
+//                         }
+//                     } else {
+//                         // Beneficiary not found
+//                         res.status(404).send({message: "Beneficiary not found"});
+//                     }
+//                 } else {
+//                     // Login failed
+//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
+//                 }
+//             }
+//         },
+//     );
+// }
+
+
 async function newlogin(req, res) {
     const beneficiaryId = req.body.beneficiaryId;
     const mob = req.body.mob;
@@ -327,7 +389,8 @@ async function newlogin(req, res) {
                     if (beneficiaryIndex !== -1) {
                         // Check if loggedin_time is not set
                         if (!user.beneficiary[beneficiaryIndex].loggedin_time) {
-                            const loggedin_time = moment().utcOffset("+06:00").format('YYYY-MM-DDTHH:mm:ss.SSSZ');                            const updatePath = {
+                            const loggedin_time = moment().utc().add(6, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+                            const updatePath = {
                                 [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
                             };
 
@@ -366,7 +429,6 @@ async function newlogin(req, res) {
         },
     );
 }
-
 
 
 
