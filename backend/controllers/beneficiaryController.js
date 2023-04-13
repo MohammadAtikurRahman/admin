@@ -5,6 +5,7 @@ const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user")
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const moment = require('moment','moment-timezone');
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -305,11 +306,11 @@ async function transaction(req, res) {
 //     );
 // }
 
+
+
 async function newlogin(req, res) {
     const beneficiaryId = req.body.beneficiaryId;
     const mob = req.body.mob;
-    const installed_time = req.body.installed_time;
-    const loggedin_time = req.body.loggedin_time;
 
     // Find a user document with a matching beneficiaryId and mob
     User.findOne(
@@ -324,29 +325,35 @@ async function newlogin(req, res) {
                     const beneficiaryIndex = user.beneficiary.findIndex(ben => ben.beneficiaryId === beneficiaryId);
 
                     if (beneficiaryIndex !== -1) {
-                        // Update installed_time and loggedin_time for the beneficiary
-                        const updatePath = {
-                            [`beneficiary.${beneficiaryIndex}.installed_time`]: installed_time,
-                            [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
-                        };
+                        // Check if loggedin_time is not set
+                        if (!user.beneficiary[beneficiaryIndex].loggedin_time) {
+                            const loggedin_time = moment().utcOffset("+06:00").format('YYYY-MM-DDTHH:mm:ss.SSSZ');                            const updatePath = {
+                                [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
+                            };
 
-                        User.updateOne(
-                            {_id: user._id},
-                            {$set: updatePath},
-                            (updateErr, updateResult) => {
-                                if (updateErr) {
-                                    // Handle error
-                                    res.status(500).send({error: updateErr});
-                                } else {
-                                    // installed_time and loggedin_time updated
-                                    res.status(200).send({
-                                        message: "Login successful, installed_time and loggedin_time updated",
-                                        installed_time: installed_time,
-                                        loggedin_time: loggedin_time
-                                    });
+                            User.updateOne(
+                                {_id: user._id},
+                                {$set: updatePath},
+                                (updateErr, updateResult) => {
+                                    if (updateErr) {
+                                        // Handle error
+                                        res.status(500).send({error: updateErr});
+                                    } else {
+                                        // loggedin_time updated
+                                        res.status(200).send({
+                                            message: "Login successful, loggedin_time set for the first time",
+                                            loggedin_time: loggedin_time
+                                        });
+                                    }
                                 }
-                            }
-                        );
+                            );
+                        } else {
+                            // loggedin_time is already set, login successful without updating loggedin_time
+                            res.status(200).send({
+                                message: "Login successful, loggedin_time not updated",
+                                loggedin_time: user.beneficiary[beneficiaryIndex].loggedin_time
+                            });
+                        }
                     } else {
                         // Beneficiary not found
                         res.status(404).send({message: "Beneficiary not found"});

@@ -21,6 +21,8 @@
         "imdb-api": "^4.4.1",
         "jsonwebtoken": "^8.5.1",
         "jwt-decode": "^3.1.2",
+        "moment": "^2.29.4",
+        "moment-timezone": "^0.5.43",
         "mongoose": "^5.11.7",
         "multer": "^1.4.2",
         "shortid": "^2.2.16"
