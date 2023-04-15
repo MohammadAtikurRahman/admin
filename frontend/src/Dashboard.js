@@ -25,30 +25,45 @@ const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB');
+};
+
+const formatTime = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+};
+
+// ...rest of the code
+
+
 const flattenTransactions = (data) => {
   return data.map((entry) => {
     const transactions = entry.transaction;
 
     return transactions.map((transaction, index) => {
       const output = {
-        beneficiaryId: entry.beneficiaryId,
-        beneficiaryMobile: transaction.beneficiaryMobile,
+        'Beneficiary Id': entry.beneficiaryId,
+        'Beneficiary Mobile': transaction.beneficiaryMobile,
         'Cash Status': transaction.type === 'in' ? 'Cash In' : 'Cash Out',
-        amount: transaction.amount,
-        date: transaction.date,
-        loggedin_time: entry.loggedin_time,
+        'Amount': transaction.amount,
+        'Date': formatDate(transaction.date),
+        'Time': formatTime(transaction.date),
+        'Loggedin Time': entry.loggedin_time,
       };
 
       if (index > 0) {
-        output.name = "";
-        output.loggedin_time = "";
+        output['Loggedin Time'] = "";
       }
-
 
       return output;
     });
   }).flat();
 };
+
+// ...rest of the code
+
 
 const getData = async () => {
   try {
