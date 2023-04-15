@@ -25,14 +25,40 @@ const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 
+const flattenTransactions = (data) => {
+  return data.map((entry) => {
+    const transactions = entry.transaction;
+
+    return transactions.map((transaction, index) => {
+      const output = {
+        beneficiaryId: entry.beneficiaryId,
+        beneficiaryMobile: transaction.beneficiaryMobile,
+        'Cash Status': transaction.type === 'in' ? 'Cash In' : 'Cash Out',
+        amount: transaction.amount,
+        date: transaction.date,
+        loggedin_time: entry.loggedin_time,
+      };
+
+      if (index > 0) {
+        output.name = "";
+        output.loggedin_time = "";
+      }
+
+
+      return output;
+    });
+  }).flat();
+};
+
 const getData = async () => {
   try {
-      const res = await axios.get(baseUrl + "/get-transaction");
-      return res.data;
+    const res = await axios.get(baseUrl + "/get-transaction");
+    return flattenTransactions(res.data);
   } catch (error) {
-      console.error(error);
+    console.error(error);
   }
 };
+
 const exportData = async () => {
   const data = await getData();
   const fields = Object.keys(data[0]);
@@ -41,7 +67,7 @@ const exportData = async () => {
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
   link.setAttribute("href", url);
-  link.setAttribute("download", "collection.csv");
+  link.setAttribute("download", "transaction.csv");
   link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
