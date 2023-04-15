@@ -38,6 +38,9 @@ const formatTime = (dateString) => {
 // ...rest of the code
 
 
+
+
+
 const flattenTransactions = (data) => {
   return data.map((entry) => {
     const transactions = entry.transaction;
@@ -50,10 +53,12 @@ const flattenTransactions = (data) => {
         'Amount': transaction.amount,
         'Date': formatDate(transaction.date),
         'Time': formatTime(transaction.date),
-        'Loggedin Time': entry.loggedin_time,
+        'Loggedin Date': formatDate(entry.loggedin_time),
+        'Loggedin Time': formatTime(entry.loggedin_time),
       };
 
       if (index > 0) {
+        output['Loggedin Date'] = "";
         output['Loggedin Time'] = "";
       }
 
@@ -61,6 +66,8 @@ const flattenTransactions = (data) => {
     });
   }).flat();
 };
+
+// ...rest of the code
 
 // ...rest of the code
 
