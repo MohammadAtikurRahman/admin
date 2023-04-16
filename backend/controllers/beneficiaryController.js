@@ -371,16 +371,16 @@ async function transaction(req, res) {
 
 
 async function newlogin(req, res) {
-    const beneficiaryId = req.body.beneficiaryId;
+    const beneficiaryId = parseInt(req.body.beneficiaryId);
     const mob = req.body.mob;
 
-    // Find a user document with a matching beneficiaryId and mob
+    // Find a user document with a matching beneficiaryId and mob within the array
     User.findOne(
-        {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
+        { "beneficiary": { $elemMatch: { "beneficiaryId": beneficiaryId, "mob": mob } } },
         (err, user) => {
             if (err) {
                 // Handle error
-                res.status(500).send({error: err});
+                res.status(500).send({ error: err });
             } else {
                 if (user) {
                     // Find the index of the matching beneficiary
@@ -395,12 +395,12 @@ async function newlogin(req, res) {
                             };
 
                             User.updateOne(
-                                {_id: user._id},
-                                {$set: updatePath},
+                                { _id: user._id },
+                                { $set: updatePath },
                                 (updateErr, updateResult) => {
                                     if (updateErr) {
                                         // Handle error
-                                        res.status(500).send({error: updateErr});
+                                        res.status(500).send({ error: updateErr });
                                     } else {
                                         // loggedin_time updated
                                         res.status(200).send({
@@ -419,16 +419,17 @@ async function newlogin(req, res) {
                         }
                     } else {
                         // Beneficiary not found
-                        res.status(404).send({message: "Beneficiary not found"});
+                        res.status(404).send({ message: "Beneficiary not found" });
                     }
                 } else {
                     // Login failed
-                    res.status(401).send({message: "Invalid beneficiaryId or mob"});
+                    res.status(401).send({ message: "Invalid beneficiaryId or mob" });
                 }
             }
-        },
+        }
     );
 }
+
 
 
 
