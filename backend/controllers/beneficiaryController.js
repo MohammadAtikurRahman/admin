@@ -204,17 +204,22 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    let promises = req.body.map(transaction => { // Map instead of forEach
+    let promises = req.body.map(transaction => {
         return User.findOne({
-            "beneficiary.beneficiaryId": transaction.beneficiaryId, 
+            "beneficiary.beneficiaryId": transaction.beneficiaryId,
             "beneficiary.transaction": {
-                $not: {
-                    $elemMatch: transaction // Check if the transaction already exists
+                $elemMatch: {
+                    beneficiaryId: transaction.beneficiaryId,
+                    beneficiaryMobile: transaction.beneficiaryMobile,
+                    type: transaction.type,
+                    amount: transaction.amount,
+                    date: transaction.date,
+                    duration: transaction.duration
                 }
             }
         })
         .then(user => {
-            if (user) {
+            if (!user) {
                 return User.updateOne(
                     { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                     { $push: { "beneficiary.$.transaction": transaction }},
