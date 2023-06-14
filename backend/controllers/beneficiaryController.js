@@ -226,49 +226,21 @@ async function transaction(req, res) {
                     { new: true }
                 );
             } else {
-                throw new Error("Beneficiary not found or transaction already exists");
+                return Promise.resolve("Duplicate transaction found.");
             }
         })
     });
 
     Promise.all(promises)
-        .then(() => {
-            removeDuplicates(req, res); // Call removeDuplicates after transactions are done
+        .then(results => {
+            if (results.includes("Duplicate transaction found.")) {
+                return res.status(409).send("Duplicate transaction found.");
+            }
+            res.status(201).send("Transactions added successfully");
         })
         .catch(error => res.status(400).send(error));
 }
 
-
-async function removeDuplicates(req, res) {
-    try {
-        const users = await User.find({});
-
-        for (let user of users) {
-            for (let beneficiary of user.beneficiary) {
-                let uniqueTransactions = [];
-
-                beneficiary.transaction.forEach(transaction => {
-                    if (!uniqueTransactions.find(t => 
-                        t.beneficiaryId === transaction.beneficiaryId &&
-                        t.beneficiaryMobile === transaction.beneficiaryMobile &&
-                        t.type === transaction.type &&
-                        t.amount === transaction.amount &&
-                        t.date === transaction.date &&
-                        t.duration === transaction.duration)) {
-                        uniqueTransactions.push(transaction);
-                    }
-                });
-
-                beneficiary.transaction = uniqueTransactions;
-            }
-            await user.save();
-        }
-
-        res.status(200).send("Duplicates removed successfully");
-    } catch (error) {
-        res.status(400).send(error);
-    }
-}
 
 
 
