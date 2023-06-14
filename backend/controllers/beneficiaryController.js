@@ -228,7 +228,7 @@ async function transaction(req, res) {
             beneficiary.transaction.push(transaction);
         }
 
-        await user.save();
+        await User.save();
         res.status(201).send("Transactions added successfully");
 
     } catch (error) {
