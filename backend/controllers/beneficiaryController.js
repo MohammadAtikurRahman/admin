@@ -203,38 +203,31 @@ async function beneficiaryLogin(req, res) {
     return res.status(401).json({message: "Something went wrong."});
 }
 
+const crypto = require('crypto');
+
 async function transaction(req, res) {
-    // User.findOneAndUpdate(
-    //     { "beneficiary.beneficiaryId": req.body.beneficiaryId },
-    //     { $push: { "beneficiary.$.transaction": {
-    //       cashIn: req.body.cashIn,
-    //       cashInTime: req.body.cashInTime,
-    //       cashOutTime: req.body.cashOutTime,
-    //       cashOut: req.body.cashOut
-    //       beneficiaryMobile: req.body.beneficiaryMobile
-    //     } } },
-    //     { new: true }
-    //   )
-    //     .then(user => {
-    //       if (!user) {
-    //         return res.status(404).send("Beneficiary not found");
-    //       }
-    //       res.status(201).send(user);
-    //     })
-    //     .catch(error => res.status(400).send(error));
 
     req.body.forEach(transaction => {
+
+        const {beneficiaryId, beneficiaryMobile, type, amount, date, duration} = transaction;
+        
+        // create a hash of the transaction fields
+        const transactionId = crypto.createHash('sha256')
+            .update(`${beneficiaryId}${beneficiaryMobile}${type}${amount}${date}${duration}`)
+            .digest('hex');
+
         User.findOneAndUpdate(
             {"beneficiary.beneficiaryId": transaction.beneficiaryId},
             {
-                $push: {
+                $addToSet: {
                     "beneficiary.$.transaction": {
-                        beneficiaryId: transaction.beneficiaryId,
-                        beneficiaryMobile: transaction.beneficiaryMobile,
-                        type: transaction.type,
-                        amount: transaction.amount,
-                        date: transaction.date,
-                        duration: transaction.duration,
+                        transactionId: transactionId,
+                        beneficiaryId: beneficiaryId,
+                        beneficiaryMobile: beneficiaryMobile,
+                        type: type,
+                        amount: amount,
+                        date: date,
+                        duration: duration,
                     },
                 },
             },
@@ -249,6 +242,7 @@ async function transaction(req, res) {
     });
     res.status(201).send("Transactions added successfully");
 }
+
 
 //original data
 // async function newlogin(req, res) {
