@@ -207,40 +207,55 @@ const crypto = require('crypto');
 
 async function transaction(req, res) {
 
-    req.body.forEach(transaction => {
+    for (const newTransaction of req.body) {
 
-        const {beneficiaryId, beneficiaryMobile, type, amount, date, duration} = transaction;
+        const {beneficiaryId, beneficiaryMobile, type, amount, date, duration} = newTransaction;
         
         // create a hash of the transaction fields
         const transactionId = crypto.createHash('sha256')
             .update(`${beneficiaryId}${beneficiaryMobile}${type}${amount}${date}${duration}`)
             .digest('hex');
 
-        User.findOneAndUpdate(
-            {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-            {
-                $addToSet: {
-                    "beneficiary.$.transaction": {
-                        transactionId: transactionId,
-                        beneficiaryId: beneficiaryId,
-                        beneficiaryMobile: beneficiaryMobile,
-                        type: type,
-                        amount: amount,
-                        date: date,
-                        duration: duration,
+        try {
+            const user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
+
+            if (!user) {
+                return res.status(404).send("Beneficiary not found");
+            }
+
+            // Check if the transaction already exists
+            if (user.beneficiary.some(beneficiary => 
+                beneficiary.transaction.some(transaction => 
+                    transaction.transactionId === transactionId
+                )
+            )) {
+                return res.status(409).send('You have tried to insert the same data');
+            }
+
+            // Update the user with the new transaction
+            const updatedUser = await User.findOneAndUpdate(
+                {"beneficiary.beneficiaryId": beneficiaryId},
+                {
+                    $push: {
+                        "beneficiary.$.transaction": {
+                            transactionId: transactionId,
+                            beneficiaryId: beneficiaryId,
+                            beneficiaryMobile: beneficiaryMobile,
+                            type: type,
+                            amount: amount,
+                            date: date,
+                            duration: duration,
+                        },
                     },
                 },
-            },
-            {new: true},
-        )
-            .then(user => {
-                if (!user) {
-                    return res.status(404).send("Beneficiary not found");
-                }
-            })
-            .catch(error => res.status(400).send(error));
-    });
-    res.status(201).send("Transactions added successfully");
+                {new: true},
+            );
+
+        } catch (error) {
+            return res.status(400).send(error);
+        }
+    }
+    return res.status(201).send("Transactions added successfully");
 }
 
 
