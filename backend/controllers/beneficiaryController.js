@@ -205,14 +205,15 @@ async function beneficiaryLogin(req, res) {
 
 async function transaction(req, res) {
     let transactionErrors = [];
-    
+    let duplicateTransactions = [];
+
     for (let transaction of req.body) {
         try {
-            let user = await User.findOneAndUpdate(
-                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+            let user = await User.findOne(
                 {
-                    $push: {
-                        "beneficiary.$.transaction": {
+                    "beneficiary.beneficiaryId": transaction.beneficiaryId,
+                    "beneficiary.transaction": {
+                        $elemMatch: {
                             beneficiaryId: transaction.beneficiaryId,
                             beneficiaryMobile: transaction.beneficiaryMobile,
                             type: transaction.type,
@@ -221,10 +222,24 @@ async function transaction(req, res) {
                             duration: transaction.duration,
                         },
                     },
+                }
+            );
+
+            if (user) {
+                duplicateTransactions.push(transaction);
+                continue;  // Skip to the next iteration as the transaction already exists
+            }
+
+            user = await User.findOneAndUpdate(
+                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+                {
+                    $push: {
+                        "beneficiary.$.transaction": transaction,
+                    },
                 },
                 {new: true},
             );
-            
+
             if (!user) {
                 transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: "Beneficiary not found"});
             }
@@ -233,14 +248,18 @@ async function transaction(req, res) {
             transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: error.message});
         }
     };
-    
+
     if (transactionErrors.length > 0) {
-        res.status(400).json(transactionErrors);
+        res.status(400).json({errors: transactionErrors, duplicates: duplicateTransactions});
+    }
+    else if (duplicateTransactions.length > 0) {
+        res.status(200).json({message: "Transactions added successfully, but some were duplicates", duplicates: duplicateTransactions});
     }
     else {
-        res.status(201).send("Transactions  successfully");
+        res.status(201).send("Transactions added successfully");
     }
 }
+
 
 
 
