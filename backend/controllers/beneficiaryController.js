@@ -255,7 +255,7 @@ async function transaction(req, res) {
             return res.status(400).send(error);
         }
     }
-    return res.status(201).send("Transactions successfully");
+    return res.status(201).send("Transactions added successfully");
 }
 
 
