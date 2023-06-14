@@ -218,7 +218,7 @@ async function transaction(req, res) {
                 return ben.transaction.some(trans => {
                     return trans.beneficiaryId == transaction.beneficiaryId &&
                         trans.beneficiaryMobile == transaction.beneficiaryMobile &&
-                        trans.type == transaction.type &&
+               
                         trans.amount == transaction.amount &&
                         trans.date == transaction.date &&
                         trans.duration == transaction.duration;
