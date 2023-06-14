@@ -204,54 +204,54 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    const tasks = req.body.map(async transaction => {
-        // Get the user first
-        const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
-        if (!user) {
-            // No user, no update
-            return Promise.resolve();
-        }
+    req.body.forEach(async transaction => {
+        try {
+            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
+            if (!user) {
+                return res.status(404).send("Beneficiary not found");
+            }
+            
+            // Check if transaction already exists
+            const transactionExists = user.beneficiary.some(beneficiary => {
+                return beneficiary.transaction.some(existingTransaction => {
+                    return existingTransaction.beneficiaryId === transaction.beneficiaryId
+                        && existingTransaction.beneficiaryMobile === transaction.beneficiaryMobile
+                        && existingTransaction.type === transaction.type
+                        && existingTransaction.amount === transaction.amount
+                        && existingTransaction.date === transaction.date
+                        && existingTransaction.duration === transaction.duration;
+                });
+            });
 
-        // Check if the transaction already exists in the user's beneficiary
-        const exists = user.beneficiary.some(b => {
-            return b.transaction.some(t => 
-                t.beneficiaryId === transaction.beneficiaryId &&
-                t.beneficiaryMobile === transaction.beneficiaryMobile &&
-                t.type === transaction.type &&
-                t.amount === transaction.amount &&
-                t.date === transaction.date &&
-                t.duration === transaction.duration
-            );
-        });
+            if (transactionExists) {
+                return res.status(400).send("Transaction already exists");
+            }
 
-        if (exists) {
-            // If it exists, no update
-            return Promise.resolve();
-        }
-
-        // If it doesn't exist, perform the update
-        return User.findOneAndUpdate(
-            { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-            {
-                $push: {
-                    "beneficiary.$.transaction": {
-                        beneficiaryId: transaction.beneficiaryId,
-                        beneficiaryMobile: transaction.beneficiaryMobile,
-                        type: transaction.type,
-                        amount: transaction.amount,
-                        date: transaction.date,
-                        duration: transaction.duration,
+            // If transaction does not exist, push new transaction
+            await User.findOneAndUpdate(
+                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+                {
+                    $push: {
+                        "beneficiary.$.transaction": {
+                            beneficiaryId: transaction.beneficiaryId,
+                            beneficiaryMobile: transaction.beneficiaryMobile,
+                            type: transaction.type,
+                            amount: transaction.amount,
+                            date: transaction.date,
+                            duration: transaction.duration,
+                        },
                     },
                 },
-            },
-            { new: true },
-        );
-    });
+                { new: true },
+            );
 
-    Promise.all(tasks)
-        .then(() => res.status(201).send("Transactions added successfully"))
-        .catch(error => res.status(400).send(error));
+            res.status(201).send("Transaction added successfully");
+        } catch (error) {
+            res.status(400).send(error);
+        }
+    });
 }
+
 
 //original data
 // async function newlogin(req, res) {
