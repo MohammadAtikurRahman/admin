@@ -212,7 +212,7 @@ export default function Transaction() {
 
 
 
-
+{/* 
 
                                             {new Date(t.date).toLocaleString('en-US', {
                                                 hour: 'numeric',
@@ -228,7 +228,9 @@ export default function Transaction() {
                                                 month: '2-digit',
                                                 day: '2-digit',
                                                 year: 'numeric',
-                                            })}
+                                            })} */}
+
+                                            {t.date}
                                         </TableCell>
                                         <TableCell align="center">
                                             {t.duration} Minutes
