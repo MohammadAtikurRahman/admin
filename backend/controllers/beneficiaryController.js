@@ -204,32 +204,12 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    for (const transaction of req.body) {
+    let transactionErrors = [];
+    
+    for (let transaction of req.body) {
         try {
-            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
-            if (!user) {
-                return res.status(404).send("Beneficiary not found");
-            }
-            
-            // Check if transaction already exists
-            const transactionExists = user.beneficiary.some(beneficiary => {
-                return beneficiary.transaction.some(existingTransaction => {
-                    return existingTransaction.beneficiaryId === transaction.beneficiaryId
-                        && existingTransaction.beneficiaryMobile === transaction.beneficiaryMobile
-                        && existingTransaction.type === transaction.type
-                        && existingTransaction.amount === transaction.amount
-                        && existingTransaction.date === transaction.date
-                        && existingTransaction.duration === transaction.duration;
-                });
-            });
-
-            if (transactionExists) {
-                continue; // Skip this iteration and move to the next transaction
-            }
-
-            // If transaction does not exist, push new transaction
-            await User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+            let user = await User.findOneAndUpdate(
+                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
                 {
                     $push: {
                         "beneficiary.$.transaction": {
@@ -242,15 +222,26 @@ async function transaction(req, res) {
                         },
                     },
                 },
-                { new: true },
+                {new: true},
             );
-        } catch (error) {
-            return res.status(400).send(error);
+            
+            if (!user) {
+                transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: "Beneficiary not found"});
+            }
         }
+        catch (error) {
+            transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: error.message});
+        }
+    };
+    
+    if (transactionErrors.length > 0) {
+        res.status(400).json(transactionErrors);
     }
-
-    res.status(201).send("Transactions added successfully");
+    else {
+        res.status(201).send("Transactions  successfully");
+    }
 }
+
 
 
 //original data
