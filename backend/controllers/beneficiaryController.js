@@ -204,41 +204,48 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    try {
-        for (let transaction of req.body) {
-            let user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
+    for (let transaction of req.body) {
+        try {
+            // Find the user with the beneficiaryId
+            let user = await User.findOne({"beneficiary.beneficiaryId": transaction.beneficiaryId});
+
             if (!user) {
                 return res.status(404).send("Beneficiary not found");
             }
 
-            // Find the beneficiary using beneficiaryId
-            let beneficiary = user.beneficiary.find(b => b.beneficiaryId === transaction.beneficiaryId);
+            // Check if transaction exists
+            let transactionExists = user.beneficiary.some(ben => {
+                return ben.transaction.some(trans => {
+                    return trans.beneficiaryId == transaction.beneficiaryId &&
+                        trans.beneficiaryMobile == transaction.beneficiaryMobile &&
+                        trans.type == transaction.type &&
+                        trans.amount == transaction.amount &&
+                        trans.date == transaction.date &&
+                        trans.duration == transaction.duration;
+                });
+            });
 
-            // Check if the transaction already exists
-            let existingTransaction = beneficiary.transaction.find(t => 
-                t.beneficiaryId === transaction.beneficiaryId &&
-                t.beneficiaryMobile === transaction.beneficiaryMobile &&
-                t.type === transaction.type &&
-                t.amount === transaction.amount &&
-                t.date === transaction.date &&
-                t.duration === transaction.duration
-            );
-
-            // If the transaction already exists, don't insert and send a response
-            if (existingTransaction) {
+            // If transaction does not exist, add it
+            if (!transactionExists) {
+                await User.findOneAndUpdate(
+                    {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+                    {
+                        $push: {
+                            "beneficiary.$.transaction": transaction,
+                        },
+                    },
+                    {new: true},
+                );
+            } else {
+                // If transaction exists, send a response and exit the function
                 return res.status(400).send("You have tried to insert the same data");
             }
-
-            // Push the transaction to the transactions array
-            beneficiary.transaction.push(transaction);
-
-            // Save the user document
-            await user.save();
+        } catch (error) {
+            return res.status(500).send(error);
         }
-        res.status(201).send("Transactions added successfully");
-    } catch (error) {
-        res.status(400).send(error);
     }
+
+    res.status(201).send(" successfully");
 }
 
 
