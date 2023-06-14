@@ -204,7 +204,7 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    req.body.forEach(async transaction => {
+    for (const transaction of req.body) {
         try {
             const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
             if (!user) {
@@ -224,7 +224,7 @@ async function transaction(req, res) {
             });
 
             if (transactionExists) {
-                return res.status(400).send("Transaction already exists");
+                continue; // Skip this iteration and move to the next transaction
             }
 
             // If transaction does not exist, push new transaction
@@ -244,12 +244,12 @@ async function transaction(req, res) {
                 },
                 { new: true },
             );
-
-           return res.status(201).send("Transaction added successfully");
         } catch (error) {
-          return  res.status(400).send(error);
+            return res.status(400).send(error);
         }
-    });
+    }
+
+    res.status(201).send("Transactions added successfully");
 }
 
 
