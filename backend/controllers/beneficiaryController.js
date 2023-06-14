@@ -216,10 +216,7 @@ async function transaction(req, res) {
             // Check if transaction exists
             let transactionExists = user.beneficiary.some(ben => {
                 return ben.transaction.some(trans => {
-                    return trans.beneficiaryId == transaction.beneficiaryId &&
-                        trans.beneficiaryMobile == transaction.beneficiaryMobile &&
-               
-                        trans.amount == transaction.amount &&
+                    return trans.amount == transaction.amount &&
                         trans.date == transaction.date &&
                         trans.duration == transaction.duration;
                 });
@@ -245,8 +242,9 @@ async function transaction(req, res) {
         }
     }
 
-    res.status(201).send(" successfully");
+    res.status(201).send("Transactions added successfully");
 }
+
 
 
 //original data
