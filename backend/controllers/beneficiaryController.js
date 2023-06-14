@@ -205,35 +205,33 @@ async function beneficiaryLogin(req, res) {
 
 async function transaction(req, res) {
     try {
-        for(let transaction of req.body) {
-            // Get the user
-            const user = await User.findOne({"beneficiary.beneficiaryId": transaction.beneficiaryId});
-            
-            // If user doesn't exist, return error
-            if (!user) return res.status(404).send("Beneficiary not found");
+        for (let transaction of req.body) {
+            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
 
-            // Check if transaction with same beneficiaryId already exists in transactions
-            let duplicateTransaction = user.beneficiary.reduce((acc, beneficiary) => {
-                return acc || beneficiary.transaction.some(t => t.beneficiaryId === transaction.beneficiaryId);
-            }, false);
-
-            // If no duplicate transaction, then add new transaction
-            if (!duplicateTransaction) {
-                await User.findOneAndUpdate(
-                    {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-                    {
-                        $push: {
-                            "beneficiary.$.transaction": transaction,
-                        },
-                    },
-                    {new: true},
-                )
-            } else {
-                return res.status(409).send("You have tried to insert the same data");
+            if (!user) {
+                return res.status(404).send("Beneficiary not found");
             }
+
+            const beneficiary = user.beneficiary.find(ben => ben.beneficiaryId === transaction.beneficiaryId);
+            const duplicateTransaction = beneficiary.transaction.find(tran => 
+                tran.beneficiaryId === transaction.beneficiaryId && 
+                tran.beneficiaryMobile === transaction.beneficiaryMobile && 
+                tran.type === transaction.type &&
+                tran.amount === transaction.amount &&
+                tran.date === transaction.date &&
+                tran.duration === transaction.duration);
+
+            if (duplicateTransaction) {
+                return res.status(400).send('You have tried to insert the same data');
+            }
+
+            beneficiary.transaction.push(transaction);
         }
+
+        await user.save();
         res.status(201).send("Transactions added successfully");
-    } catch(error) {
+
+    } catch (error) {
         res.status(400).send(error);
     }
 }
