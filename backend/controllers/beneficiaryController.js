@@ -206,31 +206,36 @@ async function beneficiaryLogin(req, res) {
 async function transaction(req, res) {
     try {
         for (let transaction of req.body) {
-            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
-
+            let user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
             if (!user) {
                 return res.status(404).send("Beneficiary not found");
             }
 
-            const beneficiary = user.beneficiary.find(ben => ben.beneficiaryId === transaction.beneficiaryId);
-            const duplicateTransaction = beneficiary.transaction.find(tran => 
-                tran.beneficiaryId === transaction.beneficiaryId && 
-                tran.beneficiaryMobile === transaction.beneficiaryMobile && 
-                tran.type === transaction.type &&
-                tran.amount === transaction.amount &&
-                tran.date === transaction.date &&
-                tran.duration === transaction.duration);
+            // Find the beneficiary using beneficiaryId
+            let beneficiary = user.beneficiary.find(b => b.beneficiaryId === transaction.beneficiaryId);
 
-            if (duplicateTransaction) {
-                return res.status(400).send('You have tried to insert the same data');
+            // Check if the transaction already exists
+            let existingTransaction = beneficiary.transaction.find(t => 
+                t.beneficiaryId === transaction.beneficiaryId &&
+                t.beneficiaryMobile === transaction.beneficiaryMobile &&
+                t.type === transaction.type &&
+                t.amount === transaction.amount &&
+                t.date === transaction.date &&
+                t.duration === transaction.duration
+            );
+
+            // If the transaction already exists, don't insert and send a response
+            if (existingTransaction) {
+                return res.status(400).send("You have tried to insert the same data");
             }
 
+            // Push the transaction to the transactions array
             beneficiary.transaction.push(transaction);
+
+            // Save the user document
+            await user.save();
         }
-
-        await User.save();
         res.status(201).send("Transactions added successfully");
-
     } catch (error) {
         res.status(400).send(error);
     }
