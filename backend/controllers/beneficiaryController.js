@@ -245,9 +245,9 @@ async function transaction(req, res) {
                 { new: true },
             );
 
-            res.status(201).send("Transaction added successfully");
+           return res.status(201).send("Transaction added successfully");
         } catch (error) {
-            res.status(400).send(error);
+          return  res.status(400).send(error);
         }
     });
 }
