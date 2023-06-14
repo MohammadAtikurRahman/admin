@@ -204,60 +204,31 @@ async function beneficiaryLogin(req, res) {
 }
 
 async function transaction(req, res) {
-    let transactionErrors = [];
-    let duplicateTransactions = [];
-
-    for (let transaction of req.body) {
-        try {
-            let user = await User.findOne(
-                {
-                    "beneficiary.beneficiaryId": transaction.beneficiaryId,
-                    "beneficiary.transaction": {
-                        $elemMatch: {
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type,
-                            amount: transaction.amount,
-                            date: transaction.date,
-                            duration: transaction.duration,
-                        },
-                    },
+    let promises = req.body.map(transaction => { // Map instead of forEach
+        return User.findOne({
+            "beneficiary.beneficiaryId": transaction.beneficiaryId, 
+            "beneficiary.transaction": {
+                $not: {
+                    $elemMatch: transaction // Check if the transaction already exists
                 }
-            );
-
+            }
+        })
+        .then(user => {
             if (user) {
-                duplicateTransactions.push(transaction);
-                continue;  // Skip to the next iteration as the transaction already exists
+                return User.updateOne(
+                    { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+                    { $push: { "beneficiary.$.transaction": transaction }},
+                    { new: true }
+                );
+            } else {
+                throw new Error("Beneficiary not found or transaction already exists");
             }
+        })
+    });
 
-            user = await User.findOneAndUpdate(
-                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-                {
-                    $push: {
-                        "beneficiary.$.transaction": transaction,
-                    },
-                },
-                {new: true},
-            );
-
-            if (!user) {
-                transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: "Beneficiary not found"});
-            }
-        }
-        catch (error) {
-            transactionErrors.push({beneficiaryId: transaction.beneficiaryId, error: error.message});
-        }
-    };
-
-    if (transactionErrors.length > 0) {
-        res.status(400).json({errors: transactionErrors, duplicates: duplicateTransactions});
-    }
-    else if (duplicateTransactions.length > 0) {
-        res.status(200).json({message: "Transactions added successfully, but some were duplicates", duplicates: duplicateTransactions});
-    }
-    else {
-        res.status(201).send("Transactions added successfully");
-    }
+    Promise.all(promises)
+        .then(() => res.status(201).send("Transactions added successfully"))
+        .catch(error => res.status(400).send(error));
 }
 
 
