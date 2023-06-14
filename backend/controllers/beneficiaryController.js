@@ -206,52 +206,54 @@ async function beneficiaryLogin(req, res) {
 const crypto = require('crypto');
 
 async function transaction(req, res) {
-    try {
-        for (let transaction of req.body) {
-            const {beneficiaryId, beneficiaryMobile, type, amount, date, duration} = transaction;
-            
-            // create a hash of the transaction fields
-            const transactionId = crypto.createHash('sha256')
-                .update(`${beneficiaryId}${beneficiaryMobile}${type}${amount}${date}${duration}`)
-                .digest('hex');
 
-            // first find the user
-            let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
-            
-            if (!user) {
-                return res.status(404).send("Beneficiary not found");
-            }
+    for (let transaction of req.body) {
+        const { beneficiaryId, beneficiaryMobile, type, amount, date, duration } = transaction;
 
-            // check if this transactionId already exists
-            if (user.transactionIds.includes(transactionId)) {
-                return res.status(409).send('You have tried to insert the same data');
-            } 
+        // Find user with specified beneficiaryId
+        const user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
 
-            // Find the correct beneficiary
-            const beneficiary = user.beneficiary.find(b => b.beneficiaryId === beneficiaryId);
-            
-            if (beneficiary) {
-                // add this transaction
-                beneficiary.transaction.push({
-                    transactionId: transactionId,
-                    beneficiaryId: beneficiaryId,
-                    beneficiaryMobile: beneficiaryMobile,
-                    type: type,
-                    amount: amount,
-                    date: date,
-                    duration: duration,
-                });
-                user.transactionIds.push(transactionId); // Store the transactionId
-                user.markModified('beneficiary'); // tell Mongoose to check 'beneficiary' for changes
-                await user.save(); // save the updated user document
-            } else {
-                return res.status(404).send("Beneficiary not found");
-            }
+        // If user doesn't exist, return 404
+        if (!user) {
+            return res.status(404).send('Beneficiary not found');
         }
-        return res.status(201).send("Transactionssuccessfully");
-    } catch (error) {
-        return res.status(500).send(error.message);
+
+        // Check if transaction already exists
+        const transactionExists = user.beneficiary.some((beneficiary) => {
+            return beneficiary.transaction.some((t) => {
+                return t.beneficiaryId === beneficiaryId && 
+                       t.beneficiaryMobile === beneficiaryMobile && 
+                       t.type === type &&
+                       t.amount === amount &&
+                       t.date === date &&
+                       t.duration === duration;
+            });
+        });
+
+        // If transaction doesn't exist, add it to user's transactions
+        if (!transactionExists) {
+            await User.findOneAndUpdate(
+                {"beneficiary.beneficiaryId": beneficiaryId},
+                {
+                    $push: {
+                        "beneficiary.$.transaction": {
+                            beneficiaryId: beneficiaryId,
+                            beneficiaryMobile: beneficiaryMobile,
+                            type: type,
+                            amount: amount,
+                            date: date,
+                            duration: duration
+                        },
+                    },
+                },
+                {new: true}
+            ).catch((error) => res.status(400).send(error));
+        } else {
+            return res.status(409).send('You have tried to insert the same data');
+        }
     }
+
+    res.status(201).send('Transactions added successfully');
 }
 
 
