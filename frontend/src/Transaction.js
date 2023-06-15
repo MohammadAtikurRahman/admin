@@ -13,6 +13,22 @@ import {
 } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -21,26 +37,9 @@ const useStyles = makeStyles({
 export default function Transaction() {
     const [persons, setPerson] = useState([]);
     const location = useLocation();
-    let userProfile = location.state;
+    const userProfile = location.state;
     console.log("transaction details", userProfile);
     const navigate = useNavigate();
-
-    function removeDuplicates(arr) {
-      let uniqueArr = arr.filter((t, index, self) => 
-        index === self.findIndex((e) => 
-          e._id === t._id &&
-          e.beneficiaryId === t.beneficiaryId &&
-          e.beneficiaryMobile === t.beneficiaryMobile &&
-          e.type === t.type &&
-          e.amount === t.amount &&
-          e.date === t.date &&
-          e.duration === t.duration
-        )
-      );
-      return uniqueArr;
-    }
-    
-    userProfile.transaction = removeDuplicates(userProfile.transaction);
 
     function logOut() {
         localStorage.setItem("token", null);
@@ -61,6 +60,10 @@ export default function Transaction() {
     const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
         return t.type != isNaN ? acc + t.duration : acc;
     }, 0);
+
+
+
+
 
     return (
         <div className="container text-center p-5 ">
@@ -115,39 +118,109 @@ export default function Transaction() {
                 </Button>
             </div>
 
+            {/* <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="transaction table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">Beneficiary ID</TableCell>
+                            <TableCell align="center">Cash In</TableCell>
+                            <TableCell align="center">Cash Out</TableCell>
+                            <TableCell align="center">Amount</TableCell>
+                            <TableCell align="center">Date</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {userProfile?.transaction.map(t => (
+                            <TableRow key={t._id}>
+                                <TableCell component="th" scope="row"
+                                    align="center"
+                                >
+                                    {t.beneficiaryId}
+                                </TableCell>
+                                <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
+                                    {t.type === 'in' ? t.amount : ''}
+                                </TableCell>
+
+                                <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}  >
+                                    {t.type === 'out' ? t.amount : ''}
+                                </TableCell>
+                                <TableCell align="center">{t.amount}</TableCell>
+                                <TableCell align="center">
+
+
+                                    {new Date(t.date).toLocaleString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                        hour12: true,
+                                    })}
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {new Date(t.date).toLocaleString("en-GB", {
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        year: "numeric",
+                                    })}
+
+
+
+
+
+
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer> */}
+
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="transaction table">
                     <TableHead>
                         <TableRow>
+                            {/* <TableCell align="center">Beneficiary ID</TableCell> */}
                             <TableCell align="center">Cash In</TableCell>
                             <TableCell align="center">Cash Out</TableCell>
+                            {/* <TableCell align="center">Amount</TableCell> */}
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Usages</TableCell>
+                            <TableCell align="center">updatedat</TableCell>
 
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
-                            userProfile.transaction
-                                .filter(t => t.date)
+                            userProfile.transaction = userProfile.transaction.filter(t => t.date)
                                 .sort((a, b) => {
                                     const dateA = new Date(a.date);
                                     const dateB = new Date(b.date);
                                     return dateB - dateA;
                                 })
+
+
+
                                 .map(t => (
                                     <TableRow key={t._id}>
+                                        {/* <TableCell component="th" scope="row" align="center">
+                                    {t.beneficiaryId}
+                                </TableCell> */}
                                         <TableCell align="center" style={{ color: 'green', fontWeight: 'bold' }}>
                                             {t.type === 'in' ? t.amount : ''}
                                         </TableCell>
                                         <TableCell align="center" style={{ color: 'red', fontWeight: 'bold' }}>
                                             {t.type === 'out' ? t.amount : ''}
                                         </TableCell>
+                                        {/* <TableCell align="center">{t.amount}</TableCell> */}
                                         <TableCell align="center">
+
+
                                             {t.date}
                                         </TableCell>
                                         <TableCell align="center">
                                             {t.duration} Minutes
+
+                                        </TableCell>
+
+                                        <TableCell align="center">
+                                            {t.updatedAt} Minutes
 
                                         </TableCell>
                                     </TableRow>
@@ -167,6 +240,9 @@ export default function Transaction() {
                                 Total minute: {totalMinutes}
                             </TableCell>
                         </TableRow>
+
+                        
+
                     </TableBody>
                 </Table>
             </TableContainer>
