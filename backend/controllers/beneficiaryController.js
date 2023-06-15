@@ -205,21 +205,25 @@ async function beneficiaryLogin(req, res) {
 
 async function transaction(req, res) {
     let promises = req.body.map(transaction => {
-        return User.findOne({
-            "beneficiary.beneficiaryId": transaction.beneficiaryId,
-            "beneficiary.transaction": {
-                $elemMatch: {
-                    beneficiaryId: transaction.beneficiaryId,
-                    beneficiaryMobile: transaction.beneficiaryMobile,
-                    type: transaction.type,
-                    amount: transaction.amount,
-                    date: transaction.date,
-                    duration: transaction.duration
+        return User.aggregate([
+            // Unwind the transactions array
+            { $unwind: "$beneficiary.transaction" },
+            // Match transactions with the same fields
+            {
+                $match: {
+                    "beneficiary.beneficiaryId": transaction.beneficiaryId,
+                    "beneficiary.transaction.beneficiaryId": transaction.beneficiaryId,
+                    "beneficiary.transaction.beneficiaryMobile": transaction.beneficiaryMobile,
+                    "beneficiary.transaction.type": transaction.type,
+                    "beneficiary.transaction.amount": transaction.amount,
+                    "beneficiary.transaction.date": transaction.date,
+                    "beneficiary.transaction.duration": transaction.duration
                 }
             }
-        })
-        .then(user => {
-            if (!user) {
+        ])
+        .then(matchedTransactions => {
+            if (matchedTransactions.length === 0) {
+                // If no duplicate transaction was found, insert the new transaction
                 return User.updateOne(
                     { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                     { $push: { "beneficiary.$.transaction": transaction }},
@@ -228,7 +232,7 @@ async function transaction(req, res) {
             } else {
                 return Promise.resolve("Duplicate transaction found.");
             }
-        })
+        });
     });
 
     Promise.all(promises)

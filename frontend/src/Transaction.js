@@ -182,7 +182,6 @@ export default function Transaction() {
                             {/* <TableCell align="center">Amount</TableCell> */}
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Usages</TableCell>
-                            <TableCell align="center">updatedat</TableCell>
 
                         </TableRow>
                     </TableHead>
@@ -212,15 +211,29 @@ export default function Transaction() {
                                         <TableCell align="center">
 
 
+
+{/* 
+
+                                            {new Date(t.date).toLocaleString('en-US', {
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                hour12: true,
+                                            })}{' '}
+
+
+                                            &nbsp; &nbsp; &nbsp; &nbsp;
+
+
+                                            {new Date(t.date).toLocaleString('en-GB', {
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                year: 'numeric',
+                                            })} */}
+
                                             {t.date}
                                         </TableCell>
                                         <TableCell align="center">
                                             {t.duration} Minutes
-
-                                        </TableCell>
-
-                                        <TableCell align="center">
-                                            {t.updatedAt} Minutes
 
                                         </TableCell>
                                     </TableRow>
