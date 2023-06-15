@@ -28,14 +28,7 @@ export default function Transaction() {
     navigate("/");
   }
   const classes = useStyles();
-  const uniqueTransactions = userProfile.transaction.reduce(
-    (unique, transaction) => {
-      return unique.some((t) => t._id === transaction._id)
-        ? unique
-        : [...unique, transaction];
-    },
-    []
-  );
+
   const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
     return t.type === "in" ? acc + t.amount : acc;
   }, 0);
@@ -47,14 +40,7 @@ export default function Transaction() {
   const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
     return t.type != isNaN ? acc + t.duration : acc;
   }, 0);
-  function filterDuplicates(transactions) {
-    const seen = new Set();
-    return transactions.filter((transaction) => {
-      const duplicate = seen.has(JSON.stringify(transaction));
-      seen.add(JSON.stringify(transaction));
-      return !duplicate;
-    });
-  }
+
   return (
     <div className="container text-center p-5 ">
       <div>
@@ -177,18 +163,29 @@ export default function Transaction() {
               <TableCell align="center">Usages</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {
-              (userProfile.transaction = filterDuplicates(
-                userProfile.transaction
-              )
-                .filter((t) => t.date)
+              (userProfile.transaction = userProfile.transaction
+                .filter(
+                  (t, index, self) =>
+                    index ===
+                    self.findIndex(
+                      (e) =>
+                        e._id === t._id &&
+                        e.beneficiaryId === t.beneficiaryId &&
+                        e.beneficiaryMobile === t.beneficiaryMobile &&
+                        e.type === t.type &&
+                        e.amount === t.amount &&
+                        e.date === t.date &&
+                        e.duration === t.duration
+                    )
+                )
                 .sort((a, b) => {
                   const dateA = new Date(a.date);
                   const dateB = new Date(b.date);
                   return dateB - dateA;
                 })
+
                 .map((t) => (
                   <TableRow key={t._id}>
                     <TableCell
@@ -208,6 +205,7 @@ export default function Transaction() {
                   </TableRow>
                 )))
             }
+
             <TableRow>
               <TableCell
                 align="center"
@@ -225,6 +223,7 @@ export default function Transaction() {
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               ></TableCell>
+
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
