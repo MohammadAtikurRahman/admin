@@ -51,8 +51,7 @@ const flattenTransactions = (data) => {
         'Beneficiary Mobile': transaction.beneficiaryMobile,
         'Cash Status': transaction.type === 'in' ? 'Cash In' : 'Cash Out',
         'Amount': transaction.amount,
-        'Date': formatDate(transaction.date),
-        'Time': formatTime(transaction.date),
+        'Date': transaction.date,
         'Loggedin Date': formatDate(entry.loggedin_time),
         'Loggedin Time': formatTime(entry.loggedin_time),
       };
