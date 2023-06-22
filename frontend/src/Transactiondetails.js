@@ -282,8 +282,8 @@ export default class Transactiondetails extends Component {
       <div>
         <div>
           <br></br>
-          <h2>Trasaction details</h2>
-          <Button
+          <h2>TRANSACTION DETAILS</h2>
+          {/* <Button
             className="button_style"
             variant="contained"
             color="primary"
@@ -291,8 +291,8 @@ export default class Transactiondetails extends Component {
             onClick={this.handleProductOpen}
           >
             Add Beneficiary
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             className="button_style"
             variant="contained"
             color="primary"
@@ -304,7 +304,7 @@ export default class Transactiondetails extends Component {
             >
               List Of Enumerator
             </MaterialLink>
-          </Button>
+          </Button> */}
           <Button
             className="button_style"
             variant="contained"
@@ -342,22 +342,7 @@ export default class Transactiondetails extends Component {
               Disagree of test
             </MaterialLink>
           </Button>
-          <Button
-            className="button_style"
-            variant="contained"
-            size="small"
-            onClick={this.logOut}
-          >
-            <MaterialLink
-              style={{
-                textDecoration: "none",
-                color: "black",
-              }}
-              href="/"
-            >
-              logout
-            </MaterialLink>
-          </Button>
+      
           <Button
             className="button_style"
             variant="contained"
@@ -377,15 +362,31 @@ export default class Transactiondetails extends Component {
           <Button
             className="button_style"
             variant="contained"
-            color="inherit"
+            color="secondary"
             size="small"
           >
             <MaterialLink
-              style={{ textDecoration: "none", color: "black" }}
+              style={{ textDecoration: "none", color: "white" }}
               href="/dashboard
               "
             >
               List of beneficiary
+            </MaterialLink>
+          </Button>
+          <Button
+            className="button_style"
+            variant="contained"
+            size="small"
+            onClick={this.logOut}
+          >
+            <MaterialLink
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              href="/"
+            >
+              logout
             </MaterialLink>
           </Button>
         </div>

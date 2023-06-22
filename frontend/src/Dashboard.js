@@ -342,23 +342,8 @@ export default class Dashboard extends Component {
               Disagree of test
             </MaterialLink>
           </Button>
-          <Button
-            className="button_style"
-            variant="contained"
-            size="small"
-            onClick={this.logOut}
-          >
-            <MaterialLink
-              style={{
-                textDecoration: "none",
-                color: "black",
-              }}
-              href="/"
-            >
-              logout
-            </MaterialLink>
-          </Button>
-          <Button
+       
+          {/* <Button
             className="button_style"
             variant="contained"
             size="small"
@@ -373,7 +358,7 @@ export default class Dashboard extends Component {
             >
               Transaction  Download
             </MaterialLink>
-          </Button>
+          </Button> */}
           <Button
             className="button_style"
             variant="contained"
@@ -386,6 +371,22 @@ export default class Dashboard extends Component {
               "
             >
               Transaction details
+            </MaterialLink>
+          </Button>
+          <Button
+            className="button_style"
+            variant="contained"
+            size="small"
+            onClick={this.logOut}
+          >
+            <MaterialLink
+              style={{
+                textDecoration: "none",
+                color: "black",
+              }}
+              href="/"
+            >
+              logout
             </MaterialLink>
           </Button>
         </div>
