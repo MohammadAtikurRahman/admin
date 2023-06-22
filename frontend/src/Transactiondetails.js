@@ -96,7 +96,7 @@ const exportData = async () => {
   document.body.removeChild(link);
 };
 
-export default class Dashboard extends Component {
+export default class Transactiondetails extends Component {
   constructor() {
     super();
     this.state = {
@@ -282,7 +282,7 @@ export default class Dashboard extends Component {
       <div>
         <div>
           <br></br>
-          <h2>Dashboard</h2>
+          <h2>Trasaction details</h2>
           <Button
             className="button_style"
             variant="contained"
@@ -371,7 +371,7 @@ export default class Dashboard extends Component {
               }}
               onClick={exportData}
             >
-              Transaction  Download
+              Transaction Details Download
             </MaterialLink>
           </Button>
           <Button
@@ -382,10 +382,10 @@ export default class Dashboard extends Component {
           >
             <MaterialLink
               style={{ textDecoration: "none", color: "black" }}
-              href="/transactiondetails
+              href="/dashboard
               "
             >
-              Transaction details
+              List of beneficiary
             </MaterialLink>
           </Button>
         </div>
@@ -437,7 +437,7 @@ export default class Dashboard extends Component {
             <TableBody>
               {this.state?.filteredBeneficiary
                 ?.reverse()
-                .filter((row) => row.test_status !== "পরীক্ষা দিতে অসম্মত")
+                .filter((row) => row.mob_own == "bkash")
 
                 .map((row, index) => (
                   <TableRow key={index}>
