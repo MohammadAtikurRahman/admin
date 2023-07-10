@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
 const cors = require("cors");
+const moment = require('moment-timezone');
 
 const multer = require("multer"),
     bodyParser = require("body-parser"),
@@ -420,7 +421,6 @@ app.get("/get-testscore", async (req, res) => {
 
     return res.status(200).json(extact_data);
 });
-
 app.get("/get-transaction", async (req, res) => {
     let users = await user
         .find({})
@@ -430,12 +430,12 @@ app.get("/get-transaction", async (req, res) => {
     const data = users;
 
     // Map and format data
-    const mapped_data = data.reverse().map(user => {
+    const mapped_data = data.map(user => {
         const { beneficiary } = user;
         return beneficiary.map(ben => ({
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
-            loggedin_time: ben.loggedin_time,
+            loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
             transaction: ben.transaction.map(t => ({
                 beneficiaryMobile: t.beneficiaryMobile,
                 type: t.type,
@@ -446,7 +446,7 @@ app.get("/get-transaction", async (req, res) => {
                 createdAt: t.createdAt
             }))
         }));
-    }).flat(); // Use flat() to flatten the array.
+    }).flat().reverse(); // Use flat() to flatten the array and reverse() to reverse the order.
 
     if (mapped_data.length > 0) {
         return res.status(200).json(mapped_data);
