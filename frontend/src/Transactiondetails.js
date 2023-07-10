@@ -83,6 +83,15 @@ const getData = async () => {
 
 const exportData = async () => {
   const data = await getData();
+  
+  // Format "Loggedin Time" column in 12-hour format
+  data.forEach(item => {
+    if (item["Loggedin Time"]) {
+      const formattedTime = moment(item["Loggedin Time"], 'HH:mm:ss').format('hh:mm:ss a');
+      item["Loggedin Time"] = formattedTime;
+    }
+  });
+
   const fields = Object.keys(data[0]);
   const csv = json2csv.parse(data, { fields });
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
