@@ -435,7 +435,7 @@ app.get("/get-transaction", async (req, res) => {
         return beneficiary.map(ben => ({
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format('hh:mm:ss a') : null,
+            loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format('DD/MM/YYYY,hh:mm:ss a') : null,
             transaction: ben.transaction.map(t => ({
                 beneficiaryMobile: t.beneficiaryMobile,
                 type: t.type,
