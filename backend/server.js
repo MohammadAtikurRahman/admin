@@ -432,20 +432,23 @@ app.get("/get-transaction", async (req, res) => {
     // Map and format data
     const mapped_data = data.map(user => {
         const { beneficiary } = user;
-        return beneficiary.map(ben => ({
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format('DD/MM/YYYY,hh:mm:ss a') : null,
-            transaction: ben.transaction.map(t => ({
-                beneficiaryMobile: t.beneficiaryMobile,
-                type: t.type,
-                amount: t.amount,
-                date: t.date,
-                duration: t.duration,
-                updatedAt: t.updatedAt,
-                createdAt: t.createdAt
-            }))
-        }));
+        return beneficiary.map(ben => {
+            console.log(ben.loggedin_time); // Log the original loggedin_time
+            return {
+                beneficiaryId: ben.beneficiaryId,
+                name: ben.name,
+                loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format('hh:mm:ss a') : null,
+                transaction: ben.transaction.map(t => ({
+                    beneficiaryMobile: t.beneficiaryMobile,
+                    type: t.type,
+                    amount: t.amount,
+                    date: t.date,
+                    duration: t.duration,
+                    updatedAt: t.updatedAt,
+                    createdAt: t.createdAt
+                }))
+            };
+        });
     }).flat().reverse(); // Use flat() to flatten the array and reverse() to reverse the order.
 
     if (mapped_data.length > 0) {
