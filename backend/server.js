@@ -429,19 +429,13 @@ app.get("/get-transaction", async (req, res) => {
 
     const data = users;
 
-    // Filter and format data
-    const filtered_data = data.map(user => {
+    // Map and format data
+    const mapped_data = data.map(user => {
         const { beneficiary } = user;
-        return beneficiary.filter(ben => {
-            const hasTransaction = Array.isArray(ben.transaction) && ben.transaction.length > 0;
-            const hasInType = hasTransaction && ben.transaction.some(t => t.type === "in");
-            const hasOutType = hasTransaction && ben.transaction.some(t => t.type === "out");
-            const hasLoggedInTime = ben.loggedin_time !== null && ben.loggedin_time !== undefined;
-            return hasInType && hasOutType && hasLoggedInTime;
-        }).map(ben => ({
+        return beneficiary.map(ben => ({
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
-            transaction: ben.transaction.filter(t => t.beneficiaryMobile !== null && t.beneficiaryMobile !== undefined).map(t => ({
+            transaction: ben.transaction.map(t => ({
                 beneficiaryMobile: t.beneficiaryMobile,
                 type: t.type,
                 amount: t.amount,
@@ -453,15 +447,15 @@ app.get("/get-transaction", async (req, res) => {
         }));
     }).flat(); // Use flat() to flatten the array.
 
-    if (filtered_data.length > 0) {
-        return res.status(200).json(filtered_data);
+    if (mapped_data.length > 0) {
+        return res.status(200).json(mapped_data);
     } else {
         return res.status(404).json({
-            message:
-                "No objects found with both 'in' and 'out' types in the transaction arrays and loggedin_time not null",
+            message: "No data found.",
         });
     }
 });
+
 
 
 app.get("/get-beneficiary", async (req, res) => {
