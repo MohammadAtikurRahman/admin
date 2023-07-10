@@ -435,6 +435,7 @@ app.get("/get-transaction", async (req, res) => {
         return beneficiary.map(ben => ({
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
+            loggedin_time: ben.loggedin_time,
             transaction: ben.transaction.map(t => ({
                 beneficiaryMobile: t.beneficiaryMobile,
                 type: t.type,
