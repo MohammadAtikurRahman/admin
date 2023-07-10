@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-const moment = require('moment-timezone');
-
+const moment = require('moment');
+require('moment-timezone');
 const multer = require("multer"),
     bodyParser = require("body-parser"),
     path = require("path");
@@ -456,6 +456,7 @@ app.get("/get-transaction", async (req, res) => {
         });
     }
 });
+
 
 
 
