@@ -441,7 +441,7 @@ app.get("/get-transaction", async (req, res) => {
         }).map(ben => ({
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
-            transaction: ben.transaction.map(t => ({
+            transaction: ben.transaction.filter(t => t.beneficiaryMobile !== null && t.beneficiaryMobile !== undefined).map(t => ({
                 beneficiaryMobile: t.beneficiaryMobile,
                 type: t.type,
                 amount: t.amount,
@@ -462,6 +462,7 @@ app.get("/get-transaction", async (req, res) => {
         });
     }
 });
+
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user
