@@ -433,11 +433,12 @@ app.get("/get-transaction", async (req, res) => {
     const mapped_data = data.map(user => {
         const { beneficiary } = user;
         return beneficiary.map(ben => {
-            console.log(ben.loggedin_time); // Log the original loggedin_time
+            const aucklandTime = moment(ben.loggedin_time);
+            const dhakaTime = aucklandTime.clone().subtract(6, 'hours');
             return {
                 beneficiaryId: ben.beneficiaryId,
                 name: ben.name,
-                loggedin_time: ben.loggedin_time ? moment(ben.loggedin_time).tz("Asia/Dhaka").format('hh:mm:ss a') : null,
+                loggedin_time: ben.loggedin_time ? dhakaTime.format('hh:mm:ss a') : null,
                 transaction: ben.transaction.map(t => ({
                     beneficiaryMobile: t.beneficiaryMobile,
                     type: t.type,
@@ -459,6 +460,7 @@ app.get("/get-transaction", async (req, res) => {
         });
     }
 });
+
 
 
 
