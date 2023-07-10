@@ -9,8 +9,8 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", true);
-const { router } = require("./routes.js");
-const { randomNumberNotInUserCollection } = require("./helpers/number");
+const {router} = require("./routes.js");
+const {randomNumberNotInUserCollection} = require("./helpers/number");
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -18,21 +18,20 @@ mongoose.connect(process.env.MONGO_URI, {
     useFindAndModify: false,
 });
 
-
 const fs = require("fs");
 const product = require("./model/product.js");
 const user = require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
 const PORT = process.env.PORT;
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({limit: "50mb"}));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
 });
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 const dir = "./uploads";
 const upload = multer({
@@ -65,12 +64,7 @@ app.use(
     }),
 );
 
-
-
-
 app.use(router);
-
-
 
 app.use("/", (req, res, next) => {
     try {
@@ -86,10 +80,8 @@ app.use("/", (req, res, next) => {
             req.path == "/get-enumerator" ||
             req.path == "/get-all" ||
             req.path == "/get-ben" ||
-
             req.path == "/get-testscore" ||
             req.path == "/get-transaction" ||
-
             req.path == "/get-login" ||
             req.path == "/list-beneficiary" ||
             req.path == "/beneficiary" ||
@@ -132,7 +124,7 @@ app.post("/register", async (req, res) => {
         const userId = await randomNumberNotInUserCollection();
         console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({ username: req.body.username }, (err, data) => {
+            user.find({username: req.body.username}, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
@@ -285,7 +277,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.beneficiaryId) {
-            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+            user.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
@@ -311,8 +303,6 @@ app.post("/delete-product", (req, res) => {
         });
     }
 });
-
-
 
 app.get("/api", (req, res) => {
     user.find((err, val) => {
@@ -349,8 +339,6 @@ app.get("/get-ben", async (req, res) => {
     extact_data = formatted_data["beneficiary"];
     return res.status(200).json(extact_data);
 });
-
-
 
 app.get("/get-enumerator", async (req, res) => {
     let users = await user.find({}).select("-beneficiary");
@@ -399,146 +387,81 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.excuses")
         .select("-beneficiary.u_nm");
 
-
     const data = users;
 
     const formatted_data = data[0];
     extact_data = formatted_data["beneficiary"];
 
-
     //  extact_data = extact_data.filter(item => item.duration || item.score1 & item.test_status || item.enumerator_observation );
 
     extact_data = extact_data.filter(item => {
-        if (item.duration && item.score1 || item.test_status || item.whotaketheexam) {
-          if (item.score1 || item.score1 == 0) {
-            item.test_status = "অংশগ্রহণকারী";
-          }
-          return true;
+        if ((item.duration && item.score1) || item.test_status || item.whotaketheexam) {
+            if (item.score1 || item.score1 == 0) {
+                item.test_status = "অংশগ্রহণকারী";
+            }
+            return true;
         }
         return false;
-      });
-    
-    
-    
+    });
+
     extact_data.sort((a, b) => b.updatedAt - a.updatedAt);
 
     extact_data.forEach(item => {
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
             const seconds = item.duration % 60;
-            
-            item.duration = minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
-        }
-         else {
+
+            item.duration =
+                minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
+        } else {
             item.duration = null;
-         }
+        }
     });
 
     return res.status(200).json(extact_data);
 });
 
-
 app.get("/get-transaction", async (req, res) => {
     let users = await user
         .find({})
-        .select("-username")
-        .select("-password")
-        .select("-id")
-        .select("-_id")
-        .select("-userId")
-        .select("-createdAt")
-        .select("-updatedAt")
-        .select("-__v")
-        .select("-beneficiary._id")
-        .select("-beneficiary.m_nm")
-        .select("-beneficiary.f_nm")
-
-
-        .select("-beneficiary.dob")
-
-        .select("-beneficiary.sub_dis")
-        .select("-beneficiary.uni")
-        .select("-beneficiary.vill")
-        .select("-beneficiary.gen")
-
-        .select("-beneficiary.updatedAt")
-
-        .select("-beneficiary.ben_nid")
-        .select("-beneficiary.ben_id")
-        .select("-beneficiary.sl")
-        .select("-beneficiary.age")
-        .select("-beneficiary.dis")
-
-        .select("-beneficiary.relgn")
-        .select("-beneficiary.job")
-        .select("-beneficiary.test")
-        .select("-beneficiary.createdAt")
-
-        .select("-beneficiary.mob")
-        .select("-beneficiary.pgm")
-        .select("-beneficiary.pass")
-        .select("-beneficiary.bank")
-        .select("-beneficiary.branch")
-        .select("-beneficiary.r_out")
-
-        .select("-beneficiary.mob_1")
-        .select("-beneficiary.ben_sts")
-        .select("-beneficiary.nid_sts")
-        .select("-beneficiary.a_sts")
-
-        .select("-beneficiary.accre")
-        .select("-beneficiary.f_allow")
-        .select("-beneficiary.mob_own")
-        .select("-beneficiary.excuses")
-        .select("-beneficiary.u_nm")
-        .select("-beneficiary.transaction._id")
-        
-        .select("-beneficiary.transaction.beneficiaryId")
-        .select("-beneficiary.duration")
-        .select("-beneficiary.score1")
-        .select("-beneficiary.installed_time")
-
-        
-        
-        ;
-
-
-
-
-
-
-
-
+        .select("beneficiary")
+        .lean(); // to use the object as a plain JavaScript object.
 
     const data = users;
 
-    const formatted_data = data[0];
- 
+    // Filter and format data
+    const filtered_data = data.map(user => {
+        const { beneficiary } = user;
+        return beneficiary.filter(ben => {
+            const hasTransaction = Array.isArray(ben.transaction) && ben.transaction.length > 0;
+            const hasInType = hasTransaction && ben.transaction.some(t => t.type === "in");
+            const hasOutType = hasTransaction && ben.transaction.some(t => t.type === "out");
+            const hasLoggedInTime = ben.loggedin_time !== null && ben.loggedin_time !== undefined;
+            return hasInType && hasOutType && hasLoggedInTime;
+        }).map(ben => ({
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            transaction: ben.transaction.map(t => ({
+                beneficiaryMobile: t.beneficiaryMobile,
+                type: t.type,
+                amount: t.amount,
+                date: t.date,
+                duration: t.duration,
+                updatedAt: t.updatedAt,
+                createdAt: t.createdAt
+            }))
+        }));
+    }).flat(); // Use flat() to flatten the array.
 
-    extact_data = formatted_data["beneficiary"];
-
-// Filter extact_data based on the condition that both "in" and "out" types exist in the transaction arrays and loggedin_time is not null
-const filtered_data = extact_data.filter(obj => {
-    const hasTransaction = Array.isArray(obj.transaction) && obj.transaction.length > 0;
-    const hasInType = hasTransaction && obj.transaction.some(transaction => transaction.type === 'in');
-    const hasOutType = hasTransaction && obj.transaction.some(transaction => transaction.type === 'out');
-    const hasLoggedInTime = obj.loggedin_time !== null && obj.loggedin_time !== undefined;
-    return hasInType && hasOutType && hasLoggedInTime;
+    if (filtered_data.length > 0) {
+        return res.status(200).json(filtered_data);
+    } else {
+        return res.status(404).json({
+            message:
+                "No objects found with both 'in' and 'out' types in the transaction arrays and loggedin_time not null",
+        });
+    }
 });
-
-if (filtered_data.length > 0) {
-    return res.status(200).json(filtered_data);
-} else {
-    return res.status(404).json({message: "No objects found with both 'in' and 'out' types in the transaction arrays and loggedin_time not null"});
-}
-
-  
-
-});
-
-
-
-
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user
@@ -602,9 +525,9 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({ success: true, data: newData });
+        res.status(201).json({success: true, data: newData});
     } catch (error) {
-        res.status(400).json({ success: false });
+        res.status(400).json({success: false});
     }
 });
 

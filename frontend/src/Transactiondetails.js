@@ -283,28 +283,7 @@ export default class Transactiondetails extends Component {
         <div>
           <br></br>
           <h2>TRANSACTION DETAILS</h2>
-          {/* <Button
-            className="button_style"
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={this.handleProductOpen}
-          >
-            Add Beneficiary
-          </Button> */}
-          {/* <Button
-            className="button_style"
-            variant="contained"
-            color="primary"
-            size="small"
-          >
-            <MaterialLink
-              style={{ textDecoration: "none", color: "white" }}
-              href="/enumerator"
-            >
-              List Of Enumerator
-            </MaterialLink>
-          </Button> */}
+      
           <Button
             className="button_style"
             variant="contained"
@@ -318,17 +297,7 @@ export default class Transactiondetails extends Component {
               List Of Test
             </MaterialLink>
           </Button>
-          {/* <Button
-                        className="button_style"
-                        variant="contained"
-                        color="inherit"
-                        size="small">
-                        <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
-                            href="/test">
-                            Transactions
-                        </MaterialLink>
-                    </Button> */}
+          
           <Button
             className="button_style"
             variant="contained"
