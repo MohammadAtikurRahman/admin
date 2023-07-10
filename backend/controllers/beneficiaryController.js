@@ -202,44 +202,41 @@ async function beneficiaryLogin(req, res) {
     }
     return res.status(401).json({message: "Something went wrong."});
 }
+app.get("/get-transaction", async (req, res) => {
+    let users = await user
+        .find({})
+        .select("beneficiary")
+        .lean(); // to use the object as a plain JavaScript object.
 
-async function transaction(req, res) {
-    let promises = req.body.map(transaction => {
-        return User.findOne({
-            "beneficiary.beneficiaryId": transaction.beneficiaryId,
-            "beneficiary.transaction": {
-                $elemMatch: {
-                    beneficiaryId: transaction.beneficiaryId,
-                    beneficiaryMobile: transaction.beneficiaryMobile,
-                    type: transaction.type,
-                    amount: transaction.amount,
-                    date: transaction.date,
-                    duration: transaction.duration
-                }
-            }
-        })
-        .then(user => {
-            if (!user) {
-                return User.updateOne(
-                    { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-                    { $push: { "beneficiary.$.transaction": transaction }},
-                    { new: true }
-                );
-            } else {
-                return Promise.resolve("Duplicate transaction found.");
-            }
-        })
-    });
+    const data = users;
 
-    Promise.all(promises)
-        .then(results => {
-            if (results.includes("Duplicate transaction found.")) {
-                return res.status(409).send("Duplicate transaction found.");
-            }
-            res.status(201).send("Transactions added successfully");
-        })
-        .catch(error => res.status(400).send(error));
-}
+    // Map and format data
+    const mapped_data = data.map(user => {
+        const { beneficiary } = user;
+        return beneficiary.map(ben => ({
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: ben.loggedin_time,
+            transaction: ben.transaction.map(t => ({
+                beneficiaryMobile: t.beneficiaryMobile,
+                type: t.type,
+                amount: t.amount,
+                date: t.date,
+                duration: t.duration,
+                updatedAt: t.updatedAt,
+                createdAt: t.createdAt
+            }))
+        }));
+    }).flat(); // Use flat() to flatten the array.
+
+    if (mapped_data.length > 0) {
+        return res.status(200).json(mapped_data);
+    } else {
+        return res.status(404).json({
+            message: "No data found.",
+        });
+    }
+});
 
 
 
