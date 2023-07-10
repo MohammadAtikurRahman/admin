@@ -430,7 +430,7 @@ app.get("/get-transaction", async (req, res) => {
     const data = users;
 
     // Map and format data
-    const mapped_data = data.map(user => {
+    const mapped_data = data.reverse().map(user => {
         const { beneficiary } = user;
         return beneficiary.map(ben => ({
             beneficiaryId: ben.beneficiaryId,
