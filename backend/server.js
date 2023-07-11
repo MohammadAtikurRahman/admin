@@ -421,6 +421,8 @@ app.get("/get-testscore", async (req, res) => {
 
     return res.status(200).json(extact_data);
 });
+
+
 app.get("/get-transaction", async (req, res) => {
     let users = await user
       .find({})
@@ -435,8 +437,8 @@ app.get("/get-transaction", async (req, res) => {
       return beneficiary.map((ben) => {
         const loggedin_time = ben.loggedin_time ? new Date(ben.loggedin_time) : null;
         if (loggedin_time) {
-          loggedin_time.setUTCHours(loggedin_time.getUTCHours() + 6);
-          const formattedTime = loggedin_time.toISOString().replace("Z", "+06:00");
+          const adjustedTime = new Date(loggedin_time.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
+          const formattedTime = adjustedTime.toISOString().replace("Z", "+06:00");
           return {
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
