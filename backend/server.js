@@ -432,20 +432,42 @@ app.get("/get-transaction", async (req, res) => {
     // Map and format data
     const mapped_data = data.map((user) => {
       const { beneficiary } = user;
-      return beneficiary.map((ben) => ({
-        beneficiaryId: ben.beneficiaryId,
-        name: ben.name,
-        loggedin_time: ben.loggedin_time ? convertTimeToBST(ben.loggedin_time) : null,
-        transaction: ben.transaction.map((t) => ({
-          beneficiaryMobile: t.beneficiaryMobile,
-          type: t.type,
-          amount: t.amount,
-          date: t.date,
-          duration: t.duration,
-          updatedAt: t.updatedAt,
-          createdAt: t.createdAt,
-        })),
-      }));
+      return beneficiary.map((ben) => {
+        const loggedin_time = ben.loggedin_time ? new Date(ben.loggedin_time) : null;
+        if (loggedin_time) {
+          loggedin_time.setUTCHours(loggedin_time.getUTCHours() + 6);
+          const formattedTime = loggedin_time.toISOString().replace("Z", "+06:00");
+          return {
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: formattedTime,
+            transaction: ben.transaction.map((t) => ({
+              beneficiaryMobile: t.beneficiaryMobile,
+              type: t.type,
+              amount: t.amount,
+              date: t.date,
+              duration: t.duration,
+              updatedAt: t.updatedAt,
+              createdAt: t.createdAt,
+            })),
+          };
+        } else {
+          return {
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: null,
+            transaction: ben.transaction.map((t) => ({
+              beneficiaryMobile: t.beneficiaryMobile,
+              type: t.type,
+              amount: t.amount,
+              date: t.date,
+              duration: t.duration,
+              updatedAt: t.updatedAt,
+              createdAt: t.createdAt,
+            })),
+          };
+        }
+      });
     }).flat().reverse();
   
     if (mapped_data.length > 0) {
@@ -456,12 +478,6 @@ app.get("/get-transaction", async (req, res) => {
       });
     }
   });
-  
-  function convertTimeToBST(time) {
-    const aucklandTime = moment.utc(time).utcOffset("+12:00");
-    const bangladeshTime = aucklandTime.clone().subtract(6, "hours");
-    return bangladeshTime.format("YYYY-MM-DD HH:mm:ss");
-  }
   
 
 
