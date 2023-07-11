@@ -28,9 +28,9 @@ export default function Transaction() {
     navigate("/");
   }
   const classes = useStyles();
-
   const trxidSet = new Set();
-
+  const trxidWithMinutesSet = new Set();
+  
   const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
     if (!trxidSet.has(t.trxid) && t.type === "in" && t.date) {
       trxidSet.add(t.trxid);
@@ -47,13 +47,13 @@ export default function Transaction() {
     return acc;
   }, 0);
   
-  const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
-    if (!trxidSet.has(t.trxid) && !isNaN(t.duration) && t.date) {
-      trxidSet.add(t.trxid);
-      return acc + parseInt(t.duration); // Parse duration to an integer
+  const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
+    if (!isNaN(Number(t.duration)) && t.date && arr.findIndex(el => el.trxid === t.trxid) === index) {
+      return acc + Number(t.duration);
     }
     return acc;
   }, 0);
+  
   
 
 
