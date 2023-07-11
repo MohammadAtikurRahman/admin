@@ -31,30 +31,30 @@ export default function Transaction() {
 
   const trxidSet = new Set();
 
-  const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
-    if (!trxidSet.has(t.trxid) && t.type === "in") {
-      trxidSet.add(t.trxid);
-      return acc + t.amount;
-    }
-    return acc;
-  }, 0);
-  
-  const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
-    if (!trxidSet.has(t.trxid) && t.type === "out") {
-      trxidSet.add(t.trxid);
-      return acc + t.amount;
-    }
-    return acc;
-  }, 0);
-  
-  const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
-    if (!trxidSet.has(t.trxid) && !isNaN(t.duration)) {
-      trxidSet.add(t.trxid);
-      return acc + t.duration;
-    }
-    return acc;
-  }, 0);
-  
+const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
+  if (!trxidSet.has(t.trxid) && t.type === "in" && t.date) {
+    trxidSet.add(t.trxid);
+    return acc + t.amount;
+  }
+  return acc;
+}, 0);
+
+const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
+  if (!trxidSet.has(t.trxid) && t.type === "out" && t.date) {
+    trxidSet.add(t.trxid);
+    return acc + t.amount;
+  }
+  return acc;
+}, 0);
+
+const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
+  if (!trxidSet.has(t.trxid) && !isNaN(t.duration) && t.date) {
+    trxidSet.add(t.trxid);
+    return acc + t.duration;
+  }
+  return acc;
+}, 0);
+
 
   return (
     <div className="container text-center p-5 ">
