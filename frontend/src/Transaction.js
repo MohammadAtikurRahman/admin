@@ -29,17 +29,32 @@ export default function Transaction() {
   }
   const classes = useStyles();
 
+  const trxidSet = new Set();
+
   const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
-    return t.type === "in" ? acc + t.amount : acc;
+    if (!trxidSet.has(t.trxid) && t.type === "in") {
+      trxidSet.add(t.trxid);
+      return acc + t.amount;
+    }
+    return acc;
   }, 0);
-
+  
   const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
-    return t.type === "out" ? acc + t.amount : acc;
+    if (!trxidSet.has(t.trxid) && t.type === "out") {
+      trxidSet.add(t.trxid);
+      return acc + t.amount;
+    }
+    return acc;
   }, 0);
-
+  
   const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
-    return t.type != isNaN ? acc + t.duration : acc;
+    if (!trxidSet.has(t.trxid) && !isNaN(t.duration)) {
+      trxidSet.add(t.trxid);
+      return acc + t.duration;
+    }
+    return acc;
   }, 0);
+  
 
   return (
     <div className="container text-center p-5 ">
@@ -101,16 +116,13 @@ export default function Transaction() {
         <Table className={classes.table} aria-label="transaction table">
           <TableHead>
             <TableRow>
-              {/* <TableCell align="center">Beneficiary ID</TableCell> */}
               <TableCell align="center">Cash In</TableCell>
               <TableCell align="center">Cash Out</TableCell>
-              {/* <TableCell align="center">Amount</TableCell> */}
               <TableCell align="center">Date</TableCell>
               <TableCell align="center">Usages</TableCell>
               <TableCell align="center">Trxid</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {userProfile.transaction
               .filter((t, index, arr) => {
@@ -121,10 +133,6 @@ export default function Transaction() {
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .map((t) => (
                 <TableRow key={t._id}>
-                  <TableCell align="center">
-                    {userProfile.beneficiaryId}
-                  </TableCell>
-                  <TableCell align="center">{t.beneficiaryMobile}</TableCell>
                   <TableCell
                     align="center"
                     style={{ color: "green", fontWeight: "bold" }}
@@ -143,7 +151,6 @@ export default function Transaction() {
                 </TableRow>
               ))}
             <TableRow>
-              <TableCell align="center" colSpan={2}></TableCell>
               <TableCell
                 align="center"
                 style={{ color: "green", fontWeight: "bold" }}
@@ -156,14 +163,20 @@ export default function Transaction() {
               >
                 Total Cash Out: {totalCashOut}
               </TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell
+                align="center"
+                style={{ color: "purple", fontWeight: "bold" }}
+              ></TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total duration: {totalMinutes} Minutes
+                Total minute: {totalMinutes}
               </TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell
+                align="center"
+                style={{ color: "purple", fontWeight: "bold" }}
+              ></TableCell>
             </TableRow>
           </TableBody>
         </Table>
