@@ -458,8 +458,6 @@ app.get("/get-transaction", async (req, res) => {
 });
 
 
-
-
 app.get("/get-transaction", async (req, res) => {
     let users = await user
       .find({})
@@ -475,10 +473,8 @@ app.get("/get-transaction", async (req, res) => {
         beneficiaryId: ben.beneficiaryId,
         name: ben.name,
         loggedin_time: ben.loggedin_time
-          ? moment
-              .utc(ben.loggedin_time)
-              .utcOffset(6)
-              .format("YYYY-MM-DD HH:mm:ss"),
+          ? moment(ben.loggedin_time).add(6, "hours").format("YYYY-MM-DD HH:mm:ss")
+          : null,
         transaction: ben.transaction.map((t) => ({
           beneficiaryMobile: t.beneficiaryMobile,
           type: t.type,
@@ -500,6 +496,7 @@ app.get("/get-transaction", async (req, res) => {
     }
   });
   
+
 
 
 app.get("/get-login", async (req, res) => {
