@@ -24,22 +24,21 @@ import { AddBeneficiary } from "./AddBeneficiary";
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB");
+
+
+const formatDate = (dateTime) => {
+  if (!dateTime) return "";
+  const bdDateTime = new Date(dateTime);
+  bdDateTime.setUTCHours(bdDateTime.getUTCHours() + 6);
+  return bdDateTime.toLocaleDateString("en-BD");
 };
 
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
+const formatTime = (dateTime) => {
+  if (!dateTime) return "";
+  const bdDateTime = new Date(dateTime);
+  bdDateTime.setUTCHours(bdDateTime.getUTCHours() + 6);
+  return bdDateTime.toLocaleTimeString("en-BD");
 };
-
-// ...rest of the code
 
 const flattenTransactions = (data) => {
   return data
@@ -297,7 +296,17 @@ export default class Transactiondetails extends Component {
               List Of Test
             </MaterialLink>
           </Button>
-          
+          {/* <Button
+                        className="button_style"
+                        variant="contained"
+                        color="inherit"
+                        size="small">
+                        <MaterialLink
+                            style={{ textDecoration: "none", color: "black" }}
+                            href="/test">
+                            Transactions
+                        </MaterialLink>
+                    </Button> */}
           <Button
             className="button_style"
             variant="contained"
