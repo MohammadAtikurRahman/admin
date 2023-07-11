@@ -423,7 +423,6 @@ app.get("/get-testscore", async (req, res) => {
 });
 
 
-
 app.get("/get-transaction", async (req, res) => {
     let users = await user
       .find({})
@@ -440,7 +439,7 @@ app.get("/get-transaction", async (req, res) => {
         return {
           beneficiaryId: ben.beneficiaryId,
           name: ben.name,
-          loggedin_time: loggedin_time ? loggedin_time.format("YYYY-MM-DD hh:mm:ss.SSS A") : null,
+          loggedin_time: loggedin_time ? loggedin_time.format("YYYY-MM-DD hh:mm:ss.SSSA Z") : null,
           transaction: ben.transaction.map((t) => ({
             beneficiaryMobile: t.beneficiaryMobile,
             type: t.type,
@@ -462,47 +461,6 @@ app.get("/get-transaction", async (req, res) => {
       });
     }
   });
-  
-
-
-
-app.get("/get-transaction", async (req, res) => {
-  let users = await user
-    .find({})
-    .select("beneficiary")
-    .lean();
-
-  const data = users;
-
-  // Map and format data
-  const mapped_data = data.map((user) => {
-    const { beneficiary } = user;
-    return beneficiary.map((ben) => ({
-      beneficiaryId: ben.beneficiaryId,
-      name: ben.name,
-      loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format("YYYY-MM-DD HH:mm:ss") : null,
-      transaction: ben.transaction.map((t) => ({
-        beneficiaryMobile: t.beneficiaryMobile,
-        type: t.type,
-        amount: t.amount,
-        date: t.date,
-        duration: t.duration,
-        updatedAt: t.updatedAt,
-        createdAt: t.createdAt,
-      })),
-    }));
-  }).flat().reverse();
-
-  if (mapped_data.length > 0) {
-    return res.status(200).json(mapped_data);
-  } else {
-    return res.status(404).json({
-      message: "No data found.",
-    });
-  }
-});
-
-
 
 
 app.get("/get-login", async (req, res) => {
