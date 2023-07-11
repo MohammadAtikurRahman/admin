@@ -494,14 +494,7 @@ app.get("/get-transaction", async (req, res) => {
         });
     }
 });
- this is backend code... const getData = async () => {
-  try {
-    const res = await axios.get(baseUrl + "/get-transaction");
-    return flattenTransactions(res.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
+
 
 
 app.get("/get-login", async (req, res) => {
