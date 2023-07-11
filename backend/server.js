@@ -438,7 +438,7 @@ app.get("/get-transaction", async (req, res) => {
         const loggedin_time = ben.loggedin_time ? new Date(ben.loggedin_time) : null;
         if (loggedin_time) {
           const adjustedTime = new Date(loggedin_time.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
-          const formattedTime = adjustedTime.toISOString().replace("Z", "+06:00");
+          const formattedTime = adjustedTime.toISOString().replace("Z", "+06:00").replace("T", " ").slice(0, -5);
           return {
             beneficiaryId: ben.beneficiaryId,
             name: ben.name,
