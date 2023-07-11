@@ -423,40 +423,46 @@ app.get("/get-testscore", async (req, res) => {
 });
 app.get("/get-transaction", async (req, res) => {
     let users = await user
-        .find({})
-        .select("beneficiary")
-        .lean();
-
+      .find({})
+      .select("beneficiary")
+      .lean();
+  
     const data = users;
-
+  
     // Map and format data
-    const mapped_data = data.map(user => {
-        const { beneficiary } = user;
-        return beneficiary.map(ben => ({
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
-            transaction: ben.transaction.map(t => ({
-                beneficiaryMobile: t.beneficiaryMobile,
-                type: t.type,
-                amount: t.amount,
-                date: t.date,
-                duration: t.duration,
-                updatedAt: t.updatedAt,
-                createdAt: t.createdAt
-            }))
-        }));
+    const mapped_data = data.map((user) => {
+      const { beneficiary } = user;
+      return beneficiary.map((ben) => ({
+        beneficiaryId: ben.beneficiaryId,
+        name: ben.name,
+        loggedin_time: ben.loggedin_time ? convertTimeToBST(ben.loggedin_time) : null,
+        transaction: ben.transaction.map((t) => ({
+          beneficiaryMobile: t.beneficiaryMobile,
+          type: t.type,
+          amount: t.amount,
+          date: t.date,
+          duration: t.duration,
+          updatedAt: t.updatedAt,
+          createdAt: t.createdAt,
+        })),
+      }));
     }).flat().reverse();
-
+  
     if (mapped_data.length > 0) {
-        return res.status(200).json(mapped_data);
+      return res.status(200).json(mapped_data);
     } else {
-        return res.status(404).json({
-            message: "No data found.",
-        });
+      return res.status(404).json({
+        message: "No data found.",
+      });
     }
-});
-
+  });
+  
+  function convertTimeToBST(time) {
+    const aucklandTime = moment.utc(time).utcOffset("+12:00");
+    const bangladeshTime = aucklandTime.clone().subtract(6, "hours");
+    return bangladeshTime.format("YYYY-MM-DD HH:mm:ss");
+  }
+  
 
 
 
