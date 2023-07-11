@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-const moment = require('moment');
-require('moment-timezone');
+const moment = require('moment-timezone');
+
 const multer = require("multer"),
     bodyParser = require("body-parser"),
     path = require("path");
@@ -459,41 +459,43 @@ app.get("/get-transaction", async (req, res) => {
 
 
 
+
 app.get("/get-transaction", async (req, res) => {
-    let users = await user
-        .find({})
-        .select("beneficiary")
-        .lean(); // to use the object as a plain JavaScript object.
+  let users = await user
+    .find({})
+    .select("beneficiary")
+    .lean();
 
-    const data = users;
+  const data = users;
 
-    // Map and format data
-    const mapped_data = data.map(user => {
-        const { beneficiary } = user;
-        return beneficiary.map(ben => ({
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours').format() : null,
-            transaction: ben.transaction.map(t => ({
-                beneficiaryMobile: t.beneficiaryMobile,
-                type: t.type,
-                amount: t.amount,
-                date: t.date,
-                duration: t.duration,
-                updatedAt: t.updatedAt,
-                createdAt: t.createdAt
-            }))
-        }));
-    }).flat().reverse(); // Use flat() to flatten the array and reverse() to reverse the order.
+  // Map and format data
+  const mapped_data = data.map((user) => {
+    const { beneficiary } = user;
+    return beneficiary.map((ben) => ({
+      beneficiaryId: ben.beneficiaryId,
+      name: ben.name,
+      loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format("YYYY-MM-DD HH:mm:ss") : null,
+      transaction: ben.transaction.map((t) => ({
+        beneficiaryMobile: t.beneficiaryMobile,
+        type: t.type,
+        amount: t.amount,
+        date: t.date,
+        duration: t.duration,
+        updatedAt: t.updatedAt,
+        createdAt: t.createdAt,
+      })),
+    }));
+  }).flat().reverse();
 
-    if (mapped_data.length > 0) {
-        return res.status(200).json(mapped_data);
-    } else {
-        return res.status(404).json({
-            message: "No data found.",
-        });
-    }
+  if (mapped_data.length > 0) {
+    return res.status(200).json(mapped_data);
+  } else {
+    return res.status(404).json({
+      message: "No data found.",
+    });
+  }
 });
+
 
 
 
