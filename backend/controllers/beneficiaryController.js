@@ -213,6 +213,7 @@ async function transaction(req, res) {
                     beneficiaryMobile: transaction.beneficiaryMobile,
                     type: transaction.type,
                     amount: transaction.amount,
+                    trxid: transaction.trxid,
                     date: transaction.date,
                     duration: transaction.duration
                 }
