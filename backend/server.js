@@ -462,48 +462,44 @@ app.get("/get-transaction", async (req, res) => {
 
 app.get("/get-transaction", async (req, res) => {
     let users = await user
-        .find({})
-        .select("beneficiary")
-        .lean();
-
+      .find({})
+      .select("beneficiary")
+      .lean();
+  
     const data = users;
-
+  
     // Map and format data
-    const mapped_data = data.map(user => {
-        const { beneficiary } = user;
-        return beneficiary.map(ben => ({
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours').format() : null,
-            transaction: ben.transaction.map(t => ({
-                beneficiaryMobile: t.beneficiaryMobile,
-                type: t.type,
-                amount: t.amount,
-                date: t.date,
-                duration: t.duration,
-                updatedAt: t.updatedAt,
-                createdAt: t.createdAt
-            }))
-        }));
+    const mapped_data = data.map((user) => {
+      const { beneficiary } = user;
+      return beneficiary.map((ben) => ({
+        beneficiaryId: ben.beneficiaryId,
+        name: ben.name,
+        loggedin_time: ben.loggedin_time
+          ? moment
+              .utc(ben.loggedin_time)
+              .utcOffset(6)
+              .format("YYYY-MM-DD HH:mm:ss"),
+        transaction: ben.transaction.map((t) => ({
+          beneficiaryMobile: t.beneficiaryMobile,
+          type: t.type,
+          amount: t.amount,
+          date: t.date,
+          duration: t.duration,
+          updatedAt: t.updatedAt,
+          createdAt: t.createdAt,
+        })),
+      }));
     }).flat().reverse();
-
+  
     if (mapped_data.length > 0) {
-        // Manually adjust loggedin_time to Bangladesh Standard Time (BST)
-        mapped_data.forEach(item => {
-            if (item.loggedin_time) {
-                const loggedinTimeUtc = moment.utc(item.loggedin_time);
-                const loggedinTimeBst = loggedinTimeUtc.clone().add(6, 'hours');
-                item.loggedin_time = loggedinTimeBst.format();
-            }
-        });
-
-        return res.status(200).json(mapped_data);
+      return res.status(200).json(mapped_data);
     } else {
-        return res.status(404).json({
-            message: "No data found.",
-        });
+      return res.status(404).json({
+        message: "No data found.",
+      });
     }
-});
+  });
+  
 
 
 app.get("/get-login", async (req, res) => {
