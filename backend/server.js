@@ -460,33 +460,51 @@ app.get("/get-transaction", async (req, res) => {
 
 
 
-app.get("/get-beneficiary", async (req, res) => {
+app.get("/get-transaction", async (req, res) => {
     let users = await user
         .find({})
-        .select("-_id")
-        .select("-id")
-        .select("-username")
-        .select("-password")
-        .select("-createdAt")
-
-        .select("-beneficiary.test");
+        .select("beneficiary")
+        .lean();
 
     const data = users;
-    const data1 = users;
-    const formatted_data = data[0];
 
-    //   const formatted_data1= data1[1]
+    // Map and format data
+    const mapped_data = data.map(user => {
+        const { beneficiary } = user;
+        return beneficiary.map(ben => ({
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours').format() : null,
+            transaction: ben.transaction.map(t => ({
+                beneficiaryMobile: t.beneficiaryMobile,
+                type: t.type,
+                amount: t.amount,
+                date: t.date,
+                duration: t.duration,
+                updatedAt: t.updatedAt,
+                createdAt: t.createdAt
+            }))
+        }));
+    }).flat().reverse();
 
-    // extact_data1 = formatted_data1['beneficiary']
+    if (mapped_data.length > 0) {
+        // Manually adjust loggedin_time to Bangladesh Standard Time (BST)
+        mapped_data.forEach(item => {
+            if (item.loggedin_time) {
+                const loggedinTimeUtc = moment.utc(item.loggedin_time);
+                const loggedinTimeBst = loggedinTimeUtc.clone().add(6, 'hours');
+                item.loggedin_time = loggedinTimeBst.format();
+            }
+        });
 
-    extact_data = formatted_data["beneficiary"];
-
-    // let obj3 = Object.assign(extact_data, extact_data1);
-
-    //  console.log(obj3)
-
-    return res.status(200).json(extact_data);
+        return res.status(200).json(mapped_data);
+    } else {
+        return res.status(404).json({
+            message: "No data found.",
+        });
+    }
 });
+
 
 app.get("/get-login", async (req, res) => {
     // let users = await user.find({}).select("-password").select("-username").select("-beneficiary.name").select("-beneficiary.f_nm")
