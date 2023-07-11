@@ -108,65 +108,42 @@ export default function Transaction() {
               <TableCell align="center">Date</TableCell>
               <TableCell align="center">Usages</TableCell>
               <TableCell align="center">Trxid</TableCell>
-
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {
-              (userProfile.transaction = userProfile.transaction
-                .filter((t) => t.date)
-                .sort((a, b) => {
-                  const dateA = new Date(a.date);
-                  const dateB = new Date(b.date);
-                  return dateB - dateA;
-                })
-
-                .map((t) => (
-                  <TableRow key={t._id}>
-                    {/* <TableCell component="th" scope="row" align="center">
-                                    {t.beneficiaryId}
-                                </TableCell> */}
-                    <TableCell
-                      align="center"
-                      style={{ color: "green", fontWeight: "bold" }}
-                    >
-                      {t.type === "in" ? t.amount : ""}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {t.type === "out" ? t.amount : ""}
-                    </TableCell>
-                    {/* <TableCell align="center">{t.amount}</TableCell> */}
-                    <TableCell align="center">
-                      {/* 
-
-                                            {new Date(t.date).toLocaleString('en-US', {
-                                                hour: 'numeric',
-                                                minute: 'numeric',
-                                                hour12: true,
-                                            })}{' '}
-
-
-                                            &nbsp; &nbsp; &nbsp; &nbsp;
-
-
-                                            {new Date(t.date).toLocaleString('en-GB', {
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                                year: 'numeric',
-                                            })} */}
-
-                      {t.date}
-                    </TableCell>
-                    <TableCell align="center">{t.duration} Minutes</TableCell>
-                    <TableCell align="center">{t.trxid} Minutes</TableCell>
-
-                  </TableRow>
-                )))
-            }
+            {userProfile.transaction
+              .filter((t, index, arr) => {
+                // Filter only the first occurrence of each trxid
+                return arr.findIndex((el) => el.trxid === t.trxid) === index;
+              })
+              .filter((t) => t.date)
+              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .map((t) => (
+                <TableRow key={t._id}>
+                  <TableCell align="center">
+                    {userProfile.beneficiaryId}
+                  </TableCell>
+                  <TableCell align="center">{t.beneficiaryMobile}</TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ color: "green", fontWeight: "bold" }}
+                  >
+                    {t.type === "in" ? t.amount : ""}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{ color: "red", fontWeight: "bold" }}
+                  >
+                    {t.type === "out" ? t.amount : ""}
+                  </TableCell>
+                  <TableCell align="center">{t.date}</TableCell>
+                  <TableCell align="center">{t.duration} Minutes</TableCell>
+                  <TableCell align="center">{t.trxid}</TableCell>
+                </TableRow>
+              ))}
             <TableRow>
+              <TableCell align="center" colSpan={2}></TableCell>
               <TableCell
                 align="center"
                 style={{ color: "green", fontWeight: "bold" }}
@@ -179,17 +156,14 @@ export default function Transaction() {
               >
                 Total Cash Out: {totalCashOut}
               </TableCell>
-              <TableCell
-                align="center"
-                style={{ color: "purple", fontWeight: "bold" }}
-              ></TableCell>
-
+              <TableCell align="center"></TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total minute: {totalMinutes}
+                Total duration: {totalDuration} Minutes
               </TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableBody>
         </Table>
