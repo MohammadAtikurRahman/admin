@@ -442,6 +442,7 @@ app.get("/get-transaction", async (req, res) => {
                 type: t.type,
                 amount: t.amount,
                 date: t.date,
+                trxid: t.trxid,
                 duration: t.duration,
                 updatedAt: t.updatedAt,
                 createdAt: t.createdAt
