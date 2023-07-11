@@ -424,40 +424,53 @@ app.get("/get-testscore", async (req, res) => {
 
 app.get("/get-transaction", async (req, res) => {
     let users = await user
-        .find({})
-        .select("beneficiary")
-        .lean();
-
+      .find({})
+      .select("beneficiary")
+      .lean();
+  
     const data = users;
-
+  
     // Map and format data
-    const mapped_data = data.map(user => {
+    const trxidSet = new Set(); // Set to store unique trxid values
+    const mapped_data = data
+      .map((user) => {
         const { beneficiary } = user;
-        return beneficiary.map(ben => ({
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
-            transaction: ben.transaction.map(t => ({
-                beneficiaryMobile: t.beneficiaryMobile,
-                type: t.type,
-                amount: t.amount,
-                date: t.date,
-                trxid: t.trxid,
-                duration: t.duration,
-                updatedAt: t.updatedAt,
-                createdAt: t.createdAt
-            }))
+        return beneficiary.map((ben) => ({
+          beneficiaryId: ben.beneficiaryId,
+          name: ben.name,
+          loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
+          transaction: ben.transaction
+            .filter((t) => {
+              if (trxidSet.has(t.trxid)) {
+                return false; // Skip duplicate transaction records
+              }
+              trxidSet.add(t.trxid);
+              return true; // Include unique transaction records
+            })
+            .map((t) => ({
+              beneficiaryMobile: t.beneficiaryMobile,
+              type: t.type,
+              amount: t.amount,
+              date: t.date,
+              trxid: t.trxid,
+              duration: t.duration,
+              updatedAt: t.updatedAt,
+              createdAt: t.createdAt,
+            })),
         }));
-    }).flat().reverse();
-
+      })
+      .flat()
+      .reverse();
+  
     if (mapped_data.length > 0) {
-        return res.status(200).json(mapped_data);
+      return res.status(200).json(mapped_data);
     } else {
-        return res.status(404).json({
-            message: "No data found.",
-        });
+      return res.status(404).json({
+        message: "No data found.",
+      });
     }
-});
+  });
+  
 
 
 
