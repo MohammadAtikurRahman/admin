@@ -458,46 +458,50 @@ app.get("/get-transaction", async (req, res) => {
 });
 
 
+
 app.get("/get-transaction", async (req, res) => {
     let users = await user
-      .find({})
-      .select("beneficiary")
-      .lean();
-  
-    const data = users;
-  
-    // Map and format data
-    const mapped_data = data.map((user) => {
-      const { beneficiary } = user;
-      return beneficiary.map((ben) => ({
-        beneficiaryId: ben.beneficiaryId,
-        name: ben.name,
-        loggedin_time: ben.loggedin_time
-          ? new Date(moment.utc(ben.loggedin_time).add(6, 'hours').format()).toISOString()
-          : null,
-        transaction: ben.transaction.map((t) => ({
-          beneficiaryMobile: t.beneficiaryMobile,
-          type: t.type,
-          amount: t.amount,
-          date: t.date,
-          duration: t.duration,
-          updatedAt: t.updatedAt,
-          createdAt: t.createdAt,
-        })),
-      }));
-    }).flat().reverse();
-  
-    if (mapped_data.length > 0) {
-      return res.status(200).json(mapped_data);
-    } else {
-      return res.status(404).json({
-        message: "No data found.",
-      });
-    }
-  });
-  
-  
+        .find({})
+        .select("beneficiary")
+        .lean(); // to use the object as a plain JavaScript object.
 
+    const data = users;
+
+    // Map and format data
+    const mapped_data = data.map(user => {
+        const { beneficiary } = user;
+        return beneficiary.map(ben => ({
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours').format() : null,
+            transaction: ben.transaction.map(t => ({
+                beneficiaryMobile: t.beneficiaryMobile,
+                type: t.type,
+                amount: t.amount,
+                date: t.date,
+                duration: t.duration,
+                updatedAt: t.updatedAt,
+                createdAt: t.createdAt
+            }))
+        }));
+    }).flat().reverse(); // Use flat() to flatten the array and reverse() to reverse the order.
+
+    if (mapped_data.length > 0) {
+        return res.status(200).json(mapped_data);
+    } else {
+        return res.status(404).json({
+            message: "No data found.",
+        });
+    }
+});
+ this is backend code... const getData = async () => {
+  try {
+    const res = await axios.get(baseUrl + "/get-transaction");
+    return flattenTransactions(res.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 
 app.get("/get-login", async (req, res) => {
