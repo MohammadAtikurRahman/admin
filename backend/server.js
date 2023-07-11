@@ -423,63 +423,47 @@ app.get("/get-testscore", async (req, res) => {
 });
 
 
+const moment = require('moment');
+
 app.get("/get-transaction", async (req, res) => {
-    let users = await user
-      .find({})
-      .select("beneficiary")
-      .lean();
-  
-    const data = users;
-  
-    // Map and format data
-    const mapped_data = data.map((user) => {
-      const { beneficiary } = user;
-      return beneficiary.map((ben) => {
-        const loggedin_time = ben.loggedin_time ? new Date(ben.loggedin_time) : null;
-        if (loggedin_time) {
-          const adjustedTime = new Date(loggedin_time.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
-          const formattedTime = adjustedTime.toISOString().replace("Z", "+06:00").replace("T", " ").slice(0, -5);
-          return {
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: formattedTime,
-            transaction: ben.transaction.map((t) => ({
-              beneficiaryMobile: t.beneficiaryMobile,
-              type: t.type,
-              amount: t.amount,
-              date: t.date,
-              duration: t.duration,
-              updatedAt: t.updatedAt,
-              createdAt: t.createdAt,
-            })),
-          };
-        } else {
-          return {
-            beneficiaryId: ben.beneficiaryId,
-            name: ben.name,
-            loggedin_time: null,
-            transaction: ben.transaction.map((t) => ({
-              beneficiaryMobile: t.beneficiaryMobile,
-              type: t.type,
-              amount: t.amount,
-              date: t.date,
-              duration: t.duration,
-              updatedAt: t.updatedAt,
-              createdAt: t.createdAt,
-            })),
-          };
-        }
-      });
-    }).flat().reverse();
-  
-    if (mapped_data.length > 0) {
-      return res.status(200).json(mapped_data);
-    } else {
-      return res.status(404).json({
-        message: "No data found.",
-      });
-    }
-  });
+  let users = await user
+    .find({})
+    .select("beneficiary")
+    .lean();
+
+  const data = users;
+
+  // Map and format data
+  const mapped_data = data.map((user) => {
+    const { beneficiary } = user;
+    return beneficiary.map((ben) => {
+      const loggedin_time = ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours') : null;
+      return {
+        beneficiaryId: ben.beneficiaryId,
+        name: ben.name,
+        loggedin_time: loggedin_time ? loggedin_time.format("YYYY-MM-DD HH:mm:ss.SSSZ") : null,
+        transaction: ben.transaction.map((t) => ({
+          beneficiaryMobile: t.beneficiaryMobile,
+          type: t.type,
+          amount: t.amount,
+          date: t.date,
+          duration: t.duration,
+          updatedAt: t.updatedAt,
+          createdAt: t.createdAt,
+        })),
+      };
+    });
+  }).flat().reverse();
+
+  if (mapped_data.length > 0) {
+    return res.status(200).json(mapped_data);
+  } else {
+    return res.status(404).json({
+      message: "No data found.",
+    });
+  }
+});
+
   
 
 
