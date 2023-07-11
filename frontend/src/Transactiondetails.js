@@ -39,9 +39,10 @@ const formatTime = (dateString) => {
     second: "2-digit",
     hour12: true,
   });
-  formattedTime = formattedTime.replace("AM", "PM");
+  formattedTime = formattedTime.replace("AM", "temp").replace("PM", "AM").replace("temp", "PM");
   return formattedTime;
 };
+
 
 
 // ...rest of the code
