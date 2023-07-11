@@ -83,17 +83,6 @@ const getData = async () => {
 
 const exportData = async () => {
   const data = await getData();
-  
-  // Format "Loggedin Time" column in 12-hour format (Bangladesh Standard Time)
-  data.forEach(item => {
-    if (item["Loggedin Time"]) {
-      const loggedinTimeUtc = moment.utc(item["Loggedin Time"]);
-      const loggedinTimeBst = loggedinTimeUtc.clone().add(6, 'hours').tz('Asia/Dhaka');
-      const formattedTime = loggedinTimeBst.format('hh:mm:ss A');
-      item["Loggedin Time"] = formattedTime;
-    }
-  });
-
   const fields = Object.keys(data[0]);
   const csv = json2csv.parse(data, { fields });
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -106,7 +95,6 @@ const exportData = async () => {
   link.click();
   document.body.removeChild(link);
 };
-
 
 export default class Transactiondetails extends Component {
   constructor() {
