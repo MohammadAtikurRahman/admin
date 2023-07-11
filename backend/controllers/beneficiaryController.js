@@ -203,82 +203,82 @@ async function beneficiaryLogin(req, res) {
     return res.status(401).json({message: "Something went wrong."});
 }
 
-async function transaction(req, res) {
-    let promises = req.body.map(transaction => {
-        return User.findOne({
-            "beneficiary.beneficiaryId": transaction.beneficiaryId,
-            "beneficiary.transaction": {
-                $elemMatch: {
-                    beneficiaryId: transaction.beneficiaryId,
-                    beneficiaryMobile: transaction.beneficiaryMobile,
-                    type: transaction.type,
-                    amount: transaction.amount,
-                    trxid: transaction.trxid,
-                    date: transaction.date,
-                    duration: transaction.duration
-                }
-            }
-        })
-        .then(user => {
-            if (!user) {
-                return User.updateOne(
-                    { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-                    { $push: { "beneficiary.$.transaction": transaction }},
-                    { new: true }
-                );
-            } else {
-                return Promise.resolve("Duplicate transaction found.");
-            }
-        })
-    });
-
-    Promise.all(promises)
-        .then(results => {
-            if (results.includes("Duplicate transaction found.")) {
-                return res.status(409).send("Duplicate transaction found.");
-            }
-            res.status(201).send("Transactions added successfully");
-        })
-        .catch(error => res.status(400).send(error));
-}
-
-
 // async function transaction(req, res) {
-//     let promises = req.body.map((transaction) => {
-//       return User.findOne({
-//         "beneficiary.beneficiaryId": transaction.beneficiaryId,
-//         "beneficiary.transaction": {
-//           $elemMatch: {
-//             trxid: transaction.trxid,
-//           },
-//         },
-//       })
-//         .then((user) => {
-//           if (!user) {
-//             return User.updateOne(
-//               { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-//               { $push: { "beneficiary.$.transaction": transaction } },
-//               { new: true }
-//             );
-//           } else {
-//             return Promise.resolve("Duplicate transaction found.");
-//           }
+//     let promises = req.body.map(transaction => {
+//         return User.findOne({
+//             "beneficiary.beneficiaryId": transaction.beneficiaryId,
+//             "beneficiary.transaction": {
+//                 $elemMatch: {
+//                     beneficiaryId: transaction.beneficiaryId,
+//                     beneficiaryMobile: transaction.beneficiaryMobile,
+//                     type: transaction.type,
+//                     amount: transaction.amount,
+//                     trxid: transaction.trxid,
+//                     date: transaction.date,
+//                     duration: transaction.duration
+//                 }
+//             }
 //         })
-//         .catch((error) => {
-//           return Promise.reject(error);
-//         });
+//         .then(user => {
+//             if (!user) {
+//                 return User.updateOne(
+//                     { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+//                     { $push: { "beneficiary.$.transaction": transaction }},
+//                     { new: true }
+//                 );
+//             } else {
+//                 return Promise.resolve("Duplicate transaction found.");
+//             }
+//         })
 //     });
+
+//     Promise.all(promises)
+//         .then(results => {
+//             if (results.includes("Duplicate transaction found.")) {
+//                 return res.status(409).send("Duplicate transaction found.");
+//             }
+//             res.status(201).send("Transactions added successfully");
+//         })
+//         .catch(error => res.status(400).send(error));
+// }
+
+
+async function transaction(req, res) {
+    let promises = req.body.map((transaction) => {
+      return User.findOne({
+        "beneficiary.beneficiaryId": transaction.beneficiaryId,
+        "beneficiary.transaction": {
+          $elemMatch: {
+            trxid: transaction.trxid,
+          },
+        },
+      })
+        .then((user) => {
+          if (!user) {
+            return User.updateOne(
+              { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+              { $push: { "beneficiary.$.transaction": transaction } },
+              { new: true }
+            );
+          } else {
+            return Promise.resolve("Duplicate transaction found.");
+          }
+        })
+        .catch((error) => {
+          return Promise.reject(error);
+        });
+    });
   
-//     try {
-//       const results = await Promise.all(promises);
-//       if (results.includes("Duplicate transaction found.")) {
-//         return res.status(409).send("Duplicate transaction found.");
-//       }
-//       res.status(201).send("Transactions added successfully");
-//     } catch (error) {
-//       res.status(400).send(error);
-//     }
-//   }
+    try {
+      const results = await Promise.all(promises);
+      if (results.includes("Duplicate transaction found.")) {
+        return res.status(409).send("Duplicate transaction found.");
+      }
+      res.status(201).send("Transactions added successfully");
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
 
 //original data
 // async function newlogin(req, res) {
