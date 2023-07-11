@@ -25,20 +25,26 @@ const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
 
-
-const formatDate = (dateTime) => {
-  if (!dateTime) return "";
-  const bdDateTime = new Date(dateTime);
-  bdDateTime.setUTCHours(bdDateTime.getUTCHours() + 6);
-  return bdDateTime.toLocaleDateString("en-BD");
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB");
 };
 
-const formatTime = (dateTime) => {
-  if (!dateTime) return "";
-  const bdDateTime = new Date(dateTime);
-  bdDateTime.setUTCHours(bdDateTime.getUTCHours() + 6);
-  return bdDateTime.toLocaleTimeString("en-BD");
+const formatTime = (dateString) => {
+  const date = new Date(dateString);
+  const adjustedTime = new Date(date.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
+  return adjustedTime.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
 };
+
+// ...rest of the code
+
+
+// ...rest of the code
 
 const flattenTransactions = (data) => {
   return data
