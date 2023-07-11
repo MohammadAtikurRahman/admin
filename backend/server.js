@@ -3,8 +3,8 @@ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-const moment = require('moment-timezone');
-
+const moment = require('moment');
+require('moment-timezone');
 const multer = require("multer"),
     bodyParser = require("body-parser"),
     path = require("path");
@@ -421,8 +421,45 @@ app.get("/get-testscore", async (req, res) => {
 
     return res.status(200).json(extact_data);
 });
+app.get("/get-transaction", async (req, res) => {
+    let users = await user
+        .find({})
+        .select("beneficiary")
+        .lean();
+
+    const data = users;
+
+    // Map and format data
+    const mapped_data = data.map(user => {
+        const { beneficiary } = user;
+        return beneficiary.map(ben => ({
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
+            transaction: ben.transaction.map(t => ({
+                beneficiaryMobile: t.beneficiaryMobile,
+                type: t.type,
+                amount: t.amount,
+                date: t.date,
+                duration: t.duration,
+                updatedAt: t.updatedAt,
+                createdAt: t.createdAt
+            }))
+        }));
+    }).flat().reverse();
+
+    if (mapped_data.length > 0) {
+        return res.status(200).json(mapped_data);
+    } else {
+        return res.status(404).json({
+            message: "No data found.",
+        });
+    }
+});
 
 
+
+const moment = require('moment-timezone');
 
 app.get("/get-transaction", async (req, res) => {
   let users = await user
@@ -435,23 +472,20 @@ app.get("/get-transaction", async (req, res) => {
   // Map and format data
   const mapped_data = data.map((user) => {
     const { beneficiary } = user;
-    return beneficiary.map((ben) => {
-      const loggedin_time = ben.loggedin_time ? moment.utc(ben.loggedin_time).add(6, 'hours') : null;
-      return {
-        beneficiaryId: ben.beneficiaryId,
-        name: ben.name,
-        loggedin_time: loggedin_time ? loggedin_time.format("YYYY-MM-DD hh:mm:ss.SSS A Z").replace("AM", "PM") : null,
-        transaction: ben.transaction.map((t) => ({
-          beneficiaryMobile: t.beneficiaryMobile,
-          type: t.type,
-          amount: t.amount,
-          date: t.date,
-          duration: t.duration,
-          updatedAt: t.updatedAt,
-          createdAt: t.createdAt,
-        })),
-      };
-    });
+    return beneficiary.map((ben) => ({
+      beneficiaryId: ben.beneficiaryId,
+      name: ben.name,
+      loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format("YYYY-MM-DD HH:mm:ss") : null,
+      transaction: ben.transaction.map((t) => ({
+        beneficiaryMobile: t.beneficiaryMobile,
+        type: t.type,
+        amount: t.amount,
+        date: t.date,
+        duration: t.duration,
+        updatedAt: t.updatedAt,
+        createdAt: t.createdAt,
+      })),
+    }));
   }).flat().reverse();
 
   if (mapped_data.length > 0) {
@@ -462,6 +496,8 @@ app.get("/get-transaction", async (req, res) => {
     });
   }
 });
+
+
 
 
 app.get("/get-login", async (req, res) => {
