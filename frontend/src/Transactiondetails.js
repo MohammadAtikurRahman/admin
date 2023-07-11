@@ -33,13 +33,16 @@ const formatDate = (dateString) => {
 const formatTime = (dateString) => {
   const date = new Date(dateString);
   const adjustedTime = new Date(date.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
-  return adjustedTime.toLocaleTimeString("en-US", {
+  let formattedTime = adjustedTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: true,
   });
+  formattedTime = formattedTime.replace("AM", "PM");
+  return formattedTime;
 };
+
 
 // ...rest of the code
 
