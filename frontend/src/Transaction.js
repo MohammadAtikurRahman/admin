@@ -161,7 +161,7 @@ export default function Transaction() {
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total duration: {totalDuration} Minutes
+                Total duration: {totalMinutes} Minutes
               </TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
