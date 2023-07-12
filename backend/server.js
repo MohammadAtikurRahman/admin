@@ -427,41 +427,46 @@ app.get("/get-transaction", async (req, res) => {
       .find({})
       .select("beneficiary")
       .lean();
-  
+
     const data = users;
-  
+
+    // Set to store unique trxid values
+    const trxidSet = new Set(); 
+
     // Map and format data
-    const trxidSet = new Set(); // Set to store unique trxid values
     const mapped_data = data
       .map((user) => {
         const { beneficiary } = user;
         return beneficiary.map((ben) => ({
           beneficiaryId: ben.beneficiaryId,
           name: ben.name,
+          mob: ben.mob,
           loggedin_time: ben.loggedin_time ? moment.utc(ben.loggedin_time).tz("Asia/Dhaka").format() : null,
           transaction: ben.transaction
-            .filter((t) => {
-              if (trxidSet.has(t.trxid)) {
-                return false; // Skip duplicate transaction records
-              }
-              trxidSet.add(t.trxid);
-              return true; // Include unique transaction records
-            })
-            .map((t) => ({
-              beneficiaryMobile: t.beneficiaryMobile,
-              type: t.type,
-              amount: t.amount,
-              date: t.date,
-              trxid: t.trxid,
-              duration: t.duration,
-              updatedAt: t.updatedAt,
-              createdAt: t.createdAt,
-            })),
+            ? ben.transaction
+                .filter((t) => {
+                    if (trxidSet.has(t.trxid)) {
+                        return false; // Skip duplicate transaction records
+                    }
+                    trxidSet.add(t.trxid);
+                    return true; // Include unique transaction records
+                })
+                .map((t) => ({
+                    beneficiaryMobile: ben.mob,
+                    type: t.type,
+                    amount: t.amount,
+                    date: t.date,
+                    trxid: t.trxid,
+                    duration: t.duration,
+                    updatedAt: t.updatedAt,
+                    createdAt: t.createdAt,
+                }))
+            : [], // or some default value when ben.transaction is undefined
         }));
       })
       .flat()
       .reverse();
-  
+
     if (mapped_data.length > 0) {
       return res.status(200).json(mapped_data);
     } else {
@@ -469,8 +474,8 @@ app.get("/get-transaction", async (req, res) => {
         message: "No data found.",
       });
     }
-  });
-  
+});
+
 
 
 
