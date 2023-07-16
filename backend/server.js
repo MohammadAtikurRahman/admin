@@ -331,19 +331,20 @@ app.get("/get-tran", (req, res) => {
             console.log(err);
         } else {
             const beneficiaries = val.flatMap((user) => {
-                return user.beneficiary.map((beneficiary) => {
-                    if (!beneficiary.beneficiaryMobile) {
-                        beneficiary.beneficiaryMobile = user.beneficiary.find((b) => b.beneficiaryId === beneficiary.beneficiaryId).mob;
-                    }
-                    return beneficiary;
+                user.beneficiary.forEach(ben => {
+                    ben.transaction.forEach(tran => {
+                        if (tran.beneficiaryMobile === "") {
+                            tran.beneficiaryMobile = ben.mob;
+                        }
+                    });
+                    ben.transaction.reverse();  // Reverse the order of transactions
                 });
+                return user.beneficiary;
             });
             res.json(beneficiaries);
         }
     });
 });
-
-
 
 
 
