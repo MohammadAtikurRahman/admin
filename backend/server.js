@@ -333,7 +333,7 @@ app.get("/get-tran", (req, res) => {
             const beneficiaries = val.flatMap((user) => {
                 return user.beneficiary.map((beneficiary) => {
                     if (!beneficiary.beneficiaryMobile) {
-                        beneficiary.beneficiaryMobile = user.beneficiary.mob;
+                        beneficiary.beneficiaryMobile = user.mob;
                     }
                     return beneficiary;
                 });
