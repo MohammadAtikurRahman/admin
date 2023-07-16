@@ -91,7 +91,8 @@ const getData = async () => {
 };
 
 const exportData = async () => {
-  const data = await getData();
+  let data = await getData();
+  data = data.reverse();  // Reverse the order of data
   const fields = Object.keys(data[0]);
   const csv = json2csv.parse(data, { fields });
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -104,6 +105,7 @@ const exportData = async () => {
   link.click();
   document.body.removeChild(link);
 };
+
 
 export default class Transactiondetails extends Component {
   constructor() {
