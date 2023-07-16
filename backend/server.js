@@ -330,7 +330,14 @@ app.get("/get-tran", (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            const beneficiaries = val.flatMap((user) => user.beneficiary);
+            const beneficiaries = val.flatMap((user) => {
+                return user.beneficiary.map((beneficiary) => {
+                    if (!beneficiary.beneficiaryMobile) {
+                        beneficiary.beneficiaryMobile = user.beneficiary.mob;
+                    }
+                    return beneficiary;
+                });
+            });
             res.json(beneficiaries);
         }
     });
