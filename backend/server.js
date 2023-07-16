@@ -330,9 +330,9 @@ app.get("/get-tran", (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            let trxidSet = new Set();  // Create a set to track trxid
             const beneficiaries = val.flatMap((user) => {
                 user.beneficiary.forEach(ben => {
+                    let trxidSet = new Set();  // Create a set to track trxid for each beneficiary
                     ben.transaction = ben.transaction.filter(tran => {
                         if (tran.beneficiaryMobile === "") {
                             tran.beneficiaryMobile = ben.mob;
