@@ -326,15 +326,16 @@ app.get("/get-all", (req, res) => {
     });
 });
 app.get("/get-tran", (req, res) => {
-    user.find({}, { beneficiary: 1 }, (err, val) => {
+    user.find({}, { "beneficiary.beneficiaryId": 1, "beneficiary.name": 1, "beneficiary.mob": 1, "beneficiary.loggedin_time": 1, "beneficiary.transaction": 1 }, (err, val) => {
         if (err) {
             console.log(err);
         } else {
-            const beneficiaries = val.map((user) => user.beneficiary);
+            const beneficiaries = val.flatMap((user) => user.beneficiary);
             res.json(beneficiaries);
         }
     });
 });
+
 
 app.get("/get-ben", async (req, res) => {
     let users = await user
