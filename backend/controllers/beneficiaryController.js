@@ -245,6 +245,11 @@ async function beneficiaryLogin(req, res) {
 
 async function transaction(req, res) {
     req.body.forEach(transaction => {
+        // Check if beneficiaryMobile is present
+        if (!transaction.beneficiaryMobile) {
+            return res.status(400).send(`Missing beneficiaryMobile for transaction with beneficiaryId: ${transaction.beneficiaryId}`);
+        }
+
         User.findOneAndUpdate(
             {"beneficiary.beneficiaryId": transaction.beneficiaryId},
             {
@@ -271,7 +276,6 @@ async function transaction(req, res) {
     });
     res.status(201).send("Transactions added successfully");
 }
-
 
 
 // async function transaction(req, res) {
