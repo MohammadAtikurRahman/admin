@@ -333,7 +333,7 @@ app.get("/get-tran", (req, res) => {
             const beneficiaries = val.flatMap((user) => {
                 return user.beneficiary.map((beneficiary) => {
                     if (!beneficiary.beneficiaryMobile) {
-                        beneficiary.beneficiaryMobile = user.mob;
+                        beneficiary.beneficiaryMobile = user.beneficiary.find((b) => b.beneficiaryId === beneficiary.beneficiaryId).mob;
                     }
                     return beneficiary;
                 });
@@ -342,6 +342,9 @@ app.get("/get-tran", (req, res) => {
         }
     });
 });
+
+
+
 
 
 app.get("/get-ben", async (req, res) => {
