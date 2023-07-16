@@ -331,17 +331,11 @@ app.get("/get-tran", (req, res) => {
             console.log(err);
         } else {
             const beneficiaries = val.flatMap((user) => {
-                let trxidSet = new Set();  // Create a set to track trxid
                 user.beneficiary.forEach(ben => {
-                    ben.transaction = ben.transaction.filter(tran => {
+                    ben.transaction.forEach(tran => {
                         if (tran.beneficiaryMobile === "") {
                             tran.beneficiaryMobile = ben.mob;
                         }
-                        if (!trxidSet.has(tran.trxid)) {
-                            trxidSet.add(tran.trxid);
-                            return true;  // Keep the transaction if trxid is not a duplicate
-                        }
-                        return false;  // Remove the transaction if trxid is a duplicate
                     });
                     ben.transaction.reverse();  // Reverse the order of transactions
                 });
@@ -351,7 +345,6 @@ app.get("/get-tran", (req, res) => {
         }
     });
 });
-
 
 
 
