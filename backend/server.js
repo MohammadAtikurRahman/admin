@@ -83,6 +83,8 @@ app.use("/", (req, res, next) => {
             req.path == "/get-ben" ||
             req.path == "/get-testscore" ||
             req.path == "/get-transaction" ||
+            req.path == "/get-tran" ||
+
             req.path == "/get-login" ||
             req.path == "/list-beneficiary" ||
             req.path == "/beneficiary" ||
@@ -323,6 +325,17 @@ app.get("/get-all", (req, res) => {
         }
     });
 });
+app.get("/get-tran", (req, res) => {
+    user.find({}, { beneficiary: 1 }, (err, val) => {
+        if (err) {
+            console.log(err);
+        } else {
+            const beneficiaries = val.map((user) => user.beneficiary);
+            res.json(beneficiaries);
+        }
+    });
+});
+
 app.get("/get-ben", async (req, res) => {
     let users = await user
         .find({})
