@@ -83,7 +83,7 @@ const flattenTransactions = (data) => {
 
 const getData = async () => {
   try {
-    const res = await axios.get(baseUrl + "/get-transaction");
+    const res = await axios.get(baseUrl + "/get-tran");
     return flattenTransactions(res.data);
   } catch (error) {
     console.error(error);
