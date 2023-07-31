@@ -325,6 +325,8 @@ app.get("/get-all", (req, res) => {
         }
     });
 });
+
+
 app.get("/get-tran", (req, res) => {
     user.find({}, { "beneficiary.beneficiaryId": 1, "beneficiary.name": 1, "beneficiary.mob": 1, "beneficiary.loggedin_time": 1, "beneficiary.transaction": 1 }, (err, val) => {
         if (err) {

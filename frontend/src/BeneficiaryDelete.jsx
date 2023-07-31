@@ -59,6 +59,11 @@ function BeneficiaryDelete({ row }) {
         color="secondary"
         size="small"
 
+        style={{
+
+          width: "100px",
+
+        }}
 
         onClick={handleDelete}
       >

@@ -24,7 +24,6 @@ import { AddBeneficiary } from "./AddBeneficiary";
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
-
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-GB");
@@ -32,21 +31,21 @@ const formatDate = (dateString) => {
 
 const formatTime = (dateString) => {
   const date = new Date(dateString);
-  const adjustedTime = new Date(date.getTime() + (6 * 60 * 60 * 1000)); // Adding 6 hours (in milliseconds)
+  const adjustedTime = new Date(date.getTime() + 6 * 60 * 60 * 1000); // Adding 6 hours (in milliseconds)
   let formattedTime = adjustedTime.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: true,
   });
-  formattedTime = formattedTime.replace("AM", "temp").replace("PM", "AM").replace("temp", "PM");
+  formattedTime = formattedTime
+    .replace("AM", "temp")
+    .replace("PM", "AM")
+    .replace("temp", "PM");
   return formattedTime;
 };
 
-
-
 // ...rest of the code
-
 
 // ...rest of the code
 
@@ -92,7 +91,7 @@ const getData = async () => {
 
 const exportData = async () => {
   let data = await getData();
-  data = data.reverse();  // Reverse the order of data
+  data = data.reverse(); // Reverse the order of data
   const fields = Object.keys(data[0]);
   const csv = json2csv.parse(data, { fields });
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -105,7 +104,6 @@ const exportData = async () => {
   link.click();
   document.body.removeChild(link);
 };
-
 
 export default class Transactiondetails extends Component {
   constructor() {
@@ -213,10 +211,32 @@ export default class Transactiondetails extends Component {
         },
       })
       .then((res) => {
+        const beneficiaries = res.data.beneficiaries.map((beneficiary) => {
+          let totalCashInTransactions = 0;
+          let totalCashOutTransactions = 0;
+          let totalTransactions = 0;
+  
+          beneficiary.transaction.forEach((transaction) => {
+            totalTransactions += 1;
+            if (transaction.type === 'in') {
+              totalCashInTransactions += 1;
+            } else if (transaction.type === 'out') {
+              totalCashOutTransactions += 1;
+            }
+          });
+  
+          return {
+            ...beneficiary,
+            totalCashInTransactions,
+            totalCashOutTransactions,
+            totalTransactions
+          };
+        });
+  
         this.setState({
           loading: false,
-          beneficiaries: res.data.beneficiaries,
-          filteredBeneficiary: res.data.beneficiaries,
+          beneficiaries,
+          filteredBeneficiary: beneficiaries,
         });
       })
       .catch((err) => {
@@ -294,7 +314,7 @@ export default class Transactiondetails extends Component {
         <div>
           <br></br>
           <h2>TRANSACTION DETAILS</h2>
-      
+  
           <Button
             className="button_style"
             variant="contained"
@@ -308,17 +328,7 @@ export default class Transactiondetails extends Component {
               List Of Test
             </MaterialLink>
           </Button>
-          {/* <Button
-                        className="button_style"
-                        variant="contained"
-                        color="inherit"
-                        size="small">
-                        <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
-                            href="/test">
-                            Transactions
-                        </MaterialLink>
-                    </Button> */}
+  
           <Button
             className="button_style"
             variant="contained"
@@ -332,7 +342,7 @@ export default class Transactiondetails extends Component {
               Disagree of test
             </MaterialLink>
           </Button>
-      
+  
           <Button
             className="button_style"
             variant="contained"
@@ -349,6 +359,7 @@ export default class Transactiondetails extends Component {
               Transaction Details Download
             </MaterialLink>
           </Button>
+  
           <Button
             className="button_style"
             variant="contained"
@@ -357,12 +368,12 @@ export default class Transactiondetails extends Component {
           >
             <MaterialLink
               style={{ textDecoration: "none", color: "white" }}
-              href="/dashboard
-              "
+              href="/dashboard"
             >
               List of beneficiary
             </MaterialLink>
           </Button>
+  
           <Button
             className="button_style"
             variant="contained"
@@ -380,7 +391,9 @@ export default class Transactiondetails extends Component {
             </MaterialLink>
           </Button>
         </div>
+  
         <br />
+  
         <TableContainer>
           <div className="search-container">
             <TextField
@@ -399,7 +412,7 @@ export default class Transactiondetails extends Component {
               }}
             />
           </div>
-
+  
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -412,24 +425,31 @@ export default class Transactiondetails extends Component {
                 <TableCell align="center">
                   <b> Beneficiary Id </b>
                 </TableCell>
-
                 <TableCell align="center">
                   <b> Test Score </b>
                 </TableCell>
                 <TableCell align="center">
-                  <b> Action </b>
+                  <b> Total Cash In</b>
                 </TableCell>
                 <TableCell align="center">
-                  <b> Details </b>
+                  <b>Total Cash out </b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Total Transaction</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Action</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Details</b>
                 </TableCell>
               </TableRow>
             </TableHead>
-
+  
             <TableBody>
               {this.state?.filteredBeneficiary
                 ?.reverse()
                 .filter((row) => row.mob_own == "bkash")
-
                 .map((row, index) => (
                   <TableRow key={index}>
                     <TableCell align="center">
@@ -445,14 +465,19 @@ export default class Transactiondetails extends Component {
                         year: "numeric",
                       })}
                     </TableCell>
+  
                     <TableCell align="center">{row.name}</TableCell>
-
+  
                     <TableCell align="center" component="th" scope="row">
                       {row.beneficiaryId}
                     </TableCell>
-
+  
                     <TableCell align="center">{row.score1}</TableCell>
 
+                    <TableCell align="center">{row.totalCashInTransactions}</TableCell>
+                    <TableCell align="center">{row.totalCashOutTransactions}</TableCell>
+                    <TableCell align="center">{row.totalTransactions}</TableCell>
+  
                     <TableCell align="center">
                       <Button
                         className="button_style"
@@ -460,13 +485,20 @@ export default class Transactiondetails extends Component {
                         color="primary"
                         size="small"
                         onClick={() => this.handleProductEditOpen(row)}
+
+                        style={{
+
+                          width: "100px",
+
+                        }}
                       >
                         Edit
                       </Button>
-
-                      <BeneficiaryDelete row={row} />
+                      <BeneficiaryDelete   row={row} />
                     </TableCell>
 
+                  
+  
                     <TableCell align="center">
                       <Button
                         className="button_style"
@@ -478,6 +510,7 @@ export default class Transactiondetails extends Component {
                           style={{
                             textDecoration: "none",
                             color: "white",
+                            width: "170px"
                           }}
                           to={`/profile/${row._id}`}
                           state={row}
@@ -496,6 +529,8 @@ export default class Transactiondetails extends Component {
                           style={{
                             textDecoration: "none",
                             color: "black",
+                            width: "170px",
+
                           }}
                           to={`/transaction/${row._id}`}
                           state={row}
@@ -504,12 +539,15 @@ export default class Transactiondetails extends Component {
                         </Link>
                       </Button>
                     </TableCell>
+                    
+                
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
-
+  
           <br />
+  
           <Pagination
             count={this.state.pages}
             page={this.state.page}
@@ -517,6 +555,7 @@ export default class Transactiondetails extends Component {
             color="primary"
           />
         </TableContainer>
+  
         {this.state.openProductEditModal && (
           <EditBeneficiary
             beneficiary={this.state.currentBeneficiary}
@@ -525,6 +564,7 @@ export default class Transactiondetails extends Component {
             getBeneficiaries={this.getBeneficiaries}
           />
         )}
+  
         {this.state.openProductModal && (
           <AddBeneficiary
             isEditModalOpen={this.state.openProductModal}
@@ -535,4 +575,4 @@ export default class Transactiondetails extends Component {
       </div>
     );
   }
-}
+}  

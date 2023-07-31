@@ -16,21 +16,47 @@ const useStyles = makeStyles({
     minWidth: 650,
   },
 });
+
 export default function Transaction() {
-  const [persons, setPerson] = useState([]);
+  const [totalTransactionCount, setTotalTransactionCount] = useState(0);
+  const [totalCashInCount, setTotalCashInCount] = useState(0);
+  const [totalCashOutCount, setTotalCashOutCount] = useState(0);
   const location = useLocation();
   const userProfile = location.state;
   console.log("transaction details", userProfile);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if(userProfile?.transaction) {
+      setTotalTransactionCount(userProfile.transaction.length);
+      
+      const cashInCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "in" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+
+      const cashOutCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "out" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+
+      setTotalCashInCount(cashInCount);
+      setTotalCashOutCount(cashOutCount);
+    }
+  }, [userProfile]);
+
   function logOut() {
     localStorage.setItem("token", null);
     navigate("/");
   }
+
   const classes = useStyles();
   const trxidSet = new Set();
-  const trxidWithMinutesSet = new Set();
-  
+
   const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
     if (!trxidSet.has(t.trxid) && t.type === "in" && t.date) {
       trxidSet.add(t.trxid);
@@ -38,7 +64,7 @@ export default function Transaction() {
     }
     return acc;
   }, 0);
-  
+
   const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
     if (!trxidSet.has(t.trxid) && t.type === "out" && t.date) {
       trxidSet.add(t.trxid);
@@ -46,16 +72,13 @@ export default function Transaction() {
     }
     return acc;
   }, 0);
-  
+
   const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
     if (!isNaN(Number(t.duration)) && t.date && arr.findIndex(el => el.trxid === t.trxid) === index) {
       return acc + Number(t.duration);
     }
     return acc;
   }, 0);
-  
-  
-
 
   return (
     <div className="container text-center p-5 ">
@@ -157,17 +180,23 @@ export default function Transaction() {
                 style={{ color: "green", fontWeight: "bold" }}
               >
                 Total Cash In: {totalCashIn}
+                <br/>
+                Total Cash In Transactions: {totalCashInCount}
               </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "red", fontWeight: "bold" }}
               >
                 Total Cash Out: {totalCashOut}
+                <br/>
+                Total Cash Out Transactions: {totalCashOutCount}
               </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
-              ></TableCell>
+              >
+                Total Transactions: {totalTransactionCount}
+              </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}

@@ -257,6 +257,7 @@ async function transaction(req, res) {
                         trxid: transaction.trxid,
                         date: transaction.date,
                         duration: transaction.duration,
+                        appusages: transaction.appusages,
                     },
                 },
             },
