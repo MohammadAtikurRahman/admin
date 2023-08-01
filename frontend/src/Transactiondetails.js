@@ -47,28 +47,27 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
-  let beneficiaries = {};
+  let beneficiaries = [];
+  let totalCashIn = 0;
+  let totalCashOut = 0;
 
   data.forEach((entry) => {
     const beneficiaryId = entry.beneficiaryId;
     let uniqueCashInTrxIds = new Set();
     let uniqueCashOutTrxIds = new Set();
-    let firstEntry = true;
 
     entry.transaction.forEach((transaction) => {
       if (transaction.type === 'in' && !uniqueCashInTrxIds.has(transaction.trxId)) {
         uniqueCashInTrxIds.add(transaction.trxId);
-        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
-        beneficiaries[beneficiaryId].cashInCount++;
+        totalCashIn++;
       }
 
       if (transaction.type === 'out' && !uniqueCashOutTrxIds.has(transaction.trxId)) {
         uniqueCashOutTrxIds.add(transaction.trxId);
-        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
-        beneficiaries[beneficiaryId].cashOutCount++;
+        totalCashOut++;
       }
 
-      beneficiaries[beneficiaryId].transactions.push({
+      beneficiaries.push({
         "Beneficiary Id": beneficiaryId,
         "Beneficiary Mobile": transaction.beneficiaryMobile,
         "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
@@ -76,16 +75,17 @@ const flattenTransactions = (data) => {
         Date: transaction.date,
         "Loggedin Date": formatDate(entry.loggedin_time),
         "Loggedin Time": formatTime(entry.loggedin_time),
-        "Total Transactions": firstEntry ? (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0) : "",
-        "Total Cash In": firstEntry ? beneficiaries[beneficiaryId].cashInCount || 0 : "",
-        "Total Cash Out": firstEntry ? beneficiaries[beneficiaryId].cashOutCount || 0 : "",
       });
-
-      firstEntry = false;
     });
   });
 
-  return Object.values(beneficiaries).map(b => b.transactions).flat();
+  beneficiaries.push({
+    "Total Cash In": totalCashIn,
+    "Total Cash Out": totalCashOut,
+    "Total Transactions": totalCashIn + totalCashOut,
+  });
+
+  return beneficiaries;
 };
 
 
