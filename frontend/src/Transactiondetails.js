@@ -225,9 +225,14 @@ export default class Transactiondetails extends Component {
                 totalCashInTransactions += 1;
               } else if (transaction.type === 'out') {
                 totalCashOutTransactions += 1;
+              } else {
+                console.log(`Unexpected transaction type: ${transaction.type}`);
               }
+              console.log(`Transaction: ${transaction.trxid}, Type: ${transaction.type}`);
             }
           });
+  
+          console.log(`Beneficiary: ${beneficiary.beneficiaryId}, Total Cash In: ${totalCashInTransactions}, Total Cash Out: ${totalCashOutTransactions}`);
   
           return {
             ...beneficiary,
