@@ -50,23 +50,25 @@ const flattenTransactions = (data) => {
   let transactionsCount = {};
   let cashInCount = {};
   let cashOutCount = {};
+  let uniqueTrxIds = {};
 
   const flatData = data
     .map((entry) => {
-      const transactions = entry.transaction;
       const beneficiaryId = entry.beneficiaryId;
+      uniqueTrxIds[beneficiaryId] = new Set();
 
-      transactions.forEach((transaction) => {
-        transactionsCount[beneficiaryId] = (transactionsCount[beneficiaryId] || 0) + 1;
+      return entry.transaction.map((transaction, index) => {
+        if (!uniqueTrxIds[beneficiaryId].has(transaction.trxid)) {
+          uniqueTrxIds[beneficiaryId].add(transaction.trxid);
+          transactionsCount[beneficiaryId] = (transactionsCount[beneficiaryId] || 0) + 1;
 
-        if (transaction.type === 'in') {
-          cashInCount[beneficiaryId] = (cashInCount[beneficiaryId] || 0) + 1;
-        } else if (transaction.type === 'out') {
-          cashOutCount[beneficiaryId] = (cashOutCount[beneficiaryId] || 0) + 1;
+          if (transaction.type === 'in') {
+            cashInCount[beneficiaryId] = (cashInCount[beneficiaryId] || 0) + 1;
+          } else if (transaction.type === 'out') {
+            cashOutCount[beneficiaryId] = (cashOutCount[beneficiaryId] || 0) + 1;
+          }
         }
-      });
 
-      return transactions.map((transaction, index) => {
         const output = {
           "Beneficiary Id": beneficiaryId,
           "Beneficiary Mobile": transaction.beneficiaryMobile,
@@ -76,8 +78,8 @@ const flattenTransactions = (data) => {
           "Loggedin Date": formatDate(entry.loggedin_time),
           "Loggedin Time": formatTime(entry.loggedin_time),
           "Total Transactions": transactionsCount[beneficiaryId],
-          "Total Cash In": cashInCount[beneficiaryId] || 0, // If there is no cash in transaction, default to 0
-          "Total Cash Out": cashOutCount[beneficiaryId] || 0 // If there is no cash out transaction, default to 0
+          "Total Cash In": cashInCount[beneficiaryId] || 0,
+          "Total Cash Out": cashOutCount[beneficiaryId] || 0
         };
 
         if (index > 0) {
@@ -92,6 +94,7 @@ const flattenTransactions = (data) => {
 
   return flatData;
 };
+
 
 
 const getData = async () => {
