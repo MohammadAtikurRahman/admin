@@ -47,11 +47,24 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
+  let totalCashIn = 0;
+  let totalCashOut = 0;
+
+  data.forEach((entry) => {
+    entry.transaction.forEach((transaction) => {
+      if (transaction.type === 'in') {
+        totalCashIn++;
+      } else {
+        totalCashOut++;
+      }
+    });
+  });
+
   return data
-    .map((entry) => {
+    .map((entry, entryIndex) => {
       const transactions = entry.transaction;
 
-      return transactions.map((transaction, index) => {
+      return transactions.map((transaction, transactionIndex) => {
         const output = {
           "Beneficiary Id": entry.beneficiaryId,
           "Beneficiary Mobile": transaction.beneficiaryMobile,
@@ -62,7 +75,13 @@ const flattenTransactions = (data) => {
           "Loggedin Time": formatTime(entry.loggedin_time),
         };
 
-        if (index > 0) {
+        if (entryIndex === 0 && transactionIndex === 0) {
+          output["Total Cash In"] = totalCashIn;
+          output["Total Cash Out"] = totalCashOut;
+          output["Total Transactions"] = totalCashIn + totalCashOut;
+        }
+
+        if (transactionIndex > 0) {
           output["Loggedin Date"] = "";
           output["Loggedin Time"] = "";
         }
