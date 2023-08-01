@@ -53,6 +53,7 @@ const flattenTransactions = (data) => {
     const beneficiaryId = entry.beneficiaryId;
     let uniqueCashInTrxIds = new Set();
     let uniqueCashOutTrxIds = new Set();
+    let firstEntry = true;
 
     entry.transaction.forEach((transaction) => {
       if (transaction.type === 'in' && !uniqueCashInTrxIds.has(transaction.trxId)) {
@@ -75,15 +76,18 @@ const flattenTransactions = (data) => {
         Date: transaction.date,
         "Loggedin Date": formatDate(entry.loggedin_time),
         "Loggedin Time": formatTime(entry.loggedin_time),
-        "Total Transactions": (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0),
-        "Total Cash In": beneficiaries[beneficiaryId].cashInCount || 0,
-        "Total Cash Out": beneficiaries[beneficiaryId].cashOutCount || 0,
+        "Total Transactions": firstEntry ? (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0) : "",
+        "Total Cash In": firstEntry ? beneficiaries[beneficiaryId].cashInCount || 0 : "",
+        "Total Cash Out": firstEntry ? beneficiaries[beneficiaryId].cashOutCount || 0 : "",
       });
+
+      firstEntry = false;
     });
   });
 
   return Object.values(beneficiaries).map(b => b.transactions).flat();
 };
+
 
 
 
