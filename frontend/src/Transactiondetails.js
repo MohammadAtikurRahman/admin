@@ -215,21 +215,24 @@ export default class Transactiondetails extends Component {
           let totalCashInTransactions = 0;
           let totalCashOutTransactions = 0;
           let totalTransactions = 0;
-          let seenTrxidsIn = new Set();
-          let seenTrxidsOut = new Set();
+          let seenTrxids = new Set();
   
           beneficiary.transaction.forEach((transaction) => {
-            if (transaction.type === 'in' && !seenTrxidsIn.has(transaction.trxid)) {
-              seenTrxidsIn.add(transaction.trxid);
-              totalCashInTransactions += 1;
+            if (!seenTrxids.has(transaction.trxid)) {
+              seenTrxids.add(transaction.trxid);
               totalTransactions += 1;
-            } 
-            else if (transaction.type === 'out' && !seenTrxidsOut.has(transaction.trxid)) {
-              seenTrxidsOut.add(transaction.trxid);
-              totalCashOutTransactions += 1;
-              totalTransactions += 1;
+              if (transaction.type === 'in') {
+                totalCashInTransactions += 1;
+              } else if (transaction.type === 'out') {
+                totalCashOutTransactions += 1;
+              } else {
+                console.log(`Unexpected transaction type: ${transaction.type}`);
+              }
+              console.log(`Transaction: ${transaction.trxid}, Type: ${transaction.type}`);
             }
           });
+  
+          console.log(`Beneficiary: ${beneficiary.beneficiaryId}, Total Cash In: ${totalCashInTransactions}, Total Cash Out: ${totalCashOutTransactions}`);
   
           return {
             ...beneficiary,
