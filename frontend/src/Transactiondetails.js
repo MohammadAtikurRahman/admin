@@ -47,50 +47,46 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
-  let uniqueTrxIds = {};
   let beneficiaries = {};
 
   data.forEach((entry) => {
     const beneficiaryId = entry.beneficiaryId;
-    if (!beneficiaries[beneficiaryId]) {
-      beneficiaries[beneficiaryId] = {
-        transactionsCount: 0,
-        cashInCount: 0,
-        cashOutCount: 0,
-        transactions: [],
-      };
-      uniqueTrxIds[beneficiaryId] = new Set();
-    }
+    let uniqueCashInTrxIds = new Set();
+    let uniqueCashOutTrxIds = new Set();
 
     entry.transaction.forEach((transaction) => {
-      if (!uniqueTrxIds[beneficiaryId].has(transaction.trxId)) {
-        uniqueTrxIds[beneficiaryId].add(transaction.trxId);
-        beneficiaries[beneficiaryId].transactionsCount++;
-
-        if (transaction.type === 'in') {
-          beneficiaries[beneficiaryId].cashInCount++;
-        } else if (transaction.type === 'out') {
-          beneficiaries[beneficiaryId].cashOutCount++;
-        }
-
-        beneficiaries[beneficiaryId].transactions.push({
-          "Beneficiary Id": beneficiaryId,
-          "Beneficiary Mobile": transaction.beneficiaryMobile,
-          "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
-          Amount: transaction.amount,
-          Date: transaction.date,
-          "Loggedin Date": formatDate(entry.loggedin_time),
-          "Loggedin Time": formatTime(entry.loggedin_time),
-          "Total Transactions": beneficiaries[beneficiaryId].transactionsCount,
-          "Total Cash In": beneficiaries[beneficiaryId].cashInCount,
-          "Total Cash Out": beneficiaries[beneficiaryId].cashOutCount,
-        });
+      if (transaction.type === 'in' && !uniqueCashInTrxIds.has(transaction.trxId)) {
+        uniqueCashInTrxIds.add(transaction.trxId);
+        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
+        beneficiaries[beneficiaryId].cashInCount++;
       }
+
+      if (transaction.type === 'out' && !uniqueCashOutTrxIds.has(transaction.trxId)) {
+        uniqueCashOutTrxIds.add(transaction.trxId);
+        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
+        beneficiaries[beneficiaryId].cashOutCount++;
+      }
+
+      beneficiaries[beneficiaryId].transactions.push({
+        "Beneficiary Id": beneficiaryId,
+        "Beneficiary Mobile": transaction.beneficiaryMobile,
+        "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
+        Amount: transaction.amount,
+        Date: transaction.date,
+        "Loggedin Date": formatDate(entry.loggedin_time),
+        "Loggedin Time": formatTime(entry.loggedin_time),
+        "Total Transactions": (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0),
+        "Total Cash In": beneficiaries[beneficiaryId].cashInCount || 0,
+        "Total Cash Out": beneficiaries[beneficiaryId].cashOutCount || 0,
+      });
     });
   });
 
   return Object.values(beneficiaries).map(b => b.transactions).flat();
 };
+
+
+
 
 
 
