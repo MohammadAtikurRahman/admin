@@ -45,24 +45,39 @@ const formatTime = (dateString) => {
   return formattedTime;
 };
 
-// ...rest of the code
-
-// ...rest of the code
 
 const flattenTransactions = (data) => {
-  return data
+  let transactionsCount = {};
+  let cashInCount = {};
+  let cashOutCount = {};
+
+  const flatData = data
     .map((entry) => {
       const transactions = entry.transaction;
+      const beneficiaryId = entry.beneficiaryId;
+
+      transactions.forEach((transaction) => {
+        transactionsCount[beneficiaryId] = (transactionsCount[beneficiaryId] || 0) + 1;
+
+        if (transaction.type === 'in') {
+          cashInCount[beneficiaryId] = (cashInCount[beneficiaryId] || 0) + 1;
+        } else if (transaction.type === 'out') {
+          cashOutCount[beneficiaryId] = (cashOutCount[beneficiaryId] || 0) + 1;
+        }
+      });
 
       return transactions.map((transaction, index) => {
         const output = {
-          "Beneficiary Id": entry.beneficiaryId,
+          "Beneficiary Id": beneficiaryId,
           "Beneficiary Mobile": transaction.beneficiaryMobile,
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
           Amount: transaction.amount,
           Date: transaction.date,
           "Loggedin Date": formatDate(entry.loggedin_time),
           "Loggedin Time": formatTime(entry.loggedin_time),
+          "Total Transactions": transactionsCount[beneficiaryId],
+          "Total Cash In": cashInCount[beneficiaryId] || 0, // If there is no cash in transaction, default to 0
+          "Total Cash Out": cashOutCount[beneficiaryId] || 0 // If there is no cash out transaction, default to 0
         };
 
         if (index > 0) {
@@ -74,11 +89,10 @@ const flattenTransactions = (data) => {
       });
     })
     .flat();
+
+  return flatData;
 };
 
-// ...rest of the code
-
-// ...rest of the code
 
 const getData = async () => {
   try {
