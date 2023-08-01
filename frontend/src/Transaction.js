@@ -23,56 +23,55 @@ export default function Transaction() {
   const [totalCashOutCount, setTotalCashOutCount] = useState(0);
   const location = useLocation();
   const userProfile = location.state;
+  console.log("transaction details", userProfile);
   const navigate = useNavigate();
-  const uniqueTrxids = new Set();
 
   useEffect(() => {
     if(userProfile?.transaction) {
-      const cashInCount = userProfile.transaction.reduce((acc, t) => {
-        if(t.type === "in" && t.date && !uniqueTrxids.has(t.trxid)) {
-          uniqueTrxids.add(t.trxid);
-          return acc + 1;
-        }
-        return acc;
-      }, 0);
-
-      const cashOutCount = userProfile.transaction.reduce((acc, t) => {
-        if(t.type === "out" && t.date && !uniqueTrxids.has(t.trxid)) {
-          uniqueTrxids.add(t.trxid);
-          return acc + 1;
-        }
-        return acc;
-      }, 0);
-
-      setTotalTransactionCount(uniqueTrxids.size);
-      setTotalCashInCount(cashInCount);
-      setTotalCashOutCount(cashOutCount);
+      const transactionData = userProfile.transaction.filter(t => t.date && !trxidSet.has(t.trxid));
+      trxidSet.add(t.trxid);
+      const totalTransactions = transactionData.length;
+  
+      const cashInTransactions = transactionData.filter(t => t.type === 'in');
+      const totalCashInCount = cashInTransactions.length;
+      const totalCashIn = cashInTransactions.reduce((acc, t) => acc + t.amount, 0);
+  
+      const cashOutTransactions = transactionData.filter(t => t.type === 'out');
+      const totalCashOutCount = cashOutTransactions.length;
+      const totalCashOut = cashOutTransactions.reduce((acc, t) => acc + t.amount, 0);
+  
+      setTotalTransactionCount(totalTransactions);
+      setTotalCashInCount(totalCashInCount);
+      setTotalCashOutCount(totalCashOutCount);
     }
   }, [userProfile]);
-
+  
   function logOut() {
     localStorage.setItem("token", null);
     navigate("/");
   }
 
   const classes = useStyles();
+  const trxidSet = new Set();
 
   const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
-    if (t.type === "in" && t.date && uniqueTrxids.has(t.trxid)) {
+    if (!trxidSet.has(t.trxid) && t.type === "in" && t.date) {
+      trxidSet.add(t.trxid);
       return acc + t.amount;
     }
     return acc;
   }, 0);
 
   const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
-    if (t.type === "out" && t.date && uniqueTrxids.has(t.trxid)) {
+    if (!trxidSet.has(t.trxid) && t.type === "out" && t.date) {
+      trxidSet.add(t.trxid);
       return acc + t.amount;
     }
     return acc;
   }, 0);
 
-  const totalMinutes = userProfile?.transaction.reduce((acc, t) => {
-    if (!isNaN(Number(t.duration)) && t.date && uniqueTrxids.has(t.trxid)) {
+  const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
+    if (!isNaN(Number(t.duration)) && t.date && arr.findIndex(el => el.trxid === t.trxid) === index) {
       return acc + Number(t.duration);
     }
     return acc;
@@ -147,7 +146,11 @@ export default function Transaction() {
           </TableHead>
           <TableBody>
             {userProfile.transaction
-              .filter((t) => t.date && uniqueTrxids.has(t.trxid))
+              .filter((t, index, arr) => {
+                // Filter only the first occurrence of each trxid
+                return arr.findIndex((el) => el.trxid === t.trxid) === index;
+              })
+              .filter((t) => t.date)
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .map((t) => (
                 <TableRow key={t._id}>
