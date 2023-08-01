@@ -28,26 +28,26 @@ export default function Transaction() {
 
   useEffect(() => {
     if(userProfile?.transaction) {
-        const uniqueTrxidSet = new Set();
-        const cashInTrxidSet = new Set();
-        const cashOutTrxidSet = new Set();
+      setTotalTransactionCount(userProfile.transaction.length);
+      
+      const cashInCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "in" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
 
-        userProfile.transaction.forEach(t => {
-            if(t.date) {
-                uniqueTrxidSet.add(t.trxid);
-                if(t.type === "in") {
-                    cashInTrxidSet.add(t.trxid);
-                } else if(t.type === "out") {
-                    cashOutTrxidSet.add(t.trxid);
-                }
-            }
-        });
+      const cashOutCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "out" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
 
-        setTotalTransactionCount(uniqueTrxidSet.size);
-        setTotalCashInCount(cashInTrxidSet.size);
-        setTotalCashOutCount(cashOutTrxidSet.size);
+      setTotalCashInCount(cashInCount);
+      setTotalCashOutCount(cashOutCount);
     }
-}, [userProfile]);
+  }, [userProfile]);
 
   function logOut() {
     localStorage.setItem("token", null);
@@ -181,7 +181,7 @@ export default function Transaction() {
               >
                 Total Cash In: {totalCashIn}
                 <br/>
-                Total Cash In Transactions: {totalCashInCount}
+                {/* Total Cash In Transactions: {totalCashInCount} */}
               </TableCell>
               <TableCell
                 align="center"
@@ -189,13 +189,13 @@ export default function Transaction() {
               >
                 Total Cash Out: {totalCashOut}
                 <br/>
-                Total Cash Out Transactions: {totalCashOutCount}
+                {/* Total Cash Out Transactions: {totalCashOutCount} */}
               </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total Transactions: {totalTransactionCount}
+                {/* Total Transactions: {totalTransactionCount} */}
               </TableCell>
               <TableCell
                 align="center"
