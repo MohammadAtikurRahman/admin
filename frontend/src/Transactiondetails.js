@@ -47,64 +47,6 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
-  let beneficiaries = [];
-  let totalCashIn = 0;
-  let totalCashOut = 0;
-  let currentBeneficiaryId = null;
-
-  data.forEach((entry) => {
-    const beneficiaryId = entry.beneficiaryId;
-
-    if (currentBeneficiaryId !== beneficiaryId) {
-      if (currentBeneficiaryId !== null) {
-        beneficiaries.push({
-          "Beneficiary Id": currentBeneficiaryId,
-          "Total Cash In": totalCashIn,
-          "Total Cash Out": totalCashOut,
-          "Total Transactions": totalCashIn + totalCashOut,
-        });
-      }
-      totalCashIn = 0;
-      totalCashOut = 0;
-      currentBeneficiaryId = beneficiaryId;
-    }
-
-    let uniqueCashInTrxIds = new Set();
-    let uniqueCashOutTrxIds = new Set();
-
-    entry.transaction.forEach((transaction) => {
-      if (transaction.type === 'in' && !uniqueCashInTrxIds.has(transaction.trxId)) {
-        uniqueCashInTrxIds.add(transaction.trxId);
-        totalCashIn++;
-      }
-
-      if (transaction.type === 'out' && !uniqueCashOutTrxIds.has(transaction.trxId)) {
-        uniqueCashOutTrxIds.add(transaction.trxId);
-        totalCashOut++;
-      }
-
-      beneficiaries.push({
-        "Beneficiary Id": beneficiaryId,
-        "Beneficiary Mobile": transaction.beneficiaryMobile,
-        "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
-        Amount: transaction.amount,
-        Date: transaction.date,
-        "Loggedin Date": formatDate(entry.loggedin_time),
-        "Loggedin Time": formatTime(entry.loggedin_time),
-      });
-    });
-  });
-
-  if (currentBeneficiaryId !== null) {
-    beneficiaries.push({
-      "Beneficiary Id": currentBeneficiaryId,
-      "Total Cash In": totalCashIn,
-      "Total Cash Out": totalCashOut,
-      "Total Transactions": totalCashIn + totalCashOut,
-    });
-  }
-
-  return beneficiaries;
 };
 
 
