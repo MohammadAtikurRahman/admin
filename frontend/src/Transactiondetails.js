@@ -47,24 +47,20 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
-  let uniqueTransactions = {};
+  let transactionsCount = {};
   let cashInCount = {};
   let cashOutCount = {};
+  let uniqueTrxIds = {};
 
   const flatData = data
     .map((entry) => {
-      const transactions = entry.transaction;
       const beneficiaryId = entry.beneficiaryId;
+      uniqueTrxIds[beneficiaryId] = new Set();
 
-      transactions.forEach((transaction) => {
-        // Initialize the set for this beneficiary ID if it doesn't exist yet
-        if (!uniqueTransactions[beneficiaryId]) {
-          uniqueTransactions[beneficiaryId] = new Set();
-        }
-
-        // Only count the transaction if we haven't seen its ID before
-        if (!uniqueTransactions[beneficiaryId].has(transaction.trxId)) {
-          uniqueTransactions[beneficiaryId].add(transaction.trxId);
+      const transactions = entry.transaction.map((transaction) => {
+        if (!uniqueTrxIds[beneficiaryId].has(transaction.trxId)) {
+          uniqueTrxIds[beneficiaryId].add(transaction.trxId);
+          transactionsCount[beneficiaryId] = (transactionsCount[beneficiaryId] || 0) + 1;
 
           if (transaction.type === 'in') {
             cashInCount[beneficiaryId] = (cashInCount[beneficiaryId] || 0) + 1;
@@ -72,10 +68,8 @@ const flattenTransactions = (data) => {
             cashOutCount[beneficiaryId] = (cashOutCount[beneficiaryId] || 0) + 1;
           }
         }
-      });
 
-      return transactions.map((transaction, index) => {
-        const output = {
+        return {
           "Beneficiary Id": beneficiaryId,
           "Beneficiary Mobile": transaction.beneficiaryMobile,
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
@@ -83,24 +77,18 @@ const flattenTransactions = (data) => {
           Date: transaction.date,
           "Loggedin Date": formatDate(entry.loggedin_time),
           "Loggedin Time": formatTime(entry.loggedin_time),
-          "Total Unique Transactions": uniqueTransactions[beneficiaryId].size,
-          "Total Cash In": cashInCount[beneficiaryId] || 0, // If there is no cash in transaction, default to 0
-          "Total Cash Out": cashOutCount[beneficiaryId] || 0 // If there is no cash out transaction, default to 0
+          "Total Transactions": transactionsCount[beneficiaryId],
+          "Total Cash In": cashInCount[beneficiaryId] || 0,
+          "Total Cash Out": cashOutCount[beneficiaryId] || 0,
         };
-
-        if (index > 0) {
-          output["Loggedin Date"] = "";
-          output["Loggedin Time"] = "";
-        }
-
-        return output;
       });
+
+      return transactions;
     })
     .flat();
 
   return flatData;
 };
-
 
 
 const getData = async () => {
