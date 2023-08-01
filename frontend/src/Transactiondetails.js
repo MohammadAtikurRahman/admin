@@ -50,9 +50,25 @@ const flattenTransactions = (data) => {
   let beneficiaries = [];
   let totalCashIn = 0;
   let totalCashOut = 0;
+  let currentBeneficiaryId = null;
 
   data.forEach((entry) => {
     const beneficiaryId = entry.beneficiaryId;
+
+    if (currentBeneficiaryId !== beneficiaryId) {
+      if (currentBeneficiaryId !== null) {
+        beneficiaries.push({
+          "Beneficiary Id": currentBeneficiaryId,
+          "Total Cash In": totalCashIn,
+          "Total Cash Out": totalCashOut,
+          "Total Transactions": totalCashIn + totalCashOut,
+        });
+      }
+      totalCashIn = 0;
+      totalCashOut = 0;
+      currentBeneficiaryId = beneficiaryId;
+    }
+
     let uniqueCashInTrxIds = new Set();
     let uniqueCashOutTrxIds = new Set();
 
@@ -79,11 +95,14 @@ const flattenTransactions = (data) => {
     });
   });
 
-  beneficiaries.push({
-    "Total Cash In": totalCashIn,
-    "Total Cash Out": totalCashOut,
-    "Total Transactions": totalCashIn + totalCashOut,
-  });
+  if (currentBeneficiaryId !== null) {
+    beneficiaries.push({
+      "Beneficiary Id": currentBeneficiaryId,
+      "Total Cash In": totalCashIn,
+      "Total Cash Out": totalCashOut,
+      "Total Transactions": totalCashIn + totalCashOut,
+    });
+  }
 
   return beneficiaries;
 };
