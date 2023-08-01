@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -181,7 +181,7 @@ export default function Transaction() {
               >
                 Total Cash In: {totalCashIn}
                 <br/>
-                {/* Total Cash In Transactions: {totalCashInCount} */}
+                Total Cash In Transactions: {totalCashInCount}
               </TableCell>
               <TableCell
                 align="center"
@@ -189,13 +189,13 @@ export default function Transaction() {
               >
                 Total Cash Out: {totalCashOut}
                 <br/>
-                {/* Total Cash Out Transactions: {totalCashOutCount} */}
+                Total Cash Out Transactions: {totalCashOutCount}
               </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                {/* Total Transactions: {totalTransactionCount} */}
+                Total Transactions: {totalTransactionCount}
               </TableCell>
               <TableCell
                 align="center"
