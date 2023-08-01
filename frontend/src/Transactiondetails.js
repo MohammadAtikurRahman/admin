@@ -48,27 +48,26 @@ const formatTime = (dateString) => {
 
 const flattenTransactions = (data) => {
   let beneficiaries = {};
-  let result = [];
 
   data.forEach((entry) => {
     const beneficiaryId = entry.beneficiaryId;
     let uniqueCashInTrxIds = new Set();
     let uniqueCashOutTrxIds = new Set();
 
-    entry.transaction.forEach((transaction, index) => {
+    entry.transaction.forEach((transaction) => {
       if (transaction.type === 'in' && !uniqueCashInTrxIds.has(transaction.trxId)) {
         uniqueCashInTrxIds.add(transaction.trxId);
-        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0 };
+        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
         beneficiaries[beneficiaryId].cashInCount++;
       }
 
       if (transaction.type === 'out' && !uniqueCashOutTrxIds.has(transaction.trxId)) {
         uniqueCashOutTrxIds.add(transaction.trxId);
-        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0 };
+        beneficiaries[beneficiaryId] = beneficiaries[beneficiaryId] || { cashInCount: 0, cashOutCount: 0, transactions: [] };
         beneficiaries[beneficiaryId].cashOutCount++;
       }
 
-      const row = {
+      beneficiaries[beneficiaryId].transactions.push({
         "Beneficiary Id": beneficiaryId,
         "Beneficiary Mobile": transaction.beneficiaryMobile,
         "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
@@ -76,15 +75,14 @@ const flattenTransactions = (data) => {
         Date: transaction.date,
         "Loggedin Date": formatDate(entry.loggedin_time),
         "Loggedin Time": formatTime(entry.loggedin_time),
-        "Total Transactions": index === 0 ? (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0) : "",
-        "Total Cash In": index === 0 ? beneficiaries[beneficiaryId].cashInCount || 0 : "",
-        "Total Cash Out": index === 0 ? beneficiaries[beneficiaryId].cashOutCount || 0 : "",
-      };
-      result.push(row);
+        "Total Transactions": (beneficiaries[beneficiaryId].cashInCount || 0) + (beneficiaries[beneficiaryId].cashOutCount || 0),
+        "Total Cash In": beneficiaries[beneficiaryId].cashInCount || 0,
+        "Total Cash Out": beneficiaries[beneficiaryId].cashOutCount || 0,
+      });
     });
   });
 
-  return result;
+  return Object.values(beneficiaries).map(b => b.transactions).flat();
 };
 
 
