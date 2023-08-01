@@ -28,24 +28,27 @@ export default function Transaction() {
 
   useEffect(() => {
     if(userProfile?.transaction) {
-      const transactionData = userProfile.transaction.filter(t => t.date && !trxidSet.has(t.trxid));
-      trxidSet.add(t.trxid);
-      const totalTransactions = transactionData.length;
-  
-      const cashInTransactions = transactionData.filter(t => t.type === 'in');
-      const totalCashInCount = cashInTransactions.length;
-      const totalCashIn = cashInTransactions.reduce((acc, t) => acc + t.amount, 0);
-  
-      const cashOutTransactions = transactionData.filter(t => t.type === 'out');
-      const totalCashOutCount = cashOutTransactions.length;
-      const totalCashOut = cashOutTransactions.reduce((acc, t) => acc + t.amount, 0);
-  
-      setTotalTransactionCount(totalTransactions);
-      setTotalCashInCount(totalCashInCount);
-      setTotalCashOutCount(totalCashOutCount);
+      setTotalTransactionCount(userProfile.transaction.length);
+      
+      const cashInCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "in" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+
+      const cashOutCount = userProfile.transaction.reduce((acc, t) => {
+        if(t.type === "out" && t.date) {
+          return acc + 1;
+        }
+        return acc;
+      }, 0);
+
+      setTotalCashInCount(cashInCount);
+      setTotalCashOutCount(cashOutCount);
     }
   }, [userProfile]);
-  
+
   function logOut() {
     localStorage.setItem("token", null);
     navigate("/");
