@@ -205,56 +205,57 @@ export default class Transactiondetails extends Component {
   getBeneficiaries = () => {
     this.setState({ loading: true });
     axios
-      .get(baseUrl + "/beneficiary", {
-        headers: {
-          token: this.state.token,
-        },
-      })
-      .then((res) => {
-        const beneficiaries = res.data.beneficiaries.map((beneficiary) => {
-          let totalCashInTransactions = 0;
-          let totalCashOutTransactions = 0;
-          let totalTransactions = 0;
-          let seenTrxids = new Set();
-  
-          beneficiary.transaction.forEach((transaction) => {
-            if (!seenTrxids.has(transaction.trxid)) {
-              seenTrxids.add(transaction.trxid);
-              totalTransactions += 1;
-              if (transaction.type === 'in') {
-                totalCashInTransactions += 1;
-              } else if (transaction.type === 'out') {
-                totalCashOutTransactions += 1;
-              }
-            }
-          });
-  
-          return {
-            ...beneficiary,
-            totalCashInTransactions,
-            totalCashOutTransactions,
-            totalTransactions
-          };
+        .get(baseUrl + "/beneficiary", {
+            headers: {
+                token: this.state.token,
+            },
+        })
+        .then((res) => {
+            const beneficiaries = res.data.beneficiaries.map((beneficiary) => {
+                let totalCashInTransactions = 0;
+                let totalCashOutTransactions = 0;
+                let totalTransactions = 0;
+                let seenTrxids = new Set();
+    
+                beneficiary.transaction.forEach((transaction) => {
+                    if (!seenTrxids.has(transaction.trxid)) {
+                        seenTrxids.add(transaction.trxid);
+                        totalTransactions += 1;
+                        if (transaction.type === 'in') {
+                            totalCashInTransactions += transaction.amount;
+                        } else if (transaction.type === 'out') {
+                            totalCashOutTransactions += transaction.amount;
+                        }
+                    }
+                });
+    
+                return {
+                    ...beneficiary,
+                    totalCashInTransactions,
+                    totalCashOutTransactions,
+                    totalTransactions
+                };
+            });
+    
+            this.setState({
+                loading: false,
+                beneficiaries,
+                filteredBeneficiary: beneficiaries,
+            });
+        })
+        .catch((err) => {
+            swal({
+                text: err,
+                icon: "error",
+                type: "error",
+            });
+            this.setState(
+                { loading: false, beneficiaries: [], userinfo: [] },
+                () => {}
+            );
         });
-  
-        this.setState({
-          loading: false,
-          beneficiaries,
-          filteredBeneficiary: beneficiaries,
-        });
-      })
-      .catch((err) => {
-        swal({
-          text: err,
-          icon: "error",
-          type: "error",
-        });
-        this.setState(
-          { loading: false, beneficiaries: [], userinfo: [] },
-          () => {}
-        );
-      });
-  }; 
+};
+
 
 
 
