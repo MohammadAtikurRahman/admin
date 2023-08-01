@@ -215,13 +215,17 @@ export default class Transactiondetails extends Component {
           let totalCashInTransactions = 0;
           let totalCashOutTransactions = 0;
           let totalTransactions = 0;
+          let seenTrxids = new Set();
   
           beneficiary.transaction.forEach((transaction) => {
-            totalTransactions += 1;
-            if (transaction.type === 'in') {
-              totalCashInTransactions += 1;
-            } else if (transaction.type === 'out') {
-              totalCashOutTransactions += 1;
+            if (!seenTrxids.has(transaction.trxid)) {
+              seenTrxids.add(transaction.trxid);
+              totalTransactions += 1;
+              if (transaction.type === 'in') {
+                totalCashInTransactions += 1;
+              } else if (transaction.type === 'out') {
+                totalCashOutTransactions += 1;
+              }
             }
           });
   
@@ -251,6 +255,10 @@ export default class Transactiondetails extends Component {
         );
       });
   };
+  
+
+
+
   logOut = () => {
     localStorage.setItem("token", null);
     this.props.history.push("/");
