@@ -47,8 +47,31 @@ const formatTime = (dateString) => {
 
 
 const flattenTransactions = (data) => {
-};
+  return data
+    .map((entry) => {
+      const transactions = entry.transaction;
 
+      return transactions.map((transaction, index) => {
+        const output = {
+          "Beneficiary Id": entry.beneficiaryId,
+          "Beneficiary Mobile": transaction.beneficiaryMobile,
+          "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
+          Amount: transaction.amount,
+          Date: transaction.date,
+          "Loggedin Date": formatDate(entry.loggedin_time),
+          "Loggedin Time": formatTime(entry.loggedin_time),
+        };
+
+        if (index > 0) {
+          output["Loggedin Date"] = "";
+          output["Loggedin Time"] = "";
+        }
+
+        return output;
+      });
+    })
+    .flat();
+};
 
 
 
