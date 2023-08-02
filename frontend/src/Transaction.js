@@ -145,8 +145,12 @@ export default function Transaction() {
               <TableCell align="center">Date</TableCell>
               <TableCell align="center">Usages</TableCell>
               <TableCell align="center">Trxid</TableCell>
+              <TableCell align="center">Payment Type</TableCell>
+              <TableCell align="center">Bkash Usages</TableCell>
+
             </TableRow>
           </TableHead>
+
           <TableBody>
             {userProfile.transaction
               .filter((t, index, arr) => {
@@ -156,22 +160,36 @@ export default function Transaction() {
               .filter((t) => t.date)
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .map((t) => (
+
+                
                 <TableRow key={t._id}>
+                
+                
                   <TableCell
                     align="center"
                     style={{ color: "green", fontWeight: "bold" }}
                   >
                     {t.type === "in" ? t.amount : ""}
                   </TableCell>
+
+                  
                   <TableCell
                     align="center"
                     style={{ color: "red", fontWeight: "bold" }}
                   >
                     {t.type === "out" ? t.amount : ""}
                   </TableCell>
+
+
                   <TableCell align="center">{t.date}</TableCell>
                   <TableCell align="center">{t.duration} Minutes</TableCell>
                   <TableCell align="center">{t.trxid}</TableCell>
+
+
+                  <TableCell align="center">{t.sub_type}</TableCell>
+
+                  <TableCell align="center">{t.duration_bkash}</TableCell>
+
                 </TableRow>
               ))}
             <TableRow>
