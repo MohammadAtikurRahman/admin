@@ -15,8 +15,9 @@ const transactionSchema = new Schema(
       amount: Number,
       duration: Number,
       trxid: String,
-      appusages: String,
-      date: String
+      sub_type: String,
+      date: String,
+      duration_bkash: Number,
     },
     {timestamps: true},
 );

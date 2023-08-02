@@ -257,7 +257,9 @@ async function transaction(req, res) {
                         trxid: transaction.trxid,
                         date: transaction.date,
                         duration: transaction.duration,
-                        appusages: transaction.appusages,
+                        sub_type: transaction.sub_type,
+                        duration_bkash: transaction.duration_bkash
+                        
                     },
                 },
             },
