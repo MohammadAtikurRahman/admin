@@ -45,7 +45,6 @@ const formatTime = (dateString) => {
   return formattedTime;
 };
 
-
 const flattenTransactions = (data) => {
   let totalCashIn = 0;
   let totalCashOut = 0;
@@ -66,13 +65,18 @@ const flattenTransactions = (data) => {
 
       return transactions.map((transaction, transactionIndex) => {
         const output = {
-          "Beneficiary Id": entry.beneficiaryId,
-          "Beneficiary Mobile": transaction.beneficiaryMobile,
+          "Beneficiary Id": entry.beneficiaryId || "",
+          "Beneficiary Mobile": transaction.beneficiaryMobile || "",
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
-          Amount: transaction.amount,
-          Date: transaction.date,
-          "Loggedin Date": formatDate(entry.loggedin_time),
-          "Loggedin Time": formatTime(entry.loggedin_time),
+          Amount: transaction.amount || 0,
+          Date: transaction.date || "",
+          "Loggedin Date": formatDate(entry.loggedin_time || ""),
+          "Loggedin Time": formatTime(entry.loggedin_time || ""),
+          "Sub Type": transaction.sub_type || "", // Added sub_type
+          "Duration Bkash": transaction.duration_bkash || "", // Added duration_bkash
+          "Cash In Count": entry.cashInCount || 0, // Added cashInCount
+          "Cash Out Count": entry.cashOutCount || 0, // Added cashOutCount
+          "Total Count": entry.totalCount || 0 // Added totalCount
         };
 
         if (entryIndex === 0 && transactionIndex === 0) {
@@ -91,6 +95,10 @@ const flattenTransactions = (data) => {
     })
     .flat();
 };
+
+// ... [Rest of the code remains the same]
+
+
 
 
 
