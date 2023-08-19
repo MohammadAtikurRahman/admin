@@ -24,25 +24,14 @@ import { AddBeneficiary } from "./AddBeneficiary";
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB");
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  return isNaN(date.getTime()) ? "" : date.toLocaleDateString();
 };
 
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  const adjustedTime = new Date(date.getTime() + 6 * 60 * 60 * 1000); // Adding 6 hours (in milliseconds)
-  let formattedTime = adjustedTime.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
-  formattedTime = formattedTime
-    .replace("AM", "temp")
-    .replace("PM", "AM")
-    .replace("temp", "PM");
-  return formattedTime;
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  return isNaN(date.getTime()) ? "" : date.toLocaleTimeString();
 };
 
 const flattenTransactions = (data) => {
@@ -62,21 +51,26 @@ const flattenTransactions = (data) => {
   return data
     .map((entry, entryIndex) => {
       const transactions = entry.transaction;
+      
+      // Extracting cash counts ID wise
+      const cashInCount = transactions.filter(t => t.type === 'in').length;
+      const cashOutCount = transactions.filter(t => t.type !== 'in').length;
+      const totalCount = cashInCount + cashOutCount;
 
       return transactions.map((transaction, transactionIndex) => {
         const output = {
-          "Beneficiary Id": entry.beneficiaryId || "",
-          "Beneficiary Mobile": transaction.beneficiaryMobile || "",
+          "Beneficiary Id": entry.beneficiaryId,
+          "Beneficiary Mobile": transaction.beneficiaryMobile,
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
-          Amount: transaction.amount || 0,
-          Date: transaction.date || "",
-          "Loggedin Date": formatDate(entry.loggedin_time || ""),
-          "Loggedin Time": formatTime(entry.loggedin_time || ""),
-          "Sub Type": transaction.sub_type || "", // Added sub_type
-          "Duration Bkash": transaction.duration_bkash || "", // Added duration_bkash
-          "Cash In Count": entry.cashInCount || 0, // Added cashInCount
-          "Cash Out Count": entry.cashOutCount || 0, // Added cashOutCount
-          "Total Count": entry.totalCount || 0 // Added totalCount
+          Amount: transaction.amount,
+          Date: transaction.date,
+          "Sub Type": transaction.sub_type, // Assuming 'sub_type' exists on each transaction
+          Duration: transaction.duration_bkash, // Assuming 'duration_bkash' exists on each transaction
+          "Loggedin Date": formatDate(entry.loggedin_time),
+          "Loggedin Time": formatTime(entry.loggedin_time),
+          "Cash In Count": cashInCount, 
+          "Cash Out Count": cashOutCount, 
+          "Total Count": totalCount
         };
 
         if (entryIndex === 0 && transactionIndex === 0) {
