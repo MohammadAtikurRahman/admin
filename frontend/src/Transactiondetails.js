@@ -63,11 +63,9 @@ const flattenTransactions = (data) => {
           "Beneficiary Mobile": transaction.beneficiaryMobile,
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
           Amount: transaction.amount,
-          Date: transaction.date,
-          "Sub Type": transaction.sub_type, // Assuming 'sub_type' exists on each transaction
-          Duration: transaction.duration_bkash, // Assuming 'duration_bkash' exists on each transaction
-          "Loggedin Date": formatDate(entry.loggedin_time),
-          "Loggedin Time": formatTime(entry.loggedin_time),
+          Date: transaction.date,  // This will display the transaction date
+          "Sub Type": transaction.sub_type, 
+          Duration: transaction.duration_bkash, 
           "Cash In Count": cashInCount, 
           "Cash Out Count": cashOutCount, 
           "Total Count": totalCount
@@ -79,16 +77,12 @@ const flattenTransactions = (data) => {
           output["Total Transactions"] = totalCashIn + totalCashOut;
         }
 
-        if (transactionIndex > 0) {
-          output["Loggedin Date"] = "";
-          output["Loggedin Time"] = "";
-        }
-
         return output;
       });
     })
     .flat();
 };
+
 
 // ... [Rest of the code remains the same]
 
