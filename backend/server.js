@@ -482,6 +482,35 @@ app.get("/get-testscore", async (req, res) => {
     return res.status(200).json(extact_data);
 });
 
+app.get("/get-beneficiary", async (req, res) => {
+    let users = await user
+        .find({})
+        .select("-_id")
+        .select("-id")
+        .select("-username")
+        .select("-password")
+        .select("-createdAt")
+
+        .select("-beneficiary.test");
+
+    const data = users;
+    const data1 = users;
+    const formatted_data = data[0];
+
+    //   const formatted_data1= data1[1]
+
+    // extact_data1 = formatted_data1['beneficiary']
+
+    extact_data = formatted_data["beneficiary"];
+
+    // let obj3 = Object.assign(extact_data, extact_data1);
+
+    //  console.log(obj3)
+
+    return res.status(200).json(extact_data);
+});
+
+
 app.get("/get-transaction", async (req, res) => {
     let users = await user
       .find({})
