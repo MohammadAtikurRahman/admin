@@ -84,6 +84,7 @@ app.use("/", (req, res, next) => {
             req.path == "/get-testscore" ||
             req.path == "/get-transaction" ||
             req.path == "/get-tran" ||
+            req.path == "/add-observation" ||
 
             req.path == "/get-login" ||
             req.path == "/list-beneficiary" ||
@@ -606,6 +607,10 @@ app.post("/api", async (req, res) => {
         res.status(400).json({success: false});
     }
 });
+
+
+
+
 
 app.listen(2000, (err, data) => {
     // console.log(err);

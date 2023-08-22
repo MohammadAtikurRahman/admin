@@ -33,6 +33,7 @@ const beneficiarySchema = new Schema(
         enumerator_observation: String,
 
 
+        observation_new: [String],
 
 
         observation: String,
