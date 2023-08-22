@@ -617,34 +617,41 @@ async function examStatus(req, res) {
 }
 
 async function enumeratorObservation(req, res) {
-    const {beneficiaryId} = req.body;
+    const { beneficiaryId, observation_new } = req.body;
+
     console.log(req.body);
-    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
+
+    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
+    
     if (!user) {
-        return res.status(400).json({message: "User not found"});
+        return res.status(400).json({ message: "User not found" });
     }
+
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
     if (!beneficiary) {
-        return res.status(400).json({message: "Beneficiary not found"});
+        return res.status(400).json({ message: "Beneficiary not found" });
     }
+
     let result = await User.updateOne(
-        {"beneficiary.beneficiaryId": beneficiaryId},
+        { "beneficiary.beneficiaryId": beneficiaryId },
         {
             $set: {
                 "beneficiary.$.enumerator_observation": req.body?.enumerator_observation,
                 "beneficiary.$.excuses": req.body?.excuses,
                 "beneficiary.$.test_status": req.body?.test_status,
                 "beneficiary.$.whotaketheexam": req.body?.userId,
-
-
-            },
-        },
+                "beneficiary.$.observation_new": observation_new   // added this line
+            }
+        }
     );
+
     if (result.nModified == 0) {
-        return res.status(400).json({message: "Failed to update "});
+        return res.status(400).json({ message: "Failed to update" });
     }
-    return res.status(200).json({message: "enumerator observation saved"});
+    
+    return res.status(200).json({ message: "enumerator observation saved" });
 }
+
 
 async function lastPagetext(req, res) {
     try {

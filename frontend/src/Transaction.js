@@ -146,7 +146,8 @@ export default function Transaction() {
               <TableCell align="center">Usages</TableCell>
               <TableCell align="center">Trxid</TableCell>
               <TableCell align="center">Payment Type</TableCell>
-              <TableCell align="center">Bkash Usages</TableCell>
+              <TableCell align="center">Bkash/Nagad Usages</TableCell>
+              <TableCell align="center">Channel</TableCell>
 
             </TableRow>
           </TableHead>
