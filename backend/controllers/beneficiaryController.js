@@ -558,37 +558,41 @@ async function newlogin(req, res) {
 // }
 
 async function addBeneficiaryScore(req, res) {
-    const {beneficiaryId} = req.body;
+    const { beneficiaryId } = req.body;
     console.log(req.body);
-    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
+
+    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
+
     if (!user) {
-        return res.status(400).json({message: "User not found"});
+        return res.status(400).json({ message: "User not found" });
     }
+
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
+
     if (!beneficiary) {
-        return res.status(400).json({message: "Beneficiary not found"});
+        return res.status(400).json({ message: "Beneficiary not found" });
     }
+
     let result = await User.updateOne(
-        {"beneficiary.beneficiaryId": beneficiaryId},
+        { "beneficiary.beneficiaryId": beneficiaryId },
         {
             $set: {
                 "beneficiary.$.score1": req.body?.score1,
                 "beneficiary.$.observation": req.body?.observation,
                 "beneficiary.$.duration": req.body?.duration,
                 "beneficiary.$.whotaketheexam": req.body?.userId,
-                
+                "beneficiary.$.observation_new": req.body?.observation_new
             },
-        },
+        }
     );
+
     if (result.nModified == 0) {
-        return res.status(400).json({message: "Failed to update beneficiary score"});
+        return res.status(400).json({ message: "Failed to update beneficiary score" });
     }
 
-
-
-    
-    return res.status(200).json({message: "Beneficiary score & observation  saved"});
+    return res.status(200).json({ message: "Beneficiary score & observation saved" });
 }
+
 
 async function examStatus(req, res) {
     const {beneficiaryId} = req.body;
