@@ -10,6 +10,7 @@ const {
     beneficiaryLogin,
     saveTestScore,
     saveTest,
+    addobservation,
     addBeneficiaryScore,
     addBeneficiaryInBulk,
     deleteBeneficiary,
@@ -75,7 +76,7 @@ router.post("/ben-score", saveTestScore);
 router.post("/get-login2",newlogin);
 router.post("/transaction",transaction);
 
-// router.post("/add-observation",addobservation);
+router.post("/add-observation",addobservation);
 
 
 module.exports = {router};

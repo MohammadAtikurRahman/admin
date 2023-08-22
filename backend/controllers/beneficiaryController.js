@@ -829,51 +829,51 @@ async function saveTestScore(req, res) {
 }
 const SECRET = 'shhhhh11111';  // Your JWT secret
 
-// async function addobservation(req, res) {
-//     try {
-//         // Decode the JWT and extract the userId
-//         const decodedToken = jwt.verify(req.body.beneficiaryToken, SECRET);
-//         const userId = decodedToken.userId;
+async function addobservation(req, res) {
+    try {
+        // Decode the JWT and extract the userId
+        const decodedToken = jwt.verify(req.body.beneficiaryToken, SECRET);
+        const userId = decodedToken.userId;
 
-//         if (!userId) {
-//             return res.status(401).send('Invalid token.');
-//         }
+        if (!userId) {
+            return res.status(401).send('Invalid token.');
+        }
 
-//         // Find the user containing the specific beneficiaryId
-//         let user = await User.findOne({"beneficiary.beneficiaryId": req.body.beneficiaryId});
-//         if (!user) {
-//             return res.status(400).json({message: "User not found"});
-//         }
+        // Find the user containing the specific beneficiaryId
+        let user = await User.findOne({"beneficiary.beneficiaryId": req.body.beneficiaryId});
+        if (!user) {
+            return res.status(400).json({message: "User not found"});
+        }
 
-//         let beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.body.beneficiaryId);
-//         if (!beneficiary) {
-//             return res.status(400).json({message: "Beneficiary not found"});
-//         }
+        let beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.body.beneficiaryId);
+        if (!beneficiary) {
+            return res.status(400).json({message: "Beneficiary not found"});
+        }
 
-//         // Update the observation_new field for that beneficiary
-//         let result = await User.updateOne(
-//             {"beneficiary.beneficiaryId": req.body.beneficiaryId},
-//             {
-//                 $set: {
-//                     "beneficiary.$.observation_new": req.body.observation_new
-//                 },
-//             }
-//         );
+        // Update the observation_new field for that beneficiary
+        let result = await User.updateOne(
+            {"beneficiary.beneficiaryId": req.body.beneficiaryId},
+            {
+                $set: {
+                    "beneficiary.$.observation_new": req.body.observation_new
+                },
+            }
+        );
 
-//         if (result.nModified == 0) {
-//             return res.status(400).json({message: "Failed to update observation"});
-//         }
+        if (result.nModified == 0) {
+            return res.status(400).json({message: "Failed to update observation"});
+        }
 
-//         return res.status(200).json({message: "Observation added successfully", beneficiary});
+        return res.status(200).json({message: "Observation added successfully", beneficiary});
         
-//     } catch (error) {
-//         if (error.name === 'JsonWebTokenError') {
-//             return res.status(401).send('Invalid token.');
-//         }
-//         console.error('Error updating observation:', error);
-//         res.status(500).send('Internal server error.');
-//     }
-// }
+    } catch (error) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).send('Invalid token.');
+        }
+        console.error('Error updating observation:', error);
+        res.status(500).send('Internal server error.');
+    }
+}
 
 
 
@@ -895,4 +895,5 @@ module.exports = {
     enumeratorObservation,
     lastPagetext,
     saveMultiObservation,
+    addobservation,
 };
