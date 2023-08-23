@@ -58,7 +58,6 @@ const getData = async () => {
 const exportData = async () => {
   const data = await getData();
   const fields = [
-
     { label: "Examiner", value: "whotaketheexam" },
 
     { label: "Test Date", value: "date" },
@@ -1475,7 +1474,16 @@ export default class Test extends Component {
                       <TableCell align="center" component="th" scope="row">
                         {row.beneficiaryId}
                       </TableCell>
-                      <TableCell align="center">{row.observation}</TableCell>
+                      <TableCell align="center">
+                        <p style={{ marginBottom: "10px" }}>
+                          • {row.observation}
+                        </p>
+                        {row.observation_new.map((observation, index) => (
+                          <p key={index} style={{ marginBottom: "10px" }}>
+                            • {observation}
+                          </p>
+                        ))}
+                      </TableCell>
 
                       <TableCell align="center">{row.score1}</TableCell>
                       <TableCell align="center">
