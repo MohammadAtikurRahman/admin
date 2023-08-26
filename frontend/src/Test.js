@@ -48,6 +48,11 @@ const getData = async () => {
         year: "numeric",
       });
 
+      // Modify all_observation field to be a single string
+      if(item.all_observation && Array.isArray(item.all_observation)) {
+        item.all_observation = `"${item.all_observation.join(',')}"`;
+      }
+
       return item;
     });
     return updatedData;
@@ -55,11 +60,13 @@ const getData = async () => {
     console.error(error);
   }
 };
+
+
+
 const exportData = async () => {
   const data = await getData();
   const fields = [
     { label: "Examiner", value: "whotaketheexam" },
-
     { label: "Test Date", value: "date" },
     { label: "Test Time", value: "time" },
     { label: "Beneficiary Name", value: "name" },
@@ -71,44 +78,16 @@ const exportData = async () => {
     { label: "Test Duration", value: "duration" },
     { label: "Test Score", value: "score1" },
     { label: "Test Status", value: "test_status" },
-    // { label: " Enumerator observation", value: "enumerator_observation" },
-    // { label: "Observation", value: row => `${row.enumerator_observation} ${row.observation}` },
-    {
-      label: "Observation",
-      value: (row) => {
-        const enumObs =
-          row.enumerator_observation !== undefined
-            ? row.enumerator_observation
-            : "";
-        const obs = row.observation !== undefined ? row.observation : "";
-        return `${enumObs} ${obs}`;
-      },
-    },
 
-    ...Object.keys(data[0]).filter(
-      (key) =>
-        key !== "updatedAt" &&
-        key !== "dob" &&
-        key !== "beneficiaryId" &&
-        key !== "name" &&
-        key !== "m_nm" &&
-        key !== "f_nm" &&
-        key !== "sub_dis" &&
-        key !== "uni" &&
-        key !== "vill" &&
-        key !== "gen" &&
-        key !== "duration" &&
-        key !== "score1" &&
-        key !== "date" &&
-        key !== "time" &&
-        key !== "dateofbirth" &&
-        key !== "test_status" &&
-        key !== "enumerator_observation" &&
-        key !== "observation" &&
-        key !== "whotaketheexam"
-    ),
+    { label: "Test Observation", value: "all_observation" },
   ];
-  const csv = json2csv.parse(data, { fields });
+
+  const csv = json2csv.parse(data, {
+    fields: fields.filter(
+      (field) =>
+        field.label !== "Observation" && field.label !== "observation_new"
+    ),
+  });
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
