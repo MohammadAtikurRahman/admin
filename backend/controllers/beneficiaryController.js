@@ -259,8 +259,8 @@ async function transaction(req, res) {
                         date: transaction.date,
                         duration: transaction.duration,
                         sub_type: transaction.sub_type,
-                        duration_bkash: transaction.duration_bkash
-                        
+                        duration_bkash: transaction.duration_bkash,
+                        sender: transaction.sender
                     },
                 },
             },

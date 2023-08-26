@@ -18,6 +18,7 @@ const transactionSchema = new Schema(
       sub_type: String,
       date: String,
       duration_bkash: Number,
+      sender: String,
     },
     {timestamps: true},
 );
