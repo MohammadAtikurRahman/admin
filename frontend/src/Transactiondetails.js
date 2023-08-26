@@ -68,7 +68,9 @@ const flattenTransactions = (data) => {
           Duration: transaction.duration_bkash, 
           "Cash In Count": cashInCount, 
           "Cash Out Count": cashOutCount, 
-          "Total Count": totalCount
+          "Total Count": totalCount,
+          "M-Banking": transaction.sender, // or entry.sender, depending on the data structure
+
         };
 
         if (entryIndex === 0 && transactionIndex === 0) {
@@ -117,6 +119,10 @@ const exportData = async () => {
   link.click();
   document.body.removeChild(link);
 };
+
+
+
+
 
 export default class Transactiondetails extends Component {
   constructor() {
