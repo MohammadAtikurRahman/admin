@@ -329,58 +329,63 @@ app.get("/get-all", (req, res) => {
 
 
 app.get("/get-tran", (req, res) => {
-    user.find({}, { "beneficiary.beneficiaryId": 1, "beneficiary.name": 1, "beneficiary.mob": 1, "beneficiary.transaction": 1 }, (err, val) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send("Server Error");
-        } else {
-            const beneficiaries = [];
-
-            val.forEach((user) => {
-                user.beneficiary.forEach(ben => {
-                    let trxidSet = new Set();  // Create a set to track trxid for each beneficiary
-                    
-                    const filteredTransactions = ben.transaction.filter(tran => {
-                        if (!trxidSet.has(tran.trxid)) {
-                            trxidSet.add(tran.trxid);
-                            return true;  // Keep the transaction if trxid is not a duplicate
-                        }
-                        return false;  // Remove the transaction if trxid is a duplicate
-                    }).reverse();  // Reverse the order of transactions
-
-                    let cashInCount = filteredTransactions.filter(tran => tran.type === "in").length;
-                    let cashOutCount = filteredTransactions.filter(tran => tran.type === "out").length;
-                    let totalCount = cashInCount + cashOutCount;
-
-                    // Push modified beneficiary data into the beneficiaries array
-                    beneficiaries.push({
-                        beneficiaryId: ben.beneficiaryId,
-                        name: ben.name,
-                        mob: ben.mob,
-                        transaction: filteredTransactions.map(tran => ({
-                            _id: tran._id,
-                            beneficiaryId: tran.beneficiaryId,
-                            beneficiaryMobile: tran.beneficiaryMobile,
-                            type: tran.type,
-                            amount: tran.amount,
-                            trxid: tran.trxid,
-                            date: tran.date,
-                            duration: tran.duration,
-                            sub_type: tran.sub_type,
-                            duration_bkash: tran.duration_bkash
-                        })),
-                        cashInCount: cashInCount,
-                        cashOutCount: cashOutCount,
-                        totalCount: totalCount
-                    });
-                });
+    user.find({}, {
+      "beneficiary.beneficiaryId": 1,
+      "beneficiary.name": 1,
+      "beneficiary.mob": 1,
+      "beneficiary.transaction": 1
+    }, (err, val) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Server Error");
+      } else {
+        const beneficiaries = [];
+  
+        val.forEach((user) => {
+          user.beneficiary.forEach(ben => {
+            let trxidSet = new Set();
+  
+            const filteredTransactions = ben.transaction.filter(tran => {
+              if (!trxidSet.has(tran.trxid)) {
+                trxidSet.add(tran.trxid);
+                return true;
+              }
+              return false;
+            }).reverse();
+  
+            let cashInCount = filteredTransactions.filter(tran => tran.type === "in").length;
+            let cashOutCount = filteredTransactions.filter(tran => tran.type === "out").length;
+            let totalCount = cashInCount + cashOutCount;
+  
+            // Push modified beneficiary data into the beneficiaries array
+            beneficiaries.push({
+              beneficiaryId: ben.beneficiaryId,
+              name: ben.name,
+              mob: ben.mob,
+              transaction: filteredTransactions.map(tran => ({
+                _id: tran._id,
+                beneficiaryId: tran.beneficiaryId,
+                beneficiaryMobile: ben.mob,  // set the beneficiaryMobile to ben.mob
+                type: tran.type,
+                amount: tran.amount,
+                trxid: tran.trxid,
+                date: tran.date,
+                duration: tran.duration,
+                sub_type: tran.sub_type,
+                duration_bkash: tran.duration_bkash
+              })),
+              cashInCount: cashInCount,
+              cashOutCount: cashOutCount,
+              totalCount: totalCount
             });
-            
-            res.json(beneficiaries);
-        }
+          });
+        });
+  
+        res.json(beneficiaries);
+      }
     });
-});
-
+  });
+  
 
 
 
