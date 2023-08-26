@@ -372,7 +372,8 @@ app.get("/get-tran", (req, res) => {
                 date: tran.date,
                 duration: tran.duration,
                 sub_type: tran.sub_type,
-                duration_bkash: tran.duration_bkash
+                duration_bkash: tran.duration_bkash,
+                sender: tran.sender
               })),
               cashInCount: cashInCount,
               cashOutCount: cashOutCount,
