@@ -454,17 +454,19 @@ app.get("/get-testscore", async (req, res) => {
     const formatted_data = data[0];
     extact_data = formatted_data["beneficiary"];
 
-    //  extact_data = extact_data.filter(item => item.duration || item.score1 & item.test_status || item.enumerator_observation );
-
-    extact_data = extact_data.filter(item => {
+    extact_data = extact_data.map(item => {
         if ((item.duration && item.score1) || item.test_status || item.whotaketheexam) {
             if (item.score1 || item.score1 == 0) {
                 item.test_status = "অংশগ্রহণকারী";
             }
-            return true;
+
+            // Append enumerator_observation and observation_new into observation_now
+            item.observation_now = [item.enumerator_observation, ...(item.observation_new || [])];
+
+            return item;
         }
-        return false;
-    });
+        return null;
+    }).filter(item => item !== null);
 
     extact_data.sort((a, b) => b.updatedAt - a.updatedAt);
 
@@ -482,6 +484,7 @@ app.get("/get-testscore", async (req, res) => {
 
     return res.status(200).json(extact_data);
 });
+
 
 app.get("/get-beneficiary", async (req, res) => {
     let users = await user

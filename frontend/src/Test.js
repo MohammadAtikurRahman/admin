@@ -1476,11 +1476,11 @@ export default class Test extends Component {
                       </TableCell>
                       <TableCell align="center">
                         <p style={{ marginBottom: "10px" }}>
-                          • {row.observation}
+                          {row.observation}
                         </p>
                         {row.observation_new.map((observation, index) => (
                           <p key={index} style={{ marginBottom: "10px" }}>
-                            • {observation}
+                            {observation}
                           </p>
                         ))}
                       </TableCell>
