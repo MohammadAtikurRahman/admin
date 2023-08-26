@@ -63,12 +63,13 @@ const flattenTransactions = (data) => {
           "Beneficiary Mobile": transaction.beneficiaryMobile,
           "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
           Amount: transaction.amount,
-          Date: transaction.date,  // This will display the transaction date
+          Date: transaction.date,
           "Sub Type": transaction.sub_type, 
           Duration: transaction.duration_bkash, 
           "Cash In Count": cashInCount, 
           "Cash Out Count": cashOutCount, 
-          "Total Count": totalCount
+          "Total Count": totalCount,
+          "Observation": transaction.Observation + ' ' + transaction.observation_new
         };
 
         if (entryIndex === 0 && transactionIndex === 0) {
@@ -82,15 +83,6 @@ const flattenTransactions = (data) => {
     })
     .flat();
 };
-
-
-// ... [Rest of the code remains the same]
-
-
-
-
-
-
 
 
 const getData = async () => {
