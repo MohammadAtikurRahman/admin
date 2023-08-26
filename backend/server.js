@@ -407,6 +407,9 @@ app.get("/get-enumerator", async (req, res) => {
     return res.status(200).json(users);
 });
 
+
+
+
 app.get("/get-testscore", async (req, res) => {
     let users = await user
         .find({})
@@ -424,12 +427,10 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.sl")
         .select("-beneficiary.age")
         .select("-beneficiary.dis")
-
         .select("-beneficiary.relgn")
         .select("-beneficiary.job")
         .select("-beneficiary.test")
         .select("-beneficiary.createdAt")
-
         .select("-beneficiary.mob")
         .select("-beneficiary.pgm")
         .select("-beneficiary.pass")
@@ -437,12 +438,10 @@ app.get("/get-testscore", async (req, res) => {
         .select("-beneficiary.branch")
         .select("-beneficiary.r_out")
         .select("-beneficiary.transaction")
-
         .select("-beneficiary.mob_1")
         .select("-beneficiary.ben_sts")
         .select("-beneficiary.nid_sts")
         .select("-beneficiary.a_sts")
-
         .select("-beneficiary.accre")
         .select("-beneficiary.f_allow")
         .select("-beneficiary.mob_own")
@@ -454,19 +453,15 @@ app.get("/get-testscore", async (req, res) => {
     const formatted_data = data[0];
     extact_data = formatted_data["beneficiary"];
 
-    extact_data = extact_data.map(item => {
+    extact_data = extact_data.filter(item => {
         if ((item.duration && item.score1) || item.test_status || item.whotaketheexam) {
             if (item.score1 || item.score1 == 0) {
                 item.test_status = "অংশগ্রহণকারী";
             }
-
-            // Append enumerator_observation and observation_new into observation_now
-            item.observation_now = [item.enumerator_observation, ...(item.observation_new || [])];
-
-            return item;
+            return true;
         }
-        return null;
-    }).filter(item => item !== null);
+        return false;
+    });
 
     extact_data.sort((a, b) => b.updatedAt - a.updatedAt);
 
@@ -474,16 +469,29 @@ app.get("/get-testscore", async (req, res) => {
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
             const seconds = item.duration % 60;
-
-            item.duration =
-                minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
+            item.duration = minutes > 0 ? `${minutes} minutes ${seconds} seconds` : `${seconds} seconds`;
         } else {
             item.duration = null;
+        }
+
+        // concatenate observation and observation_new
+        if (item.observation && item.observation_new.length > 0) {
+            item.all_observation = `${item.observation},${item.observation_new.join(',')}`;
+        } else if (item.observation) {
+            item.all_observation = item.observation;
+        } else if (item.observation_new.length > 0) {
+            item.all_observation = item.observation_new.join(',');
+        } else {
+            item.all_observation = null;
         }
     });
 
     return res.status(200).json(extact_data);
 });
+
+
+
+
 
 
 app.get("/get-beneficiary", async (req, res) => {
