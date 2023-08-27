@@ -9,6 +9,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  AppBar,
+  Toolbar,
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
@@ -281,8 +283,34 @@ export default class Dashboard extends Component {
     return (
       <div>
         <div>
+
+        <AppBar
+          position="static"
+          style={{ backgroundColor: "#1F8A7", height: "32px" }}
+        >
+          <Toolbar>
+            <h5 style={{ paddingTop: "10px" }}></h5>
+            <h6
+              style={{
+                fontFamily: "Arial",
+                fontWeight: "bold",
+                paddingBottom: "20px",
+              }}
+            >
+              <b> ADMIN PANEL NDC </b>
+            </h6>
+            &nbsp; &nbsp;
+          </Toolbar>
+        </AppBar>
+
           <br></br>
+
+
+
           <h2>Dashboard</h2>
+
+
+
           <Button
             className="button_style"
             variant="contained"
