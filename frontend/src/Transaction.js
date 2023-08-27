@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import { Button } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Swal from 'sweetalert';
 
 const useStyles = makeStyles({
   table: {
@@ -87,7 +88,7 @@ export default function Transaction() {
   return (
     <div className="container text-center p-5 ">
       <div>
-        <div style={{ display: "flex", justifyContent: "center"  }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
             className="button_style"
             variant="contained"
@@ -98,29 +99,23 @@ export default function Transaction() {
             <h6>Beneficiary Name: {userProfile?.name}</h6>{" "}
           </Button>
 
-         <Button   className="button_style"
+          <Button
+            className="button_style"
             variant="contained"
             color="primary"
             size="small"
-         > 
-         <h6>Beneficiary Id: {userProfile?.beneficiaryId}</h6>
+          >
+            <h6>Beneficiary Id: {userProfile?.beneficiaryId}</h6>
+          </Button>
 
-          
-          </Button> 
-
-        <Button   className="button_style"
+          <Button
+            className="button_style"
             variant="contained"
             color="primary"
-            size="small" >
-
-        <h6>Beneficiary mobile: {userProfile?.mob}</h6>
-
-
-
-        </Button>
-
-
-
+            size="small"
+          >
+            <h6>Beneficiary mobile: {userProfile?.mob}</h6>
+          </Button>
         </div>
 
         <br></br>
@@ -189,7 +184,6 @@ export default function Transaction() {
 
               <TableCell align="center">M-Banking</TableCell>
               <TableCell align="center">SMS</TableCell>
-
             </TableRow>
           </TableHead>
 
@@ -227,8 +221,16 @@ export default function Transaction() {
                   <TableCell align="center">{t.duration_nagad}</TableCell>
 
                   <TableCell align="center">{t.sender}</TableCell>
-                  <TableCell align="center">{t.raw_sms}</TableCell>
-
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => Swal(t.raw_sms)}
+                    >
+                      Show SMS
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             <TableRow>
