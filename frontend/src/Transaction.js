@@ -54,11 +54,15 @@ export default function Transaction() {
     localStorage.setItem("token", null);
     navigate("/");
   }
-  function capitalizeFirstLetter(string) {
+
+
+function capitalizeFirstLetter(string) {
+    if (!string) return '';
     return string.toLowerCase().split(' ').map(function(word) {
         return (word.charAt(0).toUpperCase() + word.slice(1));
     }).join(' ');
 }
+
 
   const classes = useStyles();
   const trxidSet = new Set();
@@ -91,7 +95,9 @@ export default function Transaction() {
   }, 0);
 
   return (
-    <div className="container text-center p-5 ">
+    <div className="container text-center p-2 ">
+      <br>
+      </br>
       <div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
