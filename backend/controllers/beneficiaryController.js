@@ -118,18 +118,26 @@ async function deleteBeneficiary(req, res) {
         res.send("Beneficiary deleted successfully");
     });
 }
+
+
 async function addBeneficiaryInBulk(req, res) {
     let user = jwt_decode(req.body.token);
-    for (let i = 0; i < req.body.beneficiary.length; i++) {
+    try {
         user = await User.findByIdAndUpdate(
             user.id,
-            {$push: {beneficiary: req.body.beneficiary[i]}},
-            {new: true},
+            { $push: { beneficiary: { $each: req.body.beneficiary } } },
+            { new: true },
         );
+        return res.status(200).json({ user: user });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred' });
     }
-
-    return res.status(200).json({user: user});
 }
+
+
+
+
 
 async function saveTest(req, res) {
     let user = jwt_decode(req.body.token);
