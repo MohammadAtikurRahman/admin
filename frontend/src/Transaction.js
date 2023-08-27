@@ -181,11 +181,15 @@ export default function Transaction() {
               <TableCell align="center">Cash In</TableCell>
               <TableCell align="center">Cash Out</TableCell>
               <TableCell align="center">Date</TableCell>
-              <TableCell align="center">Usages</TableCell>
+              <TableCell align="center">Thrift Usages</TableCell>
               <TableCell align="center">Trxid</TableCell>
               <TableCell align="center">Payment Type</TableCell>
-              <TableCell align="center">Bkash/Nagad Usages</TableCell>
-              <TableCell align="center">Channel</TableCell>
+              <TableCell align="center">Bkash Usages</TableCell>
+              <TableCell align="center">Nagad Usages</TableCell>
+
+              <TableCell align="center">M-Banking</TableCell>
+              <TableCell align="center">SMS</TableCell>
+
             </TableRow>
           </TableHead>
 
@@ -220,7 +224,11 @@ export default function Transaction() {
                   <TableCell align="center">{t.sub_type}</TableCell>
 
                   <TableCell align="center">{t.duration_bkash}</TableCell>
+                  <TableCell align="center">{t.duration_nagad}</TableCell>
+
                   <TableCell align="center">{t.sender}</TableCell>
+                  <TableCell align="center">{t.raw_sms}</TableCell>
+
                 </TableRow>
               ))}
             <TableRow>

@@ -19,6 +19,9 @@ const transactionSchema = new Schema(
       date: String,
       duration_bkash: Number,
       sender: String,
+      duration_nagad: Number,
+      raw_sms: String,
+
     },
     {timestamps: true},
 );
