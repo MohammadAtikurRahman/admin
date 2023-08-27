@@ -301,7 +301,7 @@ function capitalizeFirstLetter(string) {
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total Minute: {totalMinutes}
+                Total Thrift Minute: {totalMinutes}
               </TableCell>
               <TableCell
                 align="center"
