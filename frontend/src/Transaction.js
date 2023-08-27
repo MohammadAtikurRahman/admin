@@ -83,6 +83,8 @@ function capitalizeFirstLetter(string) {
     return acc;
   }, 0);
 
+
+
   const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
     if (
       !isNaN(Number(t.duration)) &&
@@ -93,6 +95,30 @@ function capitalizeFirstLetter(string) {
     }
     return acc;
   }, 0);
+
+  const totalMinutesBkash = userProfile?.transaction.reduce((acc, t, index, arr) => {
+    if (
+      !isNaN(Number(t.duration_bkash)) &&
+      t.date &&
+      arr.findIndex((el) => el.trxid === t.trxid) === index
+    ) {
+      return acc + Number(t.duration_bkash);
+    }
+    return acc;
+  }, 0);
+
+  const totalMinutesNagad = userProfile?.transaction.reduce((acc, t, index, arr) => {
+    if (
+      !isNaN(Number(t.duration_nagad)) &&
+      t.date &&
+      arr.findIndex((el) => el.trxid === t.trxid) === index
+    ) {
+      return acc + Number(t.duration_nagad);
+    }
+    return acc;
+  }, 0);
+
+
 
   return (
     <div className="container text-center p-2 ">
@@ -275,12 +301,35 @@ function capitalizeFirstLetter(string) {
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
-                Total minute: {totalMinutes}
+                Total Minute: {totalMinutes}
               </TableCell>
               <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               ></TableCell>
+                    <TableCell
+                align="center"
+                style={{ color: "purple", fontWeight: "bold" }}
+              ></TableCell>
+
+
+
+<TableCell
+                align="center"
+                style={{ color: "purple", fontWeight: "bold" }}
+              >
+                Total Bkash Minute: {totalMinutesBkash}
+              </TableCell>
+
+
+
+
+<TableCell
+                align="center"
+                style={{ color: "purple", fontWeight: "bold" }}
+              >
+                Total Nagad Minute: {totalMinutesNagad}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
