@@ -54,6 +54,11 @@ export default function Transaction() {
     localStorage.setItem("token", null);
     navigate("/");
   }
+  function capitalizeFirstLetter(string) {
+    return string.toLowerCase().split(' ').map(function(word) {
+        return (word.charAt(0).toUpperCase() + word.slice(1));
+    }).join(' ');
+}
 
   const classes = useStyles();
   const trxidSet = new Set();
@@ -169,8 +174,8 @@ export default function Transaction() {
         </Button>
       </div>
 
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="transaction table">
+      <TableContainer component={Paper} style={{ width: '100%', marginBottom: '20px' }}>
+        <Table className={classes.table} aria-label="transaction table"  style={{ minWidth: '650px' }} >
           <TableHead>
             <TableRow>
               <TableCell align="center">Cash In</TableCell>
@@ -220,7 +225,11 @@ export default function Transaction() {
                   <TableCell align="center">{t.duration_bkash}</TableCell>
                   <TableCell align="center">{t.duration_nagad}</TableCell>
 
-                  <TableCell align="center">{t.sender}</TableCell>
+                  <TableCell align="center">
+    {capitalizeFirstLetter(t.sender)}
+</TableCell>
+
+
                   <TableCell align="center">
                     <Button
                       variant="contained"
