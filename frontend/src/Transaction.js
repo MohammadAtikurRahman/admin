@@ -190,6 +190,7 @@ export default function Transaction() {
                   <TableCell align="center">{t.sub_type}</TableCell>
 
                   <TableCell align="center">{t.duration_bkash}</TableCell>
+                  <TableCell align="center">{t.sender}</TableCell>
 
                 </TableRow>
               ))}
