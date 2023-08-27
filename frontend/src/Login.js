@@ -3,7 +3,7 @@ import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
-
+import backgroundImage from "./bg.png"; 
 
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
@@ -70,6 +70,21 @@ export default function Login(props) {
     const inputStyle = { WebkitBoxShadow: "0 0 0 1000px white inset" };
 
     return (
+        <div style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            
+
+        }}>
+
+
         <div style={{ marginTop: "100px" }}>
             <div>
                 <h2 style={{ color: "#334D9F" }}
@@ -139,6 +154,8 @@ export default function Login(props) {
 
 
 
+
+        </div>
 
         </div>
     );

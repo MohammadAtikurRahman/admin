@@ -122,6 +122,9 @@ function capitalizeFirstLetter(string) {
 
   return (
     <div className="container text-center p-2 ">
+
+
+      
       <br>
       </br>
       <div>
@@ -133,7 +136,7 @@ function capitalizeFirstLetter(string) {
             size="small"
           >
             {" "}
-            <h6>Beneficiary Name: {userProfile?.name}</h6>{" "}
+            <h6> <b> Beneficiary Name: {userProfile?.name} </b> </h6>{" "}
           </Button>
 
           <Button
@@ -142,7 +145,7 @@ function capitalizeFirstLetter(string) {
             color="primary"
             size="small"
           >
-            <h6>Beneficiary Id: {userProfile?.beneficiaryId}</h6>
+            <h6> <b> Beneficiary Id: {userProfile?.beneficiaryId} </b> </h6>
           </Button>
 
           <Button
@@ -151,7 +154,7 @@ function capitalizeFirstLetter(string) {
             color="primary"
             size="small"
           >
-            <h6>Beneficiary mobile: {userProfile?.mob}</h6>
+            <h6> <b> Beneficiary mobile: {userProfile?.mob}</b></h6>
           </Button>
         </div>
 

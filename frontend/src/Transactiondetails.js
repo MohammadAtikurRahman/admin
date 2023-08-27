@@ -365,7 +365,7 @@ export default class Transactiondetails extends Component {
           </Toolbar>
         </AppBar>
           <br></br>
-          <h2>TRANSACTION DETAILS</h2>
+          <h2> <b>THRIFT TRANSACTION DETAILS </b> </h2>
   
           <Button
             className="button_style"
@@ -399,7 +399,7 @@ export default class Transactiondetails extends Component {
             className="button_style"
             variant="contained"
             size="small"
-            style={{ backgroundColor: "green", color: "white" }}
+            style={{ backgroundColor: "#34495E", color: "white" }}
           >
             <MaterialLink
               style={{
