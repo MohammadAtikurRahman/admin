@@ -27,18 +27,18 @@ export default function Transaction() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(userProfile?.transaction) {
+    if (userProfile?.transaction) {
       setTotalTransactionCount(userProfile.transaction.length);
-      
+
       const cashInCount = userProfile.transaction.reduce((acc, t) => {
-        if(t.type === "in" && t.date) {
+        if (t.type === "in" && t.date) {
           return acc + 1;
         }
         return acc;
       }, 0);
 
       const cashOutCount = userProfile.transaction.reduce((acc, t) => {
-        if(t.type === "out" && t.date) {
+        if (t.type === "out" && t.date) {
           return acc + 1;
         }
         return acc;
@@ -74,7 +74,11 @@ export default function Transaction() {
   }, 0);
 
   const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
-    if (!isNaN(Number(t.duration)) && t.date && arr.findIndex(el => el.trxid === t.trxid) === index) {
+    if (
+      !isNaN(Number(t.duration)) &&
+      t.date &&
+      arr.findIndex((el) => el.trxid === t.trxid) === index
+    ) {
       return acc + Number(t.duration);
     }
     return acc;
@@ -83,9 +87,43 @@ export default function Transaction() {
   return (
     <div className="container text-center p-5 ">
       <div>
-        <h3>Beneficiary Name: {userProfile?.name}</h3>
-        <h3>Beneficiary Id: {userProfile?.beneficiaryId}</h3>
-        <h3>Beneficiary mobile: {userProfile?.mob}</h3>
+        <div style={{ display: "flex", justifyContent: "center"  }}>
+          <Button
+            className="button_style"
+            variant="contained"
+            color="primary"
+            size="small"
+          >
+            {" "}
+            <h6>Beneficiary Name: {userProfile?.name}</h6>{" "}
+          </Button>
+
+         <Button   className="button_style"
+            variant="contained"
+            color="primary"
+            size="small"
+         > 
+         <h6>Beneficiary Id: {userProfile?.beneficiaryId}</h6>
+
+          
+          </Button> 
+
+        <Button   className="button_style"
+            variant="contained"
+            color="primary"
+            size="small" >
+
+        <h6>Beneficiary mobile: {userProfile?.mob}</h6>
+
+
+
+        </Button>
+
+
+
+        </div>
+
+        <br></br>
 
         <Button
           className="button_style"
@@ -148,7 +186,6 @@ export default function Transaction() {
               <TableCell align="center">Payment Type</TableCell>
               <TableCell align="center">Bkash/Nagad Usages</TableCell>
               <TableCell align="center">Channel</TableCell>
-
             </TableRow>
           </TableHead>
 
@@ -161,11 +198,7 @@ export default function Transaction() {
               .filter((t) => t.date)
               .sort((a, b) => new Date(b.date) - new Date(a.date))
               .map((t) => (
-
-                
                 <TableRow key={t._id}>
-                
-                
                   <TableCell
                     align="center"
                     style={{ color: "green", fontWeight: "bold" }}
@@ -173,7 +206,6 @@ export default function Transaction() {
                     {t.type === "in" ? t.amount : ""}
                   </TableCell>
 
-                  
                   <TableCell
                     align="center"
                     style={{ color: "red", fontWeight: "bold" }}
@@ -181,17 +213,14 @@ export default function Transaction() {
                     {t.type === "out" ? t.amount : ""}
                   </TableCell>
 
-
                   <TableCell align="center">{t.date}</TableCell>
                   <TableCell align="center">{t.duration} Minutes</TableCell>
                   <TableCell align="center">{t.trxid}</TableCell>
-
 
                   <TableCell align="center">{t.sub_type}</TableCell>
 
                   <TableCell align="center">{t.duration_bkash}</TableCell>
                   <TableCell align="center">{t.sender}</TableCell>
-
                 </TableRow>
               ))}
             <TableRow>
@@ -200,7 +229,7 @@ export default function Transaction() {
                 style={{ color: "green", fontWeight: "bold" }}
               >
                 Total Cash In: {totalCashIn}
-                <br/>
+                <br />
                 {/* Total Cash In Transactions: {totalCashInCount} */}
               </TableCell>
               <TableCell
@@ -208,7 +237,7 @@ export default function Transaction() {
                 style={{ color: "red", fontWeight: "bold" }}
               >
                 Total Cash Out: {totalCashOut}
-                <br/>
+                <br />
                 {/* Total Cash Out Transactions: {totalCashOutCount} */}
               </TableCell>
               <TableCell
