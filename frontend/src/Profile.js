@@ -20,8 +20,23 @@ export default function Profile() {
     return (
         <div className="container text-center p-5 ">
             <div>
+                <Button
+                
+                className="button_style"
+                variant="contained"
+                color="primary"
+                size="small"
+                
+                
+                > 
                 <h3>Beneficiary Name {userProfile?.name}</h3>
 
+                    
+             </Button>
+             <br>
+             </br>
+             <br>
+             </br>
                 <Button
                     className="button_style"
                     variant="contained"
