@@ -10,7 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import { Button } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import Swal from 'sweetalert';
+import Swal from "sweetalert";
 
 const useStyles = makeStyles({
   table: {
@@ -55,14 +55,16 @@ export default function Transaction() {
     navigate("/");
   }
 
-
-function capitalizeFirstLetter(string) {
-    if (!string) return '';
-    return string.toLowerCase().split(' ').map(function(word) {
-        return (word.charAt(0).toUpperCase() + word.slice(1));
-    }).join(' ');
-}
-
+  function capitalizeFirstLetter(string) {
+    if (!string) return "";
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
 
   const classes = useStyles();
   const trxidSet = new Set();
@@ -83,8 +85,6 @@ function capitalizeFirstLetter(string) {
     return acc;
   }, 0);
 
-
-
   const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
     if (
       !isNaN(Number(t.duration)) &&
@@ -96,37 +96,37 @@ function capitalizeFirstLetter(string) {
     return acc;
   }, 0);
 
-  const totalMinutesBkash = userProfile?.transaction.reduce((acc, t, index, arr) => {
-    if (
-      !isNaN(Number(t.duration_bkash)) &&
-      t.date &&
-      arr.findIndex((el) => el.trxid === t.trxid) === index
-    ) {
-      return acc + Number(t.duration_bkash);
-    }
-    return acc;
-  }, 0);
+  const totalMinutesBkash = userProfile?.transaction.reduce(
+    (acc, t, index, arr) => {
+      if (
+        !isNaN(Number(t.duration_bkash)) &&
+        t.date &&
+        arr.findIndex((el) => el.trxid === t.trxid) === index
+      ) {
+        return acc + Number(t.duration_bkash);
+      }
+      return acc;
+    },
+    0
+  );
 
-  const totalMinutesNagad = userProfile?.transaction.reduce((acc, t, index, arr) => {
-    if (
-      !isNaN(Number(t.duration_nagad)) &&
-      t.date &&
-      arr.findIndex((el) => el.trxid === t.trxid) === index
-    ) {
-      return acc + Number(t.duration_nagad);
-    }
-    return acc;
-  }, 0);
-
-
+  const totalMinutesNagad = userProfile?.transaction.reduce(
+    (acc, t, index, arr) => {
+      if (
+        !isNaN(Number(t.duration_nagad)) &&
+        t.date &&
+        arr.findIndex((el) => el.trxid === t.trxid) === index
+      ) {
+        return acc + Number(t.duration_nagad);
+      }
+      return acc;
+    },
+    0
+  );
 
   return (
     <div className="container text-center p-2 ">
-
-
-      
-      <br>
-      </br>
+      <br></br>
       <div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Button
@@ -136,7 +136,10 @@ function capitalizeFirstLetter(string) {
             size="small"
           >
             {" "}
-            <h6> <b> Beneficiary Name: {userProfile?.name} </b> </h6>{" "}
+            <h6>
+              {" "}
+              <b> Beneficiary Name: {userProfile?.name} </b>{" "}
+            </h6>{" "}
           </Button>
 
           <Button
@@ -145,7 +148,10 @@ function capitalizeFirstLetter(string) {
             color="primary"
             size="small"
           >
-            <h6> <b> Beneficiary Id: {userProfile?.beneficiaryId} </b> </h6>
+            <h6>
+              {" "}
+              <b> Beneficiary Id: {userProfile?.beneficiaryId} </b>{" "}
+            </h6>
           </Button>
 
           <Button
@@ -154,7 +160,10 @@ function capitalizeFirstLetter(string) {
             color="primary"
             size="small"
           >
-            <h6> <b> Beneficiary mobile: {userProfile?.mob}</b></h6>
+            <h6>
+              {" "}
+              <b> Beneficiary mobile: {userProfile?.mob}</b>
+            </h6>
           </Button>
         </div>
 
@@ -209,8 +218,15 @@ function capitalizeFirstLetter(string) {
         </Button>
       </div>
 
-      <TableContainer component={Paper} style={{ width: '100%', marginBottom: '20px' }}>
-        <Table className={classes.table} aria-label="transaction table"  style={{ minWidth: '650px' }} >
+      <TableContainer
+        component={Paper}
+        style={{ width: "100%", marginBottom: "20px" }}
+      >
+        <Table
+          className={classes.table}
+          aria-label="transaction table"
+          style={{ minWidth: "650px" }}
+        >
           <TableHead>
             <TableRow>
               <TableCell align="center">Cash In</TableCell>
@@ -234,7 +250,13 @@ function capitalizeFirstLetter(string) {
                 return arr.findIndex((el) => el.trxid === t.trxid) === index;
               })
               .filter((t) => t.date)
-              .sort((a, b) => new Date(b.date) - new Date(a.date))
+              .sort((a, b) => {
+                const [dayA, monthA, yearA] = a.date.split("/");
+                const [dayB, monthB, yearB] = b.date.split("/");
+                const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+                const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+                return dateB - dateA;
+              })
               .map((t) => (
                 <TableRow key={t._id}>
                   <TableCell
@@ -261,9 +283,8 @@ function capitalizeFirstLetter(string) {
                   <TableCell align="center">{t.duration_nagad}</TableCell>
 
                   <TableCell align="center">
-    {capitalizeFirstLetter(t.sender)}
-</TableCell>
-
+                    {capitalizeFirstLetter(t.sender)}
+                  </TableCell>
 
                   <TableCell align="center">
                     <Button
@@ -310,24 +331,19 @@ function capitalizeFirstLetter(string) {
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               ></TableCell>
-                    <TableCell
+              <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               ></TableCell>
 
-
-
-<TableCell
+              <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
                 Total Bkash Minute: {totalMinutesBkash}
               </TableCell>
 
-
-
-
-<TableCell
+              <TableCell
                 align="center"
                 style={{ color: "purple", fontWeight: "bold" }}
               >
