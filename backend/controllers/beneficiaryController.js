@@ -136,9 +136,6 @@ async function addBeneficiaryInBulk(req, res) {
 }
 
 
-
-
-
 async function saveTest(req, res) {
     let user = jwt_decode(req.body.token);
 
@@ -212,45 +209,6 @@ async function beneficiaryLogin(req, res) {
     return res.status(401).json({message: "Something went wrong."});
 }
 
-// async function transaction(req, res) {
-//     let promises = req.body.map(transaction => {
-//         return User.findOne({
-//             "beneficiary.beneficiaryId": transaction.beneficiaryId,
-//             "beneficiary.transaction": {
-//                 $elemMatch: {
-//                     beneficiaryId: transaction.beneficiaryId,
-//                     beneficiaryMobile: transaction.beneficiaryMobile,
-//                     type: transaction.type,
-//                     amount: transaction.amount,
-//                     trxid: transaction.trxid,
-//                     date: transaction.date,
-//                     duration: transaction.duration
-//                 }
-//             }
-//         })
-//         .then(user => {
-//             if (!user) {
-//                 return User.updateOne(
-//                     { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-//                     { $push: { "beneficiary.$.transaction": transaction }},
-//                     { new: true }
-//                 );
-//             } else {
-//                 return Promise.resolve("Duplicate transaction found.");
-//             }
-//         })
-//     });
-
-//     Promise.all(promises)
-//         .then(results => {
-//             if (results.includes("Duplicate transaction found.")) {
-//                 return res.status(409).send("Duplicate transaction found.");
-//             }
-//             res.status(201).send("Transactions added successfully");
-//         })
-//         .catch(error => res.status(400).send(error));
-// }
-
 
 async function transaction(req, res) {
     req.body.forEach(transaction => {
@@ -286,165 +244,6 @@ async function transaction(req, res) {
     });
     res.status(201).send("Transactions added successfully");
 }
-
-
-
-// async function transaction(req, res) {
-//     let promises = req.body.map((transaction) => {
-//       return User.findOne({
-//         "beneficiary.beneficiaryId": transaction.beneficiaryId,
-//         "beneficiary.transaction": {
-//           $elemMatch: {
-//             trxid: transaction.trxid,
-//           },
-//         },
-//       })
-//         .then((user) => {
-//           if (!user) {
-//             return User.updateOne(
-//               { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-//               { $push: { "beneficiary.$.transaction": transaction } },
-//               { new: true }
-//             );
-//           } else {
-//             return Promise.resolve("Duplicate transaction found.");
-//           }
-//         })
-//         .catch((error) => {
-//           return Promise.reject(error);
-//         });
-//     });
-  
-//     try {
-//       const results = await Promise.all(promises);
-//       if (results.includes("Duplicate transaction found.")) {
-//         return res.status(409).send("Duplicate transaction found.");
-//       }
-//       res.status(201).send("Transactions added successfully");
-//     } catch (error) {
-//       res.status(400).send(error);
-//     }
-//   }
-
-//original data
-// async function newlogin(req, res) {
-//     const beneficiaryId = req.body.beneficiaryId;
-//     const mob = req.body.mob;
-
-//     // Find a user document with a matching beneficiaryId and mob
-//     User.findOne(
-//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
-//         (err, user) => {
-//             if (err) {
-//                 // Handle error
-//                 res.status(500).send({error: err});
-//             } else {
-//                 if (user) {
-//                     // Login successful
-//                     res.status(200).send({message: "Login successful"});
-//                 } else {
-//                     // Login failed
-//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
-//                 }
-//             }
-//         },
-//     );
-// }
-
-// async function newlogin(req, res) {
-//     const beneficiaryId = req.body.beneficiaryId;
-//     const mob = req.body.mob;
-//     const installed_time = req.body.installed_time;
-//     const loggedin_time = req.body.loggedin_time;
-
-//     // Find a user document with a matching beneficiaryId and mob
-//     User.findOne(
-//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
-//         (err, user) => {
-//             if (err) {
-//                 // Handle error
-//                 res.status(500).send({error: err});
-//             } else {
-//                 if (user) {
-//                     // Login successful
-                
-//                     res.status(200).send({
-//                         message: "Login successful",
-//                         installed_time: installed_time,
-//                         loggedin_time: loggedin_time
-//                     });
-//                 } else {
-//                     // Login failed
-//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
-//                 }
-//             }
-//         },
-//     );
-// }
-
-
-
-
-// async function newlogin(req, res) {
-//     const beneficiaryId = req.body.beneficiaryId;
-//     const mob = req.body.mob;
-
-//     // Find a user document with a matching beneficiaryId and mob
-//     User.findOne(
-//         {"beneficiary.beneficiaryId": beneficiaryId, "beneficiary.mob": mob},
-//         (err, user) => {
-//             if (err) {
-//                 // Handle error
-//                 res.status(500).send({error: err});
-//             } else {
-//                 if (user) {
-//                     // Find the index of the matching beneficiary
-//                     const beneficiaryIndex = user.beneficiary.findIndex(ben => ben.beneficiaryId === beneficiaryId);
-
-//                     if (beneficiaryIndex !== -1) {
-//                         // Check if loggedin_time is not set
-//                         if (!user.beneficiary[beneficiaryIndex].loggedin_time) {
-//                             const loggedin_time = moment().tz('Asia/Dhaka').format('YYYY-MM-DDTHH:mm:ss.SSS');
-//                             const updatePath = {
-//                                 [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
-//                             };
-
-//                             User.updateOne(
-//                                 {_id: user._id},
-//                                 {$set: updatePath},
-//                                 (updateErr, updateResult) => {
-//                                     if (updateErr) {
-//                                         // Handle error
-//                                         res.status(500).send({error: updateErr});
-//                                     } else {
-//                                         // loggedin_time updated
-//                                         res.status(200).send({
-//                                             message: "Login successful, loggedin_time set for the first time",
-//                                             loggedin_time: loggedin_time
-//                                         });
-//                                     }
-//                                 }
-//                             );
-//                         } else {
-//                             // loggedin_time is already set, login successful without updating loggedin_time
-//                             res.status(200).send({
-//                                 message: "Login successful, loggedin_time not updated",
-//                                 loggedin_time: user.beneficiary[beneficiaryIndex].loggedin_time
-//                             });
-//                         }
-//                     } else {
-//                         // Beneficiary not found
-//                         res.status(404).send({message: "Beneficiary not found"});
-//                     }
-//                 } else {
-//                     // Login failed
-//                     res.status(401).send({message: "Invalid beneficiaryId or mob"});
-//                 }
-//             }
-//         },
-//     );
-// }
-
 
 async function newlogin(req, res) {
     const beneficiaryId = parseInt(req.body.beneficiaryId);
@@ -506,67 +305,6 @@ async function newlogin(req, res) {
     );
 }
 
-
-
-
-// async function addBeneficiaryScore(req, res) {
-//     const {userId, beneficiaryId} = req.body;
-//     console.log(req.body);
-//     let result = await User.findOneAndUpdate(
-//         {userId: userId, "beneficiary.beneficiaryId": beneficiaryId},
-//         {
-//             $set: {
-//                 "beneficiary.$.score1": req.body?.score1,
-//                 "beneficiary.$.score2": req.body?.score2,
-//                 "beneficiary.$.duration": req.body?.duration,
-//             },
-//         },
-//         {new: true},
-//     );
-//     return res.status(200).json(result);
-// }
-// async function addBeneficiaryScore(req, res) {
-//     const {userId, beneficiaryId} = req.body;
-//     console.log(req.body);
-//     let result = await User.updateOne(
-//         { "beneficiary.beneficiaryId": beneficiaryId },
-//         {
-//             $set: {
-//                 "beneficiary.$.score1": req.body?.score1,
-//                 "beneficiary.$.score2": req.body?.score2,
-//                 "beneficiary.$.duration": req.body?.duration,
-//             },
-//         },
-//         {new: true}
-//     );
-//     return res.status(200).json(result);
-// }
-
-// async function addBeneficiaryScore(req, res) {
-//     const { beneficiaryId } = req.body;
-//     console.log(req.body);
-//     let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
-//     if (!user) {
-//         return res.status(400).json({ message: 'Beneficiary not found' });
-//     }
-//     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
-//     let result = await User.updateOne(
-//         { "beneficiary.beneficiaryId": beneficiaryId },
-//         {
-//             $set: {
-//                 "beneficiary.$.score1": req.body?.score1,
-//                 "beneficiary.$.score2": req.body?.score2,
-//                 "beneficiary.$.duration": req.body?.duration,
-
-//             },
-//         }
-//     );
-//     if (result.nModified == 0) {
-//         return res.status(400).json({ message: 'Failed to update beneficiary score' });
-//     }
-//     return res.status(200).json({ message: 'Beneficiary score saved' });
-
-// }
 
 async function addBeneficiaryScore(req, res) {
     const { beneficiaryId } = req.body;
@@ -757,6 +495,7 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
                     "beneficiary.$.whotaketheexam": req.body?.userId,
+                    "beneficiary.$.observation_new": req.body?.observation_new
 
                 },
             },
@@ -787,10 +526,6 @@ async function saveMultiObservation(req, res) {
     }
     return res.status(200).json({message: "Multiple enumerator observation and ofline after data updated"});
 }
-
-
-
-
 
 
 async function benenScore(req, res) {

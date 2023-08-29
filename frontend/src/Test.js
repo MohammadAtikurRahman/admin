@@ -14,6 +14,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
+  AppBar,
+  Toolbar,
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
@@ -550,6 +552,28 @@ export default class Test extends Component {
     return (
       <div>
         <div>
+
+        <AppBar
+          position="static"
+          style={{ backgroundColor: "#1F8A7", height: "32px" }}
+        >
+          <Toolbar>
+            <h5 style={{ paddingTop: "10px" }}></h5>
+            <h6
+              style={{
+                fontFamily: "Arial",
+                fontWeight: "bold",
+                paddingBottom: "20px",
+              }}
+            >
+              <b> ADMIN PANEL THRIFT TEST RESULT SERVER </b>
+            </h6>
+            &nbsp; &nbsp;
+          </Toolbar>
+        </AppBar>
+
+
+
           {/* 
                     <ol>
                         {this.state.userinfo.map(user => (
@@ -622,7 +646,7 @@ export default class Test extends Component {
           </Button>
 
           <Button
-            style={{ backgroundColor: "green", color: "white" }}
+            style={{ backgroundColor: "#34495E", color: "white" }}
             className="button_style"
             variant="contained"
             color="secondary"
