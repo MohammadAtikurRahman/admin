@@ -328,63 +328,46 @@ app.get("/get-all", (req, res) => {
 });
 
 
-app.get("/get-tran", (req, res) => {
-    user.find({}, {
-      "beneficiary.beneficiaryId": 1,
-      "beneficiary.name": 1,
-      "beneficiary.mob": 1,
-      "beneficiary.transaction": 1
-    }, (err, val) => {
-      if (err) {
-        console.log(err);
-        res.status(500).send("Server Error");
-      } else {
-        const beneficiaries = [];
-  
-        val.forEach((user) => {
-          user.beneficiary.forEach(ben => {
-            let trxidSet = new Set();
-  
-            const filteredTransactions = ben.transaction.filter(tran => {
-              if (!trxidSet.has(tran.trxid)) {
-                trxidSet.add(tran.trxid);
-                return true;
-              }
-              return false;
-            }).reverse();
-  
-            let cashInCount = filteredTransactions.filter(tran => tran.type === "in").length;
-            let cashOutCount = filteredTransactions.filter(tran => tran.type === "out").length;
-            let totalCount = cashInCount + cashOutCount;
-  
-            // Push modified beneficiary data into the beneficiaries array
-            beneficiaries.push({
-              beneficiaryId: ben.beneficiaryId,
-              name: ben.name,
-              mob: ben.mob,
-              transaction: filteredTransactions.map(tran => ({
-                _id: tran._id,
-                beneficiaryId: tran.beneficiaryId,
-                beneficiaryMobile: ben.mob,  // set the beneficiaryMobile to ben.mob
-                type: tran.type,
-                amount: tran.amount,
-                trxid: tran.trxid,
-                date: tran.date,
-                duration: tran.duration,
-                sub_type: tran.sub_type,
-                duration_bkash: tran.duration_bkash,
-                sender: tran.sender
-              })),
-              cashInCount: cashInCount,
-              cashOutCount: cashOutCount,
-              totalCount: totalCount
-            });
-          });
-        });
-  
-        res.json(beneficiaries);
-      }
-    });
+app.get("/get-tran", async (req, res) => {
+    try {
+      const users = await user.find({}, {
+        "beneficiary.beneficiaryId": 1,
+        "beneficiary.name": 1,
+        "beneficiary.mob": 1,
+        "beneficiary.transaction": 1
+      }).limit(50); // Added limit for pagination
+      
+      const beneficiaries = users.flatMap(user => 
+        user.beneficiary.map(ben => {
+          const trxidSet = new Set();
+          const filteredTransactions = ben.transaction.filter(tran => {
+            if (!trxidSet.has(tran.trxid)) {
+              trxidSet.add(tran.trxid);
+              return true;
+            }
+            return false;
+          }).reverse();
+          
+          const cashInCount = filteredTransactions.filter(tran => tran.type === "in").length;
+          const cashOutCount = filteredTransactions.filter(tran => tran.type === "out").length;
+          
+          return {
+            beneficiaryId: ben.beneficiaryId,
+            name: ben.name,
+            mob: ben.mob,
+            transaction: filteredTransactions,
+            cashInCount,
+            cashOutCount,
+            totalCount: cashInCount + cashOutCount
+          };
+        })
+      );
+      
+      res.json(beneficiaries);
+    } catch(err) {
+      console.log(err);
+      res.status(500).send("Server Error");
+    }
   });
   
 
