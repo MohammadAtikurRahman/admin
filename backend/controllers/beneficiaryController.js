@@ -495,7 +495,6 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
                     "beneficiary.$.whotaketheexam": req.body?.userId,
-                    "beneficiary.$.observation_new": req.body?.observation_new
 
                 },
             },
