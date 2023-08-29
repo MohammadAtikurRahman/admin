@@ -484,9 +484,15 @@ async function lastPagetext(req, res) {
 
 async function saveMultiScore(req, res) {
     const beneficiaries = req.body;
+
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
         let {userId, beneficiaryId, score1, observation, duration} = beneficiary;
+
+        if (!userId) {
+            return res.status(400).json({message: "userId is required"});
+        }
+
         let result = await User.findOneAndUpdate(
             {"beneficiary.beneficiaryId": beneficiaryId},
             {
@@ -494,8 +500,7 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.score1": score1,
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
-                    "beneficiary.$.whotaketheexam": req.body?.userId,
-
+                    "beneficiary.$.whotaketheexam": userId,
                 },
             },
             {new: true},
