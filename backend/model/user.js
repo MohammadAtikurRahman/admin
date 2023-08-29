@@ -30,10 +30,8 @@ const beneficiarySchema = new Schema(
         beneficiaryId: Number,
 
         test_status: String,
-        whotaketheexam: {
-            type: Number,
-            required: true,
-          },         
+        whotaketheexam: Number,
+         
         excuses: String,
 
         enumerator_observation: String,
