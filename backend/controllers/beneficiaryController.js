@@ -487,7 +487,7 @@ async function saveMultiScore(req, res) {
 
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let {userId, beneficiaryId, score1, observation, duration} = beneficiary;
+        let {userId, beneficiaryId, score1, observation, duration,observation_new} = beneficiary;
 
         if (!userId) {
             return res.status(400).json({message: "userId is required"});
@@ -501,6 +501,7 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
                     "beneficiary.$.whotaketheexam": userId,
+                    "beneficiary.$.observation_new": observation_new
                 },
             },
             {new: true},
