@@ -388,6 +388,12 @@ app.get("/get-tran", (req, res) => {
   });
   
 
+
+
+
+
+
+
 app.get("/get-ben", async (req, res) => {
     let users = await user
         .find({})
@@ -481,16 +487,22 @@ app.get("/get-testscore", async (req, res) => {
         // concatenate observation and observation_new
         if (item.enumerator_observation && item.enumerator_observation.length > 0) {
             item.all_observation = item.enumerator_observation;
-            item.observation_new = item.enumerator_observation;
-        } else if (item.observation && item.observation_new.length > 0) {
-            item.all_observation = `${item.observation},${item.observation_new.join(',')}`;
-        } else if (item.observation) {
+            if (item.observation_new.length > 0) {
+                item.all_observation += ',' + item.observation_new.join(',');
+            }
+        } else if (item.observation && item.observation.length > 0) {
             item.all_observation = item.observation;
+            if (item.observation_new.length > 0) {
+                item.all_observation += ',' + item.observation_new.join(',');
+            }
         } else if (item.observation_new.length > 0) {
             item.all_observation = item.observation_new.join(',');
         } else {
             item.all_observation = null;
         }
+        
+
+
     });
     
     return res.status(200).json(extact_data);
