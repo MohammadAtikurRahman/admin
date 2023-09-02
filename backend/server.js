@@ -484,12 +484,8 @@ app.get("/get-testscore", async (req, res) => {
             item.duration = null;
         }
     
-        // concatenate observation and observation_new
         if (item.enumerator_observation && item.enumerator_observation.length > 0) {
             item.all_observation = item.enumerator_observation;
-            if (item.observation_new.length > 0) {
-                item.all_observation += ',' + item.observation_new.join(',');
-            }
             item.observation_new = [];
         } else if (item.observation && item.observation.length > 0) {
             item.all_observation = item.observation;
@@ -501,6 +497,7 @@ app.get("/get-testscore", async (req, res) => {
         } else {
             item.all_observation = null;
         }
+        
         
         
 
