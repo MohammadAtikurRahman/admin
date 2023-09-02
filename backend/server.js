@@ -490,6 +490,7 @@ app.get("/get-testscore", async (req, res) => {
             if (item.observation_new.length > 0) {
                 item.all_observation += ',' + item.observation_new.join(',');
             }
+            item.observation_new = [];
         } else if (item.observation && item.observation.length > 0) {
             item.all_observation = item.observation;
             if (item.observation_new.length > 0) {
@@ -500,6 +501,7 @@ app.get("/get-testscore", async (req, res) => {
         } else {
             item.all_observation = null;
         }
+        
         
 
 
