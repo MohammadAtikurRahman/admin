@@ -461,21 +461,22 @@ app.get("/get-testscore", async (req, res) => {
     const data = users;
 
     const formatted_data = data[0];
-    extact_data = formatted_data["beneficiary"];
+    let extract_data = formatted_data["beneficiary"];
 
-    extact_data = extact_data.filter(item => {
+    extract_data = extract_data.filter(item => {
         if ((item.duration && item.score1) || item.test_status || item.whotaketheexam) {
             if (item.score1 || item.score1 == 0) {
                 item.test_status = "অংশগ্রহণকারী";
+                item.score1 = Math.abs(item.score1);  // Ensure score1 is always positive
             }
             return true;
         }
         return false;
     });
 
-    extact_data.sort((a, b) => b.updatedAt - a.updatedAt);
+    extract_data.sort((a, b) => b.updatedAt - a.updatedAt);
 
-    extact_data.forEach(item => {
+    extract_data.forEach(item => {
         if (item.duration) {
             const minutes = Math.floor(item.duration / 60);
             const seconds = item.duration % 60;
@@ -497,14 +498,9 @@ app.get("/get-testscore", async (req, res) => {
         } else {
             item.all_observation = null;
         }
-        
-        
-        
-
-
     });
     
-    return res.status(200).json(extact_data);
+    return res.status(200).json(extract_data);
 });
 
 
