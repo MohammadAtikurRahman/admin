@@ -120,27 +120,14 @@ async function deleteBeneficiary(req, res) {
 }
 
 
-const chunkSize = 100; // Number of beneficiaries to process in each chunk
-
 async function addBeneficiaryInBulk(req, res) {
     let user = jwt_decode(req.body.token);
-
-    const allBeneficiaries = req.body.beneficiary;
-    const totalChunks = Math.ceil(allBeneficiaries.length / chunkSize);
-
     try {
-        for (let i = 0; i < totalChunks; i++) {
-            const start = i * chunkSize;
-            const end = start + chunkSize;
-            const chunk = allBeneficiaries.slice(start, end);
-
-            user = await User.findByIdAndUpdate(
-                user.id,
-                { $push: { beneficiary: { $each: chunk } } },
-                { new: true },
-            );
-        }
-
+        user = await User.findByIdAndUpdate(
+            user.id,
+            { $push: { beneficiary: { $each: req.body.beneficiary } } },
+            { new: true },
+        );
         return res.status(200).json({ user: user });
     } catch (error) {
         console.error(error);
