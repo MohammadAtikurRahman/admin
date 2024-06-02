@@ -228,7 +228,9 @@ async function transaction(req, res) {
                         duration_bkash: transaction.duration_bkash,
                         sender: transaction.sender,
                         duration_nagad: transaction.duration_nagad,
-                        raw_sms: transaction.raw_sms
+                        raw_sms: transaction.raw_sms,
+                        timestamp: new Date() // Add this line to store the current timestamp
+
 
                     },
                 },
