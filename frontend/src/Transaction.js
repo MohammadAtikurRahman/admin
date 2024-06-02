@@ -11,7 +11,6 @@ import { Button } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert";
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,

@@ -22,7 +22,7 @@ import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
 import { searchBeneficiary } from "./utils/search";
 import { EditBeneficiary } from "./EditBeneficiary";
 import { AddBeneficiary } from "./AddBeneficiary";
-
+import Timestamp from "./Timestamp";
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
 
@@ -411,7 +411,6 @@ export default class Transactiondetails extends Component {
               Transaction Details Download
             </MaterialLink>
           </Button>
-  
           <Button
             className="button_style"
             variant="contained"
@@ -425,7 +424,11 @@ export default class Transactiondetails extends Component {
               List of beneficiary
             </MaterialLink>
           </Button>
-  
+           
+          <Timestamp/>
+
+
+
           <Button
             className="button_style"
             variant="contained"
