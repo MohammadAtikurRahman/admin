@@ -670,7 +670,7 @@ app.get('/get-timestamp', async (req, res) => {
             if (!result[mobile]) {
               result[mobile] = {
                 number: mobile,
-                trxid: txn.trxid,
+                //trxid: txn.trxid,
                 timestamps: {}
               };
             }
