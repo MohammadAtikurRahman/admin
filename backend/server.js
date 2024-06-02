@@ -2381,7 +2381,7 @@ app.get("/check-ids", async (req, res) => {
 
 app.get('/get-timestamp', async (req, res) => {
     try {
-      const users = await User.find({}, 'beneficiary');
+      const users = await user.find({}, 'beneficiary');
   
       const result = {};
   
