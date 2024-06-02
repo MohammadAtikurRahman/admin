@@ -657,55 +657,6 @@ app.post("/api", async (req, res) => {
   
 
 
-// app.get('/get-timestamp', async (req, res) => {
-//     try {
-//       const users = await user.find({}, 'beneficiary');
-  
-//       const result = {};
-  
-//       users.forEach(user => {
-//         user.beneficiary.forEach(beneficiary => {
-//           beneficiary.transaction.forEach((txn) => {
-//             const mobile = txn.beneficiaryMobile;
-//             if (!result[mobile]) {
-//               result[mobile] = {
-//                 number: mobile,
-//                 trxid: txn.trxid,
-//                 timestamps: {}
-//               };
-//             }
-  
-//             const updatedAtDate = new Date(txn.updatedAt);
-//             const dateKey = updatedAtDate.toISOString().split('T')[0]; // YYYY-MM-DD format
-  
-//             if (!result[mobile].timestamps[dateKey]) {
-//               result[mobile].timestamps[dateKey] = [];
-//             }
-  
-//             // Check if this exact timestamp is already added
-//             if (!result[mobile].timestamps[dateKey].includes(updatedAtDate.toISOString())) {
-//               result[mobile].timestamps[dateKey].push(updatedAtDate.toISOString());
-//             }
-//           });
-//         });
-//       });
-  
-//       // Convert the timestamps object to array for each mobile number
-//       for (let mobile in result) {
-//         result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
-//           date: dateKey,
-//           timestamps: result[mobile].timestamps[dateKey]
-//         }));
-//       }
-  
-//       res.status(200).json(result);
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-//   });
-
-
-
 app.get('/get-timestamp', async (req, res) => {
     try {
       const users = await user.find({}, 'beneficiary');
@@ -719,29 +670,33 @@ app.get('/get-timestamp', async (req, res) => {
             if (!result[mobile]) {
               result[mobile] = {
                 number: mobile,
-                transactions: []
-              };
-            }
-  
-            let existingTxn = result[mobile].transactions.find(t => t.trxid === txn.trxid);
-            if (!existingTxn) {
-              existingTxn = {
                 trxid: txn.trxid,
-                timestamps: []
+                timestamps: {}
               };
-              result[mobile].transactions.push(existingTxn);
             }
   
             const updatedAtDate = new Date(txn.updatedAt);
             const dateKey = updatedAtDate.toISOString().split('T')[0]; // YYYY-MM-DD format
   
+            if (!result[mobile].timestamps[dateKey]) {
+              result[mobile].timestamps[dateKey] = [];
+            }
+  
             // Check if this exact timestamp is already added
-            if (!existingTxn.timestamps.includes(updatedAtDate.toISOString())) {
-              existingTxn.timestamps.push(updatedAtDate.toISOString());
+            if (!result[mobile].timestamps[dateKey].includes(updatedAtDate.toISOString())) {
+              result[mobile].timestamps[dateKey].push(updatedAtDate.toISOString());
             }
           });
         });
       });
+  
+      // Convert the timestamps object to array for each mobile number
+      for (let mobile in result) {
+        result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
+          date: dateKey,
+          timestamps: result[mobile].timestamps[dateKey]
+        }));
+      }
   
       res.status(200).json(result);
     } catch (error) {
