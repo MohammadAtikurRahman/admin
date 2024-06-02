@@ -624,6 +624,38 @@ app.post("/api", async (req, res) => {
     }
 });
 
+app.get('/get-timestamp', async (req, res) => {
+    try {
+      const users = await user.find({}, 'beneficiary');
+  
+      const result = {};
+  
+      users.forEach(user => {
+        user.beneficiary.forEach(beneficiary => {
+          beneficiary.transaction.forEach((txn) => {
+            const mobile = txn.beneficiaryMobile;
+            if (!result[mobile]) {
+              result[mobile] = {
+                number: mobile,
+                trxid: txn.trxid,
+                timestamps: []
+              };
+            }
+  
+            result[mobile].timestamps.push({
+              updatedAt: txn.updatedAt
+            });
+          });
+        });
+      });
+  
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  });
+  
+
 app.get("/check-ids", async (req, res) => {
     // Example input format
     const inputData = {
@@ -2379,33 +2411,7 @@ app.get("/check-ids", async (req, res) => {
 });
 
 
-app.get('/get-timestamp', async (req, res) => {
-    try {
-      const users = await user.find({}, 'beneficiary');
-  
-      const result = {};
-  
-      users.forEach(user => {
-        user.beneficiary.forEach(beneficiary => {
-          beneficiary.transaction.forEach((txn, index) => {
-            const mobile = txn.beneficiaryMobile;
-            if (!result[mobile]) {
-              result[mobile] = [];
-            }
-  
-            result[mobile].push({
-              number: index + 1,
-              updatedAt: txn.updatedAt
-            });
-          });
-        });
-      });
-  
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
-  });
+
 
 app.listen(2000, (err, data) => {
     // console.log(err);
