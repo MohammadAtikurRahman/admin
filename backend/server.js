@@ -717,16 +717,24 @@ app.get('/get-timestamp', async (req, res) => {
     }
 });
 
+
+
+const specificMobiles = ["1300110376", "1300118032", "1304876020", "1305066913"];
+
+// Helper function to format date
+
+
 app.get('/get-stamp', async (req, res) => {
     try {
-        const specificMobiles = ["1300110376", "1300118032", "1304876020", "1305066913"];
-        const users = await user.find({ 'beneficiary.transaction.beneficiaryMobile': { $in: specificMobiles } }, 'beneficiary');
+        const users = await User.find({
+            'beneficiary.transaction.beneficiaryMobile': { $in: specificMobiles }
+        }, 'beneficiary');
 
         const result = {};
 
         users.forEach(user => {
             user.beneficiary.forEach(beneficiary => {
-                beneficiary.transaction.forEach((txn) => {
+                beneficiary.transaction.forEach(txn => {
                     if (specificMobiles.includes(txn.beneficiaryMobile)) {
                         const mobile = txn.beneficiaryMobile;
                         if (!result[mobile]) {
@@ -748,7 +756,6 @@ app.get('/get-stamp', async (req, res) => {
                             result[mobile].timestamps[dateKey] = [];
                         }
 
-                        // Check if this exact timestamp is already added
                         const formattedTimestamp = formatDateToCustomString(updatedAtDate);
                         if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
                             result[mobile].timestamps[dateKey].push(formattedTimestamp);
@@ -758,7 +765,6 @@ app.get('/get-stamp', async (req, res) => {
             });
         });
 
-        // Convert the timestamps object to array for each mobile number
         for (let mobile in result) {
             result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
                 date: dateKey,
@@ -771,8 +777,6 @@ app.get('/get-stamp', async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-
-
 
 
 
