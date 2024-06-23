@@ -669,12 +669,12 @@ app.get('/get-timestamp', async (req, res) => {
                     const mobile = txn.beneficiaryMobile;
                     if (!result[mobile]) {
                         result[mobile] = {
-                            number: mobile,
-                            name: beneficiary.name,
-                            dis: beneficiary.dis,
-                            sub_dis: beneficiary.sub_dis,
-                            uni: beneficiary.uni,
-                            vill: beneficiary.vill,
+                            Mobile_Number: mobile,
+                            Name: beneficiary.name,
+                            District: beneficiary.dis,
+                            Sub_District: beneficiary.sub_dis,
+                            Union: beneficiary.uni,
+                            Village: beneficiary.vill,
                             timestamps: {}
                         };
                     }
