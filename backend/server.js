@@ -657,7 +657,7 @@ app.post("/api", async (req, res) => {
   
 
 function formatDateToCustomString(date) {
-    return moment(date).format('DD-MMM-YYYY hh:mm:ss.SSS a').replace('am', 'Am').replace('pm', 'Pm');
+    return moment(date).format('DD-MMM-YYYY hh:mm:ss.SSS A').replace('AM', 'Am').replace('PM', 'Pm');
 }
 
 
