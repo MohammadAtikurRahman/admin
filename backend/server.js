@@ -661,141 +661,60 @@ function formatDateToCustomString(date) {
 }
 
 
-// app.get('/get-timestamp', async (req, res) => {
-//     try {
-//         const users = await user.find({}, 'beneficiary');
-  
-//         const result = {};
-  
-//         users.forEach(user => {
-//             user.beneficiary.forEach(beneficiary => {
-//                 beneficiary.transaction.forEach((txn) => {
-//                     const mobile = txn.beneficiaryMobile;
-//                     if (!result[mobile]) {
-//                         result[mobile] = {
-//                             beneficiaryId: beneficiary.beneficiaryId,
-
-//                             Mobile_Number: mobile,
-//                             Name: beneficiary.name,
-//                             District: beneficiary.dis,
-//                             Sub_District: beneficiary.sub_dis,
-//                             Union: beneficiary.uni,
-//                             Village: beneficiary.vill,
-//                             timestamps: {}
-//                         };
-//                     }
-//                     const updatedAtDate = new Date(txn.updatedAt);
-//                     const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
-  
-//                     if (!result[mobile].timestamps[dateKey]) {
-//                         result[mobile].timestamps[dateKey] = [];
-//                     }
-  
-//                     // Check if this exact timestamp is already added
-//                     const formattedTimestamp = formatDateToCustomString(updatedAtDate);
-//                     if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
-//                         result[mobile].timestamps[dateKey].push(formattedTimestamp);
-//                     }
-//                 });
-//             });
-//         });
-  
-//         // Convert the timestamps object to array for each mobile number
-//         for (let mobile in result) {
-//             result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
-//                 date: dateKey,
-//                 timestamps: result[mobile].timestamps[dateKey]
-//             }));
-//         }
-  
-//         res.status(200).json(result);
-//     } catch (error) {
-//         res.status(500).send(error.message);
-//     }
-// });
-
-
-
 app.get('/get-timestamp', async (req, res) => {
     try {
-        const mobileNumbersToFilter = ['1300110376', '1300118032', '1304876020', '1305066913'];
-        console.log("Filtering for mobile numbers: ", mobileNumbersToFilter);
-
         const users = await user.find({}, 'beneficiary');
-        console.log("Fetched users: ", users.length);
-
+  
         const result = {};
-
+  
         users.forEach(user => {
             user.beneficiary.forEach(beneficiary => {
                 beneficiary.transaction.forEach((txn) => {
                     const mobile = txn.beneficiaryMobile;
-                    if (mobileNumbersToFilter.includes(mobile)) {
-                        console.log("Mobile number matched: ", mobile);
+                    if (!result[mobile]) {
+                        result[mobile] = {
+                            beneficiaryId: beneficiary.beneficiaryId,
 
-                        if (!result[mobile]) {
-                            result[mobile] = {
-                                beneficiaryId: beneficiary.beneficiaryId,
-                                Mobile_Number: mobile,
-                                Name: beneficiary.name,
-                                District: beneficiary.dis,
-                                Sub_District: beneficiary.sub_dis,
-                                Union: beneficiary.uni,
-                                Village: beneficiary.vill,
-                                timestamps: {}
-                            };
-                        }
-                        const updatedAtDate = new Date(txn.updatedAt);
-                        const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
-
-                        if (!result[mobile].timestamps[dateKey]) {
-                            result[mobile].timestamps[dateKey] = [];
-                        }
-
-                        // Check if this exact timestamp is already added
-                        const formattedTimestamp = formatDateToCustomString(updatedAtDate);
-                        if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
-                            result[mobile].timestamps[dateKey].push(formattedTimestamp);
-                        }
+                            Mobile_Number: mobile,
+                            Name: beneficiary.name,
+                            District: beneficiary.dis,
+                            Sub_District: beneficiary.sub_dis,
+                            Union: beneficiary.uni,
+                            Village: beneficiary.vill,
+                            timestamps: {}
+                        };
+                    }
+                    const updatedAtDate = new Date(txn.updatedAt);
+                    const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
+  
+                    if (!result[mobile].timestamps[dateKey]) {
+                        result[mobile].timestamps[dateKey] = [];
+                    }
+  
+                    // Check if this exact timestamp is already added
+                    const formattedTimestamp = formatDateToCustomString(updatedAtDate);
+                    if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
+                        result[mobile].timestamps[dateKey].push(formattedTimestamp);
                     }
                 });
             });
         });
-
-        // Ensure all specified mobile numbers are present in the result, even if they have no timestamps
-        mobileNumbersToFilter.forEach(mobile => {
-            if (!result[mobile]) {
-                result[mobile] = {
-                    Mobile_Number: mobile,
-                    Name: "",
-                    District: "",
-                    Sub_District: "",
-                    Union: "",
-                    Village: "",
-                    timestamps: []
-                };
-            } else if (!result[mobile].timestamps) {
-                result[mobile].timestamps = [];
-            } else {
-                result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
-                    date: dateKey,
-                    timestamps: result[mobile].timestamps[dateKey]
-                }));
-            }
-        });
-
-        console.log("Result: ", JSON.stringify(result, null, 2));
+  
+        // Convert the timestamps object to array for each mobile number
+        for (let mobile in result) {
+            result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
+                date: dateKey,
+                timestamps: result[mobile].timestamps[dateKey]
+            }));
+        }
+  
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
 
-// Helper function to format date to custom string
-function formatDateToCustomString(date) {
-    const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-    return date.toLocaleDateString('en-US', options).replace(',', '');
-}
+
 
 
 
