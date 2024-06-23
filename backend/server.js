@@ -91,7 +91,7 @@ app.use("/", (req, res, next) => {
             req.path == "/list-beneficiary" ||
             req.path == "/beneficiary" ||
             req.path == "/get-timestamp" ||
-            req.path == "/get-stamp" ||
+            req.path == "/d-data" ||
 
             req.path == "/get-last-page-text"
 
