@@ -718,16 +718,22 @@ function formatDateToCustomString(date) {
 app.get('/get-timestamp', async (req, res) => {
     try {
         const mobileNumbersToFilter = ['1300110376', '1300118032', '1304876020', '1305066913'];
+        console.log("Filtering for mobile numbers: ", mobileNumbersToFilter);
 
         const users = await user.find({}, 'beneficiary');
-  
+        console.log("Fetched users: ", users.length);
+
         const result = {};
-  
+
         users.forEach(user => {
             user.beneficiary.forEach(beneficiary => {
                 beneficiary.transaction.forEach((txn) => {
                     const mobile = txn.beneficiaryMobile;
+                    console.log("Processing mobile number: ", mobile);
+
                     if (mobileNumbersToFilter.includes(mobile)) {
+                        console.log("Mobile number matched: ", mobile);
+
                         if (!result[mobile]) {
                             result[mobile] = {
                                 beneficiaryId: beneficiary.beneficiaryId,
@@ -742,11 +748,11 @@ app.get('/get-timestamp', async (req, res) => {
                         }
                         const updatedAtDate = new Date(txn.updatedAt);
                         const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
-  
+
                         if (!result[mobile].timestamps[dateKey]) {
                             result[mobile].timestamps[dateKey] = [];
                         }
-  
+
                         // Check if this exact timestamp is already added
                         const formattedTimestamp = formatDateToCustomString(updatedAtDate);
                         if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
@@ -756,7 +762,7 @@ app.get('/get-timestamp', async (req, res) => {
                 });
             });
         });
-  
+
         // Convert the timestamps object to array for each mobile number
         for (let mobile in result) {
             result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
@@ -764,13 +770,12 @@ app.get('/get-timestamp', async (req, res) => {
                 timestamps: result[mobile].timestamps[dateKey]
             }));
         }
-  
+
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
-
 
 
 
