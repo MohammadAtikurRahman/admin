@@ -656,6 +656,10 @@ app.post("/api", async (req, res) => {
 //   });
   
 
+function formatDateToCustomString(date) {
+    return moment(date).format('DD-MMM-YYYY hh:mm:ss.SSS a').replace('am', 'Am').replace('pm', 'Pm');
+}
+
 
 app.get('/get-timestamp', async (req, res) => {
     try {
@@ -678,17 +682,17 @@ app.get('/get-timestamp', async (req, res) => {
                             timestamps: {}
                         };
                     }
-  
                     const updatedAtDate = new Date(txn.updatedAt);
-                    const dateKey = updatedAtDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+                    const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
   
                     if (!result[mobile].timestamps[dateKey]) {
                         result[mobile].timestamps[dateKey] = [];
                     }
   
                     // Check if this exact timestamp is already added
-                    if (!result[mobile].timestamps[dateKey].includes(updatedAtDate.toISOString())) {
-                        result[mobile].timestamps[dateKey].push(updatedAtDate.toISOString());
+                    const formattedTimestamp = formatDateToCustomString(updatedAtDate);
+                    if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
+                        result[mobile].timestamps[dateKey].push(formattedTimestamp);
                     }
                 });
             });
@@ -707,7 +711,6 @@ app.get('/get-timestamp', async (req, res) => {
         res.status(500).send(error.message);
     }
 });
-
 
 app.get("/check-ids", async (req, res) => {
     // Example input format
