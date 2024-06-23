@@ -720,21 +720,25 @@ app.get('/get-timestamp', async (req, res) => {
 
 
 
+const specificMobs = [1300110376, 1300118032, 1304876020, 1305066913];
+
+// API endpoint to get specific beneficiary data
 app.get("/d-data", async (req, res) => {
     try {
         const beneficiaries = await user.find({}, "beneficiary.beneficiaryId beneficiary.mob beneficiary.dis beneficiary.sub_dis beneficiary.uni beneficiary.vill").exec();
         
-        // Flatten the results to get the desired fields from the nested schema
-        const result = beneficiaries.map(usr => 
-            usr.beneficiary.map(ben => ({
+        // Flatten the results and filter by specific beneficiary IDs
+        const result = beneficiaries
+            .map(usr => usr.beneficiary.filter(ben => specificMobs.includes(Number(ben.mob))))
+            .flat()
+            .map(ben => ({
                 beneficiaryId: ben.beneficiaryId,
                 mob: ben.mob,
                 dis: ben.dis,
                 sub_dis: ben.sub_dis,
                 uni: ben.uni,
                 vill: ben.vill
-            }))
-        ).flat();
+            }));
 
         res.status(200).json(result);
     } catch (error) {
