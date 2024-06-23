@@ -659,50 +659,55 @@ app.post("/api", async (req, res) => {
 
 app.get('/get-timestamp', async (req, res) => {
     try {
-      const users = await user.find({}, 'beneficiary');
+        const users = await user.find({}, 'beneficiary');
   
-      const result = {};
+        const result = {};
   
-      users.forEach(user => {
-        user.beneficiary.forEach(beneficiary => {
-          beneficiary.transaction.forEach((txn) => {
-            const mobile = txn.beneficiaryMobile;
-            if (!result[mobile]) {
-              result[mobile] = {
-                number: mobile,
-                //trxid: txn.trxid,
-                timestamps: {}
-              };
-            }
+        users.forEach(user => {
+            user.beneficiary.forEach(beneficiary => {
+                beneficiary.transaction.forEach((txn) => {
+                    const mobile = txn.beneficiaryMobile;
+                    if (!result[mobile]) {
+                        result[mobile] = {
+                            number: mobile,
+                            name: beneficiary.name,
+                            dis: beneficiary.dis,
+                            sub_dis: beneficiary.sub_dis,
+                            uni: beneficiary.uni,
+                            vill: beneficiary.vill,
+                            timestamps: {}
+                        };
+                    }
   
-            const updatedAtDate = new Date(txn.updatedAt);
-            const dateKey = updatedAtDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+                    const updatedAtDate = new Date(txn.updatedAt);
+                    const dateKey = updatedAtDate.toISOString().split('T')[0]; // YYYY-MM-DD format
   
-            if (!result[mobile].timestamps[dateKey]) {
-              result[mobile].timestamps[dateKey] = [];
-            }
+                    if (!result[mobile].timestamps[dateKey]) {
+                        result[mobile].timestamps[dateKey] = [];
+                    }
   
-            // Check if this exact timestamp is already added
-            if (!result[mobile].timestamps[dateKey].includes(updatedAtDate.toISOString())) {
-              result[mobile].timestamps[dateKey].push(updatedAtDate.toISOString());
-            }
-          });
+                    // Check if this exact timestamp is already added
+                    if (!result[mobile].timestamps[dateKey].includes(updatedAtDate.toISOString())) {
+                        result[mobile].timestamps[dateKey].push(updatedAtDate.toISOString());
+                    }
+                });
+            });
         });
-      });
   
-      // Convert the timestamps object to array for each mobile number
-      for (let mobile in result) {
-        result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
-          date: dateKey,
-          timestamps: result[mobile].timestamps[dateKey]
-        }));
-      }
+        // Convert the timestamps object to array for each mobile number
+        for (let mobile in result) {
+            result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
+                date: dateKey,
+                timestamps: result[mobile].timestamps[dateKey]
+            }));
+        }
   
-      res.status(200).json(result);
+        res.status(200).json(result);
     } catch (error) {
-      res.status(500).send(error.message);
+        res.status(500).send(error.message);
     }
-  });
+});
+
 
 app.get("/check-ids", async (req, res) => {
     // Example input format
