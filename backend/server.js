@@ -715,6 +715,7 @@ function formatDateToCustomString(date) {
 // });
 
 
+
 app.get('/get-timestamp', async (req, res) => {
     try {
         const mobileNumbersToFilter = ['1300110376', '1300118032', '1304876020', '1305066913'];
@@ -783,12 +784,18 @@ app.get('/get-timestamp', async (req, res) => {
             }
         });
 
-        console.log("Result: ", result);
+        console.log("Result: ", JSON.stringify(result, null, 2));
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
+
+// Helper function to format date to custom string
+function formatDateToCustomString(date) {
+    const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    return date.toLocaleDateString('en-US', options).replace(',', '');
+}
 
 
 
