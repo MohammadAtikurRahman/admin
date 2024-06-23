@@ -726,7 +726,7 @@ const specificMobiles = ["1300110376", "1300118032", "1304876020", "1305066913"]
 
 app.get('/get-stamp', async (req, res) => {
     try {
-        const users = await User.find({
+        const users = await user.find({
             'beneficiary.transaction.beneficiaryMobile': { $in: specificMobiles }
         }, 'beneficiary');
 
