@@ -673,6 +673,8 @@ app.get('/get-timestamp', async (req, res) => {
                     const mobile = txn.beneficiaryMobile;
                     if (!result[mobile]) {
                         result[mobile] = {
+                            beneficiaryId: beneficiary.beneficiaryId,
+
                             Mobile_Number: mobile,
                             Name: beneficiary.name,
                             District: beneficiary.dis,
