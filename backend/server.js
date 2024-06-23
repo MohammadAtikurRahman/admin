@@ -715,20 +715,14 @@ function formatDateToCustomString(date) {
 // });
 
 
-
-
-
-
-
-
-
-
 app.get('/get-timestamp', async (req, res) => {
     try {
         const mobileNumbersToFilter = ['1300110376', '1300118032', '1304876020', '1305066913'];
-        
+        console.log("Filtering for mobile numbers: ", mobileNumbersToFilter);
+
         const users = await user.find({}, 'beneficiary');
-        
+        console.log("Fetched users: ", users.length);
+
         const result = {};
 
         users.forEach(user => {
@@ -736,6 +730,8 @@ app.get('/get-timestamp', async (req, res) => {
                 beneficiary.transaction.forEach((txn) => {
                     const mobile = txn.beneficiaryMobile;
                     if (mobileNumbersToFilter.includes(mobile)) {
+                        console.log("Mobile number matched: ", mobile);
+
                         if (!result[mobile]) {
                             result[mobile] = {
                                 beneficiaryId: beneficiary.beneficiaryId,
@@ -765,23 +761,35 @@ app.get('/get-timestamp', async (req, res) => {
             });
         });
 
-        // Convert the timestamps object to array for each mobile number
-        for (let mobile in result) {
-            if (Object.keys(result[mobile].timestamps).length > 0) {
+        // Ensure all specified mobile numbers are present in the result, even if they have no timestamps
+        mobileNumbersToFilter.forEach(mobile => {
+            if (!result[mobile]) {
+                result[mobile] = {
+                    Mobile_Number: mobile,
+                    Name: "",
+                    District: "",
+                    Sub_District: "",
+                    Union: "",
+                    Village: "",
+                    timestamps: []
+                };
+            } else if (!result[mobile].timestamps) {
+                result[mobile].timestamps = [];
+            } else {
                 result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
                     date: dateKey,
                     timestamps: result[mobile].timestamps[dateKey]
                 }));
-            } else {
-                result[mobile].timestamps = [];
             }
-        }
+        });
 
+        console.log("Result: ", result);
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
     }
 });
+
 
 
 
