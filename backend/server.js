@@ -719,66 +719,34 @@ app.get('/get-timestamp', async (req, res) => {
 
 
 
-const specificMobiles = ["1300110376", "1300118032", "1304876020", "1305066913"];
 
-// Helper function to format date
+const specificIds = [1300110376, 1300118032, 1304876020, 1305066913];
 
-
-app.get('/get-stamp', async (req, res) => {
+// API endpoint to get specific beneficiary data
+app.get("/d-data", async (req, res) => {
     try {
-        const users = await user.find({
-            'beneficiary.transaction.beneficiaryMobile': { $in: specificMobiles }
-        }, 'beneficiary');
-
-        const result = {};
-
-        users.forEach(user => {
-            user.beneficiary.forEach(beneficiary => {
-                beneficiary.transaction.forEach(txn => {
-                    if (specificMobiles.includes(txn.beneficiaryMobile)) {
-                        const mobile = txn.beneficiaryMobile;
-                        if (!result[mobile]) {
-                            result[mobile] = {
-                                beneficiaryId: beneficiary.beneficiaryId,
-                                Mobile_Number: mobile,
-                                Name: beneficiary.name,
-                                District: beneficiary.dis,
-                                Sub_District: beneficiary.sub_dis,
-                                Union: beneficiary.uni,
-                                Village: beneficiary.vill,
-                                timestamps: {}
-                            };
-                        }
-                        const updatedAtDate = new Date(txn.updatedAt);
-                        const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
-
-                        if (!result[mobile].timestamps[dateKey]) {
-                            result[mobile].timestamps[dateKey] = [];
-                        }
-
-                        const formattedTimestamp = formatDateToCustomString(updatedAtDate);
-                        if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
-                            result[mobile].timestamps[dateKey].push(formattedTimestamp);
-                        }
-                    }
-                });
-            });
-        });
-
-        for (let mobile in result) {
-            result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
-                date: dateKey,
-                timestamps: result[mobile].timestamps[dateKey]
-            }));
-        }
+        const beneficiaries = await user.find({}, "beneficiary.beneficiaryId beneficiary.mob beneficiary.dis beneficiary.sub_dis beneficiary.uni beneficiary.vill").exec();
+        
+        // Flatten the results and filter by specific beneficiary IDs
+        const result = beneficiaries.map(usr => 
+            usr.beneficiary
+                .filter(ben => specificIds.includes(ben.beneficiaryId))
+                .map(ben => ({
+                    beneficiaryId: ben.beneficiaryId,
+                    mob: ben.mob,
+                    dis: ben.dis,
+                    sub_dis: ben.sub_dis,
+                    uni: ben.uni,
+                    vill: ben.vill
+                }))
+        ).flat();
 
         res.status(200).json(result);
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
-
-
 
 
 
