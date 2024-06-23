@@ -657,7 +657,7 @@ app.post("/api", async (req, res) => {
   
 
 function formatDateToCustomString(date) {
-    return moment(date).tz('Europe/London').format('DD-MMM-YYYY hh:mm:ss.SSS A').replace('AM', 'Am').replace('PM', 'Pm');
+    return moment(date).tz('Asia/Dhaka').format('DD-MMM-YYYY hh:mm:ss.SSS A').replace('AM', 'Am').replace('PM', 'Pm');
 }
 
 
