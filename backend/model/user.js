@@ -5,23 +5,23 @@ nextId = Math.floor(10000 + Math.random() * 90000);
 const nextIdBen = 10000;
 const transactionSchema = new Schema(
     {
-      beneficiaryId: Number,  
+        beneficiaryId: Number,
 
-      beneficiaryMobile: {
+        beneficiaryMobile: {
+            type: String,
+            required: true,
+        },
+
         type: String,
-        required: true
-      },
-      type: String,
-      amount: Number,
-      duration: Number,
-      trxid: String,
-      sub_type: String,
-      date: String,
-      duration_bkash: Number,
-      sender: String,
-      duration_nagad: Number,
-      raw_sms: String,
-
+        amount: Number,
+        duration: Number,
+        trxid: String,
+        sub_type: String,
+        date: String,
+        duration_bkash: Number,
+        sender: String,
+        duration_nagad: Number,
+        raw_sms: String,
     },
     {timestamps: true},
 );
@@ -31,14 +31,13 @@ const beneficiarySchema = new Schema(
 
         test_status: String,
         whotaketheexam: Number,
-         
+
         excuses: String,
 
         enumerator_observation: String,
 
         all_observation: [String],
         observation_new: [String],
-
 
         observation: String,
 
@@ -59,7 +58,11 @@ const beneficiarySchema = new Schema(
         relgn: String,
         job: String,
         gen: String,
+
         mob: String,
+
+
+        
         pgm: String,
         pass: Number,
         bank: String,
