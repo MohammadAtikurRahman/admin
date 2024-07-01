@@ -246,7 +246,6 @@ async function beneficiaryLogin(req, res) {
 //     });
 //     res.status(201).send("Transactions added successfully");
 // }
-
 async function transaction(req, res) {
     try {
         if (!req.body || req.body.length === 0) {
@@ -254,39 +253,39 @@ async function transaction(req, res) {
         }
 
         const promises = req.body.map(async transaction => {
-            if (!transaction.beneficiaryId || !transaction.beneficiaryMobile) {
-                throw new Error("Missing beneficiaryId or beneficiaryMobile");
-            }
-
-            const updatedUser = await User.findOneAndUpdate(
-                {
-                    "beneficiary.beneficiaryId": transaction.beneficiaryId,
-                    "beneficiary.beneficiaryMobile": transaction.beneficiaryMobile
-                },
-                {
-                    $push: {
-                        "beneficiary.$.transaction": {
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type || null,
-                            amount: transaction.amount || null,
-                            trxid: transaction.trxid || null,
-                            date: transaction.date || null,
-                            duration: transaction.duration || null,
-                            sub_type: transaction.sub_type || null,
-                            duration_bkash: transaction.duration_bkash || null,
-                            sender: transaction.sender || null,
-                            duration_nagad: transaction.duration_nagad || null,
-                            raw_sms: transaction.raw_sms || null,
-                            timestamp: new Date() // Always store the current timestamp
+            try {
+                const updatedUser = await User.findOneAndUpdate(
+                    {
+                        "beneficiary.beneficiaryId": transaction.beneficiaryId
+                    },
+                    {
+                        $push: {
+                            "beneficiary.$.transaction": {
+                                beneficiaryId: transaction.beneficiaryId,
+                                beneficiaryMobile: transaction.beneficiaryMobile,
+                                type: transaction.type || null,
+                                amount: transaction.amount || null,
+                                trxid: transaction.trxid || null,
+                                date: transaction.date || null,
+                                duration: transaction.duration || null,
+                                sub_type: transaction.sub_type || null,
+                                duration_bkash: transaction.duration_bkash || null,
+                                sender: transaction.sender || null,
+                                duration_nagad: transaction.duration_nagad || null,
+                                raw_sms: transaction.raw_sms || null,
+                                timestamp: new Date() // Always store the current timestamp
+                            },
                         },
                     },
-                },
-                { new: true }
-            );
+                    { new: true, upsert: false }
+                );
 
-            if (!updatedUser) {
-                throw new Error("Beneficiary not found");
+                if (!updatedUser) {
+                    throw new Error("Beneficiary not found");
+                }
+            } catch (error) {
+                console.error("Error updating user:", error);
+                throw error; // Rethrow the error to trigger the catch block in the main function
             }
         });
 
@@ -298,6 +297,8 @@ async function transaction(req, res) {
         res.status(500).send("Internal Server Error");
     }
 }
+
+
 
 
 async function newlogin(req, res) {
