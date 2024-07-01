@@ -210,96 +210,42 @@ async function beneficiaryLogin(req, res) {
 }
 
 
-// async function transaction(req, res) {
-//     req.body.forEach(transaction => {
-//         User.findOneAndUpdate(
-//             {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-//             {
-//                 $push: {
-//                     "beneficiary.$.transaction": {
-//                         beneficiaryId: transaction.beneficiaryId,
-//                         beneficiaryMobile: transaction.beneficiaryMobile,
-//                         type: transaction.type,
-//                         amount: transaction.amount,
-//                         trxid: transaction.trxid,
-//                         date: transaction.date,
-//                         duration: transaction.duration,
-//                         sub_type: transaction.sub_type,
-//                         duration_bkash: transaction.duration_bkash,
-//                         sender: transaction.sender,
-//                         duration_nagad: transaction.duration_nagad,
-//                         raw_sms: transaction.raw_sms,
-//                         timestamp: new Date() // Add this line to store the current timestamp
-
-
-//                     },
-//                 },
-//             },
-//             {new: true},
-//         )
-//             .then(user => {
-//                 if (!user) {
-//                     return res.status(404).send("Beneficiary not found");
-//                 }
-//             })
-//             .catch(error => res.status(400).send(error));
-//     });
-//     res.status(201).send("Transactions added successfully");
-// }
 async function transaction(req, res) {
-    try {
-        if (!req.body || req.body.length === 0) {
-            return res.status(400).send("No transactions provided");
-        }
+    req.body.forEach(transaction => {
+        User.findOneAndUpdate(
+            {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+            {
+                $push: {
+                    "beneficiary.$.transaction": {
+                        beneficiaryId: transaction.beneficiaryId,
+                        beneficiaryMobile: transaction.beneficiaryMobile,
+                        type: transaction.type,
+                        amount: transaction.amount,
+                        trxid: transaction.trxid,
+                        date: transaction.date,
+                        duration: transaction.duration,
+                        sub_type: transaction.sub_type,
+                        duration_bkash: transaction.duration_bkash,
+                        sender: transaction.sender,
+                        duration_nagad: transaction.duration_nagad,
+                        raw_sms: transaction.raw_sms,
+                        timestamp: new Date() // Add this line to store the current timestamp
 
-        const promises = req.body.map(async transaction => {
-            try {
-                const updatedUser = await User.findOneAndUpdate(
-                    {
-                        "beneficiary.beneficiaryId": transaction.beneficiaryId
-                    },
-                    {
-                        $push: {
-                            "beneficiary.$.transaction": {
-                                beneficiaryId: transaction.beneficiaryId,
-                                beneficiaryMobile: transaction.beneficiaryMobile,
-                                type: transaction.type || null,
-                                amount: transaction.amount || null,
-                                trxid: transaction.trxid || null,
-                                date: transaction.date || null,
-                                duration: transaction.duration || null,
-                                sub_type: transaction.sub_type || null,
-                                duration_bkash: transaction.duration_bkash || null,
-                                sender: transaction.sender || null,
-                                duration_nagad: transaction.duration_nagad || null,
-                                raw_sms: transaction.raw_sms || null,
-                                timestamp: new Date() // Always store the current timestamp
-                            },
-                        },
-                    },
-                    { new: true, upsert: false }
-                );
 
-                if (!updatedUser) {
-                    throw new Error("Beneficiary not found");
+                    },
+                },
+            },
+            {new: true},
+        )
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send("Beneficiary not found");
                 }
-            } catch (error) {
-                console.error("Error updating user:", error);
-                throw error; // Rethrow the error to trigger the catch block in the main function
-            }
-        });
-
-        await Promise.all(promises);
-
-        res.status(201).send("Transactions added successfully with timestamp");
-    } catch (error) {
-        console.error("Error processing transactions:", error);
-        res.status(500).send("Internal Server Error");
-    }
+            })
+            .catch(error => res.status(400).send(error));
+    });
+    res.status(201).send("Transactions added successfully");
 }
-
-
-
 
 async function newlogin(req, res) {
     const beneficiaryId = parseInt(req.body.beneficiaryId);
