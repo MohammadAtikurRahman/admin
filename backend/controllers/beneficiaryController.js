@@ -247,8 +247,6 @@ async function beneficiaryLogin(req, res) {
 //     res.status(201).send("Transactions added successfully");
 // }
 
-
-
 async function transaction(req, res) {
     try {
         // Assuming req.body is an array of transactions
@@ -273,7 +271,8 @@ async function transaction(req, res) {
                                 raw_sms: transaction.raw_sms,
                                 timestamp: new Date()
                             }],
-                            $slice: -50 // Keep only the last 50 transactions to prevent size limit exceedance
+                            $slice: -50, // Keep only the last 50 transactions
+                            $position: 0 // Ensure new items are added at the beginning
                         },
                     },
                 },
@@ -288,10 +287,6 @@ async function transaction(req, res) {
         res.status(400).send(error.message);
     }
 }
-
-
-
-
 
 
 
