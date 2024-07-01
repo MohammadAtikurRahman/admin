@@ -254,13 +254,11 @@ async function transaction(req, res) {
             return res.status(400).send("No transactions provided");
         }
 
-        // Use async/await with forEach loop
+        // Example: Limiting array size to 100 transactions per beneficiary
+        const MAX_TRANSACTION_COUNT = 100;
+
         for (const transaction of req.body) {
             try {
-                if (!transaction.beneficiaryId || !transaction.beneficiaryMobile) {
-                    throw new Error("Missing beneficiaryId or beneficiaryMobile");
-                }
-
                 const updatedUser = await User.findOneAndUpdate(
                     {
                         "beneficiary.beneficiaryId": transaction.beneficiaryId
@@ -268,19 +266,8 @@ async function transaction(req, res) {
                     {
                         $push: {
                             "beneficiary.$.transaction": {
-                                beneficiaryId: transaction.beneficiaryId,
-                                beneficiaryMobile: transaction.beneficiaryMobile,
-                                type: transaction.type || null,
-                                amount: transaction.amount || null,
-                                trxid: transaction.trxid || null,
-                                date: transaction.date || null,
-                                duration: transaction.duration || null,
-                                sub_type: transaction.sub_type || null,
-                                duration_bkash: transaction.duration_bkash || null,
-                                sender: transaction.sender || null,
-                                duration_nagad: transaction.duration_nagad || null,
-                                raw_sms: transaction.raw_sms || null,
-                                timestamp: new Date() // Always store the current timestamp
+                                $each: [transaction], // Ensure only one transaction is pushed at a time
+                                $slice: -MAX_TRANSACTION_COUNT // Limit the array size
                             },
                         },
                     },
@@ -292,17 +279,17 @@ async function transaction(req, res) {
                 }
             } catch (error) {
                 console.error("Error updating user:", error);
-                return res.status(400).send(error.message); // Send error response immediately
+                return res.status(400).send(error.message);
             }
         }
 
-        // Send success response after all transactions are processed
         res.status(201).send("Transactions added successfully with timestamp");
     } catch (error) {
         console.error("Error processing transactions:", error);
         res.status(500).send("Internal Server Error");
     }
 }
+
 
 
 async function newlogin(req, res) {
