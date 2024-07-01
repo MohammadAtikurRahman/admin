@@ -210,42 +210,88 @@ async function beneficiaryLogin(req, res) {
 }
 
 
+// async function transaction(req, res) {
+//     req.body.forEach(transaction => {
+//         User.findOneAndUpdate(
+//             {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+//             {
+//                 $push: {
+//                     "beneficiary.$.transaction": {
+//                         beneficiaryId: transaction.beneficiaryId,
+//                         beneficiaryMobile: transaction.beneficiaryMobile,
+//                         type: transaction.type,
+//                         amount: transaction.amount,
+//                         trxid: transaction.trxid,
+//                         date: transaction.date,
+//                         duration: transaction.duration,
+//                         sub_type: transaction.sub_type,
+//                         duration_bkash: transaction.duration_bkash,
+//                         sender: transaction.sender,
+//                         duration_nagad: transaction.duration_nagad,
+//                         raw_sms: transaction.raw_sms,
+//                         timestamp: new Date() // Add this line to store the current timestamp
+
+
+//                     },
+//                 },
+//             },
+//             {new: true},
+//         )
+//             .then(user => {
+//                 if (!user) {
+//                     return res.status(404).send("Beneficiary not found");
+//                 }
+//             })
+//             .catch(error => res.status(400).send(error));
+//     });
+//     res.status(201).send("Transactions added successfully");
+// }
+
 async function transaction(req, res) {
-    req.body.forEach(transaction => {
-        User.findOneAndUpdate(
-            {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-            {
-                $push: {
-                    "beneficiary.$.transaction": {
-                        beneficiaryId: transaction.beneficiaryId,
-                        beneficiaryMobile: transaction.beneficiaryMobile,
-                        type: transaction.type,
-                        amount: transaction.amount,
-                        trxid: transaction.trxid,
-                        date: transaction.date,
-                        duration: transaction.duration,
-                        sub_type: transaction.sub_type,
-                        duration_bkash: transaction.duration_bkash,
-                        sender: transaction.sender,
-                        duration_nagad: transaction.duration_nagad,
-                        raw_sms: transaction.raw_sms,
-                        timestamp: new Date() // Add this line to store the current timestamp
+    try {
+        if (!req.body || req.body.length === 0) {
+            return res.status(400).send("No transactions provided");
+        }
 
+        // Limit the array size to 100 transactions per beneficiary
+        const MAX_TRANSACTION_COUNT = 10000;
 
+        for (const transaction of req.body) {
+            try {
+                const updatedUser = await User.findOneAndUpdate(
+                    {
+                        "beneficiary.beneficiaryId": transaction.beneficiaryId
                     },
-                },
-            },
-            {new: true},
-        )
-            .then(user => {
-                if (!user) {
-                    return res.status(404).send("Beneficiary not found");
+                    {
+                        $push: {
+                            "beneficiary.$.transaction": {
+                                $each: [transaction], // Push only one transaction
+                                $slice: -MAX_TRANSACTION_COUNT // Limit the array size
+                            },
+                        },
+                    },
+                    { new: true, upsert: false }
+                );
+
+                if (!updatedUser) {
+                    throw new Error("Beneficiary not found");
                 }
-            })
-            .catch(error => res.status(400).send(error));
-    });
-    res.status(201).send("Transactions added successfully");
+            } catch (error) {
+                console.error("Error updating user:", error);
+                return res.status(400).send(error.message);
+            }
+        }
+
+        res.status(201).send("Transactions added successfully with timestamp");
+    } catch (error) {
+        console.error("Error processing transactions:", error);
+        res.status(500).send("Internal Server Error");
+    }
 }
+
+
+
+
 
 async function newlogin(req, res) {
     const beneficiaryId = parseInt(req.body.beneficiaryId);
