@@ -249,13 +249,11 @@ async function transaction(req, res) {
 
 
 
-
-
 async function post_transaction(req, res) {
     try {
         for (const transaction of req.body) {
             const user = await User.findOneAndUpdate(
-                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                 {
                     $push: {
                         "beneficiary.$.transaction": {
@@ -279,16 +277,18 @@ async function post_transaction(req, res) {
             );
 
             if (!user) {
-                return res.status(404).send("Beneficiary not found");
+                return res.status(404).send(`Beneficiary with ID ${transaction.beneficiaryId} not found`);
             }
         }
 
         res.status(201).send("Transactions added successfully");
     } catch (error) {
-        console.error(error);
-        res.status(400).send("Error processing transactions");
+        console.error("Error processing transactions:", error);
+        res.status(500).send("Error processing transactions");
     }
 }
+
+
 
 
 
