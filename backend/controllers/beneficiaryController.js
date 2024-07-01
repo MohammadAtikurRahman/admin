@@ -248,44 +248,105 @@ async function beneficiaryLogin(req, res) {
 // }
 
 
-
-
 async function transaction(req, res) {
     try {
-        const promises = req.body.map(transaction => {
-            return User.findOneAndUpdate(
-                {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+        // Assuming req.body is an array of transactions
+        for (const transaction of req.body) {
+            const user = await User.findOneAndUpdate(
+                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                 {
                     $push: {
                         "beneficiary.$.transaction": {
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type,
-                            amount: transaction.amount,
-                            trxid: transaction.trxid,
-                            date: transaction.date,
-                            duration: transaction.duration,
-                            sub_type: transaction.sub_type,
-                            duration_bkash: transaction.duration_bkash,
-                            sender: transaction.sender,
-                            duration_nagad: transaction.duration_nagad,
-                            raw_sms: transaction.raw_sms,
-                            timestamp: new Date()
+                            $each: [{
+                                beneficiaryId: transaction.beneficiaryId,
+                                beneficiaryMobile: transaction.beneficiaryMobile,
+                                type: transaction.type,
+                                amount: transaction.amount,
+                                trxid: transaction.trxid,
+                                date: transaction.date,
+                                duration: transaction.duration,
+                                sub_type: transaction.sub_type,
+                                duration_bkash: transaction.duration_bkash,
+                                sender: transaction.sender,
+                                duration_nagad: transaction.duration_nagad,
+                                raw_sms: transaction.raw_sms,
+                                timestamp: new Date()
+                            }],
+                            $slice: -50 // Keep only the last 50 transactions to prevent size limit exceedance
                         },
                     },
                 },
-                {new: true}
+                { new: true }
             );
-        });
-
-        await Promise.all(promises);
-
+            if (!user) {
+                return res.status(404).send("Beneficiary not found");
+            }
+        }
         res.status(201).send("Transactions added successfully");
     } catch (error) {
-        console.error(error);
         res.status(400).send(error.message);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 async function newlogin(req, res) {
