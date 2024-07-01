@@ -255,39 +255,36 @@ async function transaction(req, res) {
         }
 
         const promises = req.body.map(async transaction => {
-            let filter = {};
-
-            if (transaction.beneficiaryId) {
-                filter = {"beneficiary.beneficiaryId": transaction.beneficiaryId};
-            } else if (transaction.beneficiaryMobile) {
-                filter = {"beneficiary.beneficiaryMobile": transaction.beneficiaryMobile};
-            } else {
+            if (!transaction.beneficiaryId || !transaction.beneficiaryMobile) {
                 return res.status(400).send("Missing beneficiaryId or beneficiaryMobile");
             }
 
             try {
                 const updatedUser = await User.findOneAndUpdate(
-                    filter,
+                    {
+                        "beneficiary.beneficiaryId": transaction.beneficiaryId,
+                        "beneficiary.beneficiaryMobile": transaction.beneficiaryMobile
+                    },
                     {
                         $push: {
                             "beneficiary.$.transaction": {
                                 beneficiaryId: transaction.beneficiaryId,
                                 beneficiaryMobile: transaction.beneficiaryMobile,
-                                type: transaction.type,
-                                amount: transaction.amount,
-                                trxid: transaction.trxid,
-                                date: transaction.date,
-                                duration: transaction.duration,
-                                sub_type: transaction.sub_type,
-                                duration_bkash: transaction.duration_bkash,
-                                sender: transaction.sender,
-                                duration_nagad: transaction.duration_nagad,
-                                raw_sms: transaction.raw_sms,
+                                type: transaction.type || null,
+                                amount: transaction.amount || null,
+                                trxid: transaction.trxid || null,
+                                date: transaction.date || null,
+                                duration: transaction.duration || null,
+                                sub_type: transaction.sub_type || null,
+                                duration_bkash: transaction.duration_bkash || null,
+                                sender: transaction.sender || null,
+                                duration_nagad: transaction.duration_nagad || null,
+                                raw_sms: transaction.raw_sms || null,
                                 timestamp: new Date() // Always store the current timestamp
                             },
                         },
                     },
-                    {new: true}
+                    { new: true }
                 );
 
                 if (!updatedUser) {
