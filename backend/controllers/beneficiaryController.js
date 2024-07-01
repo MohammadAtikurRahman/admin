@@ -248,6 +248,7 @@ async function beneficiaryLogin(req, res) {
 // }
 
 
+
 async function transaction(req, res) {
     try {
         // Assuming req.body is an array of transactions
@@ -287,26 +288,6 @@ async function transaction(req, res) {
         res.status(400).send(error.message);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
