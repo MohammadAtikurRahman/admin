@@ -273,7 +273,7 @@ async function transaction(req, res) {
                                 raw_sms: transaction.raw_sms,
                                 timestamp: new Date()
                             }],
-                            $slice: -5000 // Keep only the last 50 transactions to prevent size limit exceedance
+                            $slice: -50 // Keep only the last 50 transactions to prevent size limit exceedance
                         },
                     },
                 },
@@ -288,6 +288,7 @@ async function transaction(req, res) {
         res.status(400).send(error.message);
     }
 }
+
 
 
 
