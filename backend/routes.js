@@ -21,7 +21,6 @@ const {
     enumeratorObservation,
     lastPagetext,
     saveMultiObservation,
-    post_transaction,
 } = require("./controllers/beneficiaryController");
 
 router.get("/enumerator/:id", getEnumerator);
@@ -41,7 +40,6 @@ router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
 
 
 
-router.post("/post_transaction", post_transaction); // beneficiary login
 
 
 
