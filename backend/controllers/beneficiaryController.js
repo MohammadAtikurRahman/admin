@@ -237,11 +237,15 @@ async function transaction(req, res) {
             };
 
             // Update the user document to include the new transaction
-            await User.findOneAndUpdate(
+            const updatedUser = await User.findOneAndUpdate(
                 { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                 { $push: { "beneficiary.$.transaction": newTransaction } },
                 { new: true, useFindAndModify: false }
             );
+
+            if (!updatedUser) {
+                throw new Error(`User with beneficiaryId ${transaction.beneficiaryId} not found`);
+            }
 
             return newTransaction;
         }));
@@ -252,6 +256,7 @@ async function transaction(req, res) {
         res.status(400).json({ error: error.message });
     }
 }
+
 
 
 
