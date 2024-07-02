@@ -4,7 +4,8 @@ const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
 
-const  Transaction = require("../model/user");
+const { User, Transaction } = require("../model/user");
+
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -213,7 +214,6 @@ async function beneficiaryLogin(req, res) {
 }
 
 
-
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
@@ -250,7 +250,6 @@ const transaction = async (req, res) => {
         });
     }
 };
-
 
 
 
