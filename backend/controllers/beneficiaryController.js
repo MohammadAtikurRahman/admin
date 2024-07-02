@@ -213,7 +213,6 @@ async function beneficiaryLogin(req, res) {
 }
 
 
-
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
@@ -258,7 +257,6 @@ const transaction = async (req, res) => {
         });
     }
 };
-
 
 
 async function newlogin(req, res) {
