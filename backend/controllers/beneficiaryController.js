@@ -213,34 +213,41 @@ async function beneficiaryLogin(req, res) {
 }
 
 
+
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
-        const transactionPromises = transactions.map(async (transactionData) => {
+
+        // Validate and limit the beneficiary size and transactions array
+        const validateAndSaveTransaction = async (transactionData) => {
+            const user = await User.findOne({ "beneficiary.beneficiaryId": transactionData.beneficiaryId }).lean().exec();
+
+            if (!user) {
+                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} not found`);
+            }
+
+            // Find the specific beneficiary within the user
+            const beneficiary = user.beneficiary.find(b => b.beneficiaryId === transactionData.beneficiaryId);
+
+            if (beneficiary.transactions.length >= 1000) {
+                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} has too many transactions`);
+            }
+
             // Create and save the new transaction
             const newTransaction = new Transaction(transactionData);
             await newTransaction.save();
 
             // Update the beneficiary to reference the new transaction
-            const updatedUser = await User.findOneAndUpdate(
+            await User.findOneAndUpdate(
                 { "beneficiary.beneficiaryId": transactionData.beneficiaryId },
                 { $push: { "beneficiary.$.transactions": newTransaction._id } },
                 { new: true }
             ).lean().exec();
+        };
 
-            if (!updatedUser) {
-                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} not found`);
-            }
+        const transactionPromises = transactions.map(validateAndSaveTransaction);
 
-            return updatedUser;
-        });
-
-        const results = await Promise.all(transactionPromises);
-        const notFoundCount = results.filter(user => !user).length;
-
-        if (notFoundCount > 0) {
-            return res.status(404).send(`${notFoundCount} beneficiary(s) not found`);
-        }
+        await Promise.all(transactionPromises);
 
         res.status(201).send("Transactions added successfully");
     } catch (error) {
@@ -251,7 +258,6 @@ const transaction = async (req, res) => {
         });
     }
 };
-
 
 
 
