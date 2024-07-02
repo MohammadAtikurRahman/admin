@@ -288,7 +288,6 @@ async function beneficiaryLogin(req, res) {
 //     }
 // }
 
-const User = require("../model/user");
 
 async function transaction(req, res) {
     try {
