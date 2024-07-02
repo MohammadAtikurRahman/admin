@@ -211,6 +211,7 @@ async function beneficiaryLogin(req, res) {
 }
 
 
+
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
@@ -237,7 +238,7 @@ const transaction = async (req, res) => {
                     }
                 },
                 { new: true }
-            );
+            ).lean().exec();
         });
 
         const results = await Promise.all(updatePromises);
@@ -247,12 +248,12 @@ const transaction = async (req, res) => {
             return res.status(404).send(`${notFoundCount} beneficiary(s) not found`);
         }
 
-        res.status(201).send("Transactions added successfully");
+        return res.status(201).send("Transactions added successfully");
     } catch (error) {
-        res.status(400).send(error);
+        console.error("Error occurred:", error);
+        return  res.status(400).send(error);
     }
 };
-
 
 
 
