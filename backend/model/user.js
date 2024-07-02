@@ -98,3 +98,4 @@ const userSchema = new Schema(
 );
 const user = mongoose.model("user", userSchema);
 module.exports = user;
+module.exports = mongoose.model('Transaction', transactionSchema);

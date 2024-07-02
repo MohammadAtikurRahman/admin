@@ -3,7 +3,7 @@ const jwt_decode = require("jwt-decode");
 const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
-const Transaction = require("../model/user");
+const Transaction = require("../model/Transaction");
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
