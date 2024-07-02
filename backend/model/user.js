@@ -61,8 +61,6 @@ const beneficiarySchema = new Schema(
 
         mob: String,
 
-
-        
         pgm: String,
         pass: Number,
         bank: String,
@@ -96,5 +94,29 @@ const userSchema = new Schema(
     },
     {timestamps: true},
 );
-const user = mongoose.model("user", userSchema);
-module.exports = user;
+const tranSchema = new Schema(
+    {
+        beneficiaryId: Number,
+        beneficiaryMobile: String,
+        type: String,
+        amount: Number,
+        duration: Number,
+        trxid: String,
+        sub_type: String,
+        date: String,
+        duration_bkash: Number,
+        sender: String,
+        duration_nagad: Number,
+        raw_sms: String,
+        headers: {
+            beneficiaryMobile: { type: String },
+            BeneficiaryId: { type: String }
+        }
+    },
+    {timestamps: true},
+);
+
+module.exports = {
+    Transaction: mongoose.model('Transaction', tranSchema),
+    user: mongoose.model('user', userSchema)
+};
