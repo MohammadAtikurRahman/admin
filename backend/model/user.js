@@ -1,8 +1,6 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-let nextId = 10000;
-nextId = Math.floor(10000 + Math.random() * 90000);
-const nextIdBen = 10000;
+
 const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
@@ -22,8 +20,6 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
-        user: { type: Schema.Types.ObjectId, ref: 'User' } // Reference to User
-
     },
     {timestamps: true},
 );
@@ -98,4 +94,5 @@ const userSchema = new Schema(
     },
     {timestamps: true},
 );
-module.exports = mongoose.model("User", userSchema);
+const user = mongoose.model("user", userSchema);
+module.exports = user;
