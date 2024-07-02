@@ -3,15 +3,15 @@ var Schema = mongoose.Schema;
 let nextId = 10000;
 nextId = Math.floor(10000 + Math.random() * 90000);
 const nextIdBen = 10000;
+
+
 const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
-
         beneficiaryMobile: {
             type: String,
             required: true,
         },
-
         type: String,
         amount: Number,
         duration: Number,
@@ -22,9 +22,16 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
+        timestamp: { type: Date, default: Date.now }
     },
-    {timestamps: true},
+    { timestamps: true }
 );
+
+const Transaction = mongoose.model("Transaction", transactionSchema);
+
+
+
+
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
@@ -82,7 +89,7 @@ const beneficiarySchema = new Schema(
         installed_time: Date,
         loggedin_time: Date,
 
-        transaction: [transactionSchema],
+        transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }]
     },
     {timestamps: true},
 );
@@ -97,4 +104,11 @@ const userSchema = new Schema(
     {timestamps: true},
 );
 const user = mongoose.model("user", userSchema);
-module.exports = user;
+module.exports = {user,Transaction};
+
+
+
+
+// const User = mongoose.model("User", userSchema);
+
+//module.exports = { User, Transaction };

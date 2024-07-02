@@ -4,6 +4,8 @@ const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
 
+const  Transaction = require("../model/user");
+
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const moment = require('moment-timezone');
@@ -216,56 +218,40 @@ async function beneficiaryLogin(req, res) {
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
-        const updatePromises = transactions.map(async transaction => {
-            const beneficiary = await User.findOne(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId }
+        const transactionPromises = transactions.map(async (transaction) => {
+            const newTransaction = new Transaction(transaction);
+            await newTransaction.save();
+
+            const updatedUser = await User.findOneAndUpdate(
+                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+                { $push: { "beneficiary.$.transactions": newTransaction._id } },
+                { new: true }
             ).lean().exec();
 
-            if (!beneficiary) {
+            if (!updatedUser) {
                 throw new Error(`Beneficiary with ID ${transaction.beneficiaryId} not found`);
             }
 
-            return User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-                {
-                    $push: {
-                        "beneficiary.$.transaction": {
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type,
-                            amount: transaction.amount,
-                            trxid: transaction.trxid,
-                            date: transaction.date,
-                            duration: transaction.duration,
-                            sub_type: transaction.sub_type,
-                            duration_bkash: transaction.duration_bkash,
-                            sender: transaction.sender,
-                            duration_nagad: transaction.duration_nagad,
-                            raw_sms: transaction.raw_sms,
-                            timestamp: new Date() // Add this line to store the current timestamp
-                        }
-                    }
-                },
-                { new: true }
-            ).lean().exec();
+            return updatedUser;
         });
 
-        const results = await Promise.all(updatePromises);
+        const results = await Promise.all(transactionPromises);
         const notFoundCount = results.filter(user => !user).length;
 
         if (notFoundCount > 0) {
             return res.status(404).send(`${notFoundCount} beneficiary(s) not found`);
         }
 
-        return   res.status(201).send("Transactions added successfully");
+      return  res.status(201).send("Transactions added successfully");
     } catch (error) {
-        console.error("Detailed Error:", error);  // Log detailed error information
-      return    res.status(400).send({
+        console.error("Detailed Error:", error);
+        return   res.status(400).send({
             message: "An error occurred while processing transactions.",
             error: error.message || error
         });
     }
 };
+
 
 
 
