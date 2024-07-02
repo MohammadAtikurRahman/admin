@@ -288,7 +288,6 @@ async function beneficiaryLogin(req, res) {
 //     }
 // }
 
-
 async function transaction(req, res) {
     try {
         const transactions = req.body;
@@ -328,6 +327,7 @@ async function transaction(req, res) {
         res.status(400).json({ error: error.message });
     }
 }
+
 
 
 
