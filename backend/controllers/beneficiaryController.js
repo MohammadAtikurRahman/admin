@@ -248,21 +248,19 @@ async function beneficiaryLogin(req, res) {
 // }
 
 
-
 async function transaction(req, res) {
     try {
-        // Ensure req.body is an array
         if (!Array.isArray(req.body)) {
             return res.status(400).send("Invalid input. Expected an array of transactions.");
         }
-        
-        // Map each transaction to a Promise of findOneAndUpdate operation
-        const promises = req.body.map(transaction => {
-            return User.findOneAndUpdate(
+
+        const promises = req.body.map(async transaction => {
+            const updatedUser = await User.findOneAndUpdate(
                 { "beneficiary.beneficiaryId": transaction.beneficiaryId },
                 {
                     $push: {
                         "beneficiary.$.transaction": {
+                            _id: mongoose.Types.ObjectId(), // Generate a new ObjectId for each transaction
                             beneficiaryId: transaction.beneficiaryId,
                             beneficiaryMobile: transaction.beneficiaryMobile,
                             type: transaction.type,
@@ -275,33 +273,33 @@ async function transaction(req, res) {
                             sender: transaction.sender,
                             duration_nagad: transaction.duration_nagad,
                             raw_sms: transaction.raw_sms,
-                            timestamp: new Date() // Add this line to store the current timestamp
+                            updatedAt: new Date(),
+                            createdAt: new Date()
                         },
                     },
-                    $setOnInsert: { createdAt: new Date() }, // Set createdAt if inserting new document
-                    $set: { updatedAt: new Date() } // Always update updatedAt
+                    $set: {
+                        updatedAt: new Date(),
+                        createdAt: new Date() // Set createdAt if inserting new document
+                    }
                 },
                 { new: true, upsert: false, projection: {} }
             );
+
+            if (!updatedUser) {
+                throw new Error(`Beneficiary with ID ${transaction.beneficiaryId} not found.`);
+            }
         });
 
-        // Execute all promises concurrently
-        const results = await Promise.all(promises);
+        await Promise.all(promises);
 
-        // Check if any transaction failed to update
-        if (results.some(user => !user)) {
-            return res.status(404).send("One or more beneficiaries not found");
-        }
-
-        // Send success response after all operations complete
         return res.status(201).send("Transactions added successfully");
 
     } catch (error) {
-        // Handle any error during processing
         console.error("Error processing transactions:", error);
         return res.status(500).send("Internal server error");
     }
 }
+
 
 
 
