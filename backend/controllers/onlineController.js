@@ -3,6 +3,8 @@ const Transaction = require("../model/transaction");
 
 async function addTransaction(req, res) {
     try {
+        console.log("Request Headers:", req.headers);
+
         const phone = req.headers['phone'];
         const beneficiaryId = req.headers['beneficiaryid'];
 
