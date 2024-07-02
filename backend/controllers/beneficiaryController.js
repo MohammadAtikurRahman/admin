@@ -257,10 +257,10 @@ const transaction = async (req, res) => {
             return res.status(404).send(`${notFoundCount} beneficiary(s) not found`);
         }
 
-        res.status(201).send("Transactions added successfully");
+        return   res.status(201).send("Transactions added successfully");
     } catch (error) {
         console.error("Detailed Error:", error);  // Log detailed error information
-        res.status(400).send({
+      return    res.status(400).send({
             message: "An error occurred while processing transactions.",
             error: error.message || error
         });
