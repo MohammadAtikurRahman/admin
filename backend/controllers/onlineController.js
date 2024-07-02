@@ -70,6 +70,7 @@
 
 const Transaction = require("../model/transaction");
 
+
 async function addTransaction(req, res) {
     try {
         const phone = req.headers['phone'];
@@ -79,6 +80,13 @@ async function addTransaction(req, res) {
         if (!phone || !beneficiaryId) {
             return res.status(400).send({
                 message: "Missing 'phone' or 'BeneficiaryId' header"
+            });
+        }
+
+        // Check if req.body is an array
+        if (!Array.isArray(req.body)) {
+            return res.status(400).send({
+                message: "Request body should be an array of transactions"
             });
         }
 
