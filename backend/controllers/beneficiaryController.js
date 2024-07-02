@@ -5,7 +5,7 @@ const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user")
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const moment = require('moment-timezone');
+const moment = require("moment-timezone");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -119,22 +119,20 @@ async function deleteBeneficiary(req, res) {
     });
 }
 
-
 async function addBeneficiaryInBulk(req, res) {
     let user = jwt_decode(req.body.token);
     try {
         user = await User.findByIdAndUpdate(
             user.id,
-            { $push: { beneficiary: { $each: req.body.beneficiary } } },
-            { new: true },
+            {$push: {beneficiary: {$each: req.body.beneficiary}}},
+            {new: true},
         );
-        return res.status(200).json({ user: user });
+        return res.status(200).json({user: user});
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'An error occurred' });
+        return res.status(500).json({error: "An error occurred"});
     }
 }
-
 
 async function saveTest(req, res) {
     let user = jwt_decode(req.body.token);
@@ -209,7 +207,6 @@ async function beneficiaryLogin(req, res) {
     return res.status(401).json({message: "Something went wrong."});
 }
 
-
 async function transaction(req, res) {
     req.body.forEach(transaction => {
         User.findOneAndUpdate(
@@ -229,9 +226,7 @@ async function transaction(req, res) {
                         sender: transaction.sender,
                         duration_nagad: transaction.duration_nagad,
                         raw_sms: transaction.raw_sms,
-                        timestamp: new Date() // Add this line to store the current timestamp
-
-
+                        timestamp: new Date(), // Add this line to store the current timestamp
                     },
                 },
             },
@@ -242,15 +237,13 @@ async function transaction(req, res) {
                     return res.status(404).send("Beneficiary not found");
                 }
             })
-            .catch(error => res.status(400).send(error));
+            .catch(error => {
+                console.error("Error updating transaction:", error);
+                return res.status(400).send(error.message); // Return error response
+            });
     });
     return res.status(201).send("Transactions added successfully");
 }
-
-
-
-
-
 
 async function newlogin(req, res) {
     const beneficiaryId = parseInt(req.body.beneficiaryId);
@@ -258,97 +251,101 @@ async function newlogin(req, res) {
 
     // Find a user document with a matching beneficiaryId and mob within the array
     User.findOne(
-        { "beneficiary": { $elemMatch: { "beneficiaryId": beneficiaryId, "mob": mob } } },
+        {beneficiary: {$elemMatch: {beneficiaryId: beneficiaryId, mob: mob}}},
         (err, user) => {
             if (err) {
                 // Handle error
-                res.status(500).send({ error: err });
+                res.status(500).send({error: err});
             } else {
                 if (user) {
                     // Find the index of the matching beneficiary
-                    const beneficiaryIndex = user.beneficiary.findIndex(ben => ben.beneficiaryId === beneficiaryId);
+                    const beneficiaryIndex = user.beneficiary.findIndex(
+                        ben => ben.beneficiaryId === beneficiaryId,
+                    );
 
                     if (beneficiaryIndex !== -1) {
                         // Check if loggedin_time is not set
                         if (!user.beneficiary[beneficiaryIndex].loggedin_time) {
-                            const loggedin_time = moment().utc().add(6, 'hours').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+                            const loggedin_time = moment()
+                                .utc()
+                                .add(6, "hours")
+                                .format("YYYY-MM-DDTHH:mm:ss.SSS[Z]");
                             const updatePath = {
-                                [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time
+                                [`beneficiary.${beneficiaryIndex}.loggedin_time`]: loggedin_time,
                             };
 
                             User.updateOne(
-                                { _id: user._id },
-                                { $set: updatePath },
+                                {_id: user._id},
+                                {$set: updatePath},
                                 (updateErr, updateResult) => {
                                     if (updateErr) {
                                         // Handle error
-                                        res.status(500).send({ error: updateErr });
+                                        res.status(500).send({error: updateErr});
                                     } else {
                                         // loggedin_time updated
                                         res.status(200).send({
-                                            message: "Login successful, loggedin_time set for the first time",
-                                            loggedin_time: loggedin_time
+                                            message:
+                                                "Login successful, loggedin_time set for the first time",
+                                            loggedin_time: loggedin_time,
                                         });
                                     }
-                                }
+                                },
                             );
                         } else {
                             // loggedin_time is already set, login successful without updating loggedin_time
                             res.status(200).send({
                                 message: "Login successful, loggedin_time not updated",
-                                loggedin_time: user.beneficiary[beneficiaryIndex].loggedin_time
+                                loggedin_time: user.beneficiary[beneficiaryIndex].loggedin_time,
                             });
                         }
                     } else {
                         // Beneficiary not found
-                        res.status(404).send({ message: "Beneficiary not found" });
+                        res.status(404).send({message: "Beneficiary not found"});
                     }
                 } else {
                     // Login failed
-                    res.status(401).send({ message: "Invalid beneficiaryId or mob" });
+                    res.status(401).send({message: "Invalid beneficiaryId or mob"});
                 }
             }
-        }
+        },
     );
 }
 
-
 async function addBeneficiaryScore(req, res) {
-    const { beneficiaryId } = req.body;
+    const {beneficiaryId} = req.body;
     console.log(req.body);
 
-    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
+    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
 
     if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(400).json({message: "User not found"});
     }
 
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
 
     if (!beneficiary) {
-        return res.status(400).json({ message: "Beneficiary not found" });
+        return res.status(400).json({message: "Beneficiary not found"});
     }
 
     let result = await User.updateOne(
-        { "beneficiary.beneficiaryId": beneficiaryId },
+        {"beneficiary.beneficiaryId": beneficiaryId},
         {
             $set: {
                 "beneficiary.$.score1": req.body?.score1,
                 "beneficiary.$.observation": req.body?.observation,
                 "beneficiary.$.duration": req.body?.duration,
                 "beneficiary.$.whotaketheexam": req.body?.userId,
-                "beneficiary.$.observation_new": req.body?.observation_new
+                "beneficiary.$.observation_new": req.body?.observation_new,
             },
-        }
+        },
     );
 
     if (result.nModified == 0) {
-        return res.status(400).json({ message: "Failed to update beneficiary score" });
+        return res.status(400).json({message: "Failed to update beneficiary score"});
     }
 
-    return res.status(200).json({ message: "Beneficiary score & observation saved" });
+    return res.status(200).json({message: "Beneficiary score & observation saved"});
 }
-
 
 async function examStatus(req, res) {
     const {beneficiaryId} = req.body;
@@ -377,124 +374,111 @@ async function examStatus(req, res) {
 }
 
 async function enumeratorObservation(req, res) {
-    const { beneficiaryId, observation_new } = req.body;
+    const {beneficiaryId, observation_new} = req.body;
 
     console.log(req.body);
 
-    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
-    
+    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
+
     if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(400).json({message: "User not found"});
     }
 
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
     if (!beneficiary) {
-        return res.status(400).json({ message: "Beneficiary not found" });
+        return res.status(400).json({message: "Beneficiary not found"});
     }
 
     let result = await User.updateOne(
-        { "beneficiary.beneficiaryId": beneficiaryId },
+        {"beneficiary.beneficiaryId": beneficiaryId},
         {
             $set: {
                 "beneficiary.$.enumerator_observation": req.body?.enumerator_observation,
                 "beneficiary.$.excuses": req.body?.excuses,
                 "beneficiary.$.test_status": req.body?.test_status,
                 "beneficiary.$.whotaketheexam": req.body?.userId,
-                "beneficiary.$.observation_new": observation_new   // added this line
-            }
-        }
+                "beneficiary.$.observation_new": observation_new, // added this line
+            },
+        },
     );
 
     if (result.nModified == 0) {
-        return res.status(400).json({ message: "Failed to update" });
+        return res.status(400).json({message: "Failed to update"});
     }
-    
-    return res.status(200).json({ message: "enumerator observation saved" });
-}
 
+    return res.status(200).json({message: "enumerator observation saved"});
+}
 
 async function lastPagetext(req, res) {
     try {
-        const user = await User.findOne({ "beneficiary.beneficiaryId": req.params.beneficiaryId })
-        .select("-username")
-        .select("-password")
-        .select("-id")
-        .select("-_id")
-        .select("-userId")
-        .select("-createdAt")
-        .select("-updatedAt")
-        .select("-__v")
-        .select("-beneficiary._id")
-        .select("-beneficiary.ben_nid")
-        .select("-beneficiary.ben_id")
-        .select("-beneficiary.sl")
-        .select("-beneficiary.age")
-        .select("-beneficiary.dis")
+        const user = await User.findOne({"beneficiary.beneficiaryId": req.params.beneficiaryId})
+            .select("-username")
+            .select("-password")
+            .select("-id")
+            .select("-_id")
+            .select("-userId")
+            .select("-createdAt")
+            .select("-updatedAt")
+            .select("-__v")
+            .select("-beneficiary._id")
+            .select("-beneficiary.ben_nid")
+            .select("-beneficiary.ben_id")
+            .select("-beneficiary.sl")
+            .select("-beneficiary.age")
+            .select("-beneficiary.dis")
 
-        .select("-beneficiary.relgn")
-        .select("-beneficiary.job")
-        .select("-beneficiary.test")
-        .select("-beneficiary.createdAt")
+            .select("-beneficiary.relgn")
+            .select("-beneficiary.job")
+            .select("-beneficiary.test")
+            .select("-beneficiary.createdAt")
 
-        .select("-beneficiary.mob")
-        .select("-beneficiary.pgm")
-        .select("-beneficiary.pass")
-        .select("-beneficiary.bank")
-        .select("-beneficiary.branch")
-        .select("-beneficiary.r_out")
-        .select("-beneficiary.transaction")
+            .select("-beneficiary.mob")
+            .select("-beneficiary.pgm")
+            .select("-beneficiary.pass")
+            .select("-beneficiary.bank")
+            .select("-beneficiary.branch")
+            .select("-beneficiary.r_out")
+            .select("-beneficiary.transaction")
 
-        .select("-beneficiary.mob_1")
-        .select("-beneficiary.ben_sts")
-        .select("-beneficiary.nid_sts")
-        .select("-beneficiary.a_sts")
+            .select("-beneficiary.mob_1")
+            .select("-beneficiary.ben_sts")
+            .select("-beneficiary.nid_sts")
+            .select("-beneficiary.a_sts")
 
-        .select("-beneficiary.accre")
-        .select("-beneficiary.f_allow")
-        .select("-beneficiary.mob_own")
-        .select("-beneficiary.updatedAt")
-        .select("-beneficiary.m_nm")
-        .select("-beneficiary.f_nm")
-        .select("-beneficiary.dob")
-        .select("-beneficiary.sub_dis")
-        .select("-beneficiary.uni")
-        .select("-beneficiary.vill")
-        .select("-beneficiary.gen")
-        .select("-beneficiary.duration")
-        .select("-beneficiary.score1");
-
-
-
-
-
-
-
-
-
-
-
+            .select("-beneficiary.accre")
+            .select("-beneficiary.f_allow")
+            .select("-beneficiary.mob_own")
+            .select("-beneficiary.updatedAt")
+            .select("-beneficiary.m_nm")
+            .select("-beneficiary.f_nm")
+            .select("-beneficiary.dob")
+            .select("-beneficiary.sub_dis")
+            .select("-beneficiary.uni")
+            .select("-beneficiary.vill")
+            .select("-beneficiary.gen")
+            .select("-beneficiary.duration")
+            .select("-beneficiary.score1");
 
         if (!user) {
-          return res.status(404).send("Beneficiary not found");
+            return res.status(404).send("Beneficiary not found");
         }
 
         const beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.params.beneficiaryId);
         if (!beneficiary) {
-          return res.status(404).send("Beneficiary not found");
+            return res.status(404).send("Beneficiary not found");
         }
         res.send(beneficiary);
-      } catch (error) {
+    } catch (error) {
         res.status(500).send(error.message);
-      }
+    }
 }
-
 
 async function saveMultiScore(req, res) {
     const beneficiaries = req.body;
 
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let {userId, beneficiaryId, score1, observation, duration,observation_new} = beneficiary;
+        let {userId, beneficiaryId, score1, observation, duration, observation_new} = beneficiary;
 
         if (!userId) {
             return res.status(400).json({message: "userId is required"});
@@ -508,7 +492,7 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation": observation,
                     "beneficiary.$.duration": duration,
                     "beneficiary.$.whotaketheexam": userId,
-                    "beneficiary.$.observation_new": observation_new
+                    "beneficiary.$.observation_new": observation_new,
                 },
             },
             {new: true},
@@ -516,7 +500,6 @@ async function saveMultiScore(req, res) {
     }
     return res.status(200).json({message: "Multiple beneficiaries updated"});
 }
-
 
 async function saveMultiObservation(req, res) {
     const beneficiaries = req.body;
@@ -530,15 +513,15 @@ async function saveMultiObservation(req, res) {
                     "beneficiary.$.enumerator_observation": enumerator_observation,
                     "beneficiary.$.test_status": test_status,
                     "beneficiary.$.whotaketheexam": req.body?.userId,
-
                 },
             },
             {new: true},
         );
     }
-    return res.status(200).json({message: "Multiple enumerator observation and ofline after data updated"});
+    return res
+        .status(200)
+        .json({message: "Multiple enumerator observation and ofline after data updated"});
 }
-
 
 async function benenScore(req, res) {
     const {userId, beneficiaryId} = req.body;
@@ -596,7 +579,7 @@ async function saveTestScore(req, res) {
 
     return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
-const SECRET = 'shhhhh11111';  // Your JWT secret
+const SECRET = "shhhhh11111"; // Your JWT secret
 
 async function addobservation(req, res) {
     try {
@@ -605,7 +588,7 @@ async function addobservation(req, res) {
         const userId = decodedToken.userId;
 
         if (!userId) {
-            return res.status(401).send('Invalid token.');
+            return res.status(401).send("Invalid token.");
         }
 
         // Find the user containing the specific beneficiaryId
@@ -624,9 +607,9 @@ async function addobservation(req, res) {
             {"beneficiary.beneficiaryId": req.body.beneficiaryId},
             {
                 $set: {
-                    "beneficiary.$.observation_new": req.body.observation_new
+                    "beneficiary.$.observation_new": req.body.observation_new,
                 },
-            }
+            },
         );
 
         if (result.nModified == 0) {
@@ -634,17 +617,14 @@ async function addobservation(req, res) {
         }
 
         return res.status(200).json({message: "Observation added successfully", beneficiary});
-        
     } catch (error) {
-        if (error.name === 'JsonWebTokenError') {
-            return res.status(401).send('Invalid token.');
+        if (error.name === "JsonWebTokenError") {
+            return res.status(401).send("Invalid token.");
         }
-        console.error('Error updating observation:', error);
-        res.status(500).send('Internal server error.');
+        console.error("Error updating observation:", error);
+        res.status(500).send("Internal server error.");
     }
 }
-
-
 
 module.exports = {
     addBeneficiary,
