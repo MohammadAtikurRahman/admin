@@ -22,6 +22,10 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
+        headers: {
+            beneficiaryMobile: { type: String },
+            BeneficiaryId: { type: String }
+        }
     },
     {timestamps: true},
 );
