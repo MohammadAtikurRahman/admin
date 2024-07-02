@@ -6,6 +6,7 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const moment = require('moment-timezone');
+const mongoose = require('mongoose'); // Ensure mongoose is properly imported
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
