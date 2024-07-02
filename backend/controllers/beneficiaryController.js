@@ -3,7 +3,6 @@ const jwt_decode = require("jwt-decode");
 const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
 const User = require("../model/user");
-const Transaction = require("../model/Transaction");
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -256,7 +255,7 @@ async function transaction(req, res) {
 
         const createdTransactions = await Promise.all(transactions.map(async transaction => {
             // Create a new transaction in the transactions collection
-            const createdTransaction = await Transaction.create({
+            const createdTransaction = await User.create({
                 beneficiaryId: transaction.beneficiaryId,
                 beneficiaryMobile: transaction.beneficiaryMobile,
                 type: transaction.type,
