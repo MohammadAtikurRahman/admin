@@ -1,6 +1,8 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-
+let nextId = 10000;
+nextId = Math.floor(10000 + Math.random() * 90000);
+const nextIdBen = 10000;
 const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
