@@ -25,6 +25,7 @@ const {
 const {
 
     transaction,
+    getTransactions 
    
 } = require("./controllers/onlineController");
 
@@ -89,6 +90,9 @@ router.post("/get-login2",newlogin);
 
 
 router.post("/transaction",transaction);
+
+
+router.get("/get-tran", getTransactions);
 
 router.post("/add-observation",addobservation);
 
