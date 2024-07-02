@@ -294,6 +294,13 @@ async function transaction(req, res) {
         const transactions = req.body;
 
         const createdTransactions = await Promise.all(transactions.map(async transaction => {
+            // Find the user
+            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
+
+            if (!user) {
+                throw new Error(`User with beneficiaryId ${transaction.beneficiaryId} not found`);
+            }
+
             // Create a new transaction in the transactions collection
             const createdTransaction = await Transaction.create({
                 beneficiaryId: transaction.beneficiaryId,
@@ -309,26 +316,19 @@ async function transaction(req, res) {
                 duration_nagad: transaction.duration_nagad,
                 raw_sms: transaction.raw_sms,
                 headers: transaction.headers,
+                user: user._id, // Reference to User
                 timestamp: new Date() // Add this line to store the current timestamp
             });
-
-            // Update the user document to include the transaction reference
-            await User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-                { $push: { "beneficiary.$.transaction": createdTransaction._id } },
-                { new: true }
-            );
 
             return createdTransaction;
         }));
 
-        return res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
+      return   res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
     } catch (error) {
         console.error(error);
-        return  res.status(400).json({ error: error.message });
+        return   res.status(400).json({ error: error.message });
     }
 }
-
 
 
 
