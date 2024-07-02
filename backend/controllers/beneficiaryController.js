@@ -247,27 +247,31 @@ async function beneficiaryLogin(req, res) {
 //     return res.status(201).send("Transactions added successfully");
 // }
 
+
+
 async function transaction(req, res) {
     try {
         const promises = req.body.map(async transaction => {
             const user = await User.findOneAndUpdate(
                 {"beneficiary.beneficiaryId": transaction.beneficiaryId},
                 {
-                    $push: {
+                    $addToSet: {
                         "beneficiary.$.transaction": {
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type,
-                            amount: transaction.amount,
-                            trxid: transaction.trxid,
-                            date: transaction.date,
-                            duration: transaction.duration,
-                            sub_type: transaction.sub_type,
-                            duration_bkash: transaction.duration_bkash,
-                            sender: transaction.sender,
-                            duration_nagad: transaction.duration_nagad,
-                            raw_sms: transaction.raw_sms,
-                            timestamp: new Date() // Add this line to store the current timestamp
+                            $each: [{
+                                beneficiaryId: transaction.beneficiaryId,
+                                beneficiaryMobile: transaction.beneficiaryMobile,
+                                type: transaction.type,
+                                amount: transaction.amount,
+                                trxid: transaction.trxid,
+                                date: transaction.date,
+                                duration: transaction.duration,
+                                sub_type: transaction.sub_type,
+                                duration_bkash: transaction.duration_bkash,
+                                sender: transaction.sender,
+                                duration_nagad: transaction.duration_nagad,
+                                raw_sms: transaction.raw_sms,
+                                timestamp: new Date()
+                            }]
                         }
                     }
                 },
@@ -285,8 +289,6 @@ async function transaction(req, res) {
         res.status(400).send(error.message);
     }
 }
-
-
 
 
 
