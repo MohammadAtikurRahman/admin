@@ -218,7 +218,7 @@ const transaction = async (req, res) => {
         const transactions = req.body;
 
         const validateAndSaveTransaction = async (transactionData) => {
-            const user = await User.findOne({ "beneficiary.beneficiaryId": transactionData.beneficiaryId }).lean().exec();
+            const user = await User.findOne({ "beneficiary.beneficiaryId": transactionData.beneficiaryId }).exec();
 
             if (!user) {
                 throw new Error(`User with beneficiary ID ${transactionData.beneficiaryId} not found`);
@@ -230,22 +230,14 @@ const transaction = async (req, res) => {
                 throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} not found`);
             }
 
-            if (!Array.isArray(beneficiary.transactions)) {
-                beneficiary.transactions = [];
-            }
-
-            if (beneficiary.transactions.length >= 1000) {
-                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} has too many transactions`);
-            }
-
+            // Create and save the new transaction
             const newTransaction = new Transaction(transactionData);
             await newTransaction.save();
 
-            await User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transactionData.beneficiaryId },
-                { $push: { "beneficiary.$.transactions": newTransaction._id } },
-                { new: true }
-            ).lean().exec();
+            // Update the beneficiary to reference the new transaction
+            beneficiary.transactions.push(newTransaction._id);
+
+            await user.save();
         };
 
         const transactionPromises = transactions.map(validateAndSaveTransaction);
