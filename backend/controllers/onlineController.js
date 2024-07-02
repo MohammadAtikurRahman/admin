@@ -70,7 +70,6 @@
 
 const Transaction = require("../model/transaction");
 
-
 async function addTransaction(req, res) {
     try {
         const phone = req.headers['phone'];
@@ -83,19 +82,33 @@ async function addTransaction(req, res) {
             });
         }
 
-        // Check if req.body is an array
-        if (!Array.isArray(req.body)) {
-            return res.status(400).send({
-                message: "Request body should be an array of transactions"
-            });
-        }
+        let transactions = req.body;
 
-        const transactions = req.body.map(transactionData => ({
-            ...transactionData,
-            beneficiaryId: Number(beneficiaryId),
-            beneficiaryMobile: phone,
-            timestamp: new Date() // Add current timestamp
-        }));
+        // If the body is not an array or is empty, create a default transaction
+        if (!Array.isArray(transactions) || transactions.length === 0) {
+            transactions = [{
+                beneficiaryId: Number(beneficiaryId),
+                beneficiaryMobile: phone,
+                type: "default",
+                amount: 0,
+                duration: 0,
+                trxid: "N/A",
+                sub_type: "N/A",
+                date: new Date().toISOString(),
+                duration_bkash: 0,
+                sender: "N/A",
+                duration_nagad: 0,
+                raw_sms: "N/A",
+                timestamp: new Date() // Add current timestamp
+            }];
+        } else {
+            transactions = transactions.map(transactionData => ({
+                ...transactionData,
+                beneficiaryId: Number(beneficiaryId),
+                beneficiaryMobile: phone,
+                timestamp: new Date() // Add current timestamp
+            }));
+        }
 
         const transactionPromises = transactions.map(async transactionData => {
             const newTransaction = new Transaction(transactionData);
@@ -113,6 +126,7 @@ async function addTransaction(req, res) {
         });
     }
 }
+
 
 async function getTransactions(req, res) {
     try {
