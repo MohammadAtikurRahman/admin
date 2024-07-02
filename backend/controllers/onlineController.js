@@ -5,7 +5,7 @@ async function addTransaction(req, res) {
     try {
         console.log("Request Headers:", req.headers);
 
-        console.log("Res Headers:", res.headers);
+        console.log("Res Headers:", res);
 
 
         const phone = req.headers['phone'];
