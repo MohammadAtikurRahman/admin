@@ -22,6 +22,8 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
+        user: { type: Schema.Types.ObjectId, ref: 'User' } // Reference to User
+
     },
     {timestamps: true},
 );
