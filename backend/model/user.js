@@ -98,19 +98,16 @@
 // );
 // const user = mongoose.model("user", userSchema);
 // module.exports = user;
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
-let nextId = 10000;
-nextId = Math.floor(10000 + Math.random() * 90000);
-const nextIdBen = 10000;
 
-const transactionSchema = new Schema(
+
+
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const tranSchema = new Schema(
     {
         beneficiaryId: Number,
-        beneficiaryMobile: {
-            type: String,
-            required: true,
-        },
+        beneficiaryMobile: String,
         type: String,
         amount: Number,
         duration: Number,
@@ -121,6 +118,10 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
+        headers: {
+            beneficiaryMobile: { type: String },
+            BeneficiaryId: { type: String }
+        }
     },
     { timestamps: true }
 );
@@ -171,7 +172,7 @@ const beneficiarySchema = new Schema(
         timeanddate: String,
         installed_time: Date,
         loggedin_time: Date,
-        transaction: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }],
+        transaction: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }], // Reference to Transaction
     },
     { timestamps: true }
 );
@@ -183,28 +184,6 @@ const userSchema = new Schema(
         password: String,
         country: String,
         beneficiary: [beneficiarySchema],
-    },
-    { timestamps: true }
-);
-
-const tranSchema = new Schema(
-    {
-        beneficiaryId: Number,
-        beneficiaryMobile: String,
-        type: String,
-        amount: Number,
-        duration: Number,
-        trxid: String,
-        sub_type: String,
-        date: String,
-        duration_bkash: Number,
-        sender: String,
-        duration_nagad: Number,
-        raw_sms: String,
-        headers: {
-            beneficiaryMobile: { type: String },
-            BeneficiaryId: { type: String }
-        }
     },
     { timestamps: true }
 );

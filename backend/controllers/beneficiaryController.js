@@ -288,6 +288,7 @@ async function beneficiaryLogin(req, res) {
 //     }
 // }
 
+
 async function transaction(req, res) {
     try {
         const transactions = req.body;
@@ -321,12 +322,13 @@ async function transaction(req, res) {
             return createdTransaction;
         }));
 
-        res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
+        return res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
     } catch (error) {
         console.error(error);
-        res.status(400).json({ error: error.message });
+        return  res.status(400).json({ error: error.message });
     }
 }
+
 
 
 
