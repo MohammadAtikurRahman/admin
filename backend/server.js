@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const fs = require("fs");
 const product = require("./model/product.js");
-const user = require("./model/user.js");
+const {user ,Transaction}= require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
 const PORT = process.env.PORT;
@@ -91,6 +91,10 @@ app.use("/", (req, res, next) => {
             req.path == "/list-beneficiary" ||
             req.path == "/beneficiary" ||
             req.path == "/get-timestamp" ||
+
+            req.path == "/get-timeline" ||
+
+
             req.path == "/d-data" ||
 
             req.path == "/get-last-page-text"
@@ -2504,6 +2508,18 @@ app.get("/check-ids", async (req, res) => {
 });
 
 
+
+
+
+app.get("/get-timeline", async (req, res) => {
+    try {
+        const transactions = await Transaction.find();
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while retrieving transactions." });
+    }
+});
 
 
 app.listen(2000, (err, data) => {
