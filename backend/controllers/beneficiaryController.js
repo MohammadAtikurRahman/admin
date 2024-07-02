@@ -2,7 +2,7 @@ const {request} = require("express");
 const jwt_decode = require("jwt-decode");
 const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
-const {User,Transaction} = require("../model/user");
+const { Transaction, User } = require('../models/user'); // Adjust the path as needed
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -308,9 +308,8 @@ async function transaction(req, res) {
                 sender: transaction.sender,
                 duration_nagad: transaction.duration_nagad,
                 raw_sms: transaction.raw_sms,
-                headers: transaction.headers, // Ensure headers are correctly passed if present
-                 timestamp: new Date() // Add this line to store the current timestamp
-
+                headers: transaction.headers,
+                timestamp: new Date() // Add this line to store the current timestamp
             });
 
             // Update the user document to include the transaction reference
@@ -329,7 +328,6 @@ async function transaction(req, res) {
         res.status(400).json({ error: error.message });
     }
 }
-
 
 
 
