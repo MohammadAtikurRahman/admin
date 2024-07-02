@@ -248,13 +248,14 @@ async function beneficiaryLogin(req, res) {
 // }
 
 
+
 async function transaction(req, res) {
     try {
         await Promise.all(req.body.map(async transaction => {
             const user = await User.findOneAndUpdate(
                 {"beneficiary.beneficiaryId": transaction.beneficiaryId},
                 {
-                    $push: {
+                    $addToSet: {
                         "beneficiary.$.transaction": {
                             beneficiaryId: transaction.beneficiaryId,
                             beneficiaryMobile: transaction.beneficiaryMobile,
@@ -283,7 +284,6 @@ async function transaction(req, res) {
         return res.status(400).send(error.message);
     }
 }
-
 
 
 
