@@ -16,12 +16,24 @@ const {
     deleteBeneficiary,
     saveMultiScore,
     newlogin,
-    transaction,
     examStatus,
     enumeratorObservation,
     lastPagetext,
     saveMultiObservation,
 } = require("./controllers/beneficiaryController");
+
+const {
+
+    transaction,
+   
+} = require("./controllers/onlineController");
+
+
+
+
+
+
+
 
 router.get("/enumerator/:id", getEnumerator);
 
@@ -74,6 +86,8 @@ router.post("/login", userLogin);
 router.post("/ben-score", saveTestScore);
 
 router.post("/get-login2",newlogin);
+
+
 router.post("/transaction",transaction);
 
 router.post("/add-observation",addobservation);

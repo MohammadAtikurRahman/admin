@@ -2,9 +2,7 @@ const {request} = require("express");
 const jwt_decode = require("jwt-decode");
 const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
-
-const { User, Transaction } = require("../model/user");
-
+const User = require("../model/user");
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -213,46 +211,6 @@ async function beneficiaryLogin(req, res) {
 }
 
 
-const transaction = async (req, res) => {
-    try {
-        const transactions = req.body;
-
-        const validateAndSaveTransaction = async (transactionData) => {
-            const user = await User.findOne({ "beneficiary.beneficiaryId": transactionData.beneficiaryId }).exec();
-
-            if (!user) {
-                throw new Error(`User with beneficiary ID ${transactionData.beneficiaryId} not found`);
-            }
-
-            const beneficiary = user.beneficiary.find(b => b.beneficiaryId === transactionData.beneficiaryId);
-
-            if (!beneficiary) {
-                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} not found`);
-            }
-
-            // Create and save the new transaction
-            const newTransaction = new Transaction(transactionData);
-            await newTransaction.save();
-
-            // Update the beneficiary to reference the new transaction
-            beneficiary.transactions.push(newTransaction._id);
-
-            await user.save();
-        };
-
-        const transactionPromises = transactions.map(validateAndSaveTransaction);
-
-        await Promise.all(transactionPromises);
-
-        res.status(201).send("Transactions added successfully");
-    } catch (error) {
-        console.error("Detailed Error:", error);
-        res.status(400).send({
-            message: "An error occurred while processing transactions.",
-            error: error.message || error
-        });
-    }
-};
 
 
 async function newlogin(req, res) {
@@ -662,7 +620,6 @@ module.exports = {
     deleteBeneficiary,
     saveMultiScore,
     newlogin,
-    transaction,
     examStatus,
     enumeratorObservation,
     lastPagetext,
