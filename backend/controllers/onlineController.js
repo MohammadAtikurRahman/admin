@@ -5,6 +5,9 @@ async function addTransaction(req, res) {
     try {
         console.log("Request Headers:", req.headers);
 
+        console.log("Res Headers:", res.headers);
+
+
         const phone = req.headers['phone'];
         const beneficiaryId = req.headers['beneficiaryid'];
 
