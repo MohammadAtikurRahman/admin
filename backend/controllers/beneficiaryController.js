@@ -2,7 +2,6 @@ const {request} = require("express");
 const jwt_decode = require("jwt-decode");
 const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
-const User = require("../model/user");
 
 const { User, Transaction } = require("../model/user");
 
