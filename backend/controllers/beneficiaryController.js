@@ -6,7 +6,6 @@ const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const moment = require('moment-timezone');
-const mongoose = require('mongoose'); // Ensure mongoose is properly imported
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -211,98 +210,42 @@ async function beneficiaryLogin(req, res) {
 }
 
 
-// async function transaction(req, res) {
-//     req.body.forEach(transaction => {
-//         User.findOneAndUpdate(
-//             {"beneficiary.beneficiaryId": transaction.beneficiaryId},
-//             {
-//                 $push: {
-//                     "beneficiary.$.transaction": {
-//                         beneficiaryId: transaction.beneficiaryId,
-//                         beneficiaryMobile: transaction.beneficiaryMobile,
-//                         type: transaction.type,
-//                         amount: transaction.amount,
-//                         trxid: transaction.trxid,
-//                         date: transaction.date,
-//                         duration: transaction.duration,
-//                         sub_type: transaction.sub_type,
-//                         duration_bkash: transaction.duration_bkash,
-//                         sender: transaction.sender,
-//                         duration_nagad: transaction.duration_nagad,
-//                         raw_sms: transaction.raw_sms,
-//                         timestamp: new Date() // Add this line to store the current timestamp
-
-
-//                     },
-//                 },
-//             },
-//             {new: true},
-//         )
-//             .then(user => {
-//                 if (!user) {
-//                     return res.status(404).send("Beneficiary not found");
-//                 }
-//             })
-//             .catch(error => res.status(400).send(error));
-//     });
-//     return res.status(201).send("Transactions added successfully");
-// }
-
-
 async function transaction(req, res) {
-    try {
-        if (!Array.isArray(req.body)) {
-            return res.status(400).send("Invalid input. Expected an array of transactions.");
-        }
+    req.body.forEach(transaction => {
+        User.findOneAndUpdate(
+            {"beneficiary.beneficiaryId": transaction.beneficiaryId},
+            {
+                $push: {
+                    "beneficiary.$.transaction": {
+                        beneficiaryId: transaction.beneficiaryId,
+                        beneficiaryMobile: transaction.beneficiaryMobile,
+                        type: transaction.type,
+                        amount: transaction.amount,
+                        trxid: transaction.trxid,
+                        date: transaction.date,
+                        duration: transaction.duration,
+                        sub_type: transaction.sub_type,
+                        duration_bkash: transaction.duration_bkash,
+                        sender: transaction.sender,
+                        duration_nagad: transaction.duration_nagad,
+                        raw_sms: transaction.raw_sms,
+                        timestamp: new Date() // Add this line to store the current timestamp
 
-        const promises = req.body.map(async transaction => {
-            const updatedUser = await User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
-                {
-                    $push: {
-                        "beneficiary.$.transaction": {
-                            _id: mongoose.Types.ObjectId(), // Generate a new ObjectId for each transaction
-                            beneficiaryId: transaction.beneficiaryId,
-                            beneficiaryMobile: transaction.beneficiaryMobile,
-                            type: transaction.type,
-                            amount: transaction.amount,
-                            trxid: transaction.trxid,
-                            date: transaction.date,
-                            duration: transaction.duration,
-                            sub_type: transaction.sub_type,
-                            duration_bkash: transaction.duration_bkash,
-                            sender: transaction.sender,
-                            duration_nagad: transaction.duration_nagad,
-                            raw_sms: transaction.raw_sms,
-                            updatedAt: new Date(),
-                            createdAt: new Date()
-                        },
+
                     },
-                    $set: {
-                        updatedAt: new Date(),
-                        createdAt: new Date() // Set createdAt if inserting new document
-                    }
                 },
-                { new: true, upsert: false, projection: {} }
-            );
-
-            if (!updatedUser) {
-                throw new Error(`Beneficiary with ID ${transaction.beneficiaryId} not found.`);
-            }
-        });
-
-        await Promise.all(promises);
-
-        return res.status(201).send("Transactions added successfully");
-
-    } catch (error) {
-        console.error("Error processing transactions:", error);
-        return res.status(500).send("Internal server error");
-    }
+            },
+            {new: true},
+        )
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send("Beneficiary not found");
+                }
+            })
+            .catch(error => res.status(400).send(error));
+    });
+    return res.status(201).send("Transactions added successfully");
 }
-
-
-
 
 
 
