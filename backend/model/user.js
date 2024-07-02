@@ -31,7 +31,6 @@ const Transaction = mongoose.model("Transaction", transactionSchema);
 
 
 
-
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,

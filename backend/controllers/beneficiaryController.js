@@ -214,22 +214,21 @@ async function beneficiaryLogin(req, res) {
 
 
 
-
 const transaction = async (req, res) => {
     try {
         const transactions = req.body;
-        const transactionPromises = transactions.map(async (transaction) => {
-            const newTransaction = new Transaction(transaction);
+        const transactionPromises = transactions.map(async (transactionData) => {
+            const newTransaction = new Transaction(transactionData);
             await newTransaction.save();
 
             const updatedUser = await User.findOneAndUpdate(
-                { "beneficiary.beneficiaryId": transaction.beneficiaryId },
+                { "beneficiary.beneficiaryId": transactionData.beneficiaryId },
                 { $push: { "beneficiary.$.transactions": newTransaction._id } },
                 { new: true }
             ).lean().exec();
 
             if (!updatedUser) {
-                throw new Error(`Beneficiary with ID ${transaction.beneficiaryId} not found`);
+                throw new Error(`Beneficiary with ID ${transactionData.beneficiaryId} not found`);
             }
 
             return updatedUser;
@@ -242,16 +241,15 @@ const transaction = async (req, res) => {
             return res.status(404).send(`${notFoundCount} beneficiary(s) not found`);
         }
 
-      return  res.status(201).send("Transactions added successfully");
+        res.status(201).send("Transactions added successfully");
     } catch (error) {
         console.error("Detailed Error:", error);
-        return   res.status(400).send({
+        res.status(400).send({
             message: "An error occurred while processing transactions.",
             error: error.message || error
         });
     }
 };
-
 
 
 
