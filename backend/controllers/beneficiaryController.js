@@ -249,68 +249,13 @@ async function beneficiaryLogin(req, res) {
 // }
 
 
-// async function transaction(req, res) {
-//     try {
-//         const transactions = req.body;
-
-//         const createdTransactions = await Promise.all(transactions.map(async transaction => {
-//             // Create a new transaction in the transactions collection
-//             const createdTransaction = await User.create({
-//                 beneficiaryId: transaction.beneficiaryId,
-//                 beneficiaryMobile: transaction.beneficiaryMobile,
-//                 type: transaction.type,
-//                 amount: transaction.amount,
-//                 trxid: transaction.trxid,
-//                 date: transaction.date,
-//                 duration: transaction.duration,
-//                 sub_type: transaction.sub_type,
-//                 duration_bkash: transaction.duration_bkash,
-//                 sender: transaction.sender,
-//                 duration_nagad: transaction.duration_nagad,
-//                 raw_sms: transaction.raw_sms,
-//                 timestamp: new Date()
-//             });
-
-//             // Update the user document to include the transaction reference
-//             await User.findOneAndUpdate(
-//                 { beneficiaryId: transaction.beneficiaryId },
-//                 { $push: { transactions: createdTransaction._id } },
-//                 { new: true }
-//             );
-
-//             return createdTransaction;
-//         }));
-
-//         res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(400).json({ error: error.message });
-//     }
-// }
-
-
 async function transaction(req, res) {
     try {
         const transactions = req.body;
 
-        // Process each transaction sequentially
-        for (const transaction of transactions) {
-            // Find the user by beneficiaryId
-            const user = await User.findOne({ "beneficiary.beneficiaryId": transaction.beneficiaryId });
-
-            if (!user) {
-                return res.status(404).json({ error: "Beneficiary not found" });
-            }
-
-            // Add the transaction to the appropriate beneficiary
-            const beneficiary = user.beneficiary.find(b => b.beneficiaryId === transaction.beneficiaryId);
-
-            if (!beneficiary) {
-                return res.status(404).json({ error: "Beneficiary not found" });
-            }
-
-            // Push the new transaction into the transactions array
-            beneficiary.transaction.push({
+        const createdTransactions = await Promise.all(transactions.map(async transaction => {
+            // Create a new transaction in the transactions collection
+            const createdTransaction = await User.create({
                 beneficiaryId: transaction.beneficiaryId,
                 beneficiaryMobile: transaction.beneficiaryMobile,
                 type: transaction.type,
@@ -326,16 +271,23 @@ async function transaction(req, res) {
                 timestamp: new Date()
             });
 
-            // Save the updated user document
-            await user.save();
-        }
+            // Update the user document to include the transaction reference
+            await User.findOneAndUpdate(
+                { beneficiaryId: transaction.beneficiaryId },
+                { $push: { transactions: createdTransaction._id } },
+                { new: true }
+            );
 
-        res.status(201).json({ message: "Transactions added successfully" });
+            return createdTransaction;
+        }));
+
+        res.status(201).json({ message: "Transactions added successfully", transactions: createdTransactions });
     } catch (error) {
         console.error(error);
         res.status(400).json({ error: error.message });
     }
 }
+
 
 
 async function newlogin(req, res) {
