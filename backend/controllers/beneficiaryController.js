@@ -217,9 +217,11 @@ const transaction = async (req, res) => {
     try {
         const transactions = req.body;
         const transactionPromises = transactions.map(async (transactionData) => {
+            // Create and save the new transaction
             const newTransaction = new Transaction(transactionData);
             await newTransaction.save();
 
+            // Update the beneficiary to reference the new transaction
             const updatedUser = await User.findOneAndUpdate(
                 { "beneficiary.beneficiaryId": transactionData.beneficiaryId },
                 { $push: { "beneficiary.$.transactions": newTransaction._id } },
@@ -249,8 +251,6 @@ const transaction = async (req, res) => {
         });
     }
 };
-
-
 
 
 
