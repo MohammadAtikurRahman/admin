@@ -1,10 +1,17 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-
-const tranSchema = new Schema(
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
+let nextId = 10000;
+nextId = Math.floor(10000 + Math.random() * 90000);
+const nextIdBen = 10000;
+const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
-        beneficiaryMobile: String,
+
+        beneficiaryMobile: {
+            type: String,
+            required: true,
+        },
+
         type: String,
         amount: Number,
         duration: Number,
@@ -15,25 +22,25 @@ const tranSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
-        headers: {
-            beneficiaryMobile: { type: String },
-            BeneficiaryId: { type: String }
-        },
-        user: { type: Schema.Types.ObjectId, ref: 'User' } // Reference to User
     },
-    { timestamps: true }
+    {timestamps: true},
 );
-
 const beneficiarySchema = new Schema(
     {
         beneficiaryId: Number,
+
         test_status: String,
         whotaketheexam: Number,
+
         excuses: String,
+
         enumerator_observation: String,
+
         all_observation: [String],
         observation_new: [String],
+
         observation: String,
+
         score1: Number,
         time: Date,
         duration: String,
@@ -51,7 +58,11 @@ const beneficiarySchema = new Schema(
         relgn: String,
         job: String,
         gen: String,
+
         mob: String,
+
+
+        
         pgm: String,
         pass: Number,
         bank: String,
@@ -70,11 +81,11 @@ const beneficiarySchema = new Schema(
         timeanddate: String,
         installed_time: Date,
         loggedin_time: Date,
-        // Removed transaction array
-    },
-    { timestamps: true }
-);
 
+        transaction: [transactionSchema],
+    },
+    {timestamps: true},
+);
 const userSchema = new Schema(
     {
         userId: Number,
@@ -83,10 +94,7 @@ const userSchema = new Schema(
         country: String,
         beneficiary: [beneficiarySchema],
     },
-    { timestamps: true }
+    {timestamps: true},
 );
-
-module.exports = {
-    Transaction: mongoose.model('Transaction', tranSchema),
-    User: mongoose.model('User', userSchema)
-};
+const user = mongoose.model("user", userSchema);
+module.exports = user;
