@@ -4,10 +4,7 @@ const Schema = mongoose.Schema;
 const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
-        beneficiaryMobile: {
-            type: String,
-            required: true,
-        },
+        beneficiaryMobile: String,
         type: String,
         amount: Number,
         duration: Number,
@@ -18,9 +15,9 @@ const transactionSchema = new Schema(
         sender: String,
         duration_nagad: Number,
         raw_sms: String,
-        timestamp: { type: Date, default: Date.now }
+        timestamp: {type: Date, default: Date.now},
     },
-    { timestamps: true }
+    {timestamps: true},
 );
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
