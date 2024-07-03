@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const transactionSchema = new Schema(
     {
         beneficiaryId: Number,
-        beneficiaryMobile: Number,
+        beneficiaryMobile: String,
         type: String,
         amount: Number,
         duration: Number,
