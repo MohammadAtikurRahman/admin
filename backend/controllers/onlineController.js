@@ -37,14 +37,33 @@ async function addTransaction(req, res) {
     }
 }
 
-async function getTransactions(req, res) {
+async function getLastXDaysTransactions(req, res) {
     try {
-        const transactions = await Transaction.find();
+        const numberOfDays = req.params.numberOfDays;
+
+        let query;
+        if (numberOfDays === 'all') {
+            query = {};
+        } else {
+            const days = parseInt(numberOfDays, 10);
+            if (isNaN(days) || days <= 0) {
+                query = {};
+            } else {
+                const targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() - days);
+                query = {
+                    createdAt: {
+                        $gte: targetDate
+                    }
+                };
+            }
+        }
+        const transactions = await Transaction.find(query);
         res.status(200).send(transactions);
     } catch (error) {
         console.error("Detailed Error:", error);
         res.status(500).send({
-            message: "An error occurred while fetching transactions.",
+            message: "An error occurred while fetching the transactions.",
             error: error.message || error
         });
     }
@@ -53,5 +72,5 @@ async function getTransactions(req, res) {
 
 module.exports = {
     addTransaction,
-    getTransactions,
+    getLastXDaysTransactions
 };

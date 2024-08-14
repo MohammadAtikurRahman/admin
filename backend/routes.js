@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {getEnumerator, userLogin} = require("./controllers/enumeratorController");
+const { getEnumerator, userLogin } = require("./controllers/enumeratorController");
 
 const {
     addBeneficiary,
@@ -25,8 +25,7 @@ const {
 const {
 
     addTransaction,
-    getTransactions 
-   
+    getLastXDaysTransactions
 } = require("./controllers/onlineController");
 
 
@@ -63,7 +62,7 @@ router.post("/observation", enumeratorObservation); // beneficiary login
 
 
 
-router.get("/get-last-page-text/:beneficiaryId",lastPagetext); // beneficiary login
+router.get("/get-last-page-text/:beneficiaryId", lastPagetext); // beneficiary login
 
 
 
@@ -71,10 +70,10 @@ router.get("/get-last-page-text/:beneficiaryId",lastPagetext); // beneficiary lo
 
 
 
-router.post("/get-saved-multi-score", saveMultiScore); 
+router.post("/get-saved-multi-score", saveMultiScore);
 
 
-router.post("/get-saved-multi-observation", saveMultiObservation); 
+router.post("/get-saved-multi-observation", saveMultiObservation);
 
 
 
@@ -86,15 +85,15 @@ router.post("/login", userLogin);
 
 router.post("/ben-score", saveTestScore);
 
-router.post("/get-login2",newlogin);
+router.post("/get-login2", newlogin);
 
 
-router.post("/transaction",addTransaction);
+router.post("/transaction", addTransaction);
 
 
-router.get("/get-tran", getTransactions);
+router.get("/transactions/days/:numberOfDays", getLastXDaysTransactions);
 
-router.post("/add-observation",addobservation);
+router.post("/add-observation", addobservation);
 
 
-module.exports = {router};
+module.exports = { router };
