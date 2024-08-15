@@ -28,12 +28,7 @@ const {
     getLastXDaysTransactions
 } = require("./controllers/onlineController");
 
-
-
-
-
-
-
+const { migrateBeneficiaries } = require("./controllers/migration");
 
 router.get("/enumerator/:id", getEnumerator);
 
@@ -50,33 +45,13 @@ router.post("/get-login", beneficiaryLogin); // beneficiary login
 router.post("/get-score-saved", addBeneficiaryScore); // beneficiary login
 
 
-
-
-
-
-
-
 router.post("/nowillingtoexam", examStatus); // beneficiary login
-
 router.post("/observation", enumeratorObservation); // beneficiary login
-
-
 
 router.get("/get-last-page-text/:beneficiaryId", lastPagetext); // beneficiary login
 
-
-
-
-
-
-
 router.post("/get-saved-multi-score", saveMultiScore);
-
-
 router.post("/get-saved-multi-observation", saveMultiObservation);
-
-
-
 
 router.post("/save-score", addBeneficiaryScore); // beneficiary login
 
@@ -90,10 +65,10 @@ router.post("/get-login2", newlogin);
 
 router.post("/transaction", addTransaction);
 
-
 router.get("/transactions/days/:numberOfDays", getLastXDaysTransactions);
 
 router.post("/add-observation", addobservation);
 
+router.get("/migrate/beneficiaries", migrateBeneficiaries)
 
 module.exports = { router };
