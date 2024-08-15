@@ -17,6 +17,7 @@ mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true
 });
 
 const fs = require("fs");
@@ -555,23 +556,23 @@ app.get("/get-transaction", async (req, res) => {
                     : null,
                 transaction: ben.transaction
                     ? ben.transaction
-                          .filter(t => {
-                              if (trxidSet.has(t.trxid)) {
-                                  return false; // Skip duplicate transaction records
-                              }
-                              trxidSet.add(t.trxid);
-                              return true; // Include unique transaction records
-                          })
-                          .map(t => ({
-                              beneficiaryMobile: ben.mob,
-                              type: t.type,
-                              amount: t.amount,
-                              date: t.date,
-                              trxid: t.trxid,
-                              duration: t.duration,
-                              updatedAt: t.updatedAt,
-                              createdAt: t.createdAt,
-                          }))
+                        .filter(t => {
+                            if (trxidSet.has(t.trxid)) {
+                                return false; // Skip duplicate transaction records
+                            }
+                            trxidSet.add(t.trxid);
+                            return true; // Include unique transaction records
+                        })
+                        .map(t => ({
+                            beneficiaryMobile: ben.mob,
+                            type: t.type,
+                            amount: t.amount,
+                            date: t.date,
+                            trxid: t.trxid,
+                            duration: t.duration,
+                            updatedAt: t.updatedAt,
+                            createdAt: t.createdAt,
+                        }))
                     : [], // or some default value when ben.transaction is undefined
             }));
         })
@@ -630,9 +631,9 @@ app.post("/api", async (req, res) => {
 // app.get('/get-timestamp', async (req, res) => {
 //     try {
 //       const users = await user.find({}, 'beneficiary');
-  
+
 //       const result = {};
-  
+
 //       users.forEach(user => {
 //         user.beneficiary.forEach(beneficiary => {
 //           beneficiary.transaction.forEach((txn) => {
@@ -644,20 +645,20 @@ app.post("/api", async (req, res) => {
 //                 timestamps: []
 //               };
 //             }
-  
+
 //             result[mobile].timestamps.push({
 //               updatedAt: txn.updatedAt
 //             });
 //           });
 //         });
 //       });
-  
+
 //       res.status(200).json(result);
 //     } catch (error) {
 //       res.status(500).send(error.message);
 //     }
 //   });
-  
+
 
 function formatDateToCustomString(date) {
     return moment(date).tz('Asia/Dhaka').format('DD-MMM-YYYY hh:mm:ss.SSS A').replace('AM', 'Am').replace('PM', 'Pm');
@@ -667,9 +668,9 @@ function formatDateToCustomString(date) {
 app.get('/get-timestamp', async (req, res) => {
     try {
         const users = await user.find({}, 'beneficiary');
-  
+
         const result = {};
-  
+
         users.forEach(user => {
             user.beneficiary.forEach(beneficiary => {
                 beneficiary.transaction.forEach((txn) => {
@@ -689,11 +690,11 @@ app.get('/get-timestamp', async (req, res) => {
                     }
                     const updatedAtDate = new Date(txn.updatedAt);
                     const dateKey = formatDateToCustomString(updatedAtDate).split(' ')[0]; // dd-MMM-yyyy format
-  
+
                     if (!result[mobile].timestamps[dateKey]) {
                         result[mobile].timestamps[dateKey] = [];
                     }
-  
+
                     // Check if this exact timestamp is already added
                     const formattedTimestamp = formatDateToCustomString(updatedAtDate);
                     if (!result[mobile].timestamps[dateKey].includes(formattedTimestamp)) {
@@ -702,7 +703,7 @@ app.get('/get-timestamp', async (req, res) => {
                 });
             });
         });
-  
+
         // Convert the timestamps object to array for each mobile number
         for (let mobile in result) {
             result[mobile].timestamps = Object.keys(result[mobile].timestamps).map(dateKey => ({
@@ -710,7 +711,7 @@ app.get('/get-timestamp', async (req, res) => {
                 timestamps: result[mobile].timestamps[dateKey]
             }));
         }
-  
+
         res.status(200).json(result);
     } catch (error) {
         res.status(500).send(error.message);
@@ -726,7 +727,7 @@ const specificMobs = [1300110376, 1300118032, 1304876020, 1305066913];
 app.get("/d-data", async (req, res) => {
     try {
         const beneficiaries = await user.find({}, "beneficiary.beneficiaryId beneficiary.mob beneficiary.dis beneficiary.sub_dis beneficiary.uni beneficiary.vill").exec();
-        
+
         // Flatten the results and filter by specific beneficiary IDs
         const result = beneficiaries
             .map(usr => usr.beneficiary.filter(ben => specificMobs.includes(Number(ben.mob))))
@@ -743,7 +744,7 @@ app.get("/d-data", async (req, res) => {
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({message: "Internal server error"});
     }
 });
 
