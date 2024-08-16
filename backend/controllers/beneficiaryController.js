@@ -1,12 +1,13 @@
-const {request} = require("express");
+const { request } = require("express");
 const jwt_decode = require("jwt-decode");
-const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
-const {findById, findOneAndUpdate, findByIdAndUpdate} = require("../model/user");
+const { randomNumberNotInBeneficiaryCollection } = require("../helpers/number");
+const { findById, findOneAndUpdate, findByIdAndUpdate } = require("../model/user");
 const User = require("../model/user");
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const moment = require('moment-timezone');
+const Beneficiary = require("../model/beneficiary");
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -17,13 +18,12 @@ async function addBeneficiary(req, res) {
         req.body.beneficiary["beneficiaryId"] = beneficiaryId;
     }
 
-    user = await User.findByIdAndUpdate(
-        user.id,
-        {$push: {beneficiary: req.body.beneficiary}},
-        {new: true},
-    );
-
-    return res.status(200).json({user: user});
+    try {
+        const createdBeneficiary = await Beneficiary.insertOne(req.body.beneficiary)
+        return res.status(200).json({ 'message': 'Successfully created beneficiary', 'beneficiary': createdBeneficiary });
+    } catch (e) {
+        return res.status(400).json({ 'message': 'Failed to create beneficiary' });
+    }
 }
 
 async function updateBeneficiary(req, res) {
@@ -63,7 +63,7 @@ async function updateBeneficiary(req, res) {
         a_sts,
     } = req.body.beneficiary;
     const updatedBeneficiary = await User.findOneAndUpdate(
-        {"beneficiary._id": req.params.id},
+        { "beneficiary._id": req.params.id },
         {
             $set: {
                 "beneficiary.$.name": name,
@@ -102,18 +102,18 @@ async function updateBeneficiary(req, res) {
                 "beneficiary.$.a_sts": a_sts,
             },
         },
-        {new: true},
+        { new: true },
     );
 
     if (!updatedBeneficiary) {
-        return res.status(404).json({error: "Beneficiary not found"});
+        return res.status(404).json({ error: "Beneficiary not found" });
     }
 
-    return res.status(200).json({updatedBeneficiary});
+    return res.status(200).json({ updatedBeneficiary });
 }
 
 async function deleteBeneficiary(req, res) {
-    User.findOneAndUpdate({}, {$pull: {beneficiary: {_id: req.params.id}}}, (err, data) => {
+    User.findOneAndUpdate({}, { $pull: { beneficiary: { _id: req.params.id } } }, (err, data) => {
         if (err) return res.status(400).send(err);
         if (!data) return res.status(404).send("Beneficiary not found");
         res.send("Beneficiary deleted successfully");
@@ -149,7 +149,7 @@ async function saveTest(req, res) {
     let beneficiary = [...user.beneficiary, req.body.beneficiary];
     console.log(beneficiary);
 
-    user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true})
+    user = await User.findByIdAndUpdate(user._id, { beneficiary }, { new: true })
         .select("-_id")
         .select("-id")
         .select("-username")
@@ -157,17 +157,21 @@ async function saveTest(req, res) {
         .select("-created_at")
         .select("-beneficiary.test");
 
-    return res.status(200).json({user: user});
+    return res.status(200).json({ user: user });
 }
 
 async function getBeneficiaries(req, res) {
-    const user = jwt_decode(req.headers?.token);
-    let beneficiaries = (await User.findById(user.id))?.toJSON()?.beneficiary;
-    return res.status(200).json({beneficiaries});
+    try {
+        const user = await jwt_decode(req.headers?.token);
+        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(10).exec());
+        return res.status(200).json({ beneficiaries });
+    } catch (e) {
+        return res.status(401).send({ message: e.message });
+    }
 }
 
-async function getToken({beneficiaryId, userId}) {
-    let token = await jwt.sign({beneficiaryId, userId}, "shhhhh11111", {expiresIn: "1d"});
+async function getToken({ beneficiaryId, userId }) {
+    let token = await jwt.sign({ beneficiaryId, userId }, "shhhhh11111", { expiresIn: "1d" });
     console.log(token);
     return token;
 }
@@ -192,12 +196,12 @@ function getBeneficiaryIndex(arr, beneficiaryId) {
 
 async function beneficiaryLogin(req, res) {
     console.log(req.body);
-    let user = await User.findOne({userId: req.body.userId});
+    let user = await User.findOne({ userId: req.body.userId });
     if (!req.body || !req.body.userId || !req.body.password) {
-        return res.status(400).json({error: "Username or Password missing"});
+        return res.status(400).json({ error: "Username or Password missing" });
     }
     if (!user) {
-        return res.status(401).json({error: "User Not Found"});
+        return res.status(401).json({ error: "User Not Found" });
     }
     if (user.password === req.body.password) {
         let token = await getToken(user);
@@ -207,7 +211,7 @@ async function beneficiaryLogin(req, res) {
             status: true,
         });
     }
-    return res.status(401).json({message: "Something went wrong."});
+    return res.status(401).json({ message: "Something went wrong." });
 }
 
 
@@ -312,18 +316,18 @@ async function addBeneficiaryScore(req, res) {
 
 
 async function examStatus(req, res) {
-    const {beneficiaryId} = req.body;
+    const { beneficiaryId } = req.body;
     console.log(req.body);
-    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
+    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
     if (!user) {
-        return res.status(400).json({message: "User not found"});
+        return res.status(400).json({ message: "User not found" });
     }
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
     if (!beneficiary) {
-        return res.status(400).json({message: "Beneficiary not found"});
+        return res.status(400).json({ message: "Beneficiary not found" });
     }
     let result = await User.updateOne(
-        {"beneficiary.beneficiaryId": beneficiaryId},
+        { "beneficiary.beneficiaryId": beneficiaryId },
         {
             $set: {
                 "beneficiary.$.test_status": req.body?.test_status,
@@ -332,9 +336,9 @@ async function examStatus(req, res) {
         },
     );
     if (result.nModified == 0) {
-        return res.status(400).json({message: "Failed to update "});
+        return res.status(400).json({ message: "Failed to update " });
     }
-    return res.status(200).json({message: "Beneficiary test status and excuess saved"});
+    return res.status(200).json({ message: "Beneficiary test status and excuess saved" });
 }
 
 async function enumeratorObservation(req, res) {
@@ -343,7 +347,7 @@ async function enumeratorObservation(req, res) {
     console.log(req.body);
 
     let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
-    
+
     if (!user) {
         return res.status(400).json({ message: "User not found" });
     }
@@ -369,7 +373,7 @@ async function enumeratorObservation(req, res) {
     if (result.nModified == 0) {
         return res.status(400).json({ message: "Failed to update" });
     }
-    
+
     return res.status(200).json({ message: "enumerator observation saved" });
 }
 
@@ -377,52 +381,52 @@ async function enumeratorObservation(req, res) {
 async function lastPagetext(req, res) {
     try {
         const user = await User.findOne({ "beneficiary.beneficiaryId": req.params.beneficiaryId })
-        .select("-username")
-        .select("-password")
-        .select("-id")
-        .select("-_id")
-        .select("-userId")
-        .select("-createdAt")
-        .select("-updatedAt")
-        .select("-__v")
-        .select("-beneficiary._id")
-        .select("-beneficiary.ben_nid")
-        .select("-beneficiary.ben_id")
-        .select("-beneficiary.sl")
-        .select("-beneficiary.age")
-        .select("-beneficiary.dis")
+            .select("-username")
+            .select("-password")
+            .select("-id")
+            .select("-_id")
+            .select("-userId")
+            .select("-createdAt")
+            .select("-updatedAt")
+            .select("-__v")
+            .select("-beneficiary._id")
+            .select("-beneficiary.ben_nid")
+            .select("-beneficiary.ben_id")
+            .select("-beneficiary.sl")
+            .select("-beneficiary.age")
+            .select("-beneficiary.dis")
 
-        .select("-beneficiary.relgn")
-        .select("-beneficiary.job")
-        .select("-beneficiary.test")
-        .select("-beneficiary.createdAt")
+            .select("-beneficiary.relgn")
+            .select("-beneficiary.job")
+            .select("-beneficiary.test")
+            .select("-beneficiary.createdAt")
 
-        .select("-beneficiary.mob")
-        .select("-beneficiary.pgm")
-        .select("-beneficiary.pass")
-        .select("-beneficiary.bank")
-        .select("-beneficiary.branch")
-        .select("-beneficiary.r_out")
-        .select("-beneficiary.transaction")
+            .select("-beneficiary.mob")
+            .select("-beneficiary.pgm")
+            .select("-beneficiary.pass")
+            .select("-beneficiary.bank")
+            .select("-beneficiary.branch")
+            .select("-beneficiary.r_out")
+            .select("-beneficiary.transaction")
 
-        .select("-beneficiary.mob_1")
-        .select("-beneficiary.ben_sts")
-        .select("-beneficiary.nid_sts")
-        .select("-beneficiary.a_sts")
+            .select("-beneficiary.mob_1")
+            .select("-beneficiary.ben_sts")
+            .select("-beneficiary.nid_sts")
+            .select("-beneficiary.a_sts")
 
-        .select("-beneficiary.accre")
-        .select("-beneficiary.f_allow")
-        .select("-beneficiary.mob_own")
-        .select("-beneficiary.updatedAt")
-        .select("-beneficiary.m_nm")
-        .select("-beneficiary.f_nm")
-        .select("-beneficiary.dob")
-        .select("-beneficiary.sub_dis")
-        .select("-beneficiary.uni")
-        .select("-beneficiary.vill")
-        .select("-beneficiary.gen")
-        .select("-beneficiary.duration")
-        .select("-beneficiary.score1");
+            .select("-beneficiary.accre")
+            .select("-beneficiary.f_allow")
+            .select("-beneficiary.mob_own")
+            .select("-beneficiary.updatedAt")
+            .select("-beneficiary.m_nm")
+            .select("-beneficiary.f_nm")
+            .select("-beneficiary.dob")
+            .select("-beneficiary.sub_dis")
+            .select("-beneficiary.uni")
+            .select("-beneficiary.vill")
+            .select("-beneficiary.gen")
+            .select("-beneficiary.duration")
+            .select("-beneficiary.score1");
 
 
 
@@ -436,17 +440,17 @@ async function lastPagetext(req, res) {
 
 
         if (!user) {
-          return res.status(404).send("Beneficiary not found");
+            return res.status(404).send("Beneficiary not found");
         }
 
         const beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.params.beneficiaryId);
         if (!beneficiary) {
-          return res.status(404).send("Beneficiary not found");
+            return res.status(404).send("Beneficiary not found");
         }
         res.send(beneficiary);
-      } catch (error) {
+    } catch (error) {
         res.status(500).send(error.message);
-      }
+    }
 }
 
 
@@ -455,14 +459,14 @@ async function saveMultiScore(req, res) {
 
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let {userId, beneficiaryId, score1, observation, duration,observation_new} = beneficiary;
+        let { userId, beneficiaryId, score1, observation, duration, observation_new } = beneficiary;
 
         if (!userId) {
-            return res.status(400).json({message: "userId is required"});
+            return res.status(400).json({ message: "userId is required" });
         }
 
         let result = await User.findOneAndUpdate(
-            {"beneficiary.beneficiaryId": beneficiaryId},
+            { "beneficiary.beneficiaryId": beneficiaryId },
             {
                 $set: {
                     "beneficiary.$.score1": score1,
@@ -472,10 +476,10 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation_new": observation_new
                 },
             },
-            {new: true},
+            { new: true },
         );
     }
-    return res.status(200).json({message: "Multiple beneficiaries updated"});
+    return res.status(200).json({ message: "Multiple beneficiaries updated" });
 }
 
 
@@ -483,9 +487,9 @@ async function saveMultiObservation(req, res) {
     const beneficiaries = req.body;
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let {userId, beneficiaryId, enumerator_observation, test_status} = beneficiary;
+        let { userId, beneficiaryId, enumerator_observation, test_status } = beneficiary;
         let result = await User.findOneAndUpdate(
-            {"beneficiary.beneficiaryId": beneficiaryId},
+            { "beneficiary.beneficiaryId": beneficiaryId },
             {
                 $set: {
                     "beneficiary.$.enumerator_observation": enumerator_observation,
@@ -494,16 +498,16 @@ async function saveMultiObservation(req, res) {
 
                 },
             },
-            {new: true},
+            { new: true },
         );
     }
-    return res.status(200).json({message: "Multiple enumerator observation and ofline after data updated"});
+    return res.status(200).json({ message: "Multiple enumerator observation and ofline after data updated" });
 }
 
 
 async function benenScore(req, res) {
-    const {userId, beneficiaryId} = req.body;
-    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
+    const { userId, beneficiaryId } = req.body;
+    const beneficiaries = (await User.findOne({ userId: userId })).toJSON().beneficiary;
 
     let index = getBeneficiaryIndex(beneficiaries, beneficiaryId);
 
@@ -514,23 +518,23 @@ async function benenScore(req, res) {
     if (index !== null) beneficiaries[index]["duration"] = req.body?.duration;
 
     const user = (
-        await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
+        await User.findOneAndUpdate({ userId: userId }, { beneficiary: beneficiaries }, { new: true })
     ).toJSON();
 
     console.log(user);
 
-    const whoLoggedIn = await User.findOne({userId: userId});
+    const whoLoggedIn = await User.findOne({ userId: userId });
 
     if (existsInArray(beneficiaries, beneficiaryId)) {
-        return res.status(200).json({whoLoggedIn});
+        return res.status(200).json({ whoLoggedIn });
     }
 
-    return res.status(400).json({error: "Credentials does not exists"});
+    return res.status(400).json({ error: "Credentials does not exists" });
 }
 
 async function saveTestScore(req, res) {
     const data = jwt_decode(req.body.beneficiaryToken);
-    const beneficiaries = (await User.findOne({userId: data.userId})).toJSON().beneficiary;
+    const beneficiaries = (await User.findOne({ userId: data.userId })).toJSON().beneficiary;
 
     console.log(beneficiaries);
 
@@ -547,15 +551,15 @@ async function saveTestScore(req, res) {
 
     const user = (
         await User.findOneAndUpdate(
-            {userId: data.userId},
-            {beneficiary: beneficiaries},
-            {new: true},
+            { userId: data.userId },
+            { beneficiary: beneficiaries },
+            { new: true },
         )
     ).toJSON();
 
     console.log(user);
 
-    return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
+    return res.json({ message: "score saved", beneficiary: user.beneficiary[index] });
 }
 const SECRET = 'shhhhh11111';  // Your JWT secret
 
@@ -570,19 +574,19 @@ async function addobservation(req, res) {
         }
 
         // Find the user containing the specific beneficiaryId
-        let user = await User.findOne({"beneficiary.beneficiaryId": req.body.beneficiaryId});
+        let user = await User.findOne({ "beneficiary.beneficiaryId": req.body.beneficiaryId });
         if (!user) {
-            return res.status(400).json({message: "User not found"});
+            return res.status(400).json({ message: "User not found" });
         }
 
         let beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.body.beneficiaryId);
         if (!beneficiary) {
-            return res.status(400).json({message: "Beneficiary not found"});
+            return res.status(400).json({ message: "Beneficiary not found" });
         }
 
         // Update the observation_new field for that beneficiary
         let result = await User.updateOne(
-            {"beneficiary.beneficiaryId": req.body.beneficiaryId},
+            { "beneficiary.beneficiaryId": req.body.beneficiaryId },
             {
                 $set: {
                     "beneficiary.$.observation_new": req.body.observation_new
@@ -591,11 +595,11 @@ async function addobservation(req, res) {
         );
 
         if (result.nModified == 0) {
-            return res.status(400).json({message: "Failed to update observation"});
+            return res.status(400).json({ message: "Failed to update observation" });
         }
 
-        return res.status(200).json({message: "Observation added successfully", beneficiary});
-        
+        return res.status(200).json({ message: "Observation added successfully", beneficiary });
+
     } catch (error) {
         if (error.name === 'JsonWebTokenError') {
             return res.status(401).send('Invalid token.');
