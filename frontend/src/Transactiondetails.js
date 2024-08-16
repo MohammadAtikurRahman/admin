@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 import {
     Button,
@@ -12,16 +12,16 @@ import {
     AppBar,
     Toolbar,
 } from "@material-ui/core";
-import { Pagination } from "@material-ui/lab";
+import {Pagination} from "@material-ui/lab";
 import swal from "sweetalert";
 import json2csv from "json2csv";
 
-import { Link as MaterialLink } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
-import { searchBeneficiary } from "./utils/search";
-import { EditBeneficiary } from "./EditBeneficiary";
-import { AddBeneficiary } from "./AddBeneficiary";
+import {Link as MaterialLink} from "@material-ui/core";
+import {Link} from "react-router-dom";
+import BeneficiaryDelete, {beneficiarydelete} from "./BeneficiaryDelete";
+import {searchBeneficiary} from "./utils/search";
+import {EditBeneficiary} from "./EditBeneficiary";
+import {AddBeneficiary} from "./AddBeneficiary";
 import Timestamp from "./Timestamp";
 const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
@@ -93,8 +93,8 @@ const exportData = async () => {
     let data = await getData();
     data = data.reverse(); // Reverse the order of data
     const fields = Object.keys(data[0]);
-    const csv = json2csv.parse(data, { fields });
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const csv = json2csv.parse(data, {fields});
+    const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
@@ -174,15 +174,15 @@ export default class Transactiondetails extends Component {
     }
 
     handleClick(event) {
-        this.setState({ anchorEl: event.currentTarget });
+        this.setState({anchorEl: event.currentTarget});
     }
 
     handleClose() {
-        this.setState({ anchorEl: null });
+        this.setState({anchorEl: null});
     }
 
     handleSelect(item) {
-        this.setState({ selectedItem: item });
+        this.setState({selectedItem: item});
         this.handleClose();
     }
 
@@ -191,19 +191,19 @@ export default class Transactiondetails extends Component {
         if (!token) {
             this.props.history.push("/login");
         } else {
-            this.setState({ token: token }, () => {
+            this.setState({token: token}, () => {
                 this.getBeneficiaries();
             });
         }
 
         axios.get(baseUrl + "/user-details").then((res) => {
             const persons = res.data;
-            this.setState({ persons });
+            this.setState({persons});
         });
     };
 
     getBeneficiaries() {
-        this.setState({ loading: true });
+        this.setState({loading: true});
         axios
             .get(baseUrl + "/beneficiary", {
                 headers: {
@@ -218,26 +218,28 @@ export default class Transactiondetails extends Component {
                     let totalTransactions = 0;
                     let seenTrxids = new Set();
 
-                    beneficiary.transaction.forEach((transaction) => {
-                        if (!seenTrxids.has(transaction.trxid)) {
-                            seenTrxids.add(transaction.trxid);
-                            totalTransactions += 1;
-                            if (transaction.type === 'in') {
-                                totalCashInTransactions += 1;
-                            } else if (transaction.type === 'out') {
-                                totalCashOutTransactions += 1;
-                            } else {
-                                console.log(`Unexpected transaction type: ${transaction.type}`);
-                            }
-                        }
-                    });
+                    // beneficiary.transaction.forEach((transaction) => {
+                    //     if (!seenTrxids.has(transaction.trxid)) {
+                    //         seenTrxids.add(transaction.trxid);
+                    //         totalTransactions += 1;
+                    //         if (transaction.type === 'in') {
+                    //             totalCashInTransactions += 1;
+                    //         } else if (transaction.type === 'out') {
+                    //             totalCashOutTransactions += 1;
+                    //         } else {
+                    //             console.log(`Unexpected transaction type: ${transaction.type}`);
+                    //         }
+                    //     }
+                    // });
                     return {
                         ...beneficiary,
-                        totalCashInTransactions,
-                        totalCashOutTransactions,
-                        totalTransactions
+                        // totalCashInTransactions,
+                        // totalCashOutTransactions,
+                        // totalTransactions
                     };
                 });
+
+                console.log("beneficiaries", beneficiaries)
 
                 this.setState({
                     loading: false,
@@ -246,14 +248,15 @@ export default class Transactiondetails extends Component {
                 });
             })
             .catch((err) => {
+                console.log("error", err)
                 swal({
                     text: err,
                     icon: "error",
                     type: "error",
                 });
                 this.setState(
-                    { loading: false, beneficiaries: [], userinfo: [] },
-                    () => { }
+                    {loading: false, beneficiaries: [], userinfo: []},
+                    () => {}
                 );
             });
     };
@@ -264,7 +267,7 @@ export default class Transactiondetails extends Component {
     };
 
     onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value }, () => { });
+        this.setState({[e.target.name]: e.target.value}, () => {});
 
         if (e.target.name === "search") {
             const needle = e.target.value;
@@ -301,7 +304,7 @@ export default class Transactiondetails extends Component {
         });
     };
     handleProductClose = () => {
-        this.setState({ openProductModal: false });
+        this.setState({openProductModal: false});
     };
 
     handleProductEditOpen = (row) => {
@@ -312,7 +315,7 @@ export default class Transactiondetails extends Component {
     };
 
     handleProductEditClose = () => {
-        this.setState({ openProductEditModal: false });
+        this.setState({openProductEditModal: false});
     };
 
     render() {
@@ -321,10 +324,10 @@ export default class Transactiondetails extends Component {
                 <div>
                     <AppBar
                         position="static"
-                        style={{ backgroundColor: "#1F8A7", height: "32px" }}
+                        style={{backgroundColor: "#1F8A7", height: "32px"}}
                     >
                         <Toolbar>
-                            <h5 style={{ paddingTop: "10px" }}></h5>
+                            <h5 style={{paddingTop: "10px"}}></h5>
                             <h6
                                 style={{
                                     fontFamily: "Arial",
@@ -347,7 +350,7 @@ export default class Transactiondetails extends Component {
                         size="small"
                     >
                         <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
+                            style={{textDecoration: "none", color: "black"}}
                             href="/test"
                         >
                             List Of Test
@@ -361,7 +364,7 @@ export default class Transactiondetails extends Component {
                         size="small"
                     >
                         <MaterialLink
-                            style={{ textDecoration: "none", color: "white" }}
+                            style={{textDecoration: "none", color: "white"}}
                             href="/notest"
                         >
                             Disagree of test
@@ -372,7 +375,7 @@ export default class Transactiondetails extends Component {
                         className="button_style"
                         variant="contained"
                         size="small"
-                        style={{ backgroundColor: "#34495E", color: "white" }}
+                        style={{backgroundColor: "#34495E", color: "white"}}
                     >
                         <MaterialLink
                             style={{
@@ -391,7 +394,7 @@ export default class Transactiondetails extends Component {
                         size="small"
                     >
                         <MaterialLink
-                            style={{ textDecoration: "none", color: "white" }}
+                            style={{textDecoration: "none", color: "white"}}
                             href="/dashboard"
                         >
                             List of beneficiary
@@ -433,10 +436,10 @@ export default class Transactiondetails extends Component {
                             onChange={this.onChange}
                             placeholder="Search by Beneficiary"
                             required
-                            style={{ border: "1px solid grey", padding: "1px" }}
+                            style={{border: "1px solid grey", padding: "1px"}}
                             InputProps={{
                                 disableUnderline: true,
-                                style: { paddingRight: "5px", paddingLeft: "50px" },
+                                style: {paddingRight: "5px", paddingLeft: "50px"},
                             }}
                         />
                     </div>
