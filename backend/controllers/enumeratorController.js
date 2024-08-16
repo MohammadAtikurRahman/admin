@@ -18,7 +18,7 @@ async function getToken(data) {
 
 async function userLogin(req, res) {
     console.log(req.body);
-    let user = await User.findOne({username: req.body.username});
+    let user = await User.findOne({username: req.body.username}, {_id: 1, password: 1});
     if (!req.body || !req.body.username || !req.body.password) {
         return res.status(400).json({error: "Username or Password missing"});
     }
