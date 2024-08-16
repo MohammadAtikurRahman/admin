@@ -14,15 +14,17 @@ async function addBeneficiary(req, res) {
 
     const beneficiaryId = await randomNumberNotInBeneficiaryCollection(user.beneficiary);
 
+    req.body.beneficiary["userId"] = user.id;
+
     if (!req.body.beneficiary.beneficiaryId) {
         req.body.beneficiary["beneficiaryId"] = beneficiaryId;
     }
 
     try {
-        const createdBeneficiary = await Beneficiary.insertOne(req.body.beneficiary)
+        const createdBeneficiary = await Beneficiary.create(req.body.beneficiary)
         return res.status(200).json({ 'message': 'Successfully created beneficiary', 'beneficiary': createdBeneficiary });
     } catch (e) {
-        return res.status(400).json({ 'message': 'Failed to create beneficiary' });
+        return res.status(400).json({ 'message': 'Failed to create beneficiary: ' + e.message });
     }
 }
 
