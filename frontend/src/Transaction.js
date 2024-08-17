@@ -11,6 +11,9 @@ import { Button } from "@material-ui/core";
 import { Link } from "@material-ui/core";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert";
+import axios from "axios";
+
+const baseUrl = process.env.REACT_APP_URL;
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -21,23 +24,41 @@ export default function Transaction() {
     const [totalTransactionCount, setTotalTransactionCount] = useState(0);
     const [totalCashInCount, setTotalCashInCount] = useState(0);
     const [totalCashOutCount, setTotalCashOutCount] = useState(0);
+    const [transactions, setTransactions] = useState([]);
+
     const location = useLocation();
     const userProfile = location.state;
-    console.log("transaction details", userProfile);
     const navigate = useNavigate();
 
+    async function fetchTransactions(beneficiaryId) {
+        const response = await axios.get(baseUrl + `/transaction/of/${beneficiaryId}`);
+        return response.data.transactions;
+    }
     useEffect(() => {
-        if (userProfile?.transaction) {
-            setTotalTransactionCount(userProfile.transaction.length);
+        const beneficiaryId = location.pathname.split("/").pop();
 
-            const cashInCount = userProfile.transaction.reduce((acc, t) => {
+        const fetchAndSetTransactions = async () => {
+            const transactions = await fetchTransactions(beneficiaryId);
+            setTransactions(transactions);
+        };
+        fetchAndSetTransactions();
+        return () => {
+            setTransactions([]);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (transactions) {
+            setTotalTransactionCount(transactions.length);
+
+            const cashInCount = transactions.reduce((acc, t) => {
                 if (t.type === "in" && t.date) {
                     return acc + 1;
                 }
                 return acc;
             }, 0);
 
-            const cashOutCount = userProfile.transaction.reduce((acc, t) => {
+            const cashOutCount = transactions.reduce((acc, t) => {
                 if (t.type === "out" && t.date) {
                     return acc + 1;
                 }
@@ -47,7 +68,7 @@ export default function Transaction() {
             setTotalCashInCount(cashInCount);
             setTotalCashOutCount(cashOutCount);
         }
-    }, [userProfile]);
+    }, [transactions]);
 
     function logOut() {
         localStorage.setItem("token", null);
@@ -68,7 +89,7 @@ export default function Transaction() {
     const classes = useStyles();
     const trxidSet = new Set();
 
-    const totalCashIn = userProfile?.transaction.reduce((acc, t) => {
+    const totalCashIn = transactions.reduce((acc, t) => {
         if (!trxidSet.has(t.trxid) && t.type === "in" && t.date) {
             trxidSet.add(t.trxid);
             return acc + t.amount;
@@ -76,7 +97,7 @@ export default function Transaction() {
         return acc;
     }, 0);
 
-    const totalCashOut = userProfile?.transaction.reduce((acc, t) => {
+    const totalCashOut = transactions.reduce((acc, t) => {
         if (!trxidSet.has(t.trxid) && t.type === "out" && t.date) {
             trxidSet.add(t.trxid);
             return acc + t.amount;
@@ -84,7 +105,7 @@ export default function Transaction() {
         return acc;
     }, 0);
 
-    const totalMinutes = userProfile?.transaction.reduce((acc, t, index, arr) => {
+    const totalMinutes = transactions.reduce((acc, t, index, arr) => {
         if (
             !isNaN(Number(t.duration)) &&
             t.date &&
@@ -95,7 +116,7 @@ export default function Transaction() {
         return acc;
     }, 0);
 
-    const totalMinutesBkash = userProfile?.transaction.reduce(
+    const totalMinutesBkash = transactions.reduce(
         (acc, t, index, arr) => {
             if (
                 !isNaN(Number(t.duration_bkash)) &&
@@ -109,7 +130,7 @@ export default function Transaction() {
         0
     );
 
-    const totalMinutesNagad = userProfile?.transaction.reduce(
+    const totalMinutesNagad = transactions.reduce(
         (acc, t, index, arr) => {
             if (
                 !isNaN(Number(t.duration_nagad)) &&
@@ -178,7 +199,7 @@ export default function Transaction() {
                         style={{ textDecoration: "none", color: "white" }}
                         href="/dashboard"
                     >
-                        List Of BeneFiciary
+                        List Of Beneficiary
                     </Link>
                 </Button>
 
@@ -243,11 +264,10 @@ export default function Transaction() {
                     </TableHead>
 
                     <TableBody>
-                        {userProfile.transaction
-                            .filter((t, index, arr) => {
-                                // Filter only the first occurrence of each trxid
-                                return arr.findIndex((el) => el.trxid === t.trxid) === index;
-                            })
+                        {transactions.filter((t, index, arr) => {
+                            // Filter only the first occurrence of each trxid
+                            return arr.findIndex((el) => el.trxid === t.trxid) === index;
+                        })
                             .filter((t) => t.date)
                             .sort((a, b) => {
                                 const [dayA, monthA, yearA] = a.date.split("/");
