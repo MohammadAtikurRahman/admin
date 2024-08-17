@@ -10,8 +10,8 @@ const multer = require("multer"),
     path = require("path");
 
 const mongoose = require("mongoose").set("debug", true);
-const {router} = require("./routes.js");
-const {randomNumberNotInUserCollection} = require("./helpers/number");
+const { router } = require("./routes.js");
+const { randomNumberNotInUserCollection } = require("./helpers/number");
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -26,15 +26,15 @@ const user = require("./model/user.js");
 const jwt_decode = require("jwt-decode");
 
 const PORT = process.env.PORT || 5000;
-app.use(express.json({limit: "50mb"}));
-app.use(express.urlencoded({limit: "50mb", extended: true}));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
     next();
 });
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 const dir = "./uploads";
 const upload = multer({
@@ -134,7 +134,7 @@ app.post("/register", async (req, res) => {
         const userId = await randomNumberNotInUserCollection();
         console.log(userId);
         if (req.body && req.body.username && req.body.password) {
-            user.find({username: req.body.username}, (err, data) => {
+            user.find({ username: req.body.username }, (err, data) => {
                 if (data.length == 0) {
                     let User = new user({
                         username: req.body.username,
@@ -287,7 +287,7 @@ app.post("/update-product", upload.any(), (req, res) => {
 app.post("/delete-product", (req, res) => {
     try {
         if (req.body && req.body.beneficiaryId) {
-            user.findByIdAndUpdate(req.body.id, {is_delete: true}, {new: true}, (err, data) => {
+            user.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
                 if (data.is_delete) {
                     res.status(200).json({
                         status: true,
@@ -323,6 +323,9 @@ app.get("/api", (req, res) => {
         }
     });
 });
+
+
+
 app.get("/get-all", (req, res) => {
     user.find((err, val) => {
         if (err) {
@@ -546,7 +549,7 @@ app.get("/get-transaction", async (req, res) => {
 
     const mapped_data = data
         .map(user => {
-            const {beneficiary} = user;
+            const { beneficiary } = user;
             return beneficiary.map(ben => ({
                 beneficiaryId: ben.beneficiaryId,
                 name: ben.name,
@@ -622,43 +625,11 @@ app.post("/api", async (req, res) => {
             password: saveData.password,
         });
         await newData.save();
-        res.status(201).json({success: true, data: newData});
+        res.status(201).json({ success: true, data: newData });
     } catch (error) {
-        res.status(400).json({success: false});
+        res.status(400).json({ success: false });
     }
 });
-
-// app.get('/get-timestamp', async (req, res) => {
-//     try {
-//       const users = await user.find({}, 'beneficiary');
-
-//       const result = {};
-
-//       users.forEach(user => {
-//         user.beneficiary.forEach(beneficiary => {
-//           beneficiary.transaction.forEach((txn) => {
-//             const mobile = txn.beneficiaryMobile;
-//             if (!result[mobile]) {
-//               result[mobile] = {
-//                 number: mobile,
-//                 trxid: txn.trxid,
-//                 timestamps: []
-//               };
-//             }
-
-//             result[mobile].timestamps.push({
-//               updatedAt: txn.updatedAt
-//             });
-//           });
-//         });
-//       });
-
-//       res.status(200).json(result);
-//     } catch (error) {
-//       res.status(500).send(error.message);
-//     }
-//   });
-
 
 function formatDateToCustomString(date) {
     return moment(date).tz('Asia/Dhaka').format('DD-MMM-YYYY hh:mm:ss.SSS A').replace('AM', 'Am').replace('PM', 'Pm');
@@ -744,7 +715,7 @@ app.get("/d-data", async (req, res) => {
         res.status(200).json(result);
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: "Internal server error"});
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
@@ -2475,9 +2446,9 @@ app.get("/check-ids", async (req, res) => {
 
     try {
         const beneficiaries = await user.aggregate([
-            {$unwind: "$beneficiary"},
-            {$match: {"beneficiary.beneficiaryId": {$in: idsToCheck}}},
-            {$project: {"beneficiary.beneficiaryId": 1, _id: 0}},
+            { $unwind: "$beneficiary" },
+            { $match: { "beneficiary.beneficiaryId": { $in: idsToCheck } } },
+            { $project: { "beneficiary.beneficiaryId": 1, _id: 0 } },
         ]);
 
         // Extract the found IDs
