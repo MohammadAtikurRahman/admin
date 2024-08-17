@@ -5,9 +5,9 @@ const User = require("../model/user");
 const { Parser } = require('json2csv');
 
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 const moment = require('moment-timezone');
 const Beneficiary = require("../model/beneficiary");
+const { DateTime } = require('luxon');
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -105,7 +105,7 @@ async function getBeneficiaries(req, res) {
 
 async function downloadAllBeneficiaries(req, res) {
     try {
-        const user = await jwt_decode(req.headers?.token);
+        const user = await jwt_decode(req.query?.token);
         let beneficiaries = await Beneficiary.find({ userId: user.id });
 
         const json2csvParser = new Parser();
