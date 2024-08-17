@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
     Button,
     TextField,
@@ -19,7 +20,6 @@ import swal from "sweetalert";
 import { Link as MaterialLink } from "@material-ui/core";
 import { SingleEnumerator } from "./SingleEnumerator";
 const baseUrl = process.env.REACT_APP_URL;
-import axios from "axios";
 
 export default class Enumerator extends Component {
     constructor() {
@@ -80,12 +80,13 @@ export default class Enumerator extends Component {
             data = `${data}&search=${this.state.search}`;
         }
         axios
-            .get(baseUrl + "/get-product${data}", {
+            .get(baseUrl + `/get-product${data}`, {
                 headers: {
                     token: this.state.token,
                 },
             })
             .then((res) => {
+                console.log("res", res)
                 this.setState({
                     loading: false,
                     products: res.data.products,
@@ -551,9 +552,9 @@ export default class Enumerator extends Component {
                                 <TableCell align="center">
                                     <b>Enumerator Creation Time </b>{" "}
                                 </TableCell>
-                                <TableCell align="center">
+                                {/* <TableCell align="center">
                                     <b>Password </b>{" "}
-                                </TableCell>
+                                </TableCell> */}
                             </TableRow>
                         </TableHead>
                         <TableBody>

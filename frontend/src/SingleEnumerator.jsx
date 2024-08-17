@@ -13,8 +13,8 @@ export function SingleEnumerator(props) {
     }
 
     return (
-        <TableRow key={row.name}>
-            <TableCell align="center">{row.userId}</TableCell>
+        <TableRow key={row?._id}>
+            <TableCell align="center">{row?.userId}</TableCell>
             <TableCell align="center" component="th" scope="row">
                 {row.username}
             </TableCell>
@@ -31,8 +31,8 @@ export function SingleEnumerator(props) {
                     year: "numeric",
                 })}
             </TableCell>
-            <TableCell align="center">
-                {showPassword ? row.password : "*".repeat(row.password.length)}
+            {/* <TableCell align="center">
+                {showPassword ? row.password : "*".repeat(row?.password?.length)}
                 <InputAdornment position="middle">
                     <IconButton
                         aria-label="toggle password visibility"
@@ -41,7 +41,7 @@ export function SingleEnumerator(props) {
                         {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                 </InputAdornment>
-            </TableCell>
+            </TableCell> */}
         </TableRow>
     );
 }
