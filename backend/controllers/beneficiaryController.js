@@ -116,7 +116,7 @@ async function searchBeneficiaries(req, res) {
 
         const beneficiaries = await Beneficiary.find({
             $or: searchConditions
-        });
+        }).limit(100);
 
         return res.status(200).json({
             message: `Found ${beneficiaries.length} beneficiaries`,
