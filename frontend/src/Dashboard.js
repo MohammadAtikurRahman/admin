@@ -166,7 +166,11 @@ export default class Dashboard extends Component {
                 page: this.state.page,
             },
         });
-        this.setState({ filteredBeneficiary: response.data.beneficiaries });
+        this.setState({
+            filteredBeneficiary: response.data.beneficiaries,
+            page: response.data.page,
+            pages: response.data.totalPages
+        });
     }
 
     handleProductOpen = () => {
@@ -210,7 +214,10 @@ export default class Dashboard extends Component {
 
     pageChange(event, value) {
         this.setState({ page: value }, () => {
-            this.getBeneficiaries();
+            if (!this.state.search) {
+                return this.getBeneficiaries();
+            }
+            return this.onSearchBeneficiary()
         });
     }
 
