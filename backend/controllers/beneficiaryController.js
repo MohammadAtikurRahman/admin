@@ -1,7 +1,6 @@
 const { request } = require("express");
 const jwt_decode = require("jwt-decode");
 const { randomNumberNotInBeneficiaryCollection } = require("../helpers/number");
-const { findById, findOneAndUpdate, findByIdAndUpdate } = require("../model/user");
 const User = require("../model/user");
 
 const jwt = require("jsonwebtoken");
@@ -95,7 +94,7 @@ async function saveTest(req, res) {
 async function getBeneficiaries(req, res) {
     try {
         const user = await jwt_decode(req.headers?.token);
-        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(100).exec());
+        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(10).exec());
         return res.status(200).json({ beneficiaries });
     } catch (e) {
         return res.status(401).send({ message: e.message });
