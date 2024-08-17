@@ -561,8 +561,8 @@ export default class Enumerator extends Component {
                             {this.state.persons
                                 .slice(0)
                                 .reverse()
-                                .map((row) => (
-                                    <SingleEnumerator row={row} />
+                                .map((row, index) => (
+                                    <SingleEnumerator row={row} index={index}/>
                                 ))}
                         </TableBody>
                     </Table>
