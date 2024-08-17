@@ -285,20 +285,6 @@ export default class Dashboard extends Component {
                     <Button
                         className="button_style"
                         variant="contained"
-                        color="inherit"
-                        size="small"
-                    >
-                        <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
-                            href="/transactiondetails
-              "
-                        >
-                            Transaction details
-                        </MaterialLink>
-                    </Button>
-                    <Button
-                        className="button_style"
-                        variant="contained"
                         size="small"
                         onClick={this.logOut}
                     >
