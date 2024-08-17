@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getEnumerator, userLogin } = require("./controllers/enumeratorController");
+const { getEnumerator, getEnumerators, userLogin } = require("./controllers/enumeratorController");
 
 const {
     addBeneficiary,
@@ -24,7 +24,6 @@ const {
 } = require("./controllers/beneficiaryController");
 
 const {
-
     addTransaction,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
@@ -33,6 +32,7 @@ const {
 const { migrateBeneficiaries } = require("./controllers/migration");
 
 router.get("/enumerator/:id", getEnumerator);
+router.get("/enumerators", getEnumerators);
 
 router.get("/beneficiary", getBeneficiaries);
 router.patch("/beneficiary/:id", updateBeneficiary);
