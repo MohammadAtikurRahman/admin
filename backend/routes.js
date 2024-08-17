@@ -7,6 +7,7 @@ const {
     addBeneficiary,
     updateBeneficiary,
     getBeneficiaries,
+    searchBeneficiaries,
     beneficiaryLogin,
     saveTestScore,
     saveTest,
@@ -36,6 +37,7 @@ router.get("/beneficiary", getBeneficiaries);
 router.patch("/beneficiary/:id", updateBeneficiary);
 router.post("/beneficiary", addBeneficiary);
 router.delete("/beneficiary/:id", deleteBeneficiary);
+router.get("/beneficiary/search/:keyword", searchBeneficiaries)
 
 router.post("/beneficiary/add/bulk", addBeneficiaryInBulk);
 

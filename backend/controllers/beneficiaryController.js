@@ -95,12 +95,38 @@ async function saveTest(req, res) {
 async function getBeneficiaries(req, res) {
     try {
         const user = await jwt_decode(req.headers?.token);
-        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(10).exec());
+        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(100).exec());
         return res.status(200).json({ beneficiaries });
     } catch (e) {
         return res.status(401).send({ message: e.message });
     }
 }
+
+async function searchBeneficiaries(req, res) {
+    const keyword = req.params.keyword;
+
+    try {
+        const searchConditions = [
+            { name: { $regex: keyword, $options: 'i' } }
+        ];
+        // If the keyword is numeric, add the beneficiaryId condition
+        if (!isNaN(keyword)) {
+            searchConditions.push({ beneficiaryId: Number(keyword) });
+        }
+
+        const beneficiaries = await Beneficiary.find({
+            $or: searchConditions
+        });
+
+        return res.status(200).json({
+            message: `Found ${beneficiaries.length} beneficiaries`,
+            beneficiaries
+        });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+}
+
 
 async function getToken({ beneficiaryId, userId }) {
     let token = await jwt.sign({ beneficiaryId, userId }, "shhhhh11111", { expiresIn: "1d" });
@@ -547,6 +573,7 @@ module.exports = {
     addBeneficiary,
     addBeneficiaryInBulk,
     getBeneficiaries,
+    searchBeneficiaries,
     beneficiaryLogin,
     benenScore,
     addBeneficiaryScore,
