@@ -327,10 +327,9 @@ export default class Dashboard extends Component {
                             Search
                         </Button>
                         <a
-                            href={baseUrl + "/beneficiaries/download"}
+                            href={`${baseUrl}/beneficiaries/download?token=${encodeURIComponent(localStorage.getItem("token"))}`}
                             download="beneficiaries.csv"
-                            style={{ textDecoration: 'none' }}
-                        >
+                            style={{ textDecoration: 'none' }}>
                             <Button
                                 variant="contained"
                                 color="success"
