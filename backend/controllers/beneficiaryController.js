@@ -28,7 +28,7 @@ async function addBeneficiary(req, res) {
 }
 
 async function updateBeneficiary(req, res) {
-    const beneficiary = request.body.beneficiary;
+    const beneficiary = req.body.beneficiary;
 
     const updatedBeneficiary = await Beneficiary.findOneAndUpdate(
         { "beneficiaryId": req.params.id },

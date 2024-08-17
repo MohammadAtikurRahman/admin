@@ -39,7 +39,7 @@ export function EditBeneficiary(props) {
             return;
         }
 
-        const res = await axios.patch(baseUrl +"/beneficiary/" + beneficiary._id, {
+        const res = await axios.patch(baseUrl +"/beneficiary/" + beneficiary.beneficiaryId, {
             beneficiary: beneficiary,
         });
 

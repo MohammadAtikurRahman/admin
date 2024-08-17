@@ -23,7 +23,7 @@ function BeneficiaryDelete({ row }) {
     }).then(async (result) => {
       if (result.value) {
           try {
-            const response = await axios.delete(baseUrl + `/beneficiary/${row._id}`);
+            const response = await axios.delete(baseUrl + `/beneficiary/${row.beneficiaryId}`);
             window.location.reload();
             setTimeout(function() {
               swal.fire(
