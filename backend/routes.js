@@ -26,7 +26,8 @@ const {
 const {
 
     addTransaction,
-    getLastXDaysTransactions
+    getLastXDaysTransactions,
+    getTransactionBasedOnBeneficiary
 } = require("./controllers/onlineController");
 
 const { migrateBeneficiaries } = require("./controllers/migration");
@@ -66,7 +67,7 @@ router.post("/get-login2", newlogin);
 
 
 router.post("/transaction", addTransaction);
-
+router.get("/transaction/of/:beneficiaryId", getTransactionBasedOnBeneficiary);
 router.get("/transactions/days/:numberOfDays", getLastXDaysTransactions);
 
 router.post("/add-observation", addobservation);
