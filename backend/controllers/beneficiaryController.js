@@ -105,8 +105,8 @@ async function getBeneficiaries(req, res) {
 
 async function downloadAllBeneficiaries(req, res) {
     try {
-        const user = await jwt_decode(req.query?.token);
-        let beneficiaries = await Beneficiary.find({ userId: user.id });
+        let beneficiaries = await Beneficiary.find().exec();
+        beneficiaries = beneficiaries.map(beneficiary => beneficiary.toJSON());
 
         const json2csvParser = new Parser();
         const csv = json2csvParser.parse(beneficiaries);
