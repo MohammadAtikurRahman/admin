@@ -37,7 +37,7 @@ export default function Login(props) {
             .then((res) => {
                 localStorage.setItem("token", res.data.token);
                 localStorage.setItem("user_id", res.data.id);
-                if (res.status === 200) navigate("/transactiondetails");
+                if (res.status === 200) navigate("/dashboard");
                 Swal.fire({
                     title: 'Your Logged In',
                     text: 'Successfully Login',
