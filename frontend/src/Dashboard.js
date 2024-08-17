@@ -14,12 +14,10 @@ import {
 } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
-import json2csv from "json2csv";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
-import { searchBeneficiary } from "./utils/search";
 import { EditBeneficiary } from "./EditBeneficiary";
 import { AddBeneficiary } from "./AddBeneficiary";
 
@@ -40,8 +38,6 @@ const formatTime = (dateString) => {
         hour12: true,
     });
 };
-
-// ...rest of the code
 
 const flattenTransactions = (data) => {
     return data
@@ -68,34 +64,6 @@ const flattenTransactions = (data) => {
             });
         })
         .flat();
-};
-
-// ...rest of the code
-
-// ...rest of the code
-
-const getData = async () => {
-    try {
-        const res = await axios.get(baseUrl + "/get-transaction");
-        return flattenTransactions(res.data);
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-const exportData = async () => {
-    const data = await getData();
-    const fields = Object.keys(data[0]);
-    const csv = json2csv.parse(data, { fields });
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "transaction.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 };
 
 export default class Dashboard extends Component {
@@ -164,6 +132,7 @@ export default class Dashboard extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.onSearchBeneficiary = this.onSearchBeneficiary.bind(this);
     }
 
     handleClick(event) {
@@ -229,17 +198,12 @@ export default class Dashboard extends Component {
 
     onChange = (e) => {
         this.setState({ [e.target.name]: e.target.value }, () => { });
-
-        if (e.target.name === "search") {
-            const needle = e.target.value;
-            this.setState({
-                filteredBeneficiary: searchBeneficiary(
-                    this.state.beneficiaries,
-                    needle
-                ),
-            });
-        }
     };
+
+    async onSearchBeneficiary() {
+        const response = await axios.get(baseUrl + `/beneficiary/search/${this.state.search}`)
+        console.log("response = ", response)
+    }
 
     handleProductOpen = () => {
         this.setState({
@@ -436,6 +400,14 @@ export default class Dashboard extends Component {
                                 style: { paddingRight: "5px", paddingLeft: "50px" },
                             }}
                         />
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={this.onSearchBeneficiary}
+                            style={{ marginLeft: '10px' }}
+                        >
+                            Search
+                        </Button>
                     </div>
 
                     <Table aria-label="simple table">
