@@ -3,7 +3,7 @@ import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
-import backgroundImage from "./bg.png"; 
+import backgroundImage from "./bg.png";
 
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
@@ -80,82 +80,80 @@ export default function Login(props) {
             left: 0,
             width: "100%",
             height: "100%",
-            
+
 
         }}>
 
 
-        <div style={{ marginTop: "100px" }}>
-            <div>
-                <h2 style={{ color: "#334D9F" }}
-                >LOGIN</h2>
+            <div style={{ marginTop: "100px" }}>
+                <div>
+                    <h2 style={{ color: "#334D9F" }}
+                    >LOGIN</h2>
 
-                <br />
+                    <br />
+                </div>
+
+                <div>
+                    <TextField
+                        id="standard-basic"
+                        type="text"
+
+                        autoComplete="off"
+                        name="username"
+                        value={user.username}
+                        onChange={onChange}
+                        placeholder="Username"
+                        required
+                        variant="outlined"
+
+                        size="small"
+                        inputProps={{ style: inputStyle }}
+
+                    />
+                    <br />
+                    <br />
+                    <TextField
+                        size="small"
+
+                        id="standard-basic"
+                        type="password"
+                        autoComplete="off"
+                        name="password"
+                        variant="outlined"
+
+                        value={user.password}
+                        onChange={onChange}
+                        placeholder="Password"
+                        required
+                        inputProps={{ style: inputStyle }}
+
+                    />
+                    <br />
+                    <br />
+                    <Button
+                        className="button_style"
+                        variant="contained"
+                        color="primary"
+                        size="medium"
+                        disabled={user.username == "" && user.password == ""}
+                        onClick={login}
+                        style={{ backgroundColor: "#334D9F", color: "white" }}
+                    >
+                        Login
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <Link href="/register" size="normal"
+
+                        style={{ color: "#334D9F" }}
+
+                    >Register</Link>
+                </div>
+
+
+
+
+
             </div>
-
-            <div>
-                <TextField
-                    id="standard-basic"
-                    type="text"
-
-                    autoComplete="off"
-                    name="username"
-                    value={user.username}
-                    onChange={onChange}
-                    placeholder="Username"
-                    required
-                    variant="outlined"
-
-                    size="small"
-                    inputProps={{ style: inputStyle }}
-
-                />
-                <br />
-                <br />
-                <TextField
-                    size="small"
-
-                    id="standard-basic"
-                    type="password"
-                    autoComplete="off"
-                    name="password"
-                    variant="outlined"
-
-                    value={user.password}
-                    onChange={onChange}
-                    placeholder="Password"
-                    required
-                    inputProps={{ style: inputStyle }}
-
-                />
-                <br />
-                <br />
-                <Button
-                    className="button_style"
-                    variant="contained"
-                    color="primary"
-                    size="normal"
-                    disabled={user.username == "" && user.password == ""}
-                    onClick={login}
-                    style={{ backgroundColor: "#334D9F", color: "white" }}
-
-
-                >
-                    Login
-                </Button>{" "}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <Link href="/register" size="normal"
-
-                    style={{ color: "#334D9F" }}
-
-                >Register</Link>
-            </div>
-
-
-
-
-
-        </div>
 
         </div>
     );
