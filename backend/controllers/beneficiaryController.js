@@ -95,8 +95,25 @@ async function saveTest(req, res) {
 async function getBeneficiaries(req, res) {
     try {
         const user = await jwt_decode(req.headers?.token);
-        let beneficiaries = (await Beneficiary.find({ userId: user.id }).limit(10).exec());
-        return res.status(200).json({ beneficiaries });
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const skip = (page - 1) * limit;
+
+        const totalBeneficiaries = await Beneficiary.countDocuments({ userId: user.id }).exec();
+
+        const beneficiaries = await Beneficiary.find({ userId: user.id })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        return res.status(200).json({
+            totalPages: Math.ceil(totalBeneficiaries / limit),
+            page,
+            beneficiaries
+        });
     } catch (e) {
         return res.status(401).send({ message: e.message });
     }

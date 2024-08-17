@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import {
     Button,
     TextField,
@@ -18,7 +17,7 @@ import swal from "sweetalert";
 
 import { Link as MaterialLink } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
+import BeneficiaryDelete from "./BeneficiaryDelete";
 import { EditBeneficiary } from "./EditBeneficiary";
 import { AddBeneficiary } from "./AddBeneficiary";
 import axios from "axios";
@@ -33,14 +32,12 @@ export default class Dashboard extends Component {
             openProductModal: false,
             openProductEditModal: false,
             id: "",
-
             name: "",
             f_nm: "",
             ben_nid: "",
             sl: "",
             ben_id: "",
             m_nm: "",
-
             age: "",
             dis: "",
             sub_dis: "",
@@ -51,7 +48,6 @@ export default class Dashboard extends Component {
             gen: "",
             mob: "",
             pgm: "",
-
             pass: "",
             bank: "",
             branch: "",
@@ -61,14 +57,12 @@ export default class Dashboard extends Component {
             ben_sts: "",
             nid_sts: "",
             a_sts: "",
-
             u_nm: "",
             dob: "",
             accre: "",
             f_allow: "",
             score1: "",
             score2: "",
-
             desc: "",
             price: "",
             discount: "",
@@ -80,7 +74,6 @@ export default class Dashboard extends Component {
             persons: [],
             pages: 0,
             loading: false,
-
             anchorEl: null,
             selectedItem: null,
             beneficiary: {},
@@ -92,6 +85,7 @@ export default class Dashboard extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
         this.onSearchBeneficiary = this.onSearchBeneficiary.bind(this);
+        this.pageChange = this.pageChange.bind(this);
     }
 
     handleClick(event) {
@@ -130,12 +124,17 @@ export default class Dashboard extends Component {
                 headers: {
                     token: this.state.token,
                 },
+                params: {
+                    page: this.state.page,
+                },
             })
             .then((res) => {
                 this.setState({
                     loading: false,
                     beneficiaries: res.data.beneficiaries,
                     filteredBeneficiary: res.data.beneficiaries,
+                    page: res.data.page,
+                    pages: res.data.totalPages,
                 });
             })
             .catch((err) => {
@@ -151,6 +150,7 @@ export default class Dashboard extends Component {
                 // );
             });
     };
+
     logOut = () => {
         localStorage.setItem("token", null);
         this.props.history.push("/");
@@ -161,7 +161,11 @@ export default class Dashboard extends Component {
     };
 
     async onSearchBeneficiary() {
-        const response = await axios.get(baseUrl + `/beneficiary/search/${this.state.search}`)
+        const response = await axios.get(baseUrl + `/beneficiary/search/${this.state.search}`, {
+            params: {
+                page: this.state.page,
+            },
+        });
         this.setState({ filteredBeneficiary: response.data.beneficiaries });
     }
 
@@ -188,6 +192,7 @@ export default class Dashboard extends Component {
             fileName: "",
         });
     };
+
     handleProductClose = () => {
         this.setState({ openProductModal: false });
     };
@@ -203,11 +208,16 @@ export default class Dashboard extends Component {
         this.setState({ openProductEditModal: false });
     };
 
+    pageChange(event, value) {
+        this.setState({ page: value }, () => {
+            this.getBeneficiaries();
+        });
+    }
+
     render() {
         return (
             <div>
                 <div>
-
                     <AppBar
                         position="static"
                         style={{ backgroundColor: "#1F8A7", height: "32px" }}
@@ -226,15 +236,8 @@ export default class Dashboard extends Component {
                             &nbsp; &nbsp;
                         </Toolbar>
                     </AppBar>
-
-                    <br></br>
-
-
-
+                    <br />
                     <h2>Dashboard</h2>
-
-
-
                     <Button
                         className="button_style"
                         variant="contained"
@@ -340,7 +343,6 @@ export default class Dashboard extends Component {
                             </Button>
                         </a>
                     </div>
-
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -353,7 +355,6 @@ export default class Dashboard extends Component {
                                 <TableCell align="center">
                                     <b> Beneficiary Id </b>
                                 </TableCell>
-
                                 <TableCell align="center">
                                     <b> Test Score </b>
                                 </TableCell>
@@ -365,7 +366,6 @@ export default class Dashboard extends Component {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-
                         <TableBody>
                             {this.state?.filteredBeneficiary
                                 ?.reverse()
@@ -386,13 +386,10 @@ export default class Dashboard extends Component {
                                             })}
                                         </TableCell>
                                         <TableCell align="center">{row.name}</TableCell>
-
                                         <TableCell align="center" component="th" scope="row">
                                             {row.beneficiaryId}
                                         </TableCell>
-
                                         <TableCell align="center">{row.score1}</TableCell>
-
                                         <TableCell align="center">
                                             <Button
                                                 className="button_style"
@@ -403,10 +400,8 @@ export default class Dashboard extends Component {
                                             >
                                                 Edit
                                             </Button>
-
                                             <BeneficiaryDelete row={row} />
                                         </TableCell>
-
                                         <TableCell align="center">
                                             <Button
                                                 className="button_style"
@@ -447,35 +442,32 @@ export default class Dashboard extends Component {
                                 ))}
                         </TableBody>
                     </Table>
-
                     <br />
-                    <Pagination
-                        count={this.state.pages}
-                        page={this.state.page}
-                        onChange={this.pageChange}
-                        color="primary"
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Pagination
+                            count={this.state.pages}
+                            page={this.state.page}
+                            onChange={this.pageChange}
+                            color="primary"
+                        />
+                    </div>
+                </TableContainer>
+                {this.state.openProductEditModal && (
+                    <EditBeneficiary
+                        beneficiary={this.state.currentBeneficiary}
+                        isEditModalOpen={this.state.openProductEditModal}
+                        handleEditModalClose={this.handleProductEditClose}
+                        getBeneficiaries={this.getBeneficiaries}
                     />
-                </TableContainer >
-                {
-                    this.state.openProductEditModal && (
-                        <EditBeneficiary
-                            beneficiary={this.state.currentBeneficiary}
-                            isEditModalOpen={this.state.openProductEditModal}
-                            handleEditModalClose={this.handleProductEditClose}
-                            getBeneficiaries={this.getBeneficiaries}
-                        />
-                    )
-                }
-                {
-                    this.state.openProductModal && (
-                        <AddBeneficiary
-                            isEditModalOpen={this.state.openProductModal}
-                            handleEditModalClose={this.handleProductClose}
-                            getBeneficiaries={this.getBeneficiaries}
-                        />
-                    )
-                }
-            </div >
+                )}
+                {this.state.openProductModal && (
+                    <AddBeneficiary
+                        isEditModalOpen={this.state.openProductModal}
+                        handleEditModalClose={this.handleProductClose}
+                        getBeneficiaries={this.getBeneficiaries}
+                    />
+                )}
+            </div>
         );
     }
 }
