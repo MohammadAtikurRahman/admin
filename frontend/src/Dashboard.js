@@ -20,51 +20,9 @@ import { Link } from "react-router-dom";
 import BeneficiaryDelete, { beneficiarydelete } from "./BeneficiaryDelete";
 import { EditBeneficiary } from "./EditBeneficiary";
 import { AddBeneficiary } from "./AddBeneficiary";
+import axios from "axios";
 
-const axios = require("axios");
 const baseUrl = process.env.REACT_APP_URL;
-
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB");
-};
-
-const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-    });
-};
-
-const flattenTransactions = (data) => {
-    return data
-        .map((entry) => {
-            const transactions = entry.transaction;
-
-            return transactions.map((transaction, index) => {
-                const output = {
-                    "Beneficiary Id": entry.beneficiaryId,
-                    "Beneficiary Mobile": transaction.beneficiaryMobile,
-                    "Cash Status": transaction.type === "in" ? "Cash In" : "Cash Out",
-                    Amount: transaction.amount,
-                    Date: transaction.date,
-                    "Loggedin Date": formatDate(entry.loggedin_time),
-                    "Loggedin Time": formatTime(entry.loggedin_time),
-                };
-
-                if (index > 0) {
-                    output["Loggedin Date"] = "";
-                    output["Loggedin Time"] = "";
-                }
-
-                return output;
-            });
-        })
-        .flat();
-};
 
 export default class Dashboard extends Component {
     constructor() {
@@ -180,15 +138,16 @@ export default class Dashboard extends Component {
                 });
             })
             .catch((err) => {
-                swal({
-                    text: err,
-                    icon: "error",
-                    type: "error",
-                });
-                this.setState(
-                    { loading: false, beneficiaries: [], userinfo: [] },
-                    () => { }
-                );
+                console.log("error = ", err)
+                // swal({
+                //     text: err,
+                //     icon: "error",
+                //     type: "error",
+                // });
+                // this.setState(
+                //     { loading: false, beneficiaries: [], userinfo: [] },
+                //     () => { }
+                // );
             });
     };
     logOut = () => {
@@ -202,7 +161,7 @@ export default class Dashboard extends Component {
 
     async onSearchBeneficiary() {
         const response = await axios.get(baseUrl + `/beneficiary/search/${this.state.search}`)
-        console.log("response = ", response)
+        this.setState({ filteredBeneficiary: response.data.beneficiaries });
     }
 
     handleProductOpen = () => {
@@ -310,17 +269,6 @@ export default class Dashboard extends Component {
                             List Of Test
                         </MaterialLink>
                     </Button>
-                    {/* <Button
-                        className="button_style"
-                        variant="contained"
-                        color="inherit"
-                        size="small">
-                        <MaterialLink
-                            style={{ textDecoration: "none", color: "black" }}
-                            href="/test">
-                            Transactions
-                        </MaterialLink>
-                    </Button> */}
                     <Button
                         className="button_style"
                         variant="contained"
@@ -334,23 +282,6 @@ export default class Dashboard extends Component {
                             Disagree of test
                         </MaterialLink>
                     </Button>
-
-                    {/* <Button
-            className="button_style"
-            variant="contained"
-            size="small"
-            style={{ backgroundColor: "green", color: "white" }}
-          >
-            <MaterialLink
-              style={{
-                textDecoration: "none",
-                color: "white",
-              }}
-              onClick={exportData}
-            >
-              Transaction  Download
-            </MaterialLink>
-          </Button> */}
                     <Button
                         className="button_style"
                         variant="contained"
@@ -439,7 +370,6 @@ export default class Dashboard extends Component {
                             {this.state?.filteredBeneficiary
                                 ?.reverse()
                                 .filter((row) => row.test_status !== "পরীক্ষা দিতে অসম্মত")
-
                                 .map((row, index) => (
                                     <TableRow key={index}>
                                         <TableCell align="center">
@@ -492,7 +422,7 @@ export default class Dashboard extends Component {
                                                     to={`/profile/${row._id}`}
                                                     state={row}
                                                 >
-                                                    BeneFiciary Details
+                                                    Beneficiary Details
                                                 </Link>
                                             </Button>
                                             &nbsp;
