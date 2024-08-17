@@ -437,8 +437,7 @@ export default class Dashboard extends Component {
                                                         textDecoration: "none",
                                                         color: "black",
                                                     }}
-                                                    to={`/transaction/${row._id}`}
-                                                    state={row}
+                                                    to={`/transaction/${row.beneficiaryId}`}
                                                 >
                                                     Transactions Details
                                                 </Link>
