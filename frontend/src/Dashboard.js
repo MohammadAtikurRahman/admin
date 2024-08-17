@@ -12,6 +12,7 @@ import {
     AppBar,
     Toolbar,
 } from "@material-ui/core";
+import DownloadIcon from '@mui/icons-material/Download';
 import { Pagination } from "@material-ui/lab";
 import swal from "sweetalert";
 
@@ -325,6 +326,20 @@ export default class Dashboard extends Component {
                         >
                             Search
                         </Button>
+                        <a
+                            href={baseUrl + "/beneficiaries/download"}
+                            download="beneficiaries.csv"
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <Button
+                                variant="contained"
+                                color="success"
+                                startIcon={<DownloadIcon />}
+                                style={{ marginLeft: '10px' }}
+                            >
+                                Download CSV
+                            </Button>
+                        </a>
                     </div>
 
                     <Table aria-label="simple table">
@@ -441,23 +456,27 @@ export default class Dashboard extends Component {
                         onChange={this.pageChange}
                         color="primary"
                     />
-                </TableContainer>
-                {this.state.openProductEditModal && (
-                    <EditBeneficiary
-                        beneficiary={this.state.currentBeneficiary}
-                        isEditModalOpen={this.state.openProductEditModal}
-                        handleEditModalClose={this.handleProductEditClose}
-                        getBeneficiaries={this.getBeneficiaries}
-                    />
-                )}
-                {this.state.openProductModal && (
-                    <AddBeneficiary
-                        isEditModalOpen={this.state.openProductModal}
-                        handleEditModalClose={this.handleProductClose}
-                        getBeneficiaries={this.getBeneficiaries}
-                    />
-                )}
-            </div>
+                </TableContainer >
+                {
+                    this.state.openProductEditModal && (
+                        <EditBeneficiary
+                            beneficiary={this.state.currentBeneficiary}
+                            isEditModalOpen={this.state.openProductEditModal}
+                            handleEditModalClose={this.handleProductEditClose}
+                            getBeneficiaries={this.getBeneficiaries}
+                        />
+                    )
+                }
+                {
+                    this.state.openProductModal && (
+                        <AddBeneficiary
+                            isEditModalOpen={this.state.openProductModal}
+                            handleEditModalClose={this.handleProductClose}
+                            getBeneficiaries={this.getBeneficiaries}
+                        />
+                    )
+                }
+            </div >
         );
     }
 }

@@ -2,6 +2,7 @@ const { request } = require("express");
 const jwt_decode = require("jwt-decode");
 const { randomNumberNotInBeneficiaryCollection } = require("../helpers/number");
 const User = require("../model/user");
+const { Parser } = require('json2csv');
 
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -100,6 +101,28 @@ async function getBeneficiaries(req, res) {
         return res.status(401).send({ message: e.message });
     }
 }
+
+
+async function downloadAllBeneficiaries(req, res) {
+    try {
+        const user = await jwt_decode(req.headers?.token);
+        let beneficiaries = await Beneficiary.find({ userId: user.id });
+
+        const json2csvParser = new Parser();
+        const csv = json2csvParser.parse(beneficiaries);
+
+        const now = DateTime.now().setZone('Asia/Dhaka').toFormat('yyyy-MM-dd_HH-mm-ss');
+        const fileName = `beneficiaries_${now}.csv`;
+
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.setHeader('Content-Type', 'text/csv');
+
+        return res.status(200).end(csv);
+    } catch (e) {
+        return res.status(401).send({ message: e.message });
+    }
+}
+
 
 async function searchBeneficiaries(req, res) {
     const keyword = req.params.keyword;
@@ -573,6 +596,7 @@ module.exports = {
     addBeneficiaryInBulk,
     getBeneficiaries,
     searchBeneficiaries,
+    downloadAllBeneficiaries,
     beneficiaryLogin,
     benenScore,
     addBeneficiaryScore,

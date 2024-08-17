@@ -8,6 +8,7 @@ const {
     updateBeneficiary,
     getBeneficiaries,
     searchBeneficiaries,
+    downloadAllBeneficiaries,
     beneficiaryLogin,
     saveTestScore,
     saveTest,
@@ -35,6 +36,7 @@ router.get("/enumerator/:id", getEnumerator);
 router.get("/enumerators", getEnumerators);
 
 router.get("/beneficiary", getBeneficiaries);
+router.get("/beneficiaries/download", downloadAllBeneficiaries);
 router.patch("/beneficiary/:id", updateBeneficiary);
 router.post("/beneficiary", addBeneficiary);
 router.delete("/beneficiary/:id", deleteBeneficiary);
