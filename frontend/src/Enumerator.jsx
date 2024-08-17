@@ -57,8 +57,8 @@ export default class Enumerator extends Component {
             });
         }
 
-        axios.get(baseUrl + "/api").then((res) => {
-            const persons = res.data;
+        axios.get(baseUrl + "/enumerators").then((res) => {
+            const persons = res.data.enumerators;
             this.setState({ persons });
         });
         axios.get(baseUrl + "/user-details").then((res) => {
@@ -559,10 +559,8 @@ export default class Enumerator extends Component {
                         </TableHead>
                         <TableBody>
                             {this.state.persons
-                                .slice(0)
-                                .reverse()
-                                .map((row, index) => (
-                                    <SingleEnumerator row={row} index={index}/>
+                                .map((row) => (
+                                    row.username && <SingleEnumerator row={row} key={row._id}/>
                                 ))}
                         </TableBody>
                     </Table>
