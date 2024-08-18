@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getEnumerator, getEnumerators, userLogin } = require("./controllers/enumeratorController");
+const { getEnumerator, getEnumerators, userLogin } = require("./controllers/EnumeratorController");
 
 const {
     addBeneficiary,
@@ -22,13 +22,13 @@ const {
     enumeratorObservation,
     lastPagetext,
     saveMultiObservation,
-} = require("./controllers/beneficiaryController");
+} = require("./controllers/BeneficiaryController");
 
 const {
     addTransaction,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
-} = require("./controllers/onlineController");
+} = require("./controllers/TransactionController");
 
 const { migrateBeneficiaries } = require("./controllers/migration");
 
