@@ -440,6 +440,7 @@ export default class Dashboard extends Component {
                                                         color: "black",
                                                     }}
                                                     to={`/transaction/${row.beneficiaryId}`}
+                                                    state={row}
                                                 >
                                                     Transactions Details
                                                 </Link>
