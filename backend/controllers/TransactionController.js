@@ -72,7 +72,7 @@ async function getLastXDaysTransactions(req, res) {
 async function getTransactionBasedOnBeneficiary(req, res) {
     try {
         const beneficiaryId = req.params.beneficiaryId;
-        const transactions = await Transaction.find({beneficiaryId: beneficiaryId})
+        const transactions = await Transaction.find({beneficiaryId: beneficiaryId, trxid: {$ne: null}}).sort({createdAt: -1})
         return res.status(200).json({
             'message': `Found ${transactions.length}`,
             transactions

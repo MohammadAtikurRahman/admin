@@ -21,9 +21,6 @@ const useStyles = makeStyles({
 });
 
 export default function Transaction() {
-    const [totalTransactionCount, setTotalTransactionCount] = useState(0);
-    const [totalCashInCount, setTotalCashInCount] = useState(0);
-    const [totalCashOutCount, setTotalCashOutCount] = useState(0);
     const [transactions, setTransactions] = useState([]);
 
     const location = useLocation();
@@ -43,32 +40,8 @@ export default function Transaction() {
         };
         fetchAndSetTransactions();
         return () => {
-            setTransactions([]);
         };
     }, []);
-
-    useEffect(() => {
-        if (transactions) {
-            setTotalTransactionCount(transactions.length);
-
-            const cashInCount = transactions.reduce((acc, t) => {
-                if (t.type === "in" && t.date) {
-                    return acc + 1;
-                }
-                return acc;
-            }, 0);
-
-            const cashOutCount = transactions.reduce((acc, t) => {
-                if (t.type === "out" && t.date) {
-                    return acc + 1;
-                }
-                return acc;
-            }, 0);
-
-            setTotalCashInCount(cashInCount);
-            setTotalCashOutCount(cashOutCount);
-        }
-    }, [transactions]);
 
     function logOut() {
         localStorage.setItem("token", null);
@@ -155,11 +128,9 @@ export default function Transaction() {
                         color="primary"
                         size="small"
                     >
-                        {" "}
                         <h6>
-                            {" "}
                             <b> Beneficiary Name: {userProfile?.name} </b>{" "}
-                        </h6>{" "}
+                        </h6>
                     </Button>
 
                     <Button
@@ -169,7 +140,6 @@ export default function Transaction() {
                         size="small"
                     >
                         <h6>
-                            {" "}
                             <b> Beneficiary Id: {userProfile?.beneficiaryId} </b>{" "}
                         </h6>
                     </Button>
@@ -181,7 +151,6 @@ export default function Transaction() {
                         size="small"
                     >
                         <h6>
-                            {" "}
                             <b> Beneficiary mobile: {userProfile?.mob}</b>
                         </h6>
                     </Button>
@@ -268,14 +237,6 @@ export default function Transaction() {
                             // Filter only the first occurrence of each trxid
                             return arr.findIndex((el) => el.trxid === t.trxid) === index;
                         })
-                            .filter((t) => t.date)
-                            .sort((a, b) => {
-                                const [dayA, monthA, yearA] = a.date.split("/");
-                                const [dayB, monthB, yearB] = b.date.split("/");
-                                const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
-                                const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
-                                return dateB - dateA;
-                            })
                             .map((t) => (
                                 <TableRow key={t._id}>
                                     <TableCell
@@ -324,7 +285,6 @@ export default function Transaction() {
                             >
                                 Total Cash In: {totalCashIn}
                                 <br />
-                                {/* Total Cash In Transactions: {totalCashInCount} */}
                             </TableCell>
                             <TableCell
                                 align="center"
@@ -332,7 +292,6 @@ export default function Transaction() {
                             >
                                 Total Cash Out: {totalCashOut}
                                 <br />
-                                {/* Total Cash Out Transactions: {totalCashOutCount} */}
                             </TableCell>
                             <TableCell
                                 align="center"
