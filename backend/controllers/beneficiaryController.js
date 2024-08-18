@@ -140,26 +140,42 @@ async function downloadAllBeneficiaries(req, res) {
     }
 }
 
-
 async function searchBeneficiaries(req, res) {
     const keyword = req.params.keyword;
 
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    let searchConditions = []
+
     try {
-        const searchConditions = [
-            { name: { $regex: keyword, $options: 'i' } }
-        ];
-        // If the keyword is numeric, add the beneficiaryId condition
-        if (!isNaN(keyword)) {
+        if (!isNaN(keyword)) { //Number
+            if (keyword.length >= 10) {
+                searchConditions.push({ mob: { $regex: keyword.slice(1), $options: 'i' } });
+                //here slicing because sometimes mobile phone number has the tailing 0
+            }
             searchConditions.push({ beneficiaryId: Number(keyword) });
+        } else {
+            searchConditions.push({ name: { $regex: keyword, $options: 'i' } })
         }
 
+        const totalBeneficiaries = await Beneficiary.countDocuments({
+            $or: searchConditions
+        }).exec();
+
+        // Fetch paginated search results
         const beneficiaries = await Beneficiary.find({
             $or: searchConditions
-        }).limit(100);
+        })
+            .skip(skip)
+            .limit(limit)
+            .exec();
 
         return res.status(200).json({
-            message: `Found ${beneficiaries.length} beneficiaries`,
-            beneficiaries
+            totalPages: Math.ceil(totalBeneficiaries / limit),
+            page,
+            beneficiaries,
         });
     } catch (err) {
         return res.status(500).json({ error: err.message });
