@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { getEnumerator, getEnumerators, userLogin } = require("./controllers/EnumeratorController");
+const {getEnumerator, getEnumerators, userLogin} = require("./controllers/EnumeratorController");
 
 const {
     addBeneficiary,
@@ -25,12 +25,13 @@ const {
 } = require("./controllers/BeneficiaryController");
 
 const {
+    pingData,
     addTransaction,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
 } = require("./controllers/TransactionController");
 
-const { migrateBeneficiaries } = require("./controllers/migration");
+const {migrateBeneficiaries} = require("./controllers/migration");
 
 router.get("/enumerator/:id", getEnumerator);
 router.get("/enumerators", getEnumerators);
@@ -68,6 +69,7 @@ router.post("/ben-score", saveTestScore);
 router.post("/get-login2", newlogin);
 
 
+router.get("/pings/:fromDate/:toDate/limit/:limit/page/:page", pingData);
 router.post("/transaction", addTransaction);
 router.get("/transaction/of/:beneficiaryId", getTransactionBasedOnBeneficiary);
 router.get("/transactions/days/:numberOfDays", getLastXDaysTransactions);
@@ -76,4 +78,4 @@ router.post("/add-observation", addobservation);
 
 router.get("/migrate/beneficiaries", migrateBeneficiaries)
 
-module.exports = { router };
+module.exports = {router};

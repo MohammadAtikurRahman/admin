@@ -1,5 +1,53 @@
-
 const Transaction = require("../model/transaction");
+const {endOfDay, startOfDay} = require("date-fns");
+
+async function pingData(req, res) {
+    try {
+        const {fromDate, toDate} = req.params;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const skip = (page - 1) * limit;
+
+        const totalTransctions = await Transaction.countDocuments({
+            'createdAt': {
+                $gte: startOfDay(fromDate),
+                $lte: endOfDay(toDate)
+            },
+            'trxid': {
+                $in: [null, 0, "", " "]
+            }
+        }).exec();
+
+        const transactions = await Transaction.find({
+            'createdAt': {
+                $gte: startOfDay(fromDate),
+                $lte: endOfDay(toDate)
+            },
+            'trxid': {
+                $in: [null, 0, "", " "]
+            }
+        }).sort({'createdAt': 'desc'})
+            .skip(skip)
+            .limit(10)
+            .exec();
+
+        return res.status(200).json({
+            fromDate,
+            toDate,
+            totalRecords: totalTransctions,
+            page,
+            totalPages: Math.ceil(totalTransctions / limit),
+            transactions
+        })
+    } catch (error) {
+        console.error("Detailed Error:", error);
+        res.status(400).send({
+            message: "An error occurred while processing transactions.",
+            error: error.message || error
+        });
+    }
+}
 
 async function addTransaction(req, res) {
     try {
@@ -84,6 +132,7 @@ async function getTransactionBasedOnBeneficiary(req, res) {
 
 
 module.exports = {
+    pingData,
     addTransaction,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
