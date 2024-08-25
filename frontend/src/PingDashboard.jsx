@@ -53,8 +53,8 @@ export default function PingDashboard() {
             const pings = await fetchPings();
             console.log("pings", pings)
             setTransactions(pings?.transactions);
-            setTotalPages(pings.totalPages)
-            setPage(pings.page)
+            setTotalPages(pings?.totalPages)
+            setPage(pings?.page)
         };
         fetchPingData();
         return () => {};
