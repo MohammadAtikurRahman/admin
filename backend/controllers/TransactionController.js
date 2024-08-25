@@ -52,19 +52,18 @@ async function pingData(req, res) {
 async function searchPingData(req, res) {
     try {
         const {fromDate, toDate} = req.params;
-        const page = parseInt(req.params.page) || 1;
+        console.log("req.params", req.params)
+        let page = parseInt(req.params.page) || 1;
         const limit = parseInt(req.params.limit) || 10;
-        const keyword = req.params.keyword;
+        const searchingKeyword = req.params.searchingKeyword;
         const skip = (page - 1) * limit;
 
         let searchConditions = [];
 
-        if (!isNaN(keyword)) { //Number
-            if (keyword.length >= 10) {
-                searchConditions.push({mob: {$regex: keyword, $options: 'i'}});
-            } else {
-                searchConditions.push({beneficiaryId: Number(keyword)});
-            }
+        if (searchingKeyword.length >= 10) {
+            searchConditions.push({mob: {$regex: searchingKeyword, $options: 'i'}});
+        } else {
+            searchConditions.push({beneficiaryId: Number(searchingKeyword)});
         }
 
         const totalTransctions = await Transaction.countDocuments({
@@ -77,6 +76,11 @@ async function searchPingData(req, res) {
             },
             $or: searchConditions,
         }).exec();
+
+        const totalPages = Math.ceil(totalTransctions / limit)
+        if (page > totalPages) {
+            page = 1;
+        }
 
         const transactions = await Transaction.find({
             'createdAt': {
@@ -97,7 +101,7 @@ async function searchPingData(req, res) {
             toDate,
             totalRecords: totalTransctions,
             page,
-            totalPages: Math.ceil(totalTransctions / limit),
+            totalPages,
             transactions
         })
     } catch (error) {
