@@ -38,7 +38,7 @@ export default function PingDashboard() {
     async function fetchPings() {
         if (!fromDate || !toDate) return;
         const response = await axios.get(baseUrl + `/pings/${fromDate}/${toDate}/limit/20/page/${page}`);
-        return response.data.transactions;
+        return response.data;
     }
     useEffect(() => {
         let d = new Date();
@@ -50,8 +50,11 @@ export default function PingDashboard() {
     }, [])
     useEffect(() => {
         const fetchPingData = async () => {
-            const transactions = await fetchPings();
-            setTransactions(transactions);
+            const pings = await fetchPings();
+            console.log("pings", pings)
+            setTransactions(pings?.transactions);
+            setTotalPages(pings.totalPages)
+            setPage(pings.page)
         };
         fetchPingData();
         return () => {};
