@@ -296,6 +296,23 @@ export default class Dashboard extends Component {
                     <Button
                         className="button_style"
                         variant="contained"
+                        color="secondary"
+                        size="small"
+                    >
+                        <MaterialLink
+                            style={{
+                                textDecoration: "none",
+                                color: "white",
+                            }}
+                            href="/pings"
+                        >
+                            Ping Dashboard
+                        </MaterialLink>
+                    </Button>
+
+                    <Button
+                        className="button_style"
+                        variant="contained"
                         size="small"
                         onClick={this.logOut}
                     >
@@ -309,6 +326,7 @@ export default class Dashboard extends Component {
                             logout
                         </MaterialLink>
                     </Button>
+
                 </div>
                 <br />
                 <TableContainer>
