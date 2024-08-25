@@ -38,7 +38,9 @@ export default function PingDashboard() {
     async function fetchPings() {
         if (!fromDate || !toDate) return;
         const response = await axios.get(baseUrl + `/pings/${fromDate}/${toDate}/limit/20/page/${page}`);
-        return response.data;
+        setTransactions(response.data?.transactions);
+        setTotalPages(response.data?.totalPages)
+        setPage(response.data?.page)
     }
     useEffect(() => {
         let d = new Date();
@@ -48,31 +50,23 @@ export default function PingDashboard() {
         setToDate(d);
         return () => {}
     }, [])
-    useEffect(() => {
-        const fetchPingData = async () => {
-            const pings = await fetchPings();
-            console.log("pings", pings)
-            setTransactions(pings?.transactions);
-            setTotalPages(pings?.totalPages)
-            setPage(pings?.page)
-        };
-        fetchPingData();
-        return () => {};
-    }, [fromDate, toDate, page, limit]);
 
-    function handlePageChange(event, value) {
+    async function handlePageChange(event, value) {
         setPage(value);
     }
-
     useEffect(() => {
-        const search = async () => {
-            await onSearchPing()
+        console.log("inside search, searchingKeyword = ", searchingKeyword);
+        if (searchingKeyword) {
+            console.log("inside searchPings")
+            searchPings();
         }
-        search();
-        return () => {}
-    }, [searchingKeyword])
+        else {
+            console.log("inside fetchPings")
+            fetchPings();
+        }
+    }, [searchingKeyword, fromDate, toDate, limit, page])
 
-    async function onSearchPing() {
+    async function searchPings() {
         if (!searchingKeyword) {
             return;
         }
