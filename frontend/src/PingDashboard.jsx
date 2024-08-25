@@ -14,8 +14,7 @@ import {
 } from "@material-ui/core"
 
 import Pagination from "@material-ui/lab/Pagination";
-import {useLocation, useNavigate} from "react-router-dom";
-import Swal from "sweetalert";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const baseUrl = process.env.REACT_APP_URL;
@@ -34,6 +33,7 @@ export default function PingDashboard() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(20);
     const [totalPages, setTotalPages] = useState(0);
+    const [searchingKeyword, setSearchingKeyword] = useState(null);
 
     async function fetchPings() {
         if (!fromDate || !toDate) return;
@@ -63,6 +63,25 @@ export default function PingDashboard() {
     function handlePageChange(event, value) {
         setPage(value);
     }
+
+    useEffect(() => {
+        const search = async () => {
+            await onSearchPing()
+        }
+        search();
+        return () => {}
+    }, [searchingKeyword])
+
+    async function onSearchPing() {
+        if (!searchingKeyword) {
+            return;
+        }
+        const response = await axios.get(baseUrl + `/pings/fromDate/${fromDate}/toDate/${toDate}/search/${searchingKeyword}/limit/${limit}/page/${page}`);
+        setTransactions(response.data?.transactions);
+        setPage(response.data?.page);
+        setTotalPages(response.data?.totalPages);
+    }
+
 
     function logOut() {
         localStorage.setItem("token", null);
@@ -156,6 +175,24 @@ export default function PingDashboard() {
                         shrink: true,
                     }}
                 />
+                <div className="search-container">
+                    <TextField
+                        id="standard-basic"
+                        type="search"
+                        autoComplete="off"
+                        name="search"
+                        value={searchingKeyword}
+                        onChange={(event) => setSearchingKeyword(event.target.value)}
+                        placeholder="Search Transactions"
+                        required
+                        style={{border: "1px solid grey", padding: "1px", marginTop: "12px", marginLeft: "20px"}}
+                        InputProps={{
+                            disableUnderline: true,
+                            style: {paddingRight: "5px", paddingLeft: "50px"},
+                        }}
+                    />
+                </div>
+
             </div>
             <TableContainer
                 component={Paper}
@@ -185,28 +222,14 @@ export default function PingDashboard() {
                             <TableRow key={t._id}>
                                 <TableCell align="center">{t.beneficiaryId}</TableCell>
                                 <TableCell align="center">{t.beneficiaryMobile}</TableCell>
-                                <TableCell align="center">{t.date}</TableCell>
+                                <TableCell align="center">{(new Date(t.createdAt)).toLocaleString()}</TableCell>
                                 <TableCell align="center">{t.duration} Minutes</TableCell>
                                 <TableCell align="center">{t.trxid}</TableCell>
-
                                 <TableCell align="center">{t.sub_type}</TableCell>
-
                                 <TableCell align="center">{t.duration_bkash}</TableCell>
                                 <TableCell align="center">{t.duration_nagad}</TableCell>
-
                                 <TableCell align="center">
                                     {capitalizeFirstLetter(t.sender)}
-                                </TableCell>
-
-                                <TableCell align="center">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        size="small"
-                                        onClick={() => Swal(t.raw_sms)}
-                                    >
-                                        Show SMS
-                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
