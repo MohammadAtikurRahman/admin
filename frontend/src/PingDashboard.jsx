@@ -168,6 +168,8 @@ export default function PingDashboard() {
                 >
                     <TableHead>
                         <TableRow>
+                            <TableCell align="center">Beneficiary Id</TableCell>
+                            <TableCell align="center">Beneficiary Mobile</TableCell>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Thrift Usages</TableCell>
                             <TableCell align="center">Trxid</TableCell>
@@ -181,6 +183,8 @@ export default function PingDashboard() {
                     <TableBody>
                         {transactions && transactions.map((t) => (
                             <TableRow key={t._id}>
+                                <TableCell align="center">{t.beneficiaryId}</TableCell>
+                                <TableCell align="center">{t.beneficiaryMobile}</TableCell>
                                 <TableCell align="center">{t.date}</TableCell>
                                 <TableCell align="center">{t.duration} Minutes</TableCell>
                                 <TableCell align="center">{t.trxid}</TableCell>
