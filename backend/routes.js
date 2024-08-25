@@ -26,6 +26,7 @@ const {
 
 const {
     pingData,
+    searchPingData,
     addTransaction,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
@@ -70,6 +71,8 @@ router.post("/get-login2", newlogin);
 
 
 router.get("/pings/:fromDate/:toDate/limit/:limit/page/:page", pingData);
+router.get("/pings/fromDate/:fromDate/toDate/:toDate/search/:searchingKeyword/limit/:limit/page/:page", searchPingData);
+
 router.post("/transaction", addTransaction);
 router.get("/transaction/of/:beneficiaryId", getTransactionBasedOnBeneficiary);
 router.get("/transactions/days/:numberOfDays", getLastXDaysTransactions);

@@ -49,6 +49,67 @@ async function pingData(req, res) {
     }
 }
 
+async function searchPingData(req, res) {
+    try {
+        const {fromDate, toDate} = req.params;
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+        const keyword = req.params.keyword;
+        const skip = (page - 1) * limit;
+
+        let searchConditions = [];
+
+        if (!isNaN(keyword)) { //Number
+            if (keyword.length >= 10) {
+                searchConditions.push({mob: {$regex: keyword, $options: 'i'}});
+            } else {
+                searchConditions.push({beneficiaryId: Number(keyword)});
+            }
+        }
+
+        const totalTransctions = await Transaction.countDocuments({
+            'createdAt': {
+                $gte: startOfDay(fromDate),
+                $lte: endOfDay(toDate)
+            },
+            'trxid': {
+                $in: [null, 0, "", " "]
+            },
+            $or: searchConditions,
+        }).exec();
+
+        const transactions = await Transaction.find({
+            'createdAt': {
+                $gte: startOfDay(fromDate),
+                $lte: endOfDay(toDate)
+            },
+            'trxid': {
+                $in: [null, 0, "", " "]
+            },
+            $or: searchConditions,
+        }).sort({'createdAt': 'desc'})
+            .skip(skip)
+            .limit(10)
+            .exec();
+
+        return res.status(200).json({
+            fromDate,
+            toDate,
+            totalRecords: totalTransctions,
+            page,
+            totalPages: Math.ceil(totalTransctions / limit),
+            transactions
+        })
+    } catch (error) {
+        console.error("Detailed Error:", error);
+        res.status(400).send({
+            message: "An error occurred while processing transactions.",
+            error: error.message || error
+        });
+    }
+}
+
+
 async function addTransaction(req, res) {
     try {
         console.log("Request Headers:", req.headers);
@@ -130,10 +191,10 @@ async function getTransactionBasedOnBeneficiary(req, res) {
     }
 }
 
-
 module.exports = {
     pingData,
     addTransaction,
+    searchPingData,
     getLastXDaysTransactions,
     getTransactionBasedOnBeneficiary
 };
