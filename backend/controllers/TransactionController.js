@@ -4,8 +4,8 @@ const {endOfDay, startOfDay} = require("date-fns");
 async function pingData(req, res) {
     try {
         const {fromDate, toDate} = req.params;
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
 
         const skip = (page - 1) * limit;
 
