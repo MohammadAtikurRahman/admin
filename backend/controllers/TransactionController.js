@@ -61,7 +61,7 @@ async function searchPingData(req, res) {
         let searchConditions = [];
 
         if (searchingKeyword.length >= 10) {
-            searchConditions.push({mob: {$regex: searchingKeyword, $options: 'i'}});
+            searchConditions.push({beneficiaryMobile: {$regex: searchingKeyword, $options: 'i'}});
         } else {
             searchConditions.push({beneficiaryId: Number(searchingKeyword)});
         }
