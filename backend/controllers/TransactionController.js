@@ -1,18 +1,31 @@
 const Transaction = require("../model/transaction");
-const {endOfDay, startOfDay} = require("date-fns");
+const luxon = require("luxon");
+
+const TIMEZONE = 'Asia/Dhaka';
+
+function utcDateTime(startDate, endDate) {
+    let DateTime = luxon.DateTime;
+    let start = DateTime.fromISO(startDate, {zone: TIMEZONE}).startOf('day').setZone('GMT');
+    let end = DateTime.fromISO(endDate, {zone: TIMEZONE}).endOf("day").setZone('GMT')
+
+    console.log('startTime', start, 'endtime', end);
+
+    return {startTime: start, endTime: end};
+}
 
 async function pingData(req, res) {
     try {
         const {fromDate, toDate} = req.params;
         const page = parseInt(req.params.page) || 1;
         const limit = parseInt(req.params.limit) || 10;
+        const {startTime, endTime} = utcDateTime(fromDate, toDate);
 
         const skip = (page - 1) * limit;
 
         const totalTransctions = await Transaction.countDocuments({
             'createdAt': {
-                $gte: startOfDay(fromDate),
-                $lte: endOfDay(toDate)
+                $gte: startTime,
+                $lte: endTime
             },
             'trxid': {
                 $in: [null, 0, "", " "]
@@ -21,8 +34,8 @@ async function pingData(req, res) {
 
         const transactions = await Transaction.find({
             'createdAt': {
-                $gte: startOfDay(fromDate),
-                $lte: endOfDay(toDate)
+                $gte: startTime,
+                $lte: endTime
             },
             'trxid': {
                 $in: [null, 0, "", " "]
@@ -38,7 +51,8 @@ async function pingData(req, res) {
             totalRecords: totalTransctions,
             page,
             totalPages: Math.ceil(totalTransctions / limit),
-            transactions
+            transactions,
+            time: {startTime, endTime}
         })
     } catch (error) {
         console.error("Detailed Error:", error);
@@ -52,11 +66,11 @@ async function pingData(req, res) {
 async function searchPingData(req, res) {
     try {
         const {fromDate, toDate} = req.params;
-        console.log("req.params", req.params)
         let page = parseInt(req.params.page) || 1;
         const limit = parseInt(req.params.limit) || 10;
         const searchingKeyword = req.params.searchingKeyword;
         const skip = (page - 1) * limit;
+        const {startTime, endTime} = utcDateTime(fromDate, toDate);
 
         let searchConditions = [];
 
@@ -68,8 +82,8 @@ async function searchPingData(req, res) {
 
         const totalTransctions = await Transaction.countDocuments({
             'createdAt': {
-                $gte: startOfDay(fromDate),
-                $lte: endOfDay(toDate)
+                $gte: startTime,
+                $lte: endTime
             },
             'trxid': {
                 $in: [null, 0, "", " "]
@@ -84,8 +98,8 @@ async function searchPingData(req, res) {
 
         const transactions = await Transaction.find({
             'createdAt': {
-                $gte: startOfDay(fromDate),
-                $lte: endOfDay(toDate)
+                $gte: startTime,
+                $lte: endTime
             },
             'trxid': {
                 $in: [null, 0, "", " "]
@@ -102,7 +116,8 @@ async function searchPingData(req, res) {
             totalRecords: totalTransctions,
             page,
             totalPages,
-            transactions
+            transactions,
+            time: {startTime, endTime}
         })
     } catch (error) {
         console.error("Detailed Error:", error);
