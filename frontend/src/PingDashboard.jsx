@@ -188,7 +188,7 @@ export default function PingDashboard() {
                     />
                 </div>
                 <a
-                    href={`${baseUrl}/beneficiaries/download`}
+                    href={`${baseUrl}/pings/download`}
                     download="beneficiaries.csv"
                     style={{textDecoration: 'none'}}>
                     <Button
