@@ -26,6 +26,7 @@ const {
 
 const {
     pingData,
+    exportTransactionCsv,
     searchPingData,
     addTransaction,
     getLastXDaysTransactions,
@@ -70,6 +71,7 @@ router.post("/ben-score", saveTestScore);
 router.post("/get-login2", newlogin);
 
 
+router.get("/pings/download", exportTransactionCsv);
 router.get("/pings/:fromDate/:toDate/limit/:limit/page/:page", pingData);
 router.get("/pings/fromDate/:fromDate/toDate/:toDate/search/:searchingKeyword/limit/:limit/page/:page", searchPingData);
 

@@ -13,6 +13,7 @@ import {
     TextField,
 } from "@material-ui/core"
 
+import DownloadIcon from '@mui/icons-material/Download';
 import Pagination from "@material-ui/lab/Pagination";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
@@ -186,6 +187,19 @@ export default function PingDashboard() {
                         }}
                     />
                 </div>
+                <a
+                    href={`${baseUrl}/beneficiaries/download`}
+                    download="beneficiaries.csv"
+                    style={{textDecoration: 'none'}}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<DownloadIcon />}
+                        style={{marginLeft: '10px', marginTop: '10px'}}
+                    >
+                        Download CSV
+                    </Button>
+                </a>
 
             </div>
             <TableContainer

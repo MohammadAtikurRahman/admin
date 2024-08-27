@@ -1,6 +1,6 @@
 const Transaction = require("../model/transaction");
 const luxon = require("luxon");
-
+const {Parser} = require('json2csv');
 const TIMEZONE = 'Asia/Dhaka';
 
 function utcDateTime(startDate, endDate) {
@@ -13,6 +13,30 @@ function utcDateTime(startDate, endDate) {
     return {startTime: start, endTime: end};
 }
 
+async function exportTransactionCsv(req, res) {
+    try {
+        let transactions = await Transaction.find({
+            'trxid': {
+                $in: [null, 0, "", " "]
+            }
+        }, {}).sort({'createdAt': 'desc'}).exec();
+
+        transactions = transactions.map(transaction => transaction.toJSON())
+        const json2csvParser = new Parser();
+        const csv = json2csvParser.parse(transactions);
+
+        const now = luxon.DateTime.now().setZone('Asia/Dhaka').toFormat('yyyy-MM-dd_HH-mm-ss');
+        const fileName = `pings_${now}.csv`;
+
+        res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+        res.setHeader('Content-Type', 'text/csv');
+
+        return res.status(200).end(csv);
+    } catch (e) {
+        return res.status(401).send({message: e.message});
+    }
+
+}
 async function pingData(req, res) {
     try {
         const {fromDate, toDate} = req.params;
@@ -212,6 +236,7 @@ async function getTransactionBasedOnBeneficiary(req, res) {
 
 module.exports = {
     pingData,
+    exportTransactionCsv,
     addTransaction,
     searchPingData,
     getLastXDaysTransactions,
