@@ -19,9 +19,13 @@ async function exportTransactionCsv(req, res) {
             'trxid': {
                 $in: [null, 0, "", " "]
             }
-        }, {}).sort({'createdAt': 'desc'}).exec();
+        }, {beneficiaryId: 1, beneficiaryMobile: 1, createdAt: 1, _id: -1}).sort({'createdAt': 'desc'}).exec();
 
         transactions = transactions.map(transaction => transaction.toJSON())
+        transactions = transactions.map((transaction) => {
+            transaction['createdAt'] = (new Date(transaction.createdAt)).toLocaleString();
+            return transaction
+        })
         const json2csvParser = new Parser();
         const csv = json2csvParser.parse(transactions);
 
