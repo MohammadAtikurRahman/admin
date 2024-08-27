@@ -1,13 +1,13 @@
-const { request } = require("express");
+const {request} = require("express");
 const jwt_decode = require("jwt-decode");
-const { randomNumberNotInBeneficiaryCollection } = require("../helpers/number");
+const {randomNumberNotInBeneficiaryCollection} = require("../helpers/number");
 const User = require("../model/user");
-const { Parser } = require('json2csv');
+const {Parser} = require('json2csv');
 
 const jwt = require("jsonwebtoken");
 const moment = require('moment-timezone');
 const Beneficiary = require("../model/beneficiary");
-const { DateTime } = require('luxon');
+const {DateTime} = require('luxon');
 
 async function addBeneficiary(req, res) {
     let user = jwt_decode(req.body.token);
@@ -22,9 +22,9 @@ async function addBeneficiary(req, res) {
 
     try {
         const createdBeneficiary = await Beneficiary.create(req.body.beneficiary)
-        return res.status(200).json({ 'message': 'Successfully created beneficiary', 'beneficiary': createdBeneficiary });
+        return res.status(200).json({'message': 'Successfully created beneficiary', 'beneficiary': createdBeneficiary});
     } catch (e) {
-        return res.status(400).json({ 'message': 'Failed to create beneficiary: ' + e.message });
+        return res.status(400).json({'message': 'Failed to create beneficiary: ' + e.message});
     }
 }
 
@@ -32,24 +32,24 @@ async function updateBeneficiary(req, res) {
     const beneficiary = req.body.beneficiary;
 
     const updatedBeneficiary = await Beneficiary.findOneAndUpdate(
-        { "beneficiaryId": req.params.id },
+        {"beneficiaryId": req.params.id},
         beneficiary
     );
 
     if (!updatedBeneficiary) {
-        return res.status(404).json({ error: "Beneficiary not found" });
+        return res.status(404).json({error: "Beneficiary not found"});
     }
 
-    return res.status(200).json({ 'message': 'Successfully updated beneficiary', updatedBeneficiary });
+    return res.status(200).json({'message': 'Successfully updated beneficiary', updatedBeneficiary});
 }
 
 async function deleteBeneficiary(req, res) {
     try {
         const beneficiaryId = req.params.id;
-        await Beneficiary.findOneAndDelete({ 'beneficiaryId': beneficiaryId })
-        return res.status(200).json({ 'message': 'Deleted beneficiary successfully.' })
+        await Beneficiary.findOneAndDelete({'beneficiaryId': beneficiaryId})
+        return res.status(200).json({'message': 'Deleted beneficiary successfully.'})
     } catch (e) {
-        return res.status(500).json({ 'message': 'Failed to delete beneficiary' });
+        return res.status(500).json({'message': 'Failed to delete beneficiary'});
     }
 }
 
@@ -58,13 +58,13 @@ async function addBeneficiaryInBulk(req, res) {
     try {
         user = await User.findByIdAndUpdate(
             user.id,
-            { $push: { beneficiary: { $each: req.body.beneficiary } } },
-            { new: true },
+            {$push: {beneficiary: {$each: req.body.beneficiary}}},
+            {new: true},
         );
-        return res.status(200).json({ user: user });
+        return res.status(200).json({user: user});
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'An error occurred' });
+        return res.status(500).json({error: 'An error occurred'});
     }
 }
 
@@ -81,7 +81,7 @@ async function saveTest(req, res) {
     let beneficiary = [...user.beneficiary, req.body.beneficiary];
     console.log(beneficiary);
 
-    user = await User.findByIdAndUpdate(user._id, { beneficiary }, { new: true })
+    user = await User.findByIdAndUpdate(user._id, {beneficiary}, {new: true})
         .select("-_id")
         .select("-id")
         .select("-username")
@@ -89,7 +89,7 @@ async function saveTest(req, res) {
         .select("-created_at")
         .select("-beneficiary.test");
 
-    return res.status(200).json({ user: user });
+    return res.status(200).json({user: user});
 }
 
 async function getBeneficiaries(req, res) {
@@ -101,10 +101,10 @@ async function getBeneficiaries(req, res) {
 
         const skip = (page - 1) * limit;
 
-        const totalBeneficiaries = await Beneficiary.countDocuments({ userId: user.id }).exec();
+        const totalBeneficiaries = await Beneficiary.countDocuments({userId: user.id}).exec();
 
-        const beneficiaries = await Beneficiary.find({ userId: user.id })
-            .sort({ createdAt: -1 })
+        const beneficiaries = await Beneficiary.find({userId: user.id})
+            .sort({createdAt: -1})
             .skip(skip)
             .limit(limit)
             .exec();
@@ -115,7 +115,7 @@ async function getBeneficiaries(req, res) {
             beneficiaries
         });
     } catch (e) {
-        return res.status(401).send({ message: e.message });
+        return res.status(401).send({message: e.message});
     }
 }
 
@@ -136,7 +136,7 @@ async function downloadAllBeneficiaries(req, res) {
 
         return res.status(200).end(csv);
     } catch (e) {
-        return res.status(401).send({ message: e.message });
+        return res.status(401).send({message: e.message});
     }
 }
 
@@ -152,12 +152,12 @@ async function searchBeneficiaries(req, res) {
     try {
         if (!isNaN(keyword)) { //Number
             if (keyword.length >= 10) {
-                searchConditions.push({ mob: { $regex: keyword.slice(1), $options: 'i' } });
+                searchConditions.push({mob: {$regex: keyword.slice(1), $options: 'i'}});
                 //here slicing because sometimes mobile phone number has the tailing 0
             }
-            searchConditions.push({ beneficiaryId: Number(keyword) });
+            searchConditions.push({beneficiaryId: Number(keyword)});
         } else {
-            searchConditions.push({ name: { $regex: keyword, $options: 'i' } })
+            searchConditions.push({name: {$regex: keyword, $options: 'i'}})
         }
 
         const totalBeneficiaries = await Beneficiary.countDocuments({
@@ -178,13 +178,13 @@ async function searchBeneficiaries(req, res) {
             beneficiaries,
         });
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).json({error: err.message});
     }
 }
 
 
-async function getToken({ beneficiaryId, userId }) {
-    let token = await jwt.sign({ beneficiaryId, userId }, "shhhhh11111", { expiresIn: "1d" });
+async function getToken({beneficiaryId, userId}) {
+    let token = await jwt.sign({beneficiaryId, userId}, "shhhhh11111", {expiresIn: "1d"});
     console.log(token);
     return token;
 }
@@ -209,12 +209,12 @@ function getBeneficiaryIndex(arr, beneficiaryId) {
 
 async function beneficiaryLogin(req, res) {
     console.log(req.body);
-    let user = await User.findOne({ userId: req.body.userId });
+    let user = await User.findOne({userId: req.body.userId});
     if (!req.body || !req.body.userId || !req.body.password) {
-        return res.status(400).json({ error: "Username or Password missing" });
+        return res.status(400).json({error: "Username or Password missing"});
     }
     if (!user) {
-        return res.status(401).json({ error: "User Not Found" });
+        return res.status(401).json({error: "User Not Found"});
     }
     if (user.password === req.body.password) {
         let token = await getToken(user);
@@ -224,7 +224,7 @@ async function beneficiaryLogin(req, res) {
             status: true,
         });
     }
-    return res.status(401).json({ message: "Something went wrong." });
+    return res.status(401).json({message: "Something went wrong."});
 }
 
 
@@ -236,11 +236,11 @@ async function newlogin(req, res) {
 
     // Find a user document with a matching beneficiaryId and mob within the array
     User.findOne(
-        { "beneficiary": { $elemMatch: { "beneficiaryId": beneficiaryId, "mob": mob } } },
+        {"beneficiary": {$elemMatch: {"beneficiaryId": beneficiaryId, "mob": mob}}},
         (err, user) => {
             if (err) {
                 // Handle error
-                res.status(500).send({ error: err });
+                res.status(500).send({error: err});
             } else {
                 if (user) {
                     // Find the index of the matching beneficiary
@@ -255,12 +255,12 @@ async function newlogin(req, res) {
                             };
 
                             User.updateOne(
-                                { _id: user._id },
-                                { $set: updatePath },
+                                {_id: user._id},
+                                {$set: updatePath},
                                 (updateErr, updateResult) => {
                                     if (updateErr) {
                                         // Handle error
-                                        res.status(500).send({ error: updateErr });
+                                        res.status(500).send({error: updateErr});
                                     } else {
                                         // loggedin_time updated
                                         res.status(200).send({
@@ -279,99 +279,72 @@ async function newlogin(req, res) {
                         }
                     } else {
                         // Beneficiary not found
-                        res.status(404).send({ message: "Beneficiary not found" });
+                        res.status(404).send({message: "Beneficiary not found"});
                     }
                 } else {
                     // Login failed
-                    res.status(401).send({ message: "Invalid beneficiaryId or mob" });
+                    res.status(401).send({message: "Invalid beneficiaryId or mob"});
                 }
             }
         }
     );
 }
 
-
 async function addBeneficiaryScore(req, res) {
-    const { beneficiaryId } = req.body;
-    console.log(req.body);
-
-    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
-
-    if (!user) {
-        return res.status(400).json({ message: "User not found" });
+    try {
+        const {beneficiaryId} = req.body;
+        console.log("req.body", req.body);
+        let beneficiary = await Beneficiary.updateOne(
+            {"beneficiaryId": beneficiaryId},
+            {
+                "score1": req.body?.score1,
+                "observation": req.body?.observation,
+                "duration": req.body?.duration,
+                "whotaketheexam": req.body?.userId,
+                "observation_new": req.body?.observation_new
+            }
+        );
+        return res.status(200).json({message: "Beneficiary score & observation saved", beneficiary});
+    } catch (e) {
+        console.log("error = ", e);
     }
-
-    let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
-
-    if (!beneficiary) {
-        return res.status(400).json({ message: "Beneficiary not found" });
-    }
-
-    let result = await User.updateOne(
-        { "beneficiary.beneficiaryId": beneficiaryId },
-        {
-            $set: {
-                "beneficiary.$.score1": req.body?.score1,
-                "beneficiary.$.observation": req.body?.observation,
-                "beneficiary.$.duration": req.body?.duration,
-                "beneficiary.$.whotaketheexam": req.body?.userId,
-                "beneficiary.$.observation_new": req.body?.observation_new
-            },
-        }
-    );
-
-    if (result.nModified == 0) {
-        return res.status(400).json({ message: "Failed to update beneficiary score" });
-    }
-
-    return res.status(200).json({ message: "Beneficiary score & observation saved" });
 }
 
-
 async function examStatus(req, res) {
-    const { beneficiaryId } = req.body;
-    console.log(req.body);
-    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
-    if (!user) {
-        return res.status(400).json({ message: "User not found" });
-    }
-    let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
-    if (!beneficiary) {
-        return res.status(400).json({ message: "Beneficiary not found" });
-    }
-    let result = await User.updateOne(
-        { "beneficiary.beneficiaryId": beneficiaryId },
-        {
-            $set: {
+    try {
+        const {beneficiaryId} = req.body;
+        console.log(req.body);
+        let beneficiary = await User.updateOne(
+            {"beneficiary.beneficiaryId": beneficiaryId},
+            {
                 "beneficiary.$.test_status": req.body?.test_status,
                 "beneficiary.$.excuses": req.body?.excuses,
             },
-        },
-    );
-    if (result.nModified == 0) {
-        return res.status(400).json({ message: "Failed to update " });
+        );
+        return res.status(200).json({message: "Beneficiary test status and excuess saved", beneficiary});
+    } catch (e) {
+        return res.status(500).json({message: `${e.message}`, beneficiary});
     }
-    return res.status(200).json({ message: "Beneficiary test status and excuess saved" });
 }
 
 async function enumeratorObservation(req, res) {
-    const { beneficiaryId, observation_new } = req.body;
+    const {beneficiaryId, observation_new} = req.body;
 
     console.log(req.body);
 
-    let user = await User.findOne({ "beneficiary.beneficiaryId": beneficiaryId });
+    let user = await User.findOne({"beneficiary.beneficiaryId": beneficiaryId});
 
     if (!user) {
-        return res.status(400).json({ message: "User not found" });
+        return res.status(400).json({message: "User not found"});
     }
 
     let beneficiary = user.beneficiary.find(b => b.beneficiaryId == beneficiaryId);
     if (!beneficiary) {
-        return res.status(400).json({ message: "Beneficiary not found" });
+        return res.status(400).json({message: "Beneficiary not found"});
     }
 
     let result = await User.updateOne(
-        { "beneficiary.beneficiaryId": beneficiaryId },
+        {"beneficiary.beneficiaryId": beneficiaryId},
         {
             $set: {
                 "beneficiary.$.enumerator_observation": req.body?.enumerator_observation,
@@ -384,16 +357,16 @@ async function enumeratorObservation(req, res) {
     );
 
     if (result.nModified == 0) {
-        return res.status(400).json({ message: "Failed to update" });
+        return res.status(400).json({message: "Failed to update"});
     }
 
-    return res.status(200).json({ message: "enumerator observation saved" });
+    return res.status(200).json({message: "enumerator observation saved"});
 }
 
 
 async function lastPagetext(req, res) {
     try {
-        const user = await User.findOne({ "beneficiary.beneficiaryId": req.params.beneficiaryId })
+        const user = await User.findOne({"beneficiary.beneficiaryId": req.params.beneficiaryId})
             .select("-username")
             .select("-password")
             .select("-id")
@@ -472,14 +445,14 @@ async function saveMultiScore(req, res) {
 
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let { userId, beneficiaryId, score1, observation, duration, observation_new } = beneficiary;
+        let {userId, beneficiaryId, score1, observation, duration, observation_new} = beneficiary;
 
         if (!userId) {
-            return res.status(400).json({ message: "userId is required" });
+            return res.status(400).json({message: "userId is required"});
         }
 
         let result = await User.findOneAndUpdate(
-            { "beneficiary.beneficiaryId": beneficiaryId },
+            {"beneficiary.beneficiaryId": beneficiaryId},
             {
                 $set: {
                     "beneficiary.$.score1": score1,
@@ -489,10 +462,10 @@ async function saveMultiScore(req, res) {
                     "beneficiary.$.observation_new": observation_new
                 },
             },
-            { new: true },
+            {new: true},
         );
     }
-    return res.status(200).json({ message: "Multiple beneficiaries updated" });
+    return res.status(200).json({message: "Multiple beneficiaries updated"});
 }
 
 
@@ -500,9 +473,9 @@ async function saveMultiObservation(req, res) {
     const beneficiaries = req.body;
     for (let i = 0; i < beneficiaries.length; i++) {
         let beneficiary = beneficiaries[i];
-        let { userId, beneficiaryId, enumerator_observation, test_status } = beneficiary;
+        let {userId, beneficiaryId, enumerator_observation, test_status} = beneficiary;
         let result = await User.findOneAndUpdate(
-            { "beneficiary.beneficiaryId": beneficiaryId },
+            {"beneficiary.beneficiaryId": beneficiaryId},
             {
                 $set: {
                     "beneficiary.$.enumerator_observation": enumerator_observation,
@@ -511,16 +484,16 @@ async function saveMultiObservation(req, res) {
 
                 },
             },
-            { new: true },
+            {new: true},
         );
     }
-    return res.status(200).json({ message: "Multiple enumerator observation and ofline after data updated" });
+    return res.status(200).json({message: "Multiple enumerator observation and ofline after data updated"});
 }
 
 
 async function benenScore(req, res) {
-    const { userId, beneficiaryId } = req.body;
-    const beneficiaries = (await User.findOne({ userId: userId })).toJSON().beneficiary;
+    const {userId, beneficiaryId} = req.body;
+    const beneficiaries = (await User.findOne({userId: userId})).toJSON().beneficiary;
 
     let index = getBeneficiaryIndex(beneficiaries, beneficiaryId);
 
@@ -531,23 +504,23 @@ async function benenScore(req, res) {
     if (index !== null) beneficiaries[index]["duration"] = req.body?.duration;
 
     const user = (
-        await User.findOneAndUpdate({ userId: userId }, { beneficiary: beneficiaries }, { new: true })
+        await User.findOneAndUpdate({userId: userId}, {beneficiary: beneficiaries}, {new: true})
     ).toJSON();
 
     console.log(user);
 
-    const whoLoggedIn = await User.findOne({ userId: userId });
+    const whoLoggedIn = await User.findOne({userId: userId});
 
     if (existsInArray(beneficiaries, beneficiaryId)) {
-        return res.status(200).json({ whoLoggedIn });
+        return res.status(200).json({whoLoggedIn});
     }
 
-    return res.status(400).json({ error: "Credentials does not exists" });
+    return res.status(400).json({error: "Credentials does not exists"});
 }
 
 async function saveTestScore(req, res) {
     const data = jwt_decode(req.body.beneficiaryToken);
-    const beneficiaries = (await User.findOne({ userId: data.userId })).toJSON().beneficiary;
+    const beneficiaries = (await User.findOne({userId: data.userId})).toJSON().beneficiary;
 
     console.log(beneficiaries);
 
@@ -564,15 +537,15 @@ async function saveTestScore(req, res) {
 
     const user = (
         await User.findOneAndUpdate(
-            { userId: data.userId },
-            { beneficiary: beneficiaries },
-            { new: true },
+            {userId: data.userId},
+            {beneficiary: beneficiaries},
+            {new: true},
         )
     ).toJSON();
 
     console.log(user);
 
-    return res.json({ message: "score saved", beneficiary: user.beneficiary[index] });
+    return res.json({message: "score saved", beneficiary: user.beneficiary[index]});
 }
 const SECRET = 'shhhhh11111';  // Your JWT secret
 
@@ -587,19 +560,19 @@ async function addobservation(req, res) {
         }
 
         // Find the user containing the specific beneficiaryId
-        let user = await User.findOne({ "beneficiary.beneficiaryId": req.body.beneficiaryId });
+        let user = await User.findOne({"beneficiary.beneficiaryId": req.body.beneficiaryId});
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(400).json({message: "User not found"});
         }
 
         let beneficiary = user.beneficiary.find(b => b.beneficiaryId == req.body.beneficiaryId);
         if (!beneficiary) {
-            return res.status(400).json({ message: "Beneficiary not found" });
+            return res.status(400).json({message: "Beneficiary not found"});
         }
 
         // Update the observation_new field for that beneficiary
         let result = await User.updateOne(
-            { "beneficiary.beneficiaryId": req.body.beneficiaryId },
+            {"beneficiary.beneficiaryId": req.body.beneficiaryId},
             {
                 $set: {
                     "beneficiary.$.observation_new": req.body.observation_new
@@ -608,10 +581,10 @@ async function addobservation(req, res) {
         );
 
         if (result.nModified == 0) {
-            return res.status(400).json({ message: "Failed to update observation" });
+            return res.status(400).json({message: "Failed to update observation"});
         }
 
-        return res.status(200).json({ message: "Observation added successfully", beneficiary });
+        return res.status(200).json({message: "Observation added successfully", beneficiary});
 
     } catch (error) {
         if (error.name === 'JsonWebTokenError') {
