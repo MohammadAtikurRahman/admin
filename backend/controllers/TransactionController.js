@@ -23,7 +23,7 @@ async function exportTransactionCsv(req, res) {
 
         transactions = transactions.map(transaction => transaction.toJSON())
         transactions = transactions.map((transaction) => {
-            transaction['createdAt'] = (new Date(transaction.createdAt)).toLocaleString();
+            transaction['createdAt'] = (new Date(transaction.createdAt)).toLocaleString('en-US', {timeZone: 'Asia/Dhaka'});
             return transaction
         })
         const json2csvParser = new Parser();
