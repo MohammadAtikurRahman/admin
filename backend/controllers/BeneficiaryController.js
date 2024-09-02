@@ -54,8 +54,8 @@ async function deleteBeneficiary(req, res) {
 }
 
 async function addBeneficiaryInBulk(req, res) {
-    let user = jwt_decode(req.body.token);
     try {
+        let user = jwt_decode(req.body.token);
         user = await User.findByIdAndUpdate(
             user.id,
             { $push: { beneficiary: { $each: req.body.beneficiary } } },
